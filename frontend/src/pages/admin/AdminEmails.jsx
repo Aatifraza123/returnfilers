@@ -113,7 +113,7 @@ const AdminEmails = () => {
       // Fetch consultations, contacts, and newsletter subscribers
       const [consultationsRes, contactsRes, newsletterRes] = await Promise.all([
         api.get('/consultations', config).catch(() => ({ data: { consultations: [] } })),
-        api.get('/contact', config).catch(() => ({ data: { contacts: [] } })),
+        api.get('/contacts', config).catch(() => ({ data: { contacts: [] } })),
         api.get('/newsletter', config).catch(() => ({ data: { subscribers: [] } }))
       ]);
       
@@ -121,12 +121,41 @@ const AdminEmails = () => {
       const contacts = contactsRes.data.contacts || [];
       const newsletters = newsletterRes.data.subscribers || [];
       
-      // Combine all and mark type
+      console.log('📧 Fetched data:', {
+        consultations: consultations.length,
+        contacts: contacts.length,
+        newsletters: newsletters.length
+      });
+      
+      // Combine all and mark type with proper field mapping
       const allEmails = [
-        ...consultations.map(c => ({ ...c, emailType: 'consultation', name: c.name || 'N/A' })),
-        ...contacts.map(c => ({ ...c, emailType: 'contact', name: c.name || 'N/A' })),
-        ...newsletters.map(n => ({ ...n, emailType: 'newsletter', name: 'Newsletter Subscriber' }))
-      ].sort((a, b) => new Date(b.createdAt) - new Date(a.createdAt));
+        ...consultations.map(c => ({ 
+          ...c, 
+          emailType: 'consultation', 
+          name: c.name || 'N/A',
+          topic: c.service || '-', // Map service to topic for display
+          message: c.message || '-'
+        })),
+        ...contacts.map(c => ({ 
+          ...c, 
+          emailType: 'contact', 
+          name: c.name || 'N/A',
+          topic: '-', // Contacts don't have topic/service
+          message: c.message || '-'
+        })),
+        ...newsletters.map(n => ({ 
+          ...n, 
+          emailType: 'newsletter', 
+          name: 'Newsletter Subscriber',
+          topic: 'Newsletter',
+          message: '-',
+          email: n.email || n._id
+        }))
+      ].sort((a, b) => {
+        const dateA = new Date(a.createdAt || 0);
+        const dateB = new Date(b.createdAt || 0);
+        return dateB - dateA;
+      });
       
       setEmails(allEmails);
     } catch (error) {
@@ -153,7 +182,7 @@ const AdminEmails = () => {
       // Delete from appropriate endpoint based on type
       let endpoint = '';
       if (emailType === 'contact') {
-        endpoint = `/contact/${id}`;
+        endpoint = `/contacts/${id}`;
       } else if (emailType === 'consultation') {
         endpoint = `/consultations/${id}`;
       } else if (emailType === 'newsletter') {
@@ -235,6 +264,7 @@ const AdminEmails = () => {
           email.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           email.phone?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           email.topic?.toLowerCase().includes(searchTerm.toLowerCase()) ||
+          email.service?.toLowerCase().includes(searchTerm.toLowerCase()) ||
           email.message?.toLowerCase().includes(searchTerm.toLowerCase())
         );
       });
@@ -353,17 +383,23 @@ const AdminEmails = () => {
                       )}
                     </td>
                     <td className="p-3">
-                      {email.topic ? (
+                      {email.topic && email.topic !== '-' ? (
                         <span className="inline-flex items-center gap-1 text-xs bg-blue-50 text-blue-700 px-2 py-1 rounded">
                           <FaBriefcase className="text-xs" />
                           {email.topic}
                         </span>
+                      ) : email.emailType === 'newsletter' ? (
+                        <span className="text-xs text-gray-400">Newsletter</span>
                       ) : (
                         <span className="text-xs text-gray-400">-</span>
                       )}
                     </td>
-                    <td className="p-3 text-gray-600 text-xs max-w-xs truncate">
-                      {email.message || '-'}
+                    <td className="p-3 text-gray-600 text-xs max-w-xs truncate" title={email.message && email.message !== '-' ? email.message : ''}>
+                      {email.message && email.message !== '-' ? (
+                        <span className="line-clamp-2">{email.message}</span>
+                      ) : (
+                        <span className="text-gray-400">-</span>
+                      )}
                     </td>
                     <td className="p-3">
                       <span className={`text-xs px-2 py-1 rounded-full font-semibold ${
