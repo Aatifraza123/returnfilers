@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import axios from 'axios';
+import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader'; 
 import { Link } from 'react-router-dom';
@@ -20,7 +20,7 @@ const Services = () => {
 
   const fetchServices = async () => {
     try {
-      const { data } = await axios.get(`/api/services?t=${Date.now()}`);
+      const { data } = await api.get(`/services?t=${Date.now()}`);
       const serviceData = Array.isArray(data) ? data : (data.services || []);
       setServices(serviceData);
       console.log('Services fetched:', serviceData.length, 'services');

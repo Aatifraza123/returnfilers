@@ -59,8 +59,8 @@ const BlogPost = () => {
       }
       
       // Now fetch the specific blog
-      console.log('Request URL:', `/api/blogs/${id}`);
-      const response = await axios.get(`/api/blogs/${id}`, {
+      console.log('Request URL:', `/blogs/${id}`);
+      const response = await api.get(`/blogs/${id}`, {
         timeout: 10000,
         validateStatus: (status) => status < 500, // Don't throw on 404
       });
