@@ -33,62 +33,109 @@ const sendBulkEmail = async (req, res) => {
       });
     }
 
-    // Create transporter
-    const transporter = nodemailer.createTransport({
-      service: 'gmail',
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
-
-    // Send emails to all recipients
-    const emailPromises = recipients.map(recipient => {
-      const mailOptions = {
-        from: `"CA Associates" <${process.env.EMAIL_USER}>`,
-        to: recipient.email,
-        subject: subject,
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
-            <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <div style="background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%); padding: 30px; text-align: center;">
-                <h1 style="color: #D4AF37; margin: 0;">CA Associates</h1>
-              </div>
-              <div style="padding: 30px;">
-                <p style="color: #0B1530; margin-top: 0;">Dear ${recipient.name},</p>
-                ${message}
-              </div>
-              <div style="background: #0B1530; padding: 20px; text-align: center;">
-                <p style="color: #D4AF37; margin: 0; font-weight: bold;">CA Associates</p>
-                <p style="color: #fff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
-              </div>
-            </div>
-          </body>
-          </html>
-        `
-      };
-
-      return transporter.sendMail(mailOptions);
-    });
-
-    await Promise.all(emailPromises);
-
-    console.log(`✅ Bulk email sent to ${recipients.length} recipients`);
-
+    // Send response immediately (non-blocking)
     res.status(200).json({
       success: true,
-      message: `Email sent successfully to ${recipients.length} recipients`,
-      sentCount: recipients.length
+      message: `Bulk email queued for ${recipients.length} recipients. Emails are being sent in the background.`,
+      queuedCount: recipients.length
+    });
+
+    // Send emails in background (non-blocking)
+    setImmediate(() => {
+      sendBulkEmailsInBackground(recipients, subject, message)
+        .then(() => {
+          console.log(`✅ Bulk email sent to ${recipients.length} recipients`);
+        })
+        .catch(err => {
+          console.error('❌ Background bulk email error:', err);
+        });
     });
   } catch (error) {
     console.error('❌ Bulk email error:', error);
     res.status(500).json({
       success: false,
-      message: error.message || 'Failed to send bulk email'
+      message: error.message || 'Failed to queue bulk email'
     });
   }
+};
+
+// Helper function to send bulk emails in background
+const sendBulkEmailsInBackground = async (recipients, subject, message) => {
+  console.log('📧 Starting background bulk email sending...');
+  
+  // Create transporter with connection pooling
+  const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    },
+    pool: true, // Enable connection pooling
+    maxConnections: 5, // Send 5 emails concurrently
+    maxMessages: 100, // Max messages per connection
+    rateDelta: 1000, // Time window for rate limiting (1 second)
+    rateLimit: 5 // Max 5 emails per second (Gmail limit is ~100/day, ~10/min for free)
+  });
+
+  // Process emails in batches to avoid overwhelming the server
+  const batchSize = 10; // Send 10 emails at a time
+  let sentCount = 0;
+  let failedCount = 0;
+
+  for (let i = 0; i < recipients.length; i += batchSize) {
+    const batch = recipients.slice(i, i + batchSize);
+    
+    console.log(`📧 Processing batch ${Math.floor(i / batchSize) + 1}: ${batch.length} emails (${i + 1}-${Math.min(i + batchSize, recipients.length)} of ${recipients.length})`);
+
+    // Send batch in parallel
+    const batchPromises = batch.map(async (recipient) => {
+      try {
+        const mailOptions = {
+          from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+          to: recipient.email,
+          subject: subject,
+          html: `
+            <!DOCTYPE html>
+            <html>
+            <body style="font-family: Arial, sans-serif; margin: 0; padding: 20px; background-color: #f5f5f5;">
+              <div style="max-width: 600px; margin: 0 auto; background: white; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <div style="background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%); padding: 30px; text-align: center;">
+                  <h1 style="color: #D4AF37; margin: 0;">CA Associates</h1>
+                </div>
+                <div style="padding: 30px;">
+                  <p style="color: #0B1530; margin-top: 0;">Dear ${recipient.name || 'Valued Client'},</p>
+                  ${message}
+                </div>
+                <div style="background: #0B1530; padding: 20px; text-align: center;">
+                  <p style="color: #D4AF37; margin: 0; font-weight: bold;">CA Associates</p>
+                  <p style="color: #fff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                </div>
+              </div>
+            </body>
+            </html>
+          `
+        };
+
+        await transporter.sendMail(mailOptions);
+        sentCount++;
+        return { success: true, email: recipient.email };
+      } catch (error) {
+        failedCount++;
+        console.error(`❌ Failed to send email to ${recipient.email}:`, error.message);
+        return { success: false, email: recipient.email, error: error.message };
+      }
+    });
+
+    // Wait for batch to complete
+    await Promise.all(batchPromises);
+
+    // Small delay between batches to avoid rate limiting
+    if (i + batchSize < recipients.length) {
+      await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay between batches
+    }
+  }
+
+  console.log(`✅ Bulk email completed: ${sentCount} sent, ${failedCount} failed`);
 };
 
 // @desc    Submit contact message
