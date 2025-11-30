@@ -105,7 +105,7 @@ const Blog = () => {
             initial={{ opacity: 0, x: -50, scale: 0.95 }}
             animate={{ opacity: 1, x: 0, scale: 1 }}
             transition={{ delay: 0.2, duration: 0.7, ease: "easeOut", type: "spring", stiffness: 80 }}
-            className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
+            className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold mb-4 leading-tight"
           >
             Our <motion.span 
               initial={{ opacity: 0, x: 50 }}
@@ -119,7 +119,7 @@ const Blog = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-            className="text-sm sm:text-base md:text-lg text-gray-300 max-w-4xl mx-auto font-light leading-relaxed"
+            className="text-base sm:text-lg md:text-xl text-gray-300 max-w-4xl mx-auto font-light leading-relaxed"
           >
             Latest insights on taxation, compliance, and financial management to help your business grow.
           </motion.p>

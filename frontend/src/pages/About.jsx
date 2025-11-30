@@ -134,7 +134,7 @@ const About = () => {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[#D4AF37] font-bold tracking-[0.2em] uppercase text-xs md:text-sm mb-4"
+              className="text-[#D4AF37] font-bold tracking-[0.2em] uppercase text-sm md:text-base mb-4"
             >
               Our Journey
             </motion.span>
@@ -144,7 +144,7 @@ const About = () => {
               whileInView="visible"
               viewport={{ once: true }}
               variants={fadeInUp}
-              className="text-xl md:text-2xl font-serif font-bold mb-4"
+              className="text-3xl md:text-4xl font-serif font-bold mb-4"
             >
               Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-amber-200">2010</span>
             </motion.h2>
@@ -207,8 +207,8 @@ const About = () => {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-xl md:text-2xl font-serif font-bold mb-2 text-[#0B1530]">Our Leadership Team</h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-xs md:text-sm">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]">Our Leadership Team</h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
               Seasoned professionals combining deep domain expertise with a client-first mindset.
             </p>
           </motion.div>
@@ -221,7 +221,7 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-[380px]" 
+                className="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-[380px]"
               >
                 {/* Image */}
                 <div className="h-[70%] w-full overflow-hidden transition-all duration-500 group-hover:h-[40%]">

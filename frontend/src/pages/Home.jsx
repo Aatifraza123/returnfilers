@@ -194,11 +194,11 @@ const Home = () => {
             variants={containerVariants}
             className="text-center mb-16"
           >
-            <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm">Our Expertise</span>
-            <h2 className="text-2xl lg:text-3xl font-serif font-bold mt-3 mb-3 text-[#0B1530]">
+            <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-base">Our Expertise</span>
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold mt-3 mb-3 text-[#0B1530]">
               Comprehensive Solutions
             </h2>
-            <p className="text-gray-600 max-w-2xl mx-auto text-sm font-light">
+            <p className="text-gray-600 max-w-2xl mx-auto text-base font-light">
               Navigating the complexities of finance with precision and integrity.
             </p>
           </motion.div>
@@ -220,12 +220,12 @@ const Home = () => {
                 <div className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-6 group-hover:bg-[#0B1530] group-hover:text-[#D4AF37] transition-colors">
                   {service.icon}
                 </div>
-                <h3 className="text-lg font-bold text-[#0B1530] mb-3">{service.title}</h3>
-                <p className="text-gray-600 text-sm leading-relaxed mb-6">
+                <h3 className="text-xl font-bold text-[#0B1530] mb-3">{service.title}</h3>
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
                    {service.desc}
                 </p>
-                <Link to="/expertise" className="text-sm font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
-                  Read More <FaArrowRight size={10} />
+                <Link to="/expertise" className="text-base font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
+                  Read More <FaArrowRight size={12} />
                 </Link>
               </motion.div>
             ))}

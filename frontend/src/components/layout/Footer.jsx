@@ -20,7 +20,6 @@ const Footer = () => {
 
   return (
     <footer className="bg-black text-white font-sans">
-      {/* Reduced vertical padding (py-8) but kept standard width */}
       <div className="container mx-auto px-6 py-8">
         <div className="grid md:grid-cols-4 gap-10">
           
@@ -78,7 +77,7 @@ const Footer = () => {
 
           {/* Newsletter */}
           <div>
-            <h4 className="font-serif font-bold mb-4 text-white text-lg">Newsletter</h4>
+            <h4 className="font-serif font-bold mb-4 text-white text-xl">Newsletter</h4>
             <p className="text-gray-300 text-sm mb-4">Get the latest financial updates directly to your inbox.</p>
             <form onSubmit={handleSubscribe} className="relative">
               <input
