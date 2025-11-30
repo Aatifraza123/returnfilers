@@ -33,7 +33,7 @@ const createConsultation = async (req, res) => {
 
     console.log('✅ Consultation saved:', consultation._id);
 
-    // Send response immediately
+    // Send response immediately (BEFORE any email operations)
     res.status(201).json({
       success: true,
       message: 'Consultation request submitted successfully! We will contact you within 24 hours.',
@@ -44,9 +44,11 @@ const createConsultation = async (req, res) => {
       }
     });
 
-    // Send emails asynchronously (don't block response)
-    sendConsultationEmails(consultation).catch(err => {
-      console.error('❌ Email sending failed (non-blocking):', err.message);
+    // Send emails in next event loop tick (completely non-blocking)
+    setImmediate(() => {
+      sendConsultationEmails(consultation).catch(err => {
+        console.error('❌ Email sending failed (non-blocking):', err.message);
+      });
     });
   } catch (error) {
     console.error('❌ Consultation error:', error);
@@ -180,75 +182,32 @@ const sendConsultationEmails = async (consultation) => {
         pass: process.env.EMAIL_PASS
       },
       pool: false,
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      socketTimeout: 5000
+      connectionTimeout: 3000,
+      greetingTimeout: 3000,
+      socketTimeout: 3000
     });
 
-    // Admin notification email - Simple
+    // Admin notification email
     const adminEmail = {
       from: `"CA Website" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `New Consultation: ${consultation.service} - ${consultation.name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333; border-bottom: 2px solid #0B1530; padding-bottom: 10px;">New Consultation Request</h2>
-          
-          <div style="margin: 20px 0;">
-            <p><strong>Name:</strong> ${consultation.name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${consultation.email}">${consultation.email}</a></p>
-            <p><strong>Phone:</strong> ${consultation.phone}</p>
-            <p><strong>Service:</strong> ${consultation.service}</p>
-            ${consultation.message ? `<p><strong>Message:</strong><br>${consultation.message}</p>` : ''}
-          </div>
-          
-          <div style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-left: 3px solid #0B1530;">
-            <small>Ref: ${consultation._id}</small><br>
-            <small>Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</small>
-          </div>
-        </div>
-      `
+      html: `<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>New Consultation Request</h2><p><strong>Name:</strong> ${consultation.name}</p><p><strong>Email:</strong> ${consultation.email}</p><p><strong>Phone:</strong> ${consultation.phone}</p><p><strong>Service:</strong> ${consultation.service}</p>${consultation.message ? `<p><strong>Message:</strong> ${consultation.message}</p>` : ''}</div>`
     };
 
-    // Customer confirmation email - Simple
+    // Customer confirmation email
     const customerEmail = {
       from: `"CA Associates" <${process.env.EMAIL_USER}>`,
       to: consultation.email,
       subject: `Consultation Request Received - ${consultation.service}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333; border-bottom: 2px solid #0B1530; padding-bottom: 10px;">Thank You!</h2>
-          
-          <p>Dear ${consultation.name},</p>
-          
-          <p>Thank you for choosing CA Associates. We have received your consultation request for <strong>${consultation.service}</strong>.</p>
-          
-          <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 3px solid #0B1530;">
-            <p style="margin: 0;"><strong>Service:</strong> ${consultation.service}</p>
-            ${consultation.message ? `<p style="margin: 10px 0 0 0;"><strong>Your Message:</strong> ${consultation.message}</p>` : ''}
-          </div>
-          
-          <p>Our team will contact you at <strong>${consultation.phone}</strong> within 24 hours to discuss your requirements.</p>
-          
-          <p><strong>Contact Information:</strong></p>
-          <p>Email: ${process.env.EMAIL_USER}</p>
-          
-          <p>Best regards,<br>CA Associates Team</p>
-          
-          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <small style="color: #666;">CA Associates - Professional Tax & Financial Services</small>
-        </div>
-      `
+      html: `<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>Thank You!</h2><p>Dear ${consultation.name},</p><p>Thank you for choosing CA Associates. We have received your consultation request for <strong>${consultation.service}</strong>.</p><p>Our team will contact you within 24 hours.</p></div>`
     };
 
-    await Promise.all([
-      transporter.sendMail(adminEmail),
-      transporter.sendMail(customerEmail)
-    ]);
-
-    console.log('✅ Consultation emails sent');
+    // Send emails independently without waiting
+    transporter.sendMail(adminEmail).catch(err => console.error('Admin email failed:', err.message));
+    transporter.sendMail(customerEmail).catch(err => console.error('Customer email failed:', err.message));
   } catch (error) {
-    console.error('❌ Email error:', error.message);
+    console.error('❌ Email setup error:', error.message);
   }
 };
 

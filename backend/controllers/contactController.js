@@ -122,7 +122,7 @@ const createContact = async (req, res) => {
 
     console.log('✅ Contact saved:', contact._id);
 
-    // Send response immediately
+    // Send response immediately (BEFORE any email operations)
     res.status(201).json({
       success: true,
       message: 'Message sent successfully! We will get back to you soon.',
@@ -132,9 +132,11 @@ const createContact = async (req, res) => {
       }
     });
 
-    // Send emails asynchronously (don't block response)
-    sendContactEmails(contact).catch(err => {
-      console.error('❌ Email sending failed (non-blocking):', err.message);
+    // Send emails in next event loop tick (completely non-blocking)
+    setImmediate(() => {
+      sendContactEmails(contact).catch(err => {
+        console.error('❌ Email sending failed (non-blocking):', err.message);
+      });
     });
   } catch (error) {
     console.error('❌ Contact error:', error);
@@ -253,7 +255,7 @@ const deleteContact = async (req, res) => {
   }
 };
 
-// Helper function to send emails
+// Helper function to send emails (completely async, non-blocking)
 const sendContactEmails = async (contact) => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     console.log('⚠️ Email credentials not configured');
@@ -268,74 +270,32 @@ const sendContactEmails = async (contact) => {
         pass: process.env.EMAIL_PASS
       },
       pool: false,
-      connectionTimeout: 5000,
-      greetingTimeout: 5000,
-      socketTimeout: 5000
+      connectionTimeout: 3000,
+      greetingTimeout: 3000,
+      socketTimeout: 3000
     });
 
-    // Admin notification email - Simple
+    // Admin notification email
     const adminEmail = {
       from: `"CA Website" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: `New Contact Message from ${contact.name}`,
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333; border-bottom: 2px solid #0B1530; padding-bottom: 10px;">New Contact Message</h2>
-          
-          <div style="margin: 20px 0;">
-            <p><strong>Name:</strong> ${contact.name}</p>
-            <p><strong>Email:</strong> <a href="mailto:${contact.email}">${contact.email}</a></p>
-            <p><strong>Phone:</strong> ${contact.phone}</p>
-            <p><strong>Message:</strong><br>${contact.message}</p>
-          </div>
-          
-          <div style="margin-top: 20px; padding: 10px; background: #f5f5f5; border-left: 3px solid #0B1530;">
-            <small>Ref: ${contact._id}</small><br>
-            <small>Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</small>
-          </div>
-        </div>
-      `
+      html: `<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>New Contact Message</h2><p><strong>Name:</strong> ${contact.name}</p><p><strong>Email:</strong> ${contact.email}</p><p><strong>Phone:</strong> ${contact.phone}</p><p><strong>Message:</strong><br>${contact.message}</p></div>`
     };
 
-    // Customer confirmation email - Simple
+    // Customer confirmation email
     const customerEmail = {
       from: `"CA Associates" <${process.env.EMAIL_USER}>`,
       to: contact.email,
       subject: 'Thank you for contacting CA Associates',
-      html: `
-        <div style="font-family: Arial, sans-serif; max-width: 600px; margin: 0 auto; padding: 20px;">
-          <h2 style="color: #333; border-bottom: 2px solid #0B1530; padding-bottom: 10px;">Thank You!</h2>
-          
-          <p>Dear ${contact.name},</p>
-          
-          <p>Thank you for reaching out to CA Associates. We have received your message and will get back to you within 24 hours.</p>
-          
-          <div style="margin: 20px 0; padding: 15px; background: #f9f9f9; border-left: 3px solid #0B1530;">
-            <p style="margin: 0;"><strong>Your Message:</strong></p>
-            <p style="margin: 10px 0 0 0;">${contact.message}</p>
-          </div>
-          
-          <p><strong>Contact Information:</strong></p>
-          <p>Phone: +91 98765 43210<br>
-          Email: ${process.env.EMAIL_USER}<br>
-          Hours: Mon-Fri, 9am - 6pm</p>
-          
-          <p>Best regards,<br>CA Associates Team</p>
-          
-          <hr style="border: none; border-top: 1px solid #ddd; margin: 20px 0;">
-          <small style="color: #666;">CA Associates - Professional Tax & Financial Services</small>
-        </div>
-      `
+      html: `<div style="font-family: Arial, sans-serif; padding: 20px;"><h2>Thank You!</h2><p>Dear ${contact.name},</p><p>Thank you for reaching out. We have received your message and will get back to you within 24 hours.</p></div>`
     };
 
-    await Promise.all([
-      transporter.sendMail(adminEmail),
-      transporter.sendMail(customerEmail)
-    ]);
-
-    console.log('✅ Contact emails sent');
+    // Send emails independently without waiting
+    transporter.sendMail(adminEmail).catch(err => console.error('Admin email failed:', err.message));
+    transporter.sendMail(customerEmail).catch(err => console.error('Customer email failed:', err.message));
   } catch (error) {
-    console.error('❌ Email error:', error.message);
+    console.error('❌ Email setup error:', error.message);
   }
 };
 
