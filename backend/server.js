@@ -26,28 +26,46 @@ connectDB();
 // MIDDLEWARE
 // ==========================================
 // CORS Configuration - Support both development and production
-const allowedOrigins = process.env.FRONTEND_URL 
-  ? [
-      process.env.FRONTEND_URL,
-      'http://localhost:5173',
-      'http://localhost:5174',
-      'http://localhost:5175'
-    ]
-  : ['http://localhost:5173', 'http://localhost:5174', 'http://localhost:5175'];
+const allowedOrigins = [
+  // Production frontend URLs
+  'https://ca-website-nine-mu.vercel.app',
+  'https://ca-website-it5v.vercel.app',
+  'https://ca-website-puce.vercel.app',
+  // Environment variable frontend URL
+  ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
+  // Local development
+  'http://localhost:5173',
+  'http://localhost:5174',
+  'http://localhost:5175',
+  'http://localhost:3000'
+];
+
+// Function to check if origin is allowed
+const isOriginAllowed = (origin) => {
+  if (!origin) return true; // Allow requests with no origin (like mobile apps or curl requests)
+  
+  // Check exact match
+  if (allowedOrigins.includes(origin)) return true;
+  
+  // Allow Vercel preview deployments (pattern: *.vercel.app)
+  if (origin.includes('.vercel.app')) return true;
+  
+  return false;
+};
 
 app.use(cors({
   origin: function (origin, callback) {
-    // Allow requests with no origin (like mobile apps or curl requests)
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.indexOf(origin) !== -1) {
+    if (isOriginAllowed(origin)) {
       callback(null, true);
     } else {
+      console.warn(`🚫 CORS blocked origin: ${origin}`);
       callback(new Error('Not allowed by CORS'));
     }
   },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization']
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  exposedHeaders: ['Content-Range', 'X-Content-Range']
 }));
 
 app.use(bodyParser.json({ limit: '50mb' })); 
