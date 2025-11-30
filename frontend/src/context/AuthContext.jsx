@@ -1,6 +1,6 @@
 import { createContext, useState, useEffect, useContext } from 'react'; // Added useContext
 import { useNavigate } from 'react-router-dom';
-import axios from 'axios';
+import api from '../api/axios';
 
 const AuthContext = createContext();
 
@@ -25,8 +25,7 @@ export const AuthProvider = ({ children }) => {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
             
-            const { data } = await axios.get('http://localhost:5000/api/auth/me', {
-              headers: { Authorization: `Bearer ${token}` },
+            const { data } = await api.get('/auth/me', {
               signal: controller.signal,
               timeout: 3000
             });
