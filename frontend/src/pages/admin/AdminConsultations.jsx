@@ -1,0 +1,310 @@
+import { useState, useEffect } from 'react';
+import axios from 'axios';
+import toast from 'react-hot-toast';
+import { FaEye, FaTrash, FaPhone, FaEnvelope, FaBriefcase, FaCalendarAlt, FaSearch, FaFilter } from 'react-icons/fa';
+
+const AdminConsultations = () => {
+  const [consultations, setConsultations] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedConsultation, setSelectedConsultation] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+  const [filterStatus, setFilterStatus] = useState('all');
+
+  useEffect(() => {
+    fetchConsultations();
+    const interval = setInterval(fetchConsultations, 15000);
+    return () => clearInterval(interval);
+  }, []);
+
+  const fetchConsultations = async () => {
+    try {
+      const { data } = await axios.get('/api/consultations', {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      
+      if (data.success) {
+        setConsultations(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching consultations:', error);
+      toast.error('Failed to load consultations');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleStatusUpdate = async (id, status) => {
+    try {
+      const { data } = await axios.patch(
+        `/api/consultations/${id}`,
+        { status },
+        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
+      );
+      
+      if (data.success) {
+        toast.success('Status updated successfully');
+        fetchConsultations();
+      }
+    } catch (error) {
+      toast.error('Failed to update status');
+    }
+  };
+
+  const handleDelete = async (id) => {
+    if (!window.confirm('Are you sure you want to delete this consultation?')) return;
+    
+    try {
+      const { data } = await axios.delete(`/api/consultations/${id}`, {
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
+      });
+      
+      if (data.success) {
+        toast.success('Consultation deleted successfully');
+        fetchConsultations();
+      }
+    } catch (error) {
+      toast.error('Failed to delete consultation');
+    }
+  };
+
+  const filteredConsultations = consultations.filter(consultation => {
+    const matchesSearch = 
+      consultation.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      consultation.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
+      consultation.service.toLowerCase().includes(searchTerm.toLowerCase());
+    
+    const matchesFilter = filterStatus === 'all' || consultation.status === filterStatus;
+    
+    return matchesSearch && matchesFilter;
+  });
+
+  const getStatusBadge = (status) => {
+    const statusColors = {
+      pending: 'bg-yellow-100 text-yellow-800',
+      contacted: 'bg-blue-100 text-blue-800',
+      completed: 'bg-green-100 text-green-800',
+      cancelled: 'bg-red-100 text-red-800'
+    };
+    return statusColors[status] || statusColors.pending;
+  };
+
+  if (loading) {
+    return (
+      <div className="flex items-center justify-center h-64">
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="p-6">
+      {/* Header */}
+      <div className="mb-6">
+        <h1 className="text-3xl font-bold text-[#0B1530] mb-2">Consultation Requests</h1>
+        <p className="text-gray-600">Manage all consultation requests from clients</p>
+      </div>
+
+      {/* Stats Cards */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <div className="bg-white p-4 rounded-lg shadow">
+          <p className="text-gray-600 text-sm">Total</p>
+          <p className="text-2xl font-bold text-[#0B1530]">{consultations.length}</p>
+        </div>
+        <div className="bg-yellow-50 p-4 rounded-lg shadow">
+          <p className="text-gray-600 text-sm">Pending</p>
+          <p className="text-2xl font-bold text-yellow-600">
+            {consultations.filter(c => c.status === 'pending').length}
+          </p>
+        </div>
+        <div className="bg-blue-50 p-4 rounded-lg shadow">
+          <p className="text-gray-600 text-sm">Contacted</p>
+          <p className="text-2xl font-bold text-blue-600">
+            {consultations.filter(c => c.status === 'contacted').length}
+          </p>
+        </div>
+        <div className="bg-green-50 p-4 rounded-lg shadow">
+          <p className="text-gray-600 text-sm">Completed</p>
+          <p className="text-2xl font-bold text-green-600">
+            {consultations.filter(c => c.status === 'completed').length}
+          </p>
+        </div>
+      </div>
+
+      {/* Search and Filter */}
+      <div className="bg-white p-4 rounded-lg shadow mb-6">
+        <div className="flex flex-col md:flex-row gap-4">
+          <div className="flex-1 relative">
+            <FaSearch className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <input
+              type="text"
+              placeholder="Search by name, email, or service..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+            />
+          </div>
+          <div className="relative">
+            <FaFilter className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400" />
+            <select
+              value={filterStatus}
+              onChange={(e) => setFilterStatus(e.target.value)}
+              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] appearance-none bg-white"
+            >
+              <option value="all">All Status</option>
+              <option value="pending">Pending</option>
+              <option value="contacted">Contacted</option>
+              <option value="completed">Completed</option>
+              <option value="cancelled">Cancelled</option>
+            </select>
+          </div>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-lg shadow overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Client</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Service</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Contact</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Date</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                <th className="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="bg-white divide-y divide-gray-200">
+              {filteredConsultations.map((consultation) => (
+                <tr key={consultation._id} className="hover:bg-gray-50">
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div>
+                      <div className="text-sm font-medium text-gray-900">{consultation.name}</div>
+                      <div className="text-sm text-gray-500 flex items-center gap-1">
+                        <FaEnvelope size={10} />
+                        {consultation.email}
+                      </div>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-2">
+                      <FaBriefcase className="text-[#D4AF37]" size={14} />
+                      <span className="text-sm text-gray-900">{consultation.service}</span>
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-1 text-sm text-gray-900">
+                      <FaPhone size={10} />
+                      {consultation.phone}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <div className="flex items-center gap-1 text-sm text-gray-500">
+                      <FaCalendarAlt size={10} />
+                      {new Date(consultation.createdAt).toLocaleDateString()}
+                    </div>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap">
+                    <select
+                      value={consultation.status}
+                      onChange={(e) => handleStatusUpdate(consultation._id, e.target.value)}
+                      className={`text-xs px-3 py-1 rounded-full font-semibold ${getStatusBadge(consultation.status)}`}
+                    >
+                      <option value="pending">Pending</option>
+                      <option value="contacted">Contacted</option>
+                      <option value="completed">Completed</option>
+                      <option value="cancelled">Cancelled</option>
+                    </select>
+                  </td>
+                  <td className="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                    <div className="flex gap-2">
+                      <button
+                        onClick={() => setSelectedConsultation(consultation)}
+                        className="text-blue-600 hover:text-blue-900"
+                      >
+                        <FaEye />
+                      </button>
+                      <button
+                        onClick={() => handleDelete(consultation._id)}
+                        className="text-red-600 hover:text-red-900"
+                      >
+                        <FaTrash />
+                      </button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+
+        {filteredConsultations.length === 0 && (
+          <div className="text-center py-12 text-gray-500">
+            No consultations found
+          </div>
+        )}
+      </div>
+
+      {/* Detail Modal */}
+      {selectedConsultation && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-lg max-w-2xl w-full p-6">
+            <h2 className="text-2xl font-bold mb-4 text-[#0B1530]">Consultation Details</h2>
+            <div className="space-y-3">
+              <div>
+                <p className="text-sm text-gray-600">Name</p>
+                <p className="font-semibold">{selectedConsultation.name}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Email</p>
+                <p className="font-semibold">{selectedConsultation.email}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Phone</p>
+                <p className="font-semibold">{selectedConsultation.phone}</p>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Service</p>
+                <p className="font-semibold">{selectedConsultation.service}</p>
+              </div>
+              {selectedConsultation.message && (
+                <div>
+                  <p className="text-sm text-gray-600">Message</p>
+                  <p className="font-semibold">{selectedConsultation.message}</p>
+                </div>
+              )}
+              <div>
+                <p className="text-sm text-gray-600">Status</p>
+                <span className={`inline-block px-3 py-1 rounded-full text-xs font-semibold ${getStatusBadge(selectedConsultation.status)}`}>
+                  {selectedConsultation.status}
+                </span>
+              </div>
+              <div>
+                <p className="text-sm text-gray-600">Date</p>
+                <p className="font-semibold">{new Date(selectedConsultation.createdAt).toLocaleString()}</p>
+              </div>
+            </div>
+            <button
+              onClick={() => setSelectedConsultation(null)}
+              className="mt-6 w-full bg-[#0B1530] text-white py-2 rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminConsultations;
+
+
+
+
+
+
+
+
+
+
