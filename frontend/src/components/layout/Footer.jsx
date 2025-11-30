@@ -18,67 +18,73 @@ const Footer = () => {
     }
   };
 
+  const quickLinks = [
+    { to: '/about', label: 'About Us' },
+    { to: '/services', label: 'Services' },
+    { to: '/portfolio', label: 'Portfolio' },
+    { to: '/contact', label: 'Contact' },
+    { to: '/blog', label: 'Blog' }
+  ];
+
+  const legalLinks = [
+    { to: '/privacy-policy', label: 'Privacy Policy' },
+    { to: '/terms-conditions', label: 'Terms & Conditions' },
+    { to: '/refund-policy', label: 'Refund Policy' }
+  ];
+
+  const socialLinks = [
+    { href: 'https://facebook.com', icon: FaFacebook },
+    { href: 'https://twitter.com', icon: FaTwitter },
+    { href: 'https://linkedin.com', icon: FaLinkedin },
+    { href: 'https://instagram.com', icon: FaInstagram }
+  ];
+
   return (
     <footer className="bg-black text-white font-sans">
-      <div className="container mx-auto px-6 py-8">
-        <div className="grid md:grid-cols-4 gap-10">
-          
+      <div className="container mx-auto px-6 py-6 md:py-8">
+        <div className="grid md:grid-cols-4 gap-8 md:gap-10">
           {/* CA Associates Section */}
-          <div className="space-y-5">
-            <h3 className="text-3xl font-serif font-bold text-[#D4AF37]">CA Associates</h3>
-            <p className="text-gray-300 text-base leading-relaxed">
-              Professional chartered accountancy services with 15+ years of experience
-              in taxation, auditing, and financial consulting. Committed to your financial success.
+          <div className="space-y-4">
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#D4AF37]">CA Associates</h3>
+            <p className="text-gray-300 text-sm md:text-base leading-relaxed">
+              Professional chartered accountancy services with 15+ years of experience in taxation, auditing, and financial consulting.
             </p>
-            
-            {/* Social Links */}
-            <div className="flex space-x-5 pt-3">
-              <a href="https://facebook.com" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
-                <FaFacebook size={22} />
-              </a>
-              <a href="https://twitter.com" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
-                <FaTwitter size={22} />
-              </a>
-              <a href="https://linkedin.com" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
-                <FaLinkedin size={22} />
-              </a>
-              <a href="https://instagram.com" target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
-                <FaInstagram size={22} />
-              </a>
+            <div className="flex space-x-4 pt-2">
+              {socialLinks.map(({ href, icon: Icon }, idx) => (
+                <a key={idx} href={href} target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
+                  <Icon size={20} />
+                </a>
+              ))}
             </div>
-
-            {/* Copyright */}
-            <div className="text-gray-500 text-sm pt-2">
+            <div className="text-gray-500 text-xs md:text-sm pt-2">
               © {new Date().getFullYear()} CA Associates. All rights reserved.
             </div>
           </div>
 
           {/* Quick Links */}
           <div>
-            <h4 className="font-serif font-bold mb-6 text-white text-xl">Quick Links</h4>
-            <ul className="space-y-4 text-base">
-              <li><Link to="/about" className="text-[#D4AF37] hover:text-white transition-colors">About Us</Link></li>
-              <li><Link to="/services" className="text-[#D4AF37] hover:text-white transition-colors">Services</Link></li>
-              <li><Link to="/portfolio" className="text-[#D4AF37] hover:text-white transition-colors">Portfolio</Link></li>
-              <li><Link to="/contact" className="text-[#D4AF37] hover:text-white transition-colors">Contact</Link></li>
-              <li><Link to="/blog" className="text-[#D4AF37] hover:text-white transition-colors">Blog</Link></li>
+            <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Quick Links</h4>
+            <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
+              {quickLinks.map(({ to, label }) => (
+                <li key={to}><Link to={to} className="text-[#D4AF37] hover:text-white transition-colors">{label}</Link></li>
+              ))}
             </ul>
           </div>
 
           {/* Legal */}
           <div>
-            <h4 className="font-serif font-bold mb-6 text-white text-xl">Legal</h4>
-            <ul className="space-y-4 text-base">
-              <li><Link to="/privacy-policy" className="text-[#D4AF37] hover:text-white transition-colors">Privacy Policy</Link></li>
-              <li><Link to="/terms-conditions" className="text-[#D4AF37] hover:text-white transition-colors">Terms & Conditions</Link></li>
-              <li><Link to="/refund-policy" className="text-[#D4AF37] hover:text-white transition-colors">Refund Policy</Link></li>
+            <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Legal</h4>
+            <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
+              {legalLinks.map(({ to, label }) => (
+                <li key={to}><Link to={to} className="text-[#D4AF37] hover:text-white transition-colors">{label}</Link></li>
+              ))}
             </ul>
           </div>
 
           {/* Newsletter */}
           <div>
-            <h4 className="font-serif font-bold mb-4 text-white text-xl">Newsletter</h4>
-            <p className="text-gray-300 text-sm mb-4">Get the latest financial updates directly to your inbox.</p>
+            <h4 className="font-serif font-bold mb-3 md:mb-4 text-white text-lg md:text-xl">Newsletter</h4>
+            <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">Get the latest financial updates directly to your inbox.</p>
             <form onSubmit={handleSubscribe} className="relative">
               <input
                 type="email"

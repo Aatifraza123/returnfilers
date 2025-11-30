@@ -119,7 +119,7 @@ const Blog = () => {
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-            className="text-base sm:text-lg md:text-xl text-gray-300 max-w-4xl mx-auto font-light leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-gray-300 max-w-4xl mx-auto font-normal leading-relaxed"
           >
             Latest insights on taxation, compliance, and financial management to help your business grow.
           </motion.p>

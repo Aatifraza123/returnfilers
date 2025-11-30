@@ -122,9 +122,7 @@ const createContact = async (req, res) => {
 
     console.log('✅ Contact saved:', contact._id);
 
-    // Send emails
-    await sendContactEmails(contact);
-
+    // Send response immediately
     res.status(201).json({
       success: true,
       message: 'Message sent successfully! We will get back to you soon.',
@@ -132,6 +130,11 @@ const createContact = async (req, res) => {
         id: contact._id,
         name: contact.name
       }
+    });
+
+    // Send emails asynchronously (don't block response)
+    sendContactEmails(contact).catch(err => {
+      console.error('❌ Email sending failed (non-blocking):', err.message);
     });
   } catch (error) {
     console.error('❌ Contact error:', error);
@@ -263,7 +266,11 @@ const sendContactEmails = async (contact) => {
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-      }
+      },
+      pool: false,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 5000
     });
 
     // Admin notification email - Simple

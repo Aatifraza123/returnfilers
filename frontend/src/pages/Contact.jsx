@@ -11,12 +11,18 @@ import {
   FaMapMarkerAlt, 
   FaQuestionCircle, 
   FaClock, 
-  FaWhatsapp 
+  FaWhatsapp,
+  FaChevronDown
 } from 'react-icons/fa';
 
 const Contact = () => {
   const [loading, setLoading] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  
+  const toggleFaq = (index) => {
+    setOpenFaqIndex(openFaqIndex === index ? null : index);
+  };
 
   const onSubmit = async (data) => {
     setLoading(true);
@@ -84,7 +90,7 @@ const Contact = () => {
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-serif font-bold mb-3"
+            className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold mb-3"
           >
             Get In Touch
           </motion.h1>
@@ -92,7 +98,7 @@ const Contact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-base text-gray-300 max-w-3xl mx-auto font-light leading-relaxed"
+            className="text-sm md:text-base text-gray-300 max-w-3xl mx-auto font-light leading-relaxed"
           >
             Have questions about your taxes or business finances? Send us a message and our expert team will respond promptly.
           </motion.p>
@@ -262,30 +268,55 @@ const Contact = () => {
       </section>
 
       {/* ==================== FAQ SECTION ==================== */}
-      <section className="py-10 md:py-12 bg-white">
-        <div className="container mx-auto px-6 max-w-4xl">
-          <h2 className="text-2xl font-serif font-bold text-center mb-8 text-[#0B1530]">Frequently Asked Questions</h2>
-          <div className="space-y-4">
-            {faqs.map((faq, idx) => (
-              <motion.div
-                key={idx}
-                initial={{ opacity: 0, y: 10 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="group bg-gray-50 p-6 rounded-lg hover:bg-white hover:shadow-md transition-all duration-300 border border-gray-100 cursor-pointer"
-              >
-                <div className="flex items-start gap-4">
-                  <div className="mt-0.5 text-[#D4AF37] group-hover:scale-110 transition-transform flex-shrink-0">
-                     <FaQuestionCircle size={20} />
-                  </div>
-                  <div className="flex-1">
-                    <h3 className="text-base font-bold text-[#0B1530] mb-2 group-hover:text-[#D4AF37] transition-colors">{faq.question}</h3>
-                    <p className="text-sm text-gray-600 leading-relaxed">{faq.answer}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
+      <section className="py-8 md:py-12 lg:py-16 bg-white">
+        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-center mb-6 md:mb-8 lg:mb-12 text-[#0B1530]">Frequently Asked Questions</h2>
+          <div className="space-y-3 md:space-y-4">
+            {faqs.map((faq, idx) => {
+              const isOpen = openFaqIndex === idx;
+              return (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 10 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-gray-50 rounded-lg hover:bg-white hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
+                >
+                  <button
+                    onClick={() => toggleFaq(idx)}
+                    className="w-full p-4 md:p-6 flex items-start gap-3 md:gap-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 rounded-lg"
+                  >
+                    <div className="mt-0.5 text-[#D4AF37] flex-shrink-0">
+                       <FaQuestionCircle size={20} />
+                    </div>
+                    <div className="flex-1 text-left">
+                      <h3 className="text-sm md:text-base font-semibold text-[#0B1530] mb-0 hover:text-[#D4AF37] transition-colors font-sans">{faq.question}</h3>
+                    </div>
+                    <motion.div
+                      animate={{ rotate: isOpen ? 180 : 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="mt-0.5 text-[#0B1530] flex-shrink-0"
+                    >
+                      <FaChevronDown size={16} />
+                    </motion.div>
+                  </button>
+                  <motion.div
+                    initial={false}
+                    animate={{ 
+                      height: isOpen ? 'auto' : 0,
+                      opacity: isOpen ? 1 : 0
+                    }}
+                    transition={{ duration: 0.3, ease: 'easeInOut' }}
+                    className="overflow-hidden"
+                  >
+                    <div className="px-4 md:px-6 pb-4 md:pb-6 pl-11 md:pl-14">
+                      <p className="text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed font-normal">{faq.answer}</p>
+                    </div>
+                  </motion.div>
+                </motion.div>
+              );
+            })}
           </div>
         </div>
       </section>

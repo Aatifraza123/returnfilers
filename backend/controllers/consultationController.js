@@ -33,9 +33,7 @@ const createConsultation = async (req, res) => {
 
     console.log('✅ Consultation saved:', consultation._id);
 
-    // Send emails
-    await sendConsultationEmails(consultation);
-
+    // Send response immediately
     res.status(201).json({
       success: true,
       message: 'Consultation request submitted successfully! We will contact you within 24 hours.',
@@ -44,6 +42,11 @@ const createConsultation = async (req, res) => {
         name: consultation.name,
         service: consultation.service
       }
+    });
+
+    // Send emails asynchronously (don't block response)
+    sendConsultationEmails(consultation).catch(err => {
+      console.error('❌ Email sending failed (non-blocking):', err.message);
     });
   } catch (error) {
     console.error('❌ Consultation error:', error);
@@ -175,7 +178,11 @@ const sendConsultationEmails = async (consultation) => {
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
-      }
+      },
+      pool: false,
+      connectionTimeout: 5000,
+      greetingTimeout: 5000,
+      socketTimeout: 5000
     });
 
     // Admin notification email - Simple
