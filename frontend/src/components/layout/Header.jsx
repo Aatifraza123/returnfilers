@@ -32,8 +32,8 @@ const Header = () => {
       transition={{ duration: 0.5, ease: "easeOut" }}
       className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-white/80 backdrop-blur-xl shadow-lg py-3 border-b border-gray-100/50'
-          : 'bg-[#0B1530]/80 backdrop-blur-xl py-4'
+          ? 'backdrop-blur-xl shadow-lg py-3 border-b border-white/10'
+          : 'backdrop-blur-xl py-4'
       }`}
     >
       <nav className="container mx-auto px-6 flex justify-between items-center">

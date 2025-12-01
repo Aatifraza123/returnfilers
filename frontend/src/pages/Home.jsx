@@ -81,7 +81,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#D4AF37] font-medium text-sm mb-6 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-3 py-1 md:px-4 md:py-1.5 rounded-full bg-white/10 border border-white/10 text-[#D4AF37] font-medium text-xs md:text-sm mb-4 md:mb-6 backdrop-blur-sm"
               >
                 <FaBriefcase className="text-xs" /> Since 2008
               </motion.div>
@@ -90,17 +90,17 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-4xl sm:text-5xl lg:text-6xl font-serif font-semibold text-white leading-tight mb-6"
+                className="text-4xl sm:text-5xl md:text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-4 md:mb-6"
               >
-                Financial Clarity for <br />
-                <span className="text-[#D4AF37] font-normal">Modern Business</span>
+                Financial Clarity for <br className="md:hidden" />
+                <span className="text-[#D4AF37]">Modern Business</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-base sm:text-lg lg:text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-normal"
+                className="text-base sm:text-lg md:text-lg lg:text-xl text-gray-300 mb-6 md:mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light"
               >
                 We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business.
               </motion.p>
@@ -109,14 +109,14 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.5 }}
-                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
+                className="flex flex-col sm:flex-row gap-3 md:gap-4 justify-center lg:justify-start mb-6 md:mb-10"
               >
                 {/* UPDATED: Button triggers Modal */}
                 <motion.button
                   onClick={openModal}
                   whileHover={{ scale: 1.05, y: -2 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-8 py-3.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-medium text-sm sm:text-base shadow-lg hover:bg-white transition-all"
+                  className="px-6 py-3 md:px-8 md:py-3.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-semibold text-sm md:text-base shadow-lg hover:bg-white transition-all"
                 >
                   Book Consultation
                 </motion.button>
@@ -127,7 +127,7 @@ const Home = () => {
                 >
                   <Link
                     to="/services"
-                    className="px-8 py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm sm:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
+                    className="px-6 py-3 md:px-8 md:py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm md:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
                   >
                     Our Services
                   </Link>
@@ -139,16 +139,16 @@ const Home = () => {
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
                 transition={{ delay: 0.7 }}
-                className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6 border-t border-white/10"
+                className="flex flex-wrap justify-center lg:justify-start gap-4 md:gap-6 pt-4 md:pt-6 border-t border-white/10"
               >
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 15+ Years Exp.
+                <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                  <FaCheckCircle className="text-[#D4AF37] text-xs md:text-sm" /> 15+ Years Exp.
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 500+ Clients
+                <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                  <FaCheckCircle className="text-[#D4AF37] text-xs md:text-sm" /> 500+ Clients
                 </div>
-                <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> ICAI Certified
+                <div className="flex items-center gap-2 text-gray-300 text-xs md:text-sm">
+                  <FaCheckCircle className="text-[#D4AF37] text-xs md:text-sm" /> ICAI Certified
                 </div>
               </motion.div>
             </div>
