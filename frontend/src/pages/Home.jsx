@@ -90,17 +90,17 @@ const Home = () => {
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.3, duration: 0.8 }}
-                className="text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-6"
+                className="text-4xl sm:text-5xl lg:text-6xl font-serif font-semibold text-white leading-tight mb-6"
               >
                 Financial Clarity for <br />
-                <span className="text-[#D4AF37]">Modern Business</span>
+                <span className="text-[#D4AF37] font-normal">Modern Business</span>
               </motion.h1>
 
               <motion.p
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.4, duration: 0.8 }}
-                className="text-lg lg:text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light"
+                className="text-base sm:text-lg lg:text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-normal"
               >
                 We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business.
               </motion.p>
@@ -112,19 +112,26 @@ const Home = () => {
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
               >
                 {/* UPDATED: Button triggers Modal */}
-                <button
+                <motion.button
                   onClick={openModal}
-                  className="px-8 py-3.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-semibold text-base shadow-lg hover:bg-white transition-all hover:-translate-y-0.5"
+                  whileHover={{ scale: 1.05, y: -2 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-8 py-3.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-medium text-sm sm:text-base shadow-lg hover:bg-white transition-all"
                 >
                   Book Consultation
-                </button>
+                </motion.button>
                 
-                <Link
-                  to="/services"
-                  className="px-8 py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-base hover:bg-white/10 transition-all backdrop-blur-sm"
+                <motion.div
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
                 >
-                  Our Services
-                </Link>
+                  <Link
+                    to="/services"
+                    className="px-8 py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm sm:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
+                  >
+                    Our Services
+                  </Link>
+                </motion.div>
               </motion.div>
 
               {/* Simple Trust Badges */}

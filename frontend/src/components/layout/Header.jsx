@@ -26,11 +26,14 @@ const Header = () => {
   ];
 
   return (
-    <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+    <motion.header
+      initial={{ y: -100 }}
+      animate={{ y: 0 }}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      className={`fixed top-0 w-full z-50 transition-all duration-500 ${
         scrolled
-          ? 'bg-white shadow-md py-3'
-          : 'bg-[#0B1530] py-4'
+          ? 'bg-white/80 backdrop-blur-xl shadow-lg py-3 border-b border-gray-100/50'
+          : 'bg-[#0B1530]/80 backdrop-blur-xl py-4'
       }`}
     >
       <nav className="container mx-auto px-6 flex justify-between items-center">
@@ -53,19 +56,24 @@ const Header = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <li key={link.to}>
+          {navLinks.map((link, index) => (
+            <motion.li 
+              key={link.to}
+              initial={{ opacity: 0, y: -20 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.1 * index, duration: 0.3 }}
+            >
               <NavLink
                 to={link.to}
                 className={({ isActive }) =>
-                  `text-base font-sans font-medium transition-all duration-200 relative group ${
+                  `text-base font-sans font-medium transition-all duration-300 relative group ${
                     scrolled
                       ? isActive 
                         ? 'text-[#D4AF37] font-semibold' 
-                        : 'text-gray-800 hover:text-[#0B1530]'
+                        : 'text-gray-700 hover:text-[#0B1530]'
                       : isActive
                         ? 'text-[#D4AF37] font-semibold'
-                        : 'text-white hover:text-[#D4AF37]'
+                        : 'text-white/90 hover:text-white'
                   }`
                 }
               >
@@ -73,15 +81,16 @@ const Header = () => {
                   <>
                     {link.label}
                     {/* Underline that appears when active OR hovered */}
-                    <span
-                      className={`absolute -bottom-1 left-0 h-0.5 bg-[#D4AF37] transition-all duration-300 ${
-                        isActive ? 'w-full' : 'w-0 group-hover:w-full'
-                      }`}
+                    <motion.span
+                      initial={false}
+                      animate={{ width: isActive ? '100%' : '0%' }}
+                      whileHover={{ width: '100%' }}
+                      className="absolute -bottom-1 left-0 h-0.5 bg-[#D4AF37] transition-all duration-300"
                     />
                   </>
                 )}
               </NavLink>
-            </li>
+            </motion.li>
           ))}
         </ul>
 
@@ -117,10 +126,10 @@ const Header = () => {
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className={`lg:hidden backdrop-blur-xl shadow-2xl overflow-hidden border-t transition-all ${
+            className={`lg:hidden backdrop-blur-2xl shadow-2xl overflow-hidden border-t transition-all ${
               scrolled 
-                ? 'bg-white/95 border-gray-100' 
-                : 'bg-[#0B1530]/95 border-white/10'
+                ? 'bg-white/90 border-gray-100/50' 
+                : 'bg-[#0B1530]/90 border-white/10'
             }`}
           >
             <ul className="flex flex-col p-6 space-y-4">
@@ -159,7 +168,7 @@ const Header = () => {
           </motion.div>
         )}
       </AnimatePresence>
-    </header>
+    </motion.header>
   );
 };
 
