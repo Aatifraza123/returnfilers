@@ -59,7 +59,7 @@ const Home = () => {
       <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} />
 
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-28 pb-20 md:pb-24">
+      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-28 pb-24">
         
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
