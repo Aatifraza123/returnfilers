@@ -322,25 +322,68 @@ const sendConsultationEmails = async (consultation) => {
       `
     };
 
-    // Send admin email
-    console.log('Sending admin notification email to:', process.env.EMAIL_USER);
-    const adminResult = await transporter.sendMail(adminEmail);
-    console.log('Admin email sent successfully:', adminResult.messageId);
+    // Send admin email - independent try/catch so customer email still sends if admin fails
+    let adminSent = false;
+    try {
+      console.log('=== SENDING ADMIN EMAIL ===');
+      console.log('To:', process.env.EMAIL_USER);
+      console.log('Subject:', adminEmail.subject);
+      const adminResult = await transporter.sendMail(adminEmail);
+      adminSent = true;
+      console.log('Admin email sent successfully!');
+      console.log('Message ID:', adminResult.messageId);
+      console.log('Response:', adminResult.response);
+    } catch (adminError) {
+      console.error('=== ADMIN EMAIL FAILED ===');
+      console.error('Error:', adminError.message);
+      console.error('Code:', adminError.code);
+      console.error('Command:', adminError.command);
+      if (adminError.response) {
+        console.error('Response:', adminError.response);
+      }
+      // Continue to send customer email even if admin email fails
+    }
 
-    // Send customer auto-reply email
-    console.log('Sending customer auto-reply email to:', consultation.email);
-    const customerResult = await transporter.sendMail(customerEmail);
-    console.log('Customer auto-reply email sent successfully:', customerResult.messageId);
+    // Send customer auto-reply email - independent try/catch
+    let customerSent = false;
+    try {
+      console.log('=== SENDING CUSTOMER EMAIL ===');
+      console.log('To:', consultation.email);
+      console.log('Subject:', customerEmail.subject);
+      const customerResult = await transporter.sendMail(customerEmail);
+      customerSent = true;
+      console.log('Customer email sent successfully!');
+      console.log('Message ID:', customerResult.messageId);
+      console.log('Response:', customerResult.response);
+    } catch (customerError) {
+      console.error('=== CUSTOMER EMAIL FAILED ===');
+      console.error('Error:', customerError.message);
+      console.error('Code:', customerError.code);
+      console.error('Command:', customerError.command);
+      if (customerError.response) {
+        console.error('Response:', customerError.response);
+      }
+      // Don't throw - we already logged the error
+    }
 
-    console.log('Both consultation emails sent successfully');
+    // Summary
+    console.log('=== EMAIL SENDING SUMMARY ===');
+    console.log('Admin email sent:', adminSent);
+    console.log('Customer email sent:', customerSent);
+    
+    if (!adminSent && !customerSent) {
+      throw new Error('Both emails failed to send');
+    } else if (!adminSent) {
+      console.warn('Warning: Admin email failed but customer email sent');
+    } else if (!customerSent) {
+      console.warn('Warning: Customer email failed but admin email sent');
+    } else {
+      console.log('Both consultation emails sent successfully!');
+    }
   } catch (error) {
-    console.error('Email sending error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      command: error.command,
-      response: error.response
-    });
+    console.error('=== CRITICAL EMAIL ERROR ===');
+    console.error('Error:', error.message);
+    console.error('Stack:', error.stack);
     throw error; // Re-throw to be caught by caller
   }
 };
