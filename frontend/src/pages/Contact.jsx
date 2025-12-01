@@ -270,7 +270,10 @@ const Contact = () => {
       {/* ==================== FAQ SECTION ==================== */}
       <section className="py-8 md:py-12 lg:py-16 bg-white">
         <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-center mb-6 md:mb-8 lg:mb-12 text-[#0B1530]">Frequently Asked Questions</h2>
+          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-center mb-6 md:mb-8 lg:mb-12 text-[#0B1530]">
+            <span className="block">Frequently</span>
+            <span className="block">Asked Questions</span>
+          </h2>
           <div className="space-y-3 md:space-y-4">
             {faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
