@@ -105,51 +105,7 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/admin', adminRoutes);
 
-// Quote routes - MUST be before /api publicRoutes to avoid conflicts
-const Quote = require('./models/quoteModel');
-
-// POST /api/quotes - Public route for submitting quotes
-app.post('/api/quotes', async (req, res) => {
-  try {
-    console.log('POST /api/quotes - Request received:', req.body);
-    
-    const { name, email, phone, company, service, budget, message } = req.body;
-
-    // Validation
-    if (!name || !email || !phone || !service || !message) {
-      return res.status(400).json({ 
-        message: 'Please fill in all required fields',
-        received: { name: !!name, email: !!email, phone: !!phone, service: !!service, message: !!message }
-      });
-    }
-
-    // Create quote
-    const quote = await Quote.create({
-      name: name.trim(),
-      email: email.trim(),
-      phone: phone.trim(),
-      company: (company || '').trim(),
-      service: service.trim(),
-      budget: (budget || '').trim(),
-      message: message.trim()
-    });
-
-    console.log('Quote created successfully:', quote._id);
-    res.status(201).json({
-      success: true,
-      message: 'Quote request submitted successfully',
-      quote
-    });
-  } catch (error) {
-    console.error('Quote creation error:', error);
-    res.status(500).json({ 
-      message: error.message || 'Failed to create quote',
-      error: process.env.NODE_ENV === 'development' ? error.stack : undefined
-    });
-  }
-});
-
-// Register quotes router for GET, PATCH, DELETE (admin routes)
+// Quote routes - use controller which sends emails
 app.use('/api/quotes', quoteRoutes);
 console.log('✓ Quote routes registered at /api/quotes');
 

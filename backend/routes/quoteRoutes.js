@@ -21,8 +21,8 @@ router.get('/test', (req, res) => {
 });
 
 // @route   /api/quotes
-// Note: POST is handled directly in server.js to avoid conflicts
 router.route('/')
+  .post(createQuote)               // Public: Anyone can submit quote
   .get(protect, getQuotes);        // Private: Only Admin can view
 
 // @route   /api/quotes/:id
