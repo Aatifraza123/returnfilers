@@ -28,10 +28,10 @@ if (!rootElement) {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-      // Simulate app loading time
+      // Quick loader - just 500ms
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 1500); // Show loader for at least 1.5 seconds
+      }, 500);
 
       return () => clearTimeout(timer);
     }, []);
