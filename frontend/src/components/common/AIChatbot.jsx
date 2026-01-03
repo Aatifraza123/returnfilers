@@ -91,6 +91,7 @@ const formatText = (text) => {
 
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [isVisible, setIsVisible] = useState(true);
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
@@ -120,6 +121,27 @@ const AIChatbot = () => {
     const handleOpenChatbot = () => setIsOpen(true);
     window.addEventListener('openChatbot', handleOpenChatbot);
     return () => window.removeEventListener('openChatbot', handleOpenChatbot);
+  }, []);
+
+  // Hide chatbot when near footer/newsletter section
+  useEffect(() => {
+    const handleScroll = () => {
+      const footer = document.querySelector('footer');
+      if (footer) {
+        const footerRect = footer.getBoundingClientRect();
+        const windowHeight = window.innerHeight;
+        // Hide when footer is 200px from bottom of viewport
+        if (footerRect.top < windowHeight + 100) {
+          setIsVisible(false);
+        } else {
+          setIsVisible(true);
+        }
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    handleScroll(); // Check on mount
+    return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
   const clearChat = () => {
@@ -176,11 +198,12 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button - higher position on mobile to avoid footer overlap */}
+      {/* Floating Chat Button - hide when near footer */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 ${isOpen ? 'scale-0' : 'scale-100'}`}
-        style={{ transition: 'transform 0.2s ease' }}
+        className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 transition-all duration-300 ${
+          isOpen ? 'scale-0 opacity-0' : isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
+        }`}
       >
         <div className="w-12 h-12 md:w-14 md:h-14 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors">
           <FaRobot size={20} className="text-[#D4AF37] md:text-[22px]" />
@@ -188,10 +211,10 @@ const AIChatbot = () => {
         </div>
       </button>
 
-      {/* Chat Window - higher position on mobile */}
+      {/* Chat Window */}
       <div 
-        className={`fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 w-[340px] md:w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
-          isOpen ? 'opacity-100 scale-100 h-[450px] md:h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
+        className={`fixed bottom-20 md:bottom-6 right-4 md:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[360px] md:w-[380px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
+          isOpen && isVisible ? 'opacity-100 scale-100 h-[60vh] sm:h-[480px] md:h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
         }`}
       >
         {/* Header */}
