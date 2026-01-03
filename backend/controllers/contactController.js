@@ -327,242 +327,128 @@ const deleteContact = async (req, res) => {
   }
 };
 
-// Helper function to send emails (completely async, non-blocking)
+// Helper function to send emails using Resend (primary) or Gmail (fallback)
 const sendContactEmails = async (contact) => {
   console.log('sendContactEmails called for:', contact._id);
   
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    console.error('Email credentials not configured');
-    console.log('EMAIL_USER exists:', !!process.env.EMAIL_USER);
-    console.log('EMAIL_PASS exists:', !!process.env.EMAIL_PASS);
-    return;
-  }
+  const { sendEmail } = require('../utils/emailService');
+
+  const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
+
+  // Admin notification email HTML
+  const adminHtml = `
+    <!DOCTYPE html>
+    <html>
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <tr>
+                <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                  <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">New Contact Message</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 30px;">
+                  <table width="100%" cellpadding="8" cellspacing="0">
+                    <tr>
+                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Name:</strong></td>
+                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.name}</td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Email:</strong></td>
+                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;"><a href="mailto:${contact.email}" style="color: #0B1530;">${contact.email}</a></td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
+                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.phone}</td>
+                    </tr>
+                    <tr>
+                      <td style="color: #666; font-size: 14px; padding: 8px 0; vertical-align: top;"><strong>Message:</strong></td>
+                      <td style="color: #333; font-size: 14px; padding: 8px 0; text-align: right; line-height: 1.5;">${contact.message.replace(/\n/g, '<br>')}</td>
+                    </tr>
+                  </table>
+                  <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 3px solid #0B1530; border-radius: 4px;">
+                    <p style="margin: 0; color: #666; font-size: 12px;"><strong>Reference ID:</strong> ${contact._id}</p>
+                    <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;"><strong>Time:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
+                  </div>
+                </td>
+              </tr>
+              <tr>
+                <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
+
+  // Customer confirmation email HTML
+  const customerHtml = `
+    <!DOCTYPE html>
+    <html>
+    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+        <tr>
+          <td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+              <tr>
+                <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                  <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Thank You!</h1>
+                </td>
+              </tr>
+              <tr>
+                <td style="padding: 30px;">
+                  <p style="color: #333; font-size: 16px; line-height: 1.6;">Dear ${contact.name},</p>
+                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for reaching out to Tax Filer. We have received your message and our team will get back to you within 24 hours.</p>
+                  <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
+                    <p style="margin: 0; color: #666; font-size: 14px;"><strong>Your Message:</strong></p>
+                    <p style="margin: 10px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">${contact.message}</p>
+                  </div>
+                  <p style="color: #666; font-size: 14px; line-height: 1.6;">For urgent queries, call us at <strong>+91 84471 27264</strong></p>
+                </td>
+              </tr>
+              <tr>
+                <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                </td>
+              </tr>
+            </table>
+          </td>
+        </tr>
+      </table>
+    </body>
+    </html>
+  `;
 
   try {
-    console.log('Creating email transporter...');
-    console.log('EMAIL_USER:', process.env.EMAIL_USER ? 'EXISTS' : 'MISSING');
-    console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'EXISTS' : 'MISSING');
-    
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      },
-      connectionTimeout: 60000,
-      greetingTimeout: 30000,
-      socketTimeout: 60000,
-      tls: {
-        rejectUnauthorized: false
-      }
-    });
-
-    // Try to verify transporter (don't block if it fails)
-    try {
-      console.log('Verifying email transporter...');
-      await transporter.verify();
-      console.log('Email transporter verified successfully');
-    } catch (verifyError) {
-      console.warn('Email transporter verification failed, but continuing:', verifyError.message);
-    }
-
-    // Admin notification email
-    const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
-    const adminEmail = {
-      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
+    // Send admin notification
+    console.log('Sending admin notification email...');
+    await sendEmail({
       to: adminEmailAddress,
       subject: `New Contact Message from ${contact.name}`,
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-            <tr>
-              <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">New Contact Message</h1>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 30px;">
-                      <table width="100%" cellpadding="8" cellspacing="0">
-                        <tr>
-                          <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Name:</strong></td>
-                          <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.name}</td>
-                        </tr>
-                        <tr>
-                          <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Email:</strong></td>
-                          <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;"><a href="mailto:${contact.email}" style="color: #0B1530;">${contact.email}</a></td>
-                        </tr>
-                        <tr>
-                          <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
-                          <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.phone}</td>
-                        </tr>
-                        <tr>
-                          <td style="color: #666; font-size: 14px; padding: 8px 0; vertical-align: top;"><strong>Message:</strong></td>
-                          <td style="color: #333; font-size: 14px; padding: 8px 0; text-align: right; line-height: 1.5;">${contact.message.replace(/\n/g, '<br>')}</td>
-                        </tr>
-                      </table>
-                      <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 3px solid #0B1530; border-radius: 4px;">
-                        <p style="margin: 0; color: #666; font-size: 12px;"><strong>Reference ID:</strong> ${contact._id}</p>
-                        <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;"><strong>Time:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
-                      </div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
-                      <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </body>
-        </html>
-      `
-    };
+      html: adminHtml
+    });
+    console.log('✅ Admin email sent');
 
-    // Customer confirmation email (Auto-reply)
-    const customerEmail = {
-      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
+    // Send customer confirmation
+    console.log('Sending customer confirmation email...');
+    await sendEmail({
       to: contact.email,
       subject: 'Thank you for contacting Tax Filer',
-      html: `
-        <!DOCTYPE html>
-        <html>
-        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-            <tr>
-              <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Thank You!</h1>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 30px;">
-                      <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${contact.name},</p>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Thank you for reaching out to <strong>Tax Filer</strong>. We have received your message and will get back to you within 24 hours.</p>
-                      <div style="margin: 20px 0; padding: 20px; background-color: #f8f9fa; border-left: 4px solid #D4AF37; border-radius: 4px;">
-                        <p style="margin: 0; color: #0B1530; font-size: 14px; font-weight: bold;">Your Message:</p>
-                        <p style="margin: 10px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">${contact.message.replace(/\n/g, '<br>')}</p>
-                      </div>
-                      <div style="margin: 20px 0; padding: 15px; background-color: #e7f3ff; border: 1px solid #b3d9ff; border-radius: 4px;">
-                        <p style="margin: 0; color: #004085; font-size: 14px;"><strong>Contact Information:</strong></p>
-                        <p style="margin: 5px 0 0 0; color: #004085; font-size: 14px;">Email: ${process.env.EMAIL_USER}<br>Hours: Mon-Fri, 9am - 6pm IST</p>
-                      </div>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0 0 0;">Best regards,<br><strong>Tax Filer Team</strong></p>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
-                      <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </body>
-        </html>
-      `
-    };
-
-    // Send admin email - independent try/catch so customer email still sends if admin fails
-    let adminSent = false;
-    try {
-      console.log('=== SENDING ADMIN EMAIL ===');
-      console.log('From:', adminEmail.from);
-      console.log('To:', adminEmailAddress);
-      console.log('Subject:', adminEmail.subject);
-      
-      const adminResult = await Promise.race([
-        transporter.sendMail(adminEmail),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Email send timeout after 20 seconds')), 20000)
-        )
-      ]);
-      
-      adminSent = true;
-      console.log('✅ Admin email sent successfully!');
-      console.log('Message ID:', adminResult.messageId);
-      console.log('Response:', adminResult.response);
-    } catch (adminError) {
-      console.error('❌ ADMIN EMAIL FAILED ===');
-      console.error('Error message:', adminError.message);
-      console.error('Error code:', adminError.code);
-      console.error('Full error:', JSON.stringify(adminError, null, 2));
-      if (adminError.response) {
-        console.error('SMTP Response:', adminError.response);
-      }
-      if (adminError.responseCode) {
-        console.error('Response Code:', adminError.responseCode);
-      }
-    }
-
-    // Send customer auto-reply email - independent try/catch
-    let customerSent = false;
-    try {
-      console.log('=== SENDING CUSTOMER EMAIL ===');
-      console.log('From:', customerEmail.from);
-      console.log('To:', contact.email);
-      console.log('Subject:', customerEmail.subject);
-      
-      const customerResult = await Promise.race([
-        transporter.sendMail(customerEmail),
-        new Promise((_, reject) => 
-          setTimeout(() => reject(new Error('Email send timeout after 20 seconds')), 20000)
-        )
-      ]);
-      
-      customerSent = true;
-      console.log('✅ Customer email sent successfully!');
-      console.log('Message ID:', customerResult.messageId);
-      console.log('Response:', customerResult.response);
-    } catch (customerError) {
-      console.error('❌ CUSTOMER EMAIL FAILED ===');
-      console.error('Error message:', customerError.message);
-      console.error('Error code:', customerError.code);
-      console.error('Full error:', JSON.stringify(customerError, null, 2));
-      if (customerError.response) {
-        console.error('SMTP Response:', customerError.response);
-      }
-      if (customerError.responseCode) {
-        console.error('Response Code:', customerError.responseCode);
-      }
-    }
-
-    // Summary
-    console.log('=== EMAIL SENDING SUMMARY ===');
-    console.log('Admin email sent:', adminSent);
-    console.log('Customer email sent:', customerSent);
-    
-    if (!adminSent && !customerSent) {
-      throw new Error('Both emails failed to send');
-    } else if (!adminSent) {
-      console.warn('Warning: Admin email failed but customer email sent');
-    } else if (!customerSent) {
-      console.warn('Warning: Customer email failed but admin email sent');
-    } else {
-      console.log('✅ Both contact emails sent successfully!');
-    }
-  } catch (error) {
-    console.error('❌ Email sending error:', error);
-    console.error('Error details:', {
-      message: error.message,
-      code: error.code,
-      command: error.command,
-      response: error.response
+      html: customerHtml
     });
-    throw error; // Re-throw to be caught by caller
+    console.log('✅ Customer email sent');
+
+  } catch (error) {
+    console.error('❌ Email sending failed:', error.message);
   }
 };
 
