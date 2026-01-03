@@ -41,10 +41,10 @@ const Home = () => {
   }, []);
 
   const services = [
-    { icon: <FaFileInvoiceDollar />, title: 'Tax Consulting', desc: 'Expert tax planning and compliance strategies optimized for your business growth.' },
-    { icon: <FaBalanceScale />, title: 'Auditing', desc: 'Comprehensive audit services ensuring accuracy, transparency, and regulatory compliance.' },
-    { icon: <FaChartLine />, title: 'Financial Advisory', desc: 'Strategic financial guidance to maximize profits and minimize risks.' },
-    { icon: <FaUsers />, title: 'Business Setup', desc: 'End-to-end assistance in company formation, registration, and legal structuring.' },
+    { icon: <FaFileInvoiceDollar />, title: 'Tax Consulting', desc: 'Expert tax planning and compliance strategies optimized for your business growth.', slug: 'tax-consulting' },
+    { icon: <FaBalanceScale />, title: 'Auditing', desc: 'Comprehensive audit services ensuring accuracy, transparency, and regulatory compliance.', slug: 'auditing' },
+    { icon: <FaChartLine />, title: 'Financial Advisory', desc: 'Strategic financial guidance to maximize profits and minimize risks.', slug: 'financial-advisory' },
+    { icon: <FaUsers />, title: 'Business Setup', desc: 'End-to-end assistance in company formation, registration, and legal structuring.', slug: 'business-setup' },
   ];
 
   const features = [
@@ -236,7 +236,7 @@ const Home = () => {
                 <p className="text-gray-600 text-base leading-relaxed mb-6">
                    {service.desc}
                 </p>
-                <Link to="/expertise" className="text-base font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
+                <Link to={`/expertise/${service.slug}`} className="text-base font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
                   Read More <FaArrowRight size={12} />
                 </Link>
               </motion.div>

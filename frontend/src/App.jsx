@@ -11,6 +11,7 @@ import About from './pages/About'
 import Services from './pages/Services'
 import ServiceDetail from './pages/ServiceDetail'
 import Expertise from './pages/Expertise'
+import ExpertiseDetail from './pages/ExpertiseDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Portfolio from './pages/Portfolio'
@@ -62,6 +63,7 @@ function App() {
           <Route path="services" element={<Services />} />
           <Route path="services/:id" element={<ServiceDetail />} />
           <Route path="expertise" element={<Expertise />} />
+          <Route path="expertise/:slug" element={<ExpertiseDetail />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:id" element={<BlogPost />} />
           <Route path="portfolio" element={<Portfolio />} />
