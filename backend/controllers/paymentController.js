@@ -1,7 +1,6 @@
 const Payment = require('../models/paymentModel');
 const Razorpay = require('razorpay');
 const crypto = require('crypto');
-const nodemailer = require('nodemailer');
 
 // Initialize Razorpay (only if keys are provided)
 let razorpay;
@@ -184,212 +183,49 @@ const getPaymentById = async (req, res) => {
   }
 };
 
-// Helper function to send payment emails (non-blocking)
+// Helper function to send payment emails using Resend
 const sendPaymentEmails = async (payment) => {
-  if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
-    return;
-  }
+  const { sendEmail } = require('../utils/emailService');
+  const adminEmail = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
 
   try {
-    const transporter = nodemailer.createTransport({
-      host: 'smtp.gmail.com',
-      port: 465,
-      secure: true,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
-      },
-      tls: {
-        rejectUnauthorized: false
-      },
-      connectionTimeout: 30000,
-      greetingTimeout: 30000,
-      socketTimeout: 30000
-    });
-
     // Customer confirmation email
     if (payment.customerDetails?.email) {
       const customerSubject = payment.serviceName 
         ? `Payment Confirmed - ${payment.serviceName} - ₹${payment.amount.toLocaleString()}`
         : `Payment Confirmed - ₹${payment.amount.toLocaleString()}`;
 
-      const customerEmail = {
-        from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
-        to: payment.customerDetails.email,
-        subject: customerSubject,
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          </head>
-          <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-              <tr>
-                <td align="center">
-                  <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                    <tr>
-                      <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                        <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Payment Confirmed</h1>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="padding: 30px;">
-                        <p style="color: #333; font-size: 16px; margin: 0 0 20px 0;">Dear <strong>${payment.customerDetails.name}</strong>,</p>
-                        <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">
-                          Thank you for your payment. Your transaction has been successfully processed.
-                        </p>
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; margin: 20px 0; border-radius: 8px;">
-                          <h3 style="color: #0B1530; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">Payment Details</h3>
-                          <table width="100%" cellpadding="8" cellspacing="0">
-                            <tr>
-                              <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Amount Paid:</strong></td>
-                              <td style="color: #0B1530; font-size: 16px; font-weight: bold; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">₹${payment.amount.toLocaleString()}</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Payment ID:</strong></td>
-                              <td style="color: #666; font-size: 12px; font-family: monospace; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.razorpayPaymentId}</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Order ID:</strong></td>
-                              <td style="color: #666; font-size: 12px; font-family: monospace; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.razorpayOrderId}</td>
-                            </tr>
-                            <tr>
-                              <td style="color: #666; font-size: 14px; padding: 8px 0;"><strong>Date:</strong></td>
-                              <td style="color: #666; font-size: 14px; padding: 8px 0; text-align: right;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td>
-                            </tr>
-                          </table>
-                        </div>
-                        ${payment.serviceName ? `
-                        <div style="background-color: #f8f9fa; border-left: 4px solid #D4AF37; padding: 20px; margin: 20px 0; border-radius: 4px;">
-                          <h3 style="color: #0B1530; margin: 0 0 12px 0; font-size: 16px; font-weight: bold; border-bottom: 1px solid #dee2e6; padding-bottom: 8px;">Service Details</h3>
-                          <table width="100%" cellpadding="6" cellspacing="0">
-                            <tr>
-                              <td style="color: #666; font-size: 13px; padding: 6px 0; width: 30%;"><strong>Service Name:</strong></td>
-                              <td style="color: #0B1530; font-size: 14px; font-weight: bold; padding: 6px 0;">${payment.serviceName}</td>
-                            </tr>
-                            ${payment.serviceCategory ? `
-                            <tr>
-                              <td style="color: #666; font-size: 13px; padding: 6px 0;"><strong>Category:</strong></td>
-                              <td style="color: #666; font-size: 13px; padding: 6px 0;">
-                                <span style="background-color: #D4AF37; color: #0B1530; padding: 3px 8px; border-radius: 4px; font-size: 11px; font-weight: bold; text-transform: uppercase;">${payment.serviceCategory}</span>
-                              </td>
-                            </tr>
-                            ` : ''}
-                            ${payment.serviceDescription ? `
-                            <tr>
-                              <td style="color: #666; font-size: 13px; padding: 6px 0; vertical-align: top;"><strong>Description:</strong></td>
-                              <td style="color: #666; font-size: 13px; padding: 6px 0; line-height: 1.5;">${payment.serviceDescription}</td>
-                            </tr>
-                            ` : ''}
-                          </table>
-                        </div>
-                        ` : ''}
-                        <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0;">
-                          Your payment receipt has been generated. Please keep this email for your records.
-                        </p>
-                        <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 15px; margin: 20px 0; border-radius: 4px;">
-                          <p style="margin: 0; color: #333; font-size: 14px;">
-                            <strong>Need Help?</strong><br>
-                            If you have any questions about this payment, please contact us at <a href="mailto:${process.env.EMAIL_USER}" style="color: #0B1530; font-weight: bold;">${process.env.EMAIL_USER}</a>
-                          </p>
-                        </div>
-                      </td>
-                    </tr>
-                    <tr>
-                      <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                        <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
-                        <p style="color: #ffffff; margin: 0; font-size: 12px;">Professional Tax & Financial Services</p>
-                      </td>
-                    </tr>
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-          </html>
-        `,
-      };
-
-      await transporter.sendMail(customerEmail);
-      console.log('Payment confirmation email sent to customer:', payment.customerDetails.email);
-    }
-
-    // Admin notification email
-    const adminSubject = payment.serviceName 
-      ? `New Payment Received - ${payment.serviceName} - ₹${payment.amount.toLocaleString()}`
-      : `New Payment Received - ₹${payment.amount.toLocaleString()}`;
-
-    const adminEmail = {
-      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
-      to: process.env.EMAIL_USER,
-      subject: adminSubject,
-      html: `
+      const customerHtml = `
         <!DOCTYPE html>
         <html>
-        <head>
-          <meta charset="utf-8">
-          <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        </head>
         <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
           <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
             <tr>
               <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
                   <tr>
                     <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">New Payment Received</h1>
+                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">Payment Confirmed ✓</h1>
                     </td>
                   </tr>
                   <tr>
                     <td style="padding: 30px;">
-                      <p style="color: #333; font-size: 16px; margin: 0 0 20px 0;">A new payment has been received.</p>
-                      <div style="background-color: #f8f9fa; border: 1px solid #dee2e6; padding: 20px; margin: 20px 0; border-radius: 8px;">
-                        <h3 style="color: #0B1530; margin: 0 0 15px 0; font-size: 18px; border-bottom: 2px solid #D4AF37; padding-bottom: 10px;">Payment Details</h3>
-                        <table width="100%" cellpadding="8" cellspacing="0">
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Amount:</strong></td>
-                            <td style="color: #0B1530; font-size: 16px; font-weight: bold; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">₹${payment.amount.toLocaleString()}</td>
-                          </tr>
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Customer Name:</strong></td>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.customerDetails?.name || 'N/A'}</td>
-                          </tr>
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Customer Email:</strong></td>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.customerDetails?.email || 'N/A'}</td>
-                          </tr>
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Customer Phone:</strong></td>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.customerDetails?.phone || 'N/A'}</td>
-                          </tr>
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Payment ID:</strong></td>
-                            <td style="color: #666; font-size: 12px; font-family: monospace; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.razorpayPaymentId}</td>
-                          </tr>
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Order ID:</strong></td>
-                            <td style="color: #666; font-size: 12px; font-family: monospace; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.razorpayOrderId}</td>
-                          </tr>
-                          ${payment.serviceName ? `
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Service:</strong></td>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${payment.serviceName}</td>
-                          </tr>
-                          ` : ''}
-                          <tr>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0;"><strong>Date:</strong></td>
-                            <td style="color: #666; font-size: 14px; padding: 8px 0; text-align: right;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td>
-                          </tr>
+                      <p style="color: #333; font-size: 16px;">Dear <strong>${payment.customerDetails.name}</strong>,</p>
+                      <p style="color: #666; font-size: 14px;">Your payment has been successfully processed.</p>
+                      <div style="background-color: #f8f9fa; padding: 20px; margin: 20px 0; border-radius: 8px;">
+                        <table width="100%" cellpadding="8">
+                          <tr><td style="color: #666;"><strong>Amount:</strong></td><td style="text-align: right; color: #0B1530; font-weight: bold;">₹${payment.amount.toLocaleString()}</td></tr>
+                          <tr><td style="color: #666;"><strong>Payment ID:</strong></td><td style="text-align: right; font-family: monospace; font-size: 12px;">${payment.razorpayPaymentId}</td></tr>
+                          ${payment.serviceName ? `<tr><td style="color: #666;"><strong>Service:</strong></td><td style="text-align: right;">${payment.serviceName}</td></tr>` : ''}
+                          <tr><td style="color: #666;"><strong>Date:</strong></td><td style="text-align: right;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
                         </table>
                       </div>
+                      <p style="color: #666; font-size: 14px;">For queries, call us at <strong>+91 84471 27264</strong></p>
                     </td>
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
-                      <p style="color: #ffffff; margin: 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                      <p style="color: #D4AF37; margin: 0; font-weight: bold;">Tax Filer</p>
                     </td>
                   </tr>
                 </table>
@@ -398,13 +234,71 @@ const sendPaymentEmails = async (payment) => {
           </table>
         </body>
         </html>
-      `,
-    };
+      `;
 
-    await transporter.sendMail(adminEmail);
-    console.log('Payment notification email sent to admin:', process.env.EMAIL_USER);
+      await sendEmail({
+        to: payment.customerDetails.email,
+        subject: customerSubject,
+        html: customerHtml
+      });
+      console.log('✅ Payment confirmation email sent to customer');
+    }
+
+    // Admin notification email
+    const adminSubject = payment.serviceName 
+      ? `New Payment - ${payment.serviceName} - ₹${payment.amount.toLocaleString()}`
+      : `New Payment - ₹${payment.amount.toLocaleString()}`;
+
+    const adminHtml = `
+      <!DOCTYPE html>
+      <html>
+      <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+          <tr>
+            <td align="center">
+              <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
+                <tr>
+                  <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                    <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">New Payment Received</h1>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="padding: 30px;">
+                    <div style="background-color: #f8f9fa; padding: 20px; border-radius: 8px;">
+                      <table width="100%" cellpadding="8">
+                        <tr><td style="color: #666;"><strong>Amount:</strong></td><td style="text-align: right; color: #0B1530; font-weight: bold; font-size: 18px;">₹${payment.amount.toLocaleString()}</td></tr>
+                        <tr><td style="color: #666;"><strong>Customer:</strong></td><td style="text-align: right;">${payment.customerDetails?.name || 'N/A'}</td></tr>
+                        <tr><td style="color: #666;"><strong>Email:</strong></td><td style="text-align: right;">${payment.customerDetails?.email || 'N/A'}</td></tr>
+                        <tr><td style="color: #666;"><strong>Phone:</strong></td><td style="text-align: right;">${payment.customerDetails?.phone || 'N/A'}</td></tr>
+                        <tr><td style="color: #666;"><strong>Payment ID:</strong></td><td style="text-align: right; font-family: monospace; font-size: 11px;">${payment.razorpayPaymentId}</td></tr>
+                        ${payment.serviceName ? `<tr><td style="color: #666;"><strong>Service:</strong></td><td style="text-align: right;">${payment.serviceName}</td></tr>` : ''}
+                        <tr><td style="color: #666;"><strong>Date:</strong></td><td style="text-align: right;">${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</td></tr>
+                      </table>
+                    </div>
+                  </td>
+                </tr>
+                <tr>
+                  <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
+                    <p style="color: #D4AF37; margin: 0; font-weight: bold;">Tax Filer</p>
+                  </td>
+                </tr>
+              </table>
+            </td>
+          </tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    await sendEmail({
+      to: adminEmail,
+      subject: adminSubject,
+      html: adminHtml
+    });
+    console.log('✅ Payment notification email sent to admin');
+
   } catch (error) {
-    console.error('Payment email error:', error);
+    console.error('❌ Payment email error:', error.message);
   }
 };
 
