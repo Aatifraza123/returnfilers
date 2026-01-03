@@ -9,17 +9,28 @@ const MessageContent = ({ content, isUser }) => {
   const lines = content.split('\n');
   
   return (
-    <div className="space-y-1.5">
+    <div className="space-y-1">
       {lines.map((line, idx) => {
         const trimmedLine = line.trim();
         
         if (!trimmedLine) {
-          return <div key={idx} className="h-0.5" />;
+          return <div key={idx} className="h-1" />;
         }
         
-        // Bullet points
-        if (trimmedLine.startsWith('- ') || trimmedLine.startsWith('• ')) {
-          const text = trimmedLine.replace(/^[-•]\s*/, '');
+        // Nested bullet points (+ at start, with or without space)
+        if (/^\+\s*\S/.test(trimmedLine)) {
+          const text = trimmedLine.replace(/^\+\s*/, '');
+          return (
+            <div key={idx} className="flex items-start gap-1.5 pl-4">
+              <span className="w-1 h-1 rounded-full bg-[#0B1530] mt-1.5 flex-shrink-0"></span>
+              <span className="text-[12px]">{formatText(text)}</span>
+            </div>
+          );
+        }
+        
+        // Bullet points (* - •) with or without space
+        if (/^[-•*]\s*\S/.test(trimmedLine) && !trimmedLine.startsWith('**')) {
+          const text = trimmedLine.replace(/^[-•*]\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-1.5 flex-shrink-0"></span>
@@ -40,10 +51,10 @@ const MessageContent = ({ content, isUser }) => {
           );
         }
         
-        // Headers
-        if (trimmedLine.endsWith(':') && trimmedLine.length < 40 && !trimmedLine.includes('http')) {
+        // Headers (ending with :)
+        if (trimmedLine.endsWith(':') && trimmedLine.length < 50 && !trimmedLine.includes('http') && !trimmedLine.includes('₹')) {
           return (
-            <div key={idx} className="font-semibold text-[#0B1530] mt-1.5 text-[12px]">
+            <div key={idx} className="font-semibold text-[#0B1530] mt-2 mb-1 text-[12px]">
               {formatText(trimmedLine)}
             </div>
           );
@@ -63,14 +74,19 @@ const MessageContent = ({ content, isUser }) => {
 const formatText = (text) => {
   if (!text) return null;
   
-  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*-\s*₹?[\d,]+)?(?:\/month)?|\+91\s*\d{5}\s*\d{5})/g);
+  // Match: **bold**, ₹prices with ranges (various dash types), phone numbers, pipe separators
+  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?))/gi);
   
   return parts.map((part, idx) => {
+    if (!part) return null;
     if (part.startsWith('**') && part.endsWith('**')) {
       return <strong key={idx} className="font-semibold text-[#0B1530]">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith('₹')) {
       return <span key={idx} className="font-semibold text-[#0B1530] bg-[#D4AF37]/20 px-1 rounded">{part}</span>;
+    }
+    if (part.startsWith('|')) {
+      return <span key={idx} className="text-gray-500 text-[11px]">{part}</span>;
     }
     if (part.startsWith('+91')) {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
