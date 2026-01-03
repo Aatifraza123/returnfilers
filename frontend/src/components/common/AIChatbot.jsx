@@ -202,8 +202,8 @@ const AIChatbot = () => {
 
       {/* Chat Window */}
       <div 
-        className={`fixed bottom-6 right-4 md:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[400px] md:w-[450px] bg-white rounded-3xl shadow-2xl shadow-violet-500/20 flex flex-col overflow-hidden border border-violet-100 transition-all duration-300 ${
-          isOpen && isVisible ? 'opacity-100 scale-100 h-[75vh] sm:h-[550px] md:h-[650px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
+        className={`fixed bottom-6 right-4 md:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] md:w-[400px] bg-white rounded-3xl shadow-2xl shadow-violet-500/20 flex flex-col overflow-hidden border border-violet-100 transition-all duration-300 ${
+          isOpen && isVisible ? 'opacity-100 scale-100 h-[75vh] sm:h-[500px] md:h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
         }`}
       >
         {/* Header */}
