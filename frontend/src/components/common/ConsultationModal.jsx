@@ -1,10 +1,10 @@
-import { useState, Fragment } from 'react';
+import { useState, useEffect, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaComment } from 'react-icons/fa';
 
-const ConsultationModal = ({ isOpen, closeModal }) => {
+const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -13,6 +13,13 @@ const ConsultationModal = ({ isOpen, closeModal }) => {
     service: '',
     message: ''
   });
+
+  // Pre-fill service when preSelectedService prop changes
+  useEffect(() => {
+    if (preSelectedService) {
+      setFormData(prev => ({ ...prev, service: preSelectedService }));
+    }
+  }, [preSelectedService]);
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -147,6 +154,9 @@ const ConsultationModal = ({ isOpen, closeModal }) => {
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all appearance-none text-sm text-gray-700"
                     >
                       <option value="">Select Service *</option>
+                      {preSelectedService && !['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Other'].includes(preSelectedService) && (
+                        <option value={preSelectedService}>{preSelectedService}</option>
+                      )}
                       <option value="Tax Consulting">Tax Consulting</option>
                       <option value="Audit Services">Audit Services</option>
                       <option value="Business Registration">Business Registration</option>

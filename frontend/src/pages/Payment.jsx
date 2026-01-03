@@ -149,7 +149,7 @@ const Payment = () => {
         amount: data.amount, // Amount in paise
         currency: data.currency || 'INR',
         order_id: data.orderId,
-        name: 'CA Associates',
+        name: 'Tax Filer',
         description: service?.title || 'Service Payment',
         image: '/logo.png',
         handler: async (response) => {
@@ -425,7 +425,7 @@ const Payment = () => {
                 <div className="flex items-center justify-center gap-2 pt-2">
                   <FaCheckCircle className="text-green-500 text-sm" />
                   <p className="text-xs text-gray-500 text-center">
-                    Secure payment powered by Razorpay
+                    Secure payment gateway
                   </p>
                 </div>
               </form>

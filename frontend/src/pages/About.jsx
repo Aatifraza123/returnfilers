@@ -15,9 +15,9 @@ import {
 
 const About = () => {
   const stats = [
-    { icon: <FaUsers />, value: '500+', label: 'Happy Clients' },
-    { icon: <FaAward />, value: '15+', label: 'Years Experience' },
-    { icon: <FaHandshake />, value: '1000+', label: 'Projects Completed' },
+    { icon: <FaUsers />, value: '100+', label: 'Happy Clients' },
+    { icon: <FaAward />, value: '3+', label: 'Years Experience' },
+    { icon: <FaHandshake />, value: '200+', label: 'Projects Completed' },
     { icon: <FaChartLine />, value: '98%', label: 'Success Rate' },
   ];
 
@@ -25,7 +25,7 @@ const About = () => {
     {
       name: 'CA Rajesh Kumar',
       position: 'Founder & Senior Partner',
-      qualification: 'FCA, DISA (ICAI)',
+      qualification: 'FCA, DISA',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop',
       social: { linkedin: '#', twitter: '#', email: 'mailto:rajesh@example.com' },
       about: 'Leads complex audits, large-scale tax planning and high-stakes financial strategy for enterprises.',
@@ -80,7 +80,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight"
           >
-            About <span className="text-[#D4AF37]">CA Associates</span>
+            About <span className="text-[#D4AF37]">Tax Filer</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -88,7 +88,7 @@ const About = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Your trusted partner in financial excellence. We combine over 15 years of expertise with modern strategies to drive your business growth.
+            Your trusted partner in financial excellence. We combine 3+ years of expertise with modern strategies to drive your business growth.
           </motion.p>
         </div>
       </section>
@@ -146,7 +146,7 @@ const About = () => {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-serif font-bold mb-4"
             >
-              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-amber-200">2010</span>
+              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-amber-200">2022</span>
             </motion.h2>
 
             <div className="max-w-4xl mx-auto">
@@ -167,7 +167,7 @@ const About = () => {
                 variants={fadeInUp}
                 className="text-sm md:text-base text-gray-400 leading-relaxed max-w-3xl mx-auto"
               >
-                From a small practice to a full-service chartered accountancy firm serving over 500 clients across India, our journey has been driven by integrity, expertise, and long-term relationships. We don't just balance books; we build futures.
+                From a small practice to a full-service chartered accountancy firm serving over 100 clients across India, our journey has been driven by integrity, expertise, and long-term relationships. We don't just balance books; we build futures.
               </motion.p>
             </div>
 
@@ -179,12 +179,12 @@ const About = () => {
               className="mt-8 flex gap-6 md:gap-8 justify-center"
             >
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">500+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">100+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Clients</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">15+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">3+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Years</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>

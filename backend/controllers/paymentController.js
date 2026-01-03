@@ -192,11 +192,19 @@ const sendPaymentEmails = async (payment) => {
 
   try {
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS,
       },
+      tls: {
+        rejectUnauthorized: false
+      },
+      connectionTimeout: 30000,
+      greetingTimeout: 30000,
+      socketTimeout: 30000
     });
 
     // Customer confirmation email
@@ -206,7 +214,7 @@ const sendPaymentEmails = async (payment) => {
         : `Payment Confirmed - ₹${payment.amount.toLocaleString()}`;
 
       const customerEmail = {
-        from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+        from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
         to: payment.customerDetails.email,
         subject: customerSubject,
         html: `
@@ -291,7 +299,7 @@ const sendPaymentEmails = async (payment) => {
                     </tr>
                     <tr>
                       <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                        <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                        <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                         <p style="color: #ffffff; margin: 0; font-size: 12px;">Professional Tax & Financial Services</p>
                       </td>
                     </tr>
@@ -314,7 +322,7 @@ const sendPaymentEmails = async (payment) => {
       : `New Payment Received - ₹${payment.amount.toLocaleString()}`;
 
     const adminEmail = {
-      from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
       to: process.env.EMAIL_USER,
       subject: adminSubject,
       html: `
@@ -380,7 +388,7 @@ const sendPaymentEmails = async (payment) => {
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                      <p style="color: #D4AF37; margin: 0 0 10px 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                       <p style="color: #ffffff; margin: 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>

@@ -1,5 +1,5 @@
 const Contact = require('../models/Contact');
-const nodemailer = require('nodemailer');
+const { sendEmail } = require('../utils/emailService');
 
 // @desc    Send bulk email
 // @route   POST /api/contacts/bulk-email
@@ -63,18 +63,24 @@ const sendBulkEmail = async (req, res) => {
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   console.log('Starting background bulk email sending...');
   
-  // Create transporter with connection pooling
+  // Create transporter with explicit SMTP settings (works better on Render)
   const transporter = nodemailer.createTransport({
-    service: 'gmail',
+    host: 'smtp.gmail.com',
+    port: 465,
+    secure: true, // use SSL
     auth: {
       user: process.env.EMAIL_USER,
       pass: process.env.EMAIL_PASS
     },
-    pool: true, // Enable connection pooling
-    maxConnections: 5, // Send 5 emails concurrently
-    maxMessages: 100, // Max messages per connection
-    rateDelta: 1000, // Time window for rate limiting (1 second)
-    rateLimit: 5 // Max 5 emails per second (Gmail limit is ~100/day, ~10/min for free)
+    pool: true,
+    maxConnections: 3,
+    maxMessages: 50,
+    connectionTimeout: 60000, // 60 seconds
+    greetingTimeout: 30000,
+    socketTimeout: 60000,
+    tls: {
+      rejectUnauthorized: false // Allow self-signed certificates
+    }
   });
 
   // Process emails in batches to avoid overwhelming the server
@@ -91,7 +97,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
     const batchPromises = batch.map(async (recipient) => {
       try {
         const mailOptions = {
-          from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+          from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
           to: recipient.email,
           subject: subject,
           html: `
@@ -104,7 +110,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
                     <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
                       <tr>
                         <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                          <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">CA Associates</h1>
+                          <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Tax Filer</h1>
                         </td>
                       </tr>
                       <tr>
@@ -117,7 +123,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
                       </tr>
                       <tr>
                         <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                          <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                          <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                           <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                         </td>
                       </tr>
@@ -338,15 +344,19 @@ const sendContactEmails = async (contact) => {
     console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'EXISTS' : 'MISSING');
     
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
-      pool: false,
-      connectionTimeout: 15000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000
+      connectionTimeout: 60000,
+      greetingTimeout: 30000,
+      socketTimeout: 60000,
+      tls: {
+        rejectUnauthorized: false
+      }
     });
 
     // Try to verify transporter (don't block if it fails)
@@ -361,7 +371,7 @@ const sendContactEmails = async (contact) => {
     // Admin notification email
     const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
     const adminEmail = {
-      from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
       to: adminEmailAddress,
       subject: `New Contact Message from ${contact.name}`,
       html: `
@@ -405,7 +415,7 @@ const sendContactEmails = async (contact) => {
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                       <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>
@@ -420,9 +430,9 @@ const sendContactEmails = async (contact) => {
 
     // Customer confirmation email (Auto-reply)
     const customerEmail = {
-      from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
       to: contact.email,
-      subject: 'Thank you for contacting CA Associates',
+      subject: 'Thank you for contacting Tax Filer',
       html: `
         <!DOCTYPE html>
         <html>
@@ -439,7 +449,7 @@ const sendContactEmails = async (contact) => {
                   <tr>
                     <td style="padding: 30px;">
                       <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${contact.name},</p>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Thank you for reaching out to <strong>CA Associates</strong>. We have received your message and will get back to you within 24 hours.</p>
+                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Thank you for reaching out to <strong>Tax Filer</strong>. We have received your message and will get back to you within 24 hours.</p>
                       <div style="margin: 20px 0; padding: 20px; background-color: #f8f9fa; border-left: 4px solid #D4AF37; border-radius: 4px;">
                         <p style="margin: 0; color: #0B1530; font-size: 14px; font-weight: bold;">Your Message:</p>
                         <p style="margin: 10px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">${contact.message.replace(/\n/g, '<br>')}</p>
@@ -448,12 +458,12 @@ const sendContactEmails = async (contact) => {
                         <p style="margin: 0; color: #004085; font-size: 14px;"><strong>Contact Information:</strong></p>
                         <p style="margin: 5px 0 0 0; color: #004085; font-size: 14px;">Email: ${process.env.EMAIL_USER}<br>Hours: Mon-Fri, 9am - 6pm IST</p>
                       </div>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0 0 0;">Best regards,<br><strong>CA Associates Team</strong></p>
+                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0 0 0;">Best regards,<br><strong>Tax Filer Team</strong></p>
                     </td>
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                       <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>

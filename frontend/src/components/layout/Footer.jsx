@@ -43,11 +43,11 @@ const Footer = () => {
     <footer className="bg-black text-white font-sans" id="footer">
       <div className="container mx-auto px-6 py-6 md:py-8">
         <div className="grid md:grid-cols-4 gap-8 md:gap-10">
-          {/* CA Associates Section */}
+          {/* Tax Filer Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#D4AF37]">CA Associates</h3>
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#D4AF37]">Tax Filer</h3>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              Professional chartered accountancy services with 15+ years of experience in taxation, auditing, and financial consulting.
+              Professional chartered accountancy services with 3+ years of experience in taxation, auditing, and financial consulting.
             </p>
             <div className="flex space-x-4 pt-2">
               {socialLinks.map(({ href, icon: Icon }, idx) => (
@@ -57,7 +57,7 @@ const Footer = () => {
               ))}
             </div>
             <div className="text-gray-500 text-xs md:text-sm pt-2">
-              © {new Date().getFullYear()} CA Associates. All rights reserved.
+              © {new Date().getFullYear()} Tax Filer. All rights reserved.
             </div>
           </div>
 

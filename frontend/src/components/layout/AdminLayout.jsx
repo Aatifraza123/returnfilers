@@ -7,7 +7,6 @@ import {
   FaEnvelope, 
   FaSignOutAlt, 
   FaBriefcase, 
-  FaCreditCard,
   FaComments,
   FaUser,
   FaBars,
@@ -15,7 +14,8 @@ import {
   FaBell,
   FaInbox,
   FaAddressBook,
-  FaFileInvoiceDollar
+  FaFileInvoiceDollar,
+  FaQuoteRight
 } from 'react-icons/fa';
 import { useState } from 'react';
 
@@ -34,11 +34,11 @@ const AdminLayout = () => {
     { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
     { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
-    { path: '/admin/payments', icon: <FaCreditCard />, label: 'Payments', badge: null },
+    { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
   ];
 
   const handleLogout = () => {
-    logout(); // logout already handles navigation
+    logout();
   };
 
   const isActive = (path) => {
@@ -75,7 +75,7 @@ const AdminLayout = () => {
               </div>
               <div>
                 <h2 className="text-base font-bold text-[#D4AF37]">Admin Panel</h2>
-                <p className="text-xs text-gray-400">CA Associates</p>
+                <p className="text-xs text-gray-400">Tax Filer</p>
               </div>
             </div>
             <button 

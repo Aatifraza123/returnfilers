@@ -2,13 +2,14 @@ import { Routes, Route, Navigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
-import WhatsAppFloat from './components/common/WhatsAppFloat'
+import AIChatbot from './components/common/AIChatbot'
 import AdminLayout from './components/layout/AdminLayout' 
 
 // Public Pages
 import Home from './pages/Home'
 import About from './pages/About'
 import Services from './pages/Services'
+import ServiceDetail from './pages/ServiceDetail'
 import Expertise from './pages/Expertise'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
@@ -41,6 +42,7 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminEmails from './pages/admin/AdminEmails'
 import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
+import AdminTestimonials from './pages/admin/AdminTestimonials'
 
 function App() {
   console.log('App component rendering...');
@@ -49,7 +51,7 @@ function App() {
   try {
     return (
       <AuthProvider>
-        <WhatsAppFloat /> 
+        <AIChatbot />
 
           <Routes>
         {/* Public Routes */}
@@ -58,6 +60,7 @@ function App() {
           <Route path="auth" element={<Auth />} />
           <Route path="about" element={<About />} />
           <Route path="services" element={<Services />} />
+          <Route path="services/:id" element={<ServiceDetail />} />
           <Route path="expertise" element={<Expertise />} />
           <Route path="blog" element={<Blog />} />
           <Route path="blog/:id" element={<BlogPost />} />
@@ -89,6 +92,7 @@ function App() {
           <Route path="blogs" element={<AdminBlogs />} />
           <Route path="portfolio" element={<AdminPortfolio />} />
           <Route path="reviews" element={<AdminReviews />} />
+          <Route path="testimonials" element={<AdminTestimonials />} />
           <Route path="payments" element={<AdminPayments />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="emails" element={<AdminEmails />} />

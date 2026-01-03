@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ConsultationModal from '../components/common/ConsultationModal'; // Import the Modal
+import api from '../api/axios';
 import {
   FaChartLine,
   FaFileInvoiceDollar,
@@ -19,9 +20,25 @@ import {
 const Home = () => {
   // State to control the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [testimonials, setTestimonials] = useState([]);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Fetch testimonials
+  useEffect(() => {
+    const fetchTestimonials = async () => {
+      try {
+        const { data } = await api.get('/testimonials');
+        if (data.success && data.data.length > 0) {
+          setTestimonials(data.data);
+        }
+      } catch (error) {
+        console.log('No testimonials found');
+      }
+    };
+    fetchTestimonials();
+  }, []);
 
   const services = [
     { icon: <FaFileInvoiceDollar />, title: 'Tax Consulting', desc: 'Expert tax planning and compliance strategies optimized for your business growth.' },
@@ -34,12 +51,7 @@ const Home = () => {
     { icon: <FaCheckCircle />, title: 'Transparent Pricing', desc: 'Clear fee structure with no hidden charges.' },
     { icon: <FaChartLine />, title: 'Timely Compliance', desc: 'Never miss a deadline with our automated reminders.' },
     { icon: <FaLock />, title: 'Secure Data', desc: 'Bank-grade encryption keeps your financial data safe.' },
-    { icon: <FaUserTie />, title: 'Expert Team', desc: 'ICAI certified professionals dedicated to your success.' },
-  ];
-
-  const testimonials = [
-    { name: 'Rahul Sharma', title: 'CEO, TechCorp', quote: 'Exceptional service and advice. Highly recommend!', rating: 5 },
-    { name: 'Priya Patel', title: 'Founder, GreenLeaf', quote: 'Professional, prompt, and reliable. A true partner.', rating: 5 },
+    { icon: <FaUserTie />, title: 'Expert Team', desc: 'Certified professionals dedicated to your success.' },
   ];
 
   const containerVariants = {
@@ -83,7 +95,7 @@ const Home = () => {
                 transition={{ delay: 0.2 }}
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#D4AF37] font-medium text-sm mb-6 backdrop-blur-sm"
               >
-                <FaBriefcase className="text-xs" /> Since 2008
+                <FaBriefcase className="text-xs" /> Since 2022
               </motion.div>
 
               <motion.h1
@@ -135,13 +147,13 @@ const Home = () => {
                 className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6 border-t border-white/10"
               >
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 15+ Years Exp.
+                  <FaCheckCircle className="text-[#D4AF37]" /> 3+ Years Exp.
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 500+ Clients
+                  <FaCheckCircle className="text-[#D4AF37]" /> 100+ Clients
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> ICAI Certified
+                  <FaCheckCircle className="text-[#D4AF37]" /> Certified Experts
                 </div>
               </motion.div>
             </div>
@@ -156,8 +168,8 @@ const Home = () => {
                {/* Main Image */}
                <div className="relative w-full h-full rounded-t-[10rem] rounded-b-[2rem] overflow-hidden border-[6px] border-white/10 shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?q=80&w=1932&auto=format&fit=crop" 
-                    alt="Professional CA Team" 
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" 
+                    alt="Tax and Finance Professional" 
                     className="w-full h-full object-cover"
                   />
                   <div className="absolute inset-0 bg-[#0B1530]/20 mix-blend-multiply"></div>
@@ -297,12 +309,12 @@ const Home = () => {
         <div className="container mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap justify-around items-center gap-8 text-[#0B1530]">
              <div className="text-center">
-                <div className="text-4xl font-serif font-bold">15+</div>
+                <div className="text-4xl font-serif font-bold">3+</div>
                 <div className="text-sm font-bold uppercase tracking-wider opacity-80">Years Experience</div>
              </div>
              <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>
              <div className="text-center">
-                <div className="text-4xl font-serif font-bold">500+</div>
+                <div className="text-4xl font-serif font-bold">100+</div>
                 <div className="text-sm font-bold uppercase tracking-wider opacity-80">Happy Clients</div>
              </div>
              <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>
@@ -315,18 +327,35 @@ const Home = () => {
       </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
-      <section className="py-12 md:py-16 bg-white overflow-hidden">
+      {testimonials.length > 0 && (
+      <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
         <div className="container mx-auto max-w-7xl px-6">
-          <h2 className="text-2xl lg:text-3xl font-serif font-bold text-center mb-10 text-[#0B1530]">Trusted by Leaders</h2>
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="inline-block px-4 py-1.5 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+              Client Reviews
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+              Trusted by Clients
+            </h2>
+            <p className="text-gray-500 max-w-xl mx-auto">
+              See what our clients say about their experience working with us
+            </p>
+          </motion.div>
           
           {/* Marquee Container */}
           <div className="relative">
             {/* Gradient Overlays */}
-            <div className="absolute left-0 top-0 bottom-0 w-20 bg-gradient-to-r from-white to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-20 bg-gradient-to-l from-white to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
+            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
             
             {/* Marquee */}
-            <div className="overflow-hidden">
+            <div className="overflow-hidden py-4">
               <motion.div
                 className="flex gap-6"
                 animate={{
@@ -336,7 +365,7 @@ const Home = () => {
                   x: {
                     repeat: Infinity,
                     repeatType: "loop",
-                    duration: 20,
+                    duration: 25,
                     ease: "linear",
                   },
                 }}
@@ -345,15 +374,40 @@ const Home = () => {
                 {testimonials.map((t, idx) => (
                   <div
                     key={`first-${idx}`}
-                    className="flex-shrink-0 w-[400px] md:w-[450px] p-8 rounded-2xl border border-gray-200 relative"
+                    className="flex-shrink-0 w-[380px] md:w-[420px] bg-transparent p-7 rounded-2xl relative group"
                   >
-                    <div className="flex gap-1 mb-4 text-[#D4AF37]">
-                      {[...Array(t.rating)].map((_, i) => <FaStar key={i} size={16} />)}
+                    {/* Quote Icon */}
+                    <div className="absolute -top-3 -left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                      </svg>
                     </div>
-                    <p className="text-gray-600 mb-6 text-sm md:text-base italic leading-relaxed">"{t.quote}"</p>
-                    <div>
-                      <div className="font-bold text-[#0B1530] text-base md:text-lg">{t.name}</div>
-                      <div className="text-xs md:text-sm text-gray-500">{t.title}</div>
+                    
+                    {/* Stars */}
+                    <div className="flex gap-1 mb-4 pt-2">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar 
+                          key={i} 
+                          size={16} 
+                          className={i < t.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
+                        />
+                      ))}
+                    </div>
+                    
+                    {/* Quote */}
+                    <p className="text-gray-600 mb-6 text-sm md:text-base leading-relaxed line-clamp-4">
+                      "{t.quote}"
+                    </p>
+                    
+                    {/* Author */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        {t.name?.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-bold text-[#0B1530] text-base">{t.name}</div>
+                        <div className="text-xs text-gray-500">{t.title}</div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -361,15 +415,40 @@ const Home = () => {
                 {testimonials.map((t, idx) => (
                   <div
                     key={`second-${idx}`}
-                    className="flex-shrink-0 w-[400px] md:w-[450px] p-8 rounded-2xl border border-gray-200 relative"
+                    className="flex-shrink-0 w-[380px] md:w-[420px] bg-transparent p-7 rounded-2xl relative group"
                   >
-                    <div className="flex gap-1 mb-4 text-[#D4AF37]">
-                      {[...Array(t.rating)].map((_, i) => <FaStar key={i} size={16} />)}
+                    {/* Quote Icon */}
+                    <div className="absolute -top-3 -left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                      </svg>
                     </div>
-                    <p className="text-gray-600 mb-6 text-sm md:text-base italic leading-relaxed">"{t.quote}"</p>
-                    <div>
-                      <div className="font-bold text-[#0B1530] text-base md:text-lg">{t.name}</div>
-                      <div className="text-xs md:text-sm text-gray-500">{t.title}</div>
+                    
+                    {/* Stars */}
+                    <div className="flex gap-1 mb-4 pt-2">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar 
+                          key={i} 
+                          size={16} 
+                          className={i < t.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
+                        />
+                      ))}
+                    </div>
+                    
+                    {/* Quote */}
+                    <p className="text-gray-600 mb-6 text-sm md:text-base leading-relaxed line-clamp-4">
+                      "{t.quote}"
+                    </p>
+                    
+                    {/* Author */}
+                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
+                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-lg shadow-md">
+                        {t.name?.charAt(0)}
+                      </div>
+                      <div>
+                        <div className="font-bold text-[#0B1530] text-base">{t.name}</div>
+                        <div className="text-xs text-gray-500">{t.title}</div>
+                      </div>
                     </div>
                   </div>
                 ))}
@@ -378,6 +457,7 @@ const Home = () => {
           </div>
         </div>
       </section>
+      )}
 
       {/* ==================== CTA SECTION ==================== */}
       <section className="py-12 md:py-16 px-6 bg-[#0B1530] text-center">

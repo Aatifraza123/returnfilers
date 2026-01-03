@@ -19,6 +19,10 @@ const serviceSchema = mongoose.Schema({
     required: [true, 'Please select a category'], 
     default: 'Tax'
   },
+  timeline: {
+    type: String,
+    default: '3-7 Working Days'
+  },
   features: {
     type: [String],
     default: []

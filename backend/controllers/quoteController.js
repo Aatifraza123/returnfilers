@@ -75,15 +75,19 @@ const sendQuoteEmails = async (quote) => {
     console.log('EMAIL_PASS:', process.env.EMAIL_PASS ? 'EXISTS' : 'MISSING');
     
     const transporter = nodemailer.createTransport({
-      service: 'gmail',
+      host: 'smtp.gmail.com',
+      port: 465,
+      secure: true,
       auth: {
         user: process.env.EMAIL_USER,
         pass: process.env.EMAIL_PASS
       },
-      pool: false,
-      connectionTimeout: 15000,
-      greetingTimeout: 10000,
-      socketTimeout: 15000
+      tls: {
+        rejectUnauthorized: false
+      },
+      connectionTimeout: 30000,
+      greetingTimeout: 30000,
+      socketTimeout: 30000
     });
 
     // Try to verify transporter (don't block if it fails)
@@ -99,7 +103,7 @@ const sendQuoteEmails = async (quote) => {
 
     // Admin notification email
     const adminEmailContent = {
-      from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
       to: adminEmail,
       subject: `New Quote Request: ${quote.service} - ${quote.name}`,
       html: `
@@ -159,7 +163,7 @@ const sendQuoteEmails = async (quote) => {
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                       <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>
@@ -174,7 +178,7 @@ const sendQuoteEmails = async (quote) => {
 
     // Customer auto-reply email
     const customerEmail = {
-      from: `"CA Associates" <${process.env.EMAIL_USER}>`,
+      from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
       to: quote.email,
       subject: `Quote Request Received - ${quote.service}`,
       html: `
@@ -193,7 +197,7 @@ const sendQuoteEmails = async (quote) => {
                   <tr>
                     <td style="padding: 30px;">
                       <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${quote.name},</p>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Thank you for requesting a quote from <strong>CA Associates</strong>. We have received your quote request for <strong>${quote.service}</strong>.</p>
+                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 0 0 20px 0;">Thank you for requesting a quote from <strong>Tax Filer</strong>. We have received your quote request for <strong>${quote.service}</strong>.</p>
                       <div style="margin: 20px 0; padding: 20px; background-color: #f8f9fa; border-left: 4px solid #D4AF37; border-radius: 4px;">
                         <p style="margin: 0; color: #0B1530; font-size: 14px; font-weight: bold;">Your Quote Request:</p>
                         <p style="margin: 5px 0; color: #333; font-size: 14px;"><strong>Service:</strong> ${quote.service}</p>
@@ -206,12 +210,12 @@ const sendQuoteEmails = async (quote) => {
                         <p style="margin: 0; color: #004085; font-size: 14px;"><strong>Contact Information:</strong></p>
                         <p style="margin: 5px 0 0 0; color: #004085; font-size: 14px;">Email: ${process.env.EMAIL_USER}<br>Hours: Mon-Fri, 9am - 6pm IST</p>
                       </div>
-                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0 0 0;">Best regards,<br><strong>CA Associates Team</strong></p>
+                      <p style="color: #333; font-size: 15px; line-height: 1.6; margin: 20px 0 0 0;">Best regards,<br><strong>Tax Filer Team</strong></p>
                     </td>
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">CA Associates</p>
+                      <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
                       <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>

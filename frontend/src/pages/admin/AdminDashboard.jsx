@@ -7,13 +7,11 @@ import {
   FaEnvelope, 
   FaPlus, 
   FaArrowRight, 
-  FaCreditCard,
   FaBriefcase,
   FaComments,
-  FaUsers,
-  FaChartLine,
   FaArrowUp,
-  FaClock
+  FaClock,
+  FaExternalLinkAlt
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 
@@ -23,10 +21,8 @@ const AdminDashboard = () => {
     services: 0,
     blogs: 0,
     consultations: 0,
-    payments: 0,
     portfolio: 0,
-    contact: 0,
-    totalRevenue: 0
+    contact: 0
   });
   const [loading, setLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -44,12 +40,11 @@ const AdminDashboard = () => {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const [servicesRes, blogsRes, consultRes, contactRes, paymentsRes, portfolioRes] = await Promise.all([
+      const [servicesRes, blogsRes, consultRes, contactRes, portfolioRes] = await Promise.all([
         api.get('/admin/services', config).catch(() => ({ data: { services: [] } })),
         api.get('/admin/blogs', config).catch(() => ({ data: [] })),
         api.get('/consultations', config).catch(() => ({ data: { data: [] } })),
         api.get('/contacts', config).catch(() => ({ data: { data: [] } })),
-        api.get('/payments', config).catch(() => ({ data: { payments: [] } })),
         api.get('/portfolio', config).catch(() => ({ data: { portfolio: [] } }))
       ]);
 
@@ -67,29 +62,21 @@ const AdminDashboard = () => {
       
       console.log('Dashboard - Consultations:', consultations.length, '| Contacts:', contacts.length);
       
-      // Payments and portfolio
-      const payments = paymentsRes.data.payments || [];
+      // Portfolio
       const portfolio = portfolioRes.data.portfolio || [];
-
-      const totalRevenue = payments
-        .filter(p => p.status === 'captured')
-        .reduce((sum, p) => sum + (p.amount || 0), 0);
 
       setStats({
         services: services.length,
         blogs: blogs.length,
         consultations: consultations.length,
-        payments: payments.length,
         portfolio: portfolio.length,
-        contact: contacts.length,
-        totalRevenue
+        contact: contacts.length
       });
 
       // Set recent activity
       const recent = [
-        ...consultations.slice(0, 2).map(c => ({ type: 'consultation', data: c, time: c.createdAt })),
-        ...contacts.slice(0, 2).map(c => ({ type: 'contact', data: c, time: c.createdAt })),
-        ...payments.slice(0, 2).map(p => ({ type: 'payment', data: p, time: p.createdAt }))
+        ...consultations.slice(0, 3).map(c => ({ type: 'consultation', data: c, time: c.createdAt })),
+        ...contacts.slice(0, 3).map(c => ({ type: 'contact', data: c, time: c.createdAt }))
       ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
 
       setRecentActivity(recent);
@@ -135,16 +122,6 @@ const AdminDashboard = () => {
       trend: '+23%'
     },
     { 
-      title: 'Total Payments', 
-      count: stats.payments, 
-      icon: <FaCreditCard />, 
-      color: 'from-purple-500 to-purple-600',
-      bgColor: 'bg-purple-50',
-      iconColor: 'text-purple-600',
-      link: '/admin/payments',
-      trend: '+8%'
-    },
-    { 
       title: 'Portfolio Items', 
       count: stats.portfolio, 
       icon: <FaBriefcase />, 
@@ -179,17 +156,15 @@ const AdminDashboard = () => {
               Here's what's happening with your business today.
             </p>
           </div>
-          <div className="flex items-center gap-4">
-            <div className="text-right">
-              <p className="text-sm text-gray-400">Total Revenue</p>
-              <p className="text-3xl font-bold text-[#D4AF37]">
-                ₹{stats.totalRevenue.toLocaleString('en-IN')}
-              </p>
-            </div>
-            <div className="w-16 h-16 rounded-full bg-[#D4AF37]/20 flex items-center justify-center">
-              <FaChartLine className="text-3xl text-[#D4AF37]" />
-            </div>
-          </div>
+          <a 
+            href="/" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-colors shadow-lg"
+          >
+            <FaExternalLinkAlt size={14} />
+            Visit Website
+          </a>
         </div>
       </div>
 
@@ -277,15 +252,15 @@ const AdminDashboard = () => {
             </Link>
 
             <Link 
-              to="/admin/payments" 
+              to="/admin/portfolio" 
               className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
             >
-              <div className="bg-purple-100 text-purple-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
-                <FaCreditCard />
+              <div className="bg-indigo-100 text-indigo-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
+                <FaBriefcase />
               </div>
               <div>
-                <p className="font-semibold text-[#0B1530]">Payments</p>
-                <p className="text-xs text-gray-500">Manage transactions</p>
+                <p className="font-semibold text-[#0B1530]">Portfolio</p>
+                <p className="text-xs text-gray-500">Manage portfolio</p>
               </div>
             </Link>
           </div>
@@ -302,21 +277,15 @@ const AdminDashboard = () => {
               recentActivity.map((activity, idx) => (
                 <div key={idx} className="flex items-start gap-3 pb-4 border-b border-gray-100 last:border-0">
                   <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
-                    activity.type === 'consultation' ? 'bg-green-500' : 
-                    activity.type === 'contact' ? 'bg-pink-500' : 
-                    'bg-blue-500'
+                    activity.type === 'consultation' ? 'bg-green-500' : 'bg-pink-500'
                   }`}>
-                    {activity.type === 'consultation' ? <FaComments /> : 
-                     activity.type === 'contact' ? <FaEnvelope /> : 
-                     <FaCreditCard />}
+                    {activity.type === 'consultation' ? <FaComments /> : <FaEnvelope />}
                   </div>
                   <div className="flex-1 min-w-0">
                     <p className="text-sm font-semibold text-[#0B1530] truncate">
                       {activity.type === 'consultation' 
                         ? `New consultation from ${activity.data.name}`
-                        : activity.type === 'contact'
-                        ? `New contact from ${activity.data.name}`
-                        : `Payment received: ₹${activity.data.amount}`
+                        : `New contact from ${activity.data.name}`
                       }
                     </p>
                     <p className="text-xs text-gray-500">
@@ -336,4 +305,3 @@ const AdminDashboard = () => {
 };
 
 export default AdminDashboard;
-

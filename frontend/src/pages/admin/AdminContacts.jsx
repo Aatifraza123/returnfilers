@@ -33,11 +33,7 @@ const AdminContacts = () => {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      const { data } = await axios.patch(
-        `/api/contacts/${id}`,
-        { status },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      const { data } = await api.patch(`/contacts/${id}`, { status });
       
       if (data.success) {
         toast.success('Status updated successfully');
@@ -49,12 +45,33 @@ const AdminContacts = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this contact?')) return;
-    
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="font-medium">Delete this contact?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              confirmDelete(id);
+            }}
+            className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 10000 });
+  };
+
+  const confirmDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`/api/contacts/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      const { data } = await api.delete(`/contacts/${id}`);
       
       if (data.success) {
         toast.success('Contact deleted successfully');

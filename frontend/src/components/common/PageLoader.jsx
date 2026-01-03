@@ -142,7 +142,7 @@ const PageLoader = () => {
               backgroundSize: '200% auto',
             }}
           >
-            CA Associates
+            Tax Filer
           </motion.h2>
           
           <motion.p

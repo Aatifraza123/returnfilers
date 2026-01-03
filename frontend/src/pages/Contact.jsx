@@ -11,6 +11,7 @@ import {
   FaMapMarkerAlt, 
   FaQuestionCircle, 
   FaClock, 
+  FaRobot,
   FaWhatsapp,
   FaChevronDown
 } from 'react-icons/fa';
@@ -180,14 +181,20 @@ const Contact = () => {
                  </div>
 
                  <div className="bg-white p-6 rounded-xl shadow-md border border-gray-100 flex flex-col justify-center">
-                    <div className="flex items-center gap-3 mb-2 text-green-600">
-                       <FaWhatsapp size={22} />
-                       <h3 className="font-bold text-[#0B1530] text-base">Quick Chat?</h3>
+                    <div className="flex items-center gap-3 mb-2 text-[#0B1530]">
+                       <FaWhatsapp size={22} className="text-[#25D366]" />
+                       <h3 className="font-bold text-[#0B1530] text-base">WhatsApp Us</h3>
                     </div>
                     <p className="text-sm text-gray-600 mb-4">Chat with us directly on WhatsApp.</p>
-                    <button className="w-full py-2 bg-green-50 text-green-700 font-semibold rounded-lg hover:bg-green-100 transition-colors text-sm">
+                    <a 
+                       href="https://wa.me/918447127264?text=Hi%2C%20I%20need%20help%20with%20tax%20services"
+                       target="_blank"
+                       rel="noopener noreferrer"
+                       className="w-full py-2 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#128C7E] transition-colors text-sm text-center flex items-center justify-center gap-2"
+                    >
+                       <FaWhatsapp size={16} />
                        Start Chat
-                    </button>
+                    </a>
                  </div>
               </motion.div>
             </div>
@@ -268,42 +275,78 @@ const Contact = () => {
       </section>
 
       {/* ==================== FAQ SECTION ==================== */}
-      <section className="py-8 md:py-12 lg:py-16 bg-white">
-        <div className="container mx-auto px-4 md:px-6 max-w-4xl">
-          <h2 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-center mb-6 md:mb-8 lg:mb-12 text-[#0B1530]">
-            <span className="block">Frequently</span>
-            <span className="block">Asked Questions</span>
-          </h2>
-          <div className="space-y-3 md:space-y-4">
+      <section className="py-12 md:py-16 lg:py-20 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4 md:px-6 max-w-5xl">
+          {/* Section Header */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-10 md:mb-14"
+          >
+            <span className="inline-block px-4 py-1.5 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+              Got Questions?
+            </span>
+            <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-[#0B1530] mb-4">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto text-sm md:text-base">
+              Find answers to common questions about our services, process, and pricing.
+            </p>
+          </motion.div>
+
+          {/* FAQ Grid */}
+          <div className="grid md:grid-cols-2 gap-4 md:gap-6">
             {faqs.map((faq, idx) => {
               const isOpen = openFaqIndex === idx;
               return (
                 <motion.div
                   key={idx}
-                  initial={{ opacity: 0, y: 10 }}
+                  initial={{ opacity: 0, y: 20 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-gray-50 rounded-lg hover:bg-white hover:shadow-md transition-all duration-300 border border-gray-100 overflow-hidden"
+                  transition={{ delay: idx * 0.08 }}
+                  className={`bg-white rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
+                    isOpen 
+                      ? 'border-[#D4AF37] shadow-lg shadow-[#D4AF37]/10' 
+                      : 'border-gray-100 hover:border-gray-200 hover:shadow-md'
+                  }`}
                 >
                   <button
                     onClick={() => toggleFaq(idx)}
-                    className="w-full p-4 md:p-6 flex items-start gap-3 md:gap-4 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:ring-offset-2 rounded-lg"
+                    className="w-full p-5 md:p-6 flex items-start gap-4 cursor-pointer focus:outline-none text-left"
                   >
-                    <div className="mt-0.5 text-[#D4AF37] flex-shrink-0">
-                       <FaQuestionCircle size={20} />
+                    {/* Number Badge */}
+                    <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm transition-colors ${
+                      isOpen 
+                        ? 'bg-[#D4AF37] text-[#0B1530]' 
+                        : 'bg-[#0B1530]/5 text-[#0B1530]'
+                    }`}>
+                      {String(idx + 1).padStart(2, '0')}
                     </div>
-                    <div className="flex-1 text-left">
-                      <h3 className="text-sm md:text-base font-semibold text-[#0B1530] mb-0 hover:text-[#D4AF37] transition-colors font-sans">{faq.question}</h3>
+                    
+                    <div className="flex-1">
+                      <h3 className={`text-sm md:text-base font-semibold transition-colors ${
+                        isOpen ? 'text-[#D4AF37]' : 'text-[#0B1530]'
+                      }`}>
+                        {faq.question}
+                      </h3>
                     </div>
+                    
+                    {/* Toggle Icon */}
                     <motion.div
                       animate={{ rotate: isOpen ? 180 : 0 }}
                       transition={{ duration: 0.3 }}
-                      className="mt-0.5 text-[#0B1530] flex-shrink-0"
+                      className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
+                        isOpen 
+                          ? 'bg-[#D4AF37] text-[#0B1530]' 
+                          : 'bg-gray-100 text-gray-500'
+                      }`}
                     >
-                      <FaChevronDown size={16} />
+                      <FaChevronDown size={12} />
                     </motion.div>
                   </button>
+                  
                   <motion.div
                     initial={false}
                     animate={{ 
@@ -313,14 +356,33 @@ const Contact = () => {
                     transition={{ duration: 0.3, ease: 'easeInOut' }}
                     className="overflow-hidden"
                   >
-                    <div className="px-4 md:px-6 pb-4 md:pb-6 pl-11 md:pl-14">
-                      <p className="text-xs md:text-sm lg:text-base text-gray-600 leading-relaxed font-normal">{faq.answer}</p>
+                    <div className="px-5 md:px-6 pb-5 md:pb-6 pl-[4.5rem]">
+                      <p className="text-sm md:text-base text-gray-600 leading-relaxed">
+                        {faq.answer}
+                      </p>
                     </div>
                   </motion.div>
                 </motion.div>
               );
             })}
           </div>
+
+          {/* CTA Below FAQ */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center"
+          >
+            <p className="text-gray-500 mb-4">Still have questions?</p>
+            <button 
+              onClick={() => window.dispatchEvent(new CustomEvent('openChatbot'))}
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1530] text-white rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all shadow-lg hover:shadow-xl"
+            >
+              <FaRobot size={18} />
+              Chat with AI
+            </button>
+          </motion.div>
         </div>
       </section>
     </div>

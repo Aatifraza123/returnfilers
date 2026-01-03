@@ -37,55 +37,55 @@ const AdminEmails = () => {
       message: ''
     },
     welcome: {
-      subject: 'Welcome to CA Associates',
+      subject: 'Welcome to Tax Filer',
       message: `
         <h2 style="color: #0B1530;">Welcome!</h2>
-        <p>Thank you for reaching out to CA Associates. We're excited to work with you!</p>
+        <p>Thank you for reaching out to Tax Filer. We're excited to work with you!</p>
         <p>Our team of professional chartered accountants is dedicated to providing you with exceptional service.</p>
         <p>We will be in touch with you soon.</p>
         <br>
-        <p>Best regards,<br><strong>CA Associates Team</strong></p>
+        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
       `
     },
     followup: {
       subject: 'Following up on your inquiry',
       message: `
         <h2 style="color: #0B1530;">Following Up</h2>
-        <p>We wanted to follow up regarding your recent inquiry with CA Associates.</p>
+        <p>We wanted to follow up regarding your recent inquiry with Tax Filer.</p>
         <p>If you have any questions or need further assistance, please don't hesitate to reach out to us.</p>
         <p>We're here to help!</p>
         <br>
-        <p>Best regards,<br><strong>CA Associates Team</strong></p>
+        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
       `
     },
     thankyou: {
-      subject: 'Thank you for choosing CA Associates',
+      subject: 'Thank you for choosing Tax Filer',
       message: `
         <h2 style="color: #0B1530;">Thank You!</h2>
-        <p>We sincerely appreciate you choosing CA Associates for your financial needs.</p>
+        <p>We sincerely appreciate you choosing Tax Filer for your financial needs.</p>
         <p>Your trust in our services means a lot to us, and we're committed to delivering the best results.</p>
         <p>If you have any questions, feel free to contact us anytime.</p>
         <br>
-        <p>Best regards,<br><strong>CA Associates Team</strong></p>
+        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
       `
     },
     reminder: {
-      subject: 'Reminder: Important Update from CA Associates',
+      subject: 'Reminder: Important Update from Tax Filer',
       message: `
         <h2 style="color: #0B1530;">Reminder</h2>
-        <p>This is a friendly reminder regarding your pending matters with CA Associates.</p>
+        <p>This is a friendly reminder regarding your pending matters with Tax Filer.</p>
         <p>Please review the details and let us know if you need any clarification.</p>
         <p>We're here to assist you!</p>
         <br>
-        <p>Best regards,<br><strong>CA Associates Team</strong></p>
+        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
       `
     },
     newsletter: {
-      subject: 'CA Associates Newsletter - Latest Updates',
+      subject: 'Tax Filer Newsletter - Latest Updates',
       message: `
         <h2 style="color: #0B1530;">Newsletter</h2>
         <p>Welcome to our latest newsletter!</p>
-        <p>Here are some important updates and insights from CA Associates:</p>
+        <p>Here are some important updates and insights from Tax Filer:</p>
         <ul>
           <li>Tax planning tips for the upcoming quarter</li>
           <li>Recent regulatory changes</li>
@@ -93,7 +93,7 @@ const AdminEmails = () => {
         </ul>
         <p>Stay informed and reach out if you need any assistance.</p>
         <br>
-        <p>Best regards,<br><strong>CA Associates Team</strong></p>
+        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
       `
     }
   };

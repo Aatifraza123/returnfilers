@@ -16,6 +16,8 @@ const portfolioRoutes = require('./routes/portfolioRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
 const paymentRoutes = require('./routes/paymentRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
+const testimonialRoutes = require('./routes/testimonialRoutes');
+const chatRoutes = require('./routes/chatRoutes');
 
 const app = express();
 
@@ -37,6 +39,8 @@ const allowedOrigins = [
   'http://localhost:5173',
   'http://localhost:5174',
   'http://localhost:5175',
+  'http://localhost:5176',
+  'http://localhost:5177',
   'http://localhost:3000'
 ];
 
@@ -170,6 +174,11 @@ app.get('/api/blogs/test-direct', (req, res) => {
 });
 
 app.use('/api/portfolio', portfolioRoutes);
+app.use('/api/testimonials', testimonialRoutes);
+console.log('✓ Testimonial routes registered at /api/testimonials');
+
+app.use('/api/chat', chatRoutes);
+console.log('✓ Chat routes registered at /api/chat');
 
 // Public routes last - /api/blogs in publicRoutes won't be reached (blogRoutes handles it first)
 app.use('/api', publicRoutes); 

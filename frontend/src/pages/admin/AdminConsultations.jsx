@@ -33,11 +33,7 @@ const AdminConsultations = () => {
 
   const handleStatusUpdate = async (id, status) => {
     try {
-      const { data } = await axios.patch(
-        `/api/consultations/${id}`,
-        { status },
-        { headers: { Authorization: `Bearer ${localStorage.getItem('token')}` } }
-      );
+      const { data } = await api.patch(`/consultations/${id}`, { status });
       
       if (data.success) {
         toast.success('Status updated successfully');
@@ -49,19 +45,43 @@ const AdminConsultations = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this consultation?')) return;
-    
+    toast((t) => (
+      <div className="flex flex-col gap-2">
+        <p className="font-medium">Delete this consultation?</p>
+        <div className="flex gap-2">
+          <button
+            onClick={() => {
+              toast.dismiss(t.id);
+              confirmDelete(id);
+            }}
+            className="px-3 py-1 bg-red-500 text-white rounded text-sm hover:bg-red-600"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-3 py-1 bg-gray-200 text-gray-700 rounded text-sm hover:bg-gray-300"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: 10000 });
+  };
+
+  const confirmDelete = async (id) => {
     try {
-      const { data } = await axios.delete(`/api/consultations/${id}`, {
-        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` }
-      });
+      console.log('Deleting consultation:', id);
+      const { data } = await api.delete(`/consultations/${id}`);
+      console.log('Delete response:', data);
       
       if (data.success) {
         toast.success('Consultation deleted successfully');
         fetchConsultations();
       }
     } catch (error) {
-      toast.error('Failed to delete consultation');
+      console.error('Delete error:', error.response?.data || error.message);
+      toast.error(error.response?.data?.message || 'Failed to delete consultation');
     }
   };
 
