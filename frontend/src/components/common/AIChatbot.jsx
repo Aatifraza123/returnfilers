@@ -176,22 +176,22 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button */}
+      {/* Floating Chat Button - higher position on mobile to avoid footer overlap */}
       <button
         onClick={() => setIsOpen(true)}
-        className={`fixed bottom-6 right-6 z-50 ${isOpen ? 'scale-0' : 'scale-100'}`}
+        className={`fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 ${isOpen ? 'scale-0' : 'scale-100'}`}
         style={{ transition: 'transform 0.2s ease' }}
       >
-        <div className="w-14 h-14 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors">
-          <FaRobot size={22} className="text-[#D4AF37]" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 bg-[#D4AF37] rounded-full animate-pulse"></span>
+        <div className="w-12 h-12 md:w-14 md:h-14 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors">
+          <FaRobot size={20} className="text-[#D4AF37] md:text-[22px]" />
+          <span className="absolute -top-1 -right-1 w-3 h-3 md:w-4 md:h-4 bg-[#D4AF37] rounded-full animate-pulse"></span>
         </div>
       </button>
 
-      {/* Chat Window */}
+      {/* Chat Window - higher position on mobile */}
       <div 
-        className={`fixed bottom-6 right-6 z-50 w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
-          isOpen ? 'opacity-100 scale-100 h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
+        className={`fixed bottom-24 md:bottom-6 right-4 md:right-6 z-50 w-[340px] md:w-[380px] max-w-[calc(100vw-2rem)] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
+          isOpen ? 'opacity-100 scale-100 h-[450px] md:h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
         }`}
       >
         {/* Header */}
