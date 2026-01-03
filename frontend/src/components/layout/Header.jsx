@@ -27,19 +27,19 @@ const Header = () => {
 
   return (
     <header
-      className={`fixed top-0 w-full z-50 transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
         scrolled
-          ? 'bg-white/70 backdrop-blur-lg shadow-sm py-3'
-          : 'bg-transparent py-4'
+          ? 'bg-white/95 backdrop-blur-lg shadow-md py-2'
+          : 'bg-white/80 backdrop-blur-sm py-3'
       }`}
     >
-      <nav className="container mx-auto px-6 flex justify-between items-center">
+      <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 sm:gap-3 hover:opacity-90 transition-opacity group">
-          <div className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#D4AF37] to-[#C9A832] rounded-tr-2xl rounded-bl-2xl flex items-center justify-center text-white font-serif text-base sm:text-lg md:text-xl font-bold shadow-lg group-hover:shadow-xl transition-shadow">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#D4AF37] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md group-hover:shadow-lg transition-shadow">
             TF
           </div>
-          <span className="text-xl sm:text-2xl md:text-3xl font-serif font-bold text-[#0B1530] tracking-tight">
+          <span className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-[#0B1530] tracking-tight">
             Tax Filer
           </span>
         </Link>
