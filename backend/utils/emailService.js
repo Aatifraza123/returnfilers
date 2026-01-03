@@ -4,7 +4,7 @@ const nodemailer = require('nodemailer');
 // Initialize Resend if API key exists
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// Gmail transporter (fallback)
+// Gmail transporter
 const getGmailTransporter = () => {
   if (!process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
     return null;
@@ -28,41 +28,16 @@ const getGmailTransporter = () => {
 };
 
 /**
- * Send email using Resend (primary) or Gmail (fallback)
- * @param {Object} options - Email options
- * @param {string} options.to - Recipient email
- * @param {string} options.subject - Email subject
- * @param {string} options.html - HTML content
- * @param {string} [options.from] - Sender (optional)
+ * Send email - Uses Gmail for all emails (more reliable for customer emails)
  */
 const sendEmail = async ({ to, subject, html, from }) => {
-  const fromEmail = from || `Tax Filer <${process.env.EMAIL_USER || 'noreply@taxfiler.in'}>`;
+  const fromEmail = from || `Tax Filer <${process.env.EMAIL_USER}>`;
   
-  // Try Resend first (works better on cloud)
-  if (resend) {
-    try {
-      console.log('📧 Sending email via Resend...');
-      const result = await resend.emails.send({
-        from: process.env.RESEND_FROM || 'Tax Filer <onboarding@resend.dev>',
-        to: to,
-        subject: subject,
-        html: html
-      });
-      
-      if (result.data?.id) {
-        console.log('✅ Email sent via Resend:', result.data.id);
-        return { success: true, provider: 'resend', id: result.data.id };
-      }
-    } catch (error) {
-      console.log('❌ Resend failed:', error.message);
-    }
-  }
-  
-  // Fallback to Gmail
+  // Use Gmail (works for all recipients)
   const transporter = getGmailTransporter();
   if (transporter) {
     try {
-      console.log('📧 Sending email via Gmail...');
+      console.log('📧 Sending email via Gmail to:', to);
       const result = await transporter.sendMail({
         from: fromEmail,
         to: to,
@@ -74,6 +49,27 @@ const sendEmail = async ({ to, subject, html, from }) => {
       return { success: true, provider: 'gmail', id: result.messageId };
     } catch (error) {
       console.log('❌ Gmail failed:', error.message);
+      
+      // Try Resend as fallback (only works for verified domains)
+      if (resend) {
+        try {
+          console.log('📧 Trying Resend as fallback...');
+          const result = await resend.emails.send({
+            from: process.env.RESEND_FROM || 'Tax Filer <onboarding@resend.dev>',
+            to: to,
+            subject: subject,
+            html: html
+          });
+          
+          if (result.data?.id) {
+            console.log('✅ Email sent via Resend:', result.data.id);
+            return { success: true, provider: 'resend', id: result.data.id };
+          }
+        } catch (resendError) {
+          console.log('❌ Resend also failed:', resendError.message);
+        }
+      }
+      
       throw error;
     }
   }
@@ -82,17 +78,29 @@ const sendEmail = async ({ to, subject, html, from }) => {
 };
 
 /**
- * Send multiple emails
+ * Send bulk emails
  */
 const sendBulkEmails = async (emails) => {
   const results = [];
+  const transporter = getGmailTransporter();
+  
+  if (!transporter) {
+    throw new Error('Email not configured');
+  }
   
   for (const email of emails) {
     try {
-      const result = await sendEmail(email);
-      results.push({ ...email, ...result });
+      const result = await transporter.sendMail({
+        from: `Tax Filer <${process.env.EMAIL_USER}>`,
+        to: email.to,
+        subject: email.subject,
+        html: email.html
+      });
+      results.push({ to: email.to, success: true, id: result.messageId });
+      console.log('✅ Bulk email sent to:', email.to);
     } catch (error) {
-      results.push({ ...email, success: false, error: error.message });
+      results.push({ to: email.to, success: false, error: error.message });
+      console.log('❌ Bulk email failed for:', email.to, error.message);
     }
   }
   

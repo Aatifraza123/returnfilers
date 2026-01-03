@@ -1,5 +1,6 @@
 const Contact = require('../models/Contact');
-const { sendEmail } = require('../utils/emailService');
+const { sendEmail, sendBulkEmails } = require('../utils/emailService');
+const nodemailer = require('nodemailer');
 
 // @desc    Send bulk email
 // @route   POST /api/contacts/bulk-email
@@ -59,99 +60,64 @@ const sendBulkEmail = async (req, res) => {
   }
 };
 
-// Helper function to send bulk emails in background
+// Helper function to send bulk emails in background using emailService
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   console.log('Starting background bulk email sending...');
   
-  // Create transporter with explicit SMTP settings (works better on Render)
-  const transporter = nodemailer.createTransport({
-    host: 'smtp.gmail.com',
-    port: 465,
-    secure: true, // use SSL
-    auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
-    },
-    pool: true,
-    maxConnections: 3,
-    maxMessages: 50,
-    connectionTimeout: 60000, // 60 seconds
-    greetingTimeout: 30000,
-    socketTimeout: 60000,
-    tls: {
-      rejectUnauthorized: false // Allow self-signed certificates
-    }
-  });
-
-  // Process emails in batches to avoid overwhelming the server
-  const batchSize = 10; // Send 10 emails at a time
   let sentCount = 0;
   let failedCount = 0;
 
-  for (let i = 0; i < recipients.length; i += batchSize) {
-    const batch = recipients.slice(i, i + batchSize);
-    
-    console.log(`Processing batch ${Math.floor(i / batchSize) + 1}: ${batch.length} emails (${i + 1}-${Math.min(i + batchSize, recipients.length)} of ${recipients.length})`);
+  // Process emails one by one with delay
+  for (const recipient of recipients) {
+    try {
+      const html = `
+        <!DOCTYPE html>
+        <html>
+        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
+          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
+            <tr>
+              <td align="center">
+                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
+                  <tr>
+                    <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
+                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">Tax Filer</h1>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 30px;">
+                      <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${recipient.name || 'Valued Client'},</p>
+                      <div style="color: #333; font-size: 15px; line-height: 1.6;">${message}</div>
+                    </td>
+                  </tr>
+                  <tr>
+                    <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
+                      <p style="color: #D4AF37; margin: 0; font-weight: bold;">Tax Filer</p>
+                      <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                    </td>
+                  </tr>
+                </table>
+              </td>
+            </tr>
+          </table>
+        </body>
+        </html>
+      `;
 
-    // Send batch in parallel
-    const batchPromises = batch.map(async (recipient) => {
-      try {
-        const mailOptions = {
-          from: `"Tax Filer" <${process.env.EMAIL_USER}>`,
-          to: recipient.email,
-          subject: subject,
-          html: `
-            <!DOCTYPE html>
-            <html>
-            <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-              <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-                <tr>
-                  <td align="center">
-                    <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-                      <tr>
-                        <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                          <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Tax Filer</h1>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="padding: 30px;">
-                          <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${recipient.name || 'Valued Client'},</p>
-                          <div style="color: #333; font-size: 15px; line-height: 1.6;">
-                            ${message}
-                          </div>
-                        </td>
-                      </tr>
-                      <tr>
-                        <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                          <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
-                          <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
-                        </td>
-                      </tr>
-                    </table>
-                  </td>
-                </tr>
-              </table>
-            </body>
-            </html>
-          `
-        };
-
-        await transporter.sendMail(mailOptions);
-        sentCount++;
-        return { success: true, email: recipient.email };
-      } catch (error) {
-        failedCount++;
-        console.error(`Failed to send email to ${recipient.email}:`, error.message);
-        return { success: false, email: recipient.email, error: error.message };
-      }
-    });
-
-    // Wait for batch to complete
-    await Promise.all(batchPromises);
-
-    // Small delay between batches to avoid rate limiting
-    if (i + batchSize < recipients.length) {
-      await new Promise(resolve => setTimeout(resolve, 1000)); // 1 second delay between batches
+      await sendEmail({
+        to: recipient.email,
+        subject: subject,
+        html: html
+      });
+      
+      sentCount++;
+      console.log(`✅ Sent to ${recipient.email} (${sentCount}/${recipients.length})`);
+      
+      // Small delay between emails
+      await new Promise(resolve => setTimeout(resolve, 500));
+      
+    } catch (error) {
+      failedCount++;
+      console.error(`❌ Failed for ${recipient.email}:`, error.message);
     }
   }
 
