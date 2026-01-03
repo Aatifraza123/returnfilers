@@ -404,7 +404,9 @@ const sendContactEmails = async (contact) => {
     });
     console.log('✅ Admin email sent');
 
-    // Send customer confirmation
+    // Customer confirmation - only works after domain verification in Resend
+    // Uncomment below after verifying domain
+    /*
     console.log('Sending customer confirmation email...');
     await sendEmail({
       to: contact.email,
@@ -412,6 +414,7 @@ const sendContactEmails = async (contact) => {
       html: customerHtml
     });
     console.log('✅ Customer email sent');
+    */
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);
