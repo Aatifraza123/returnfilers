@@ -1,4 +1,4 @@
-import { Routes, Route, Navigate } from 'react-router-dom'
+import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
@@ -45,6 +45,17 @@ import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 
+// Wrapper component to conditionally show chatbot
+const ChatbotWrapper = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  
+  // Don't show chatbot on admin pages
+  if (isAdminRoute) return null;
+  
+  return <AIChatbot />;
+};
+
 function App() {
   console.log('App component rendering...');
   
@@ -52,7 +63,7 @@ function App() {
   try {
     return (
       <AuthProvider>
-        <AIChatbot />
+        <ChatbotWrapper />
 
           <Routes>
         {/* Public Routes */}
