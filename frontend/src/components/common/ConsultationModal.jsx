@@ -22,11 +22,27 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
   }, [preSelectedService]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Phone number validation - only allow digits and max 10
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData({ ...formData, [name]: digitsOnly });
+      return;
+    }
+    
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Validate phone is exactly 10 digits
+    if (formData.phone.length !== 10) {
+      toast.error('Please enter a valid 10-digit phone number');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -135,7 +151,10 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       name="phone"
                       value={formData.phone}
                       onChange={handleChange}
-                      placeholder="Phone Number *"
+                      placeholder="9876543210"
+                      maxLength={10}
+                      pattern="[6-9][0-9]{9}"
+                      title="Enter valid 10-digit mobile number"
                       required
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
                     />

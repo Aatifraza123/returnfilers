@@ -237,8 +237,15 @@ const Contact = () => {
                    <Input
                      label="Phone Number"
                      type="tel"
-                     placeholder="+91..."
-                     {...register('phone', { required: 'Phone is required' })}
+                     placeholder="9876543210"
+                     maxLength={10}
+                     {...register('phone', { 
+                       required: 'Phone is required',
+                       pattern: {
+                         value: /^[6-9]\d{9}$/,
+                         message: 'Enter valid 10-digit mobile number'
+                       }
+                     })}
                      error={errors.phone?.message}
                      className="bg-gray-50 border-gray-200 focus:border-[#0B1530] focus:ring-0 rounded-lg text-sm py-2.5"
                    />
