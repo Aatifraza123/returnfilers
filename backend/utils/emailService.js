@@ -25,33 +25,64 @@ const getGmailTransporter = () => {
     },
     connectionTimeout: 60000,
     greetingTimeout: 60000,
-    socketTimeout: 60000,
-    debug: true,
-    logger: true
+    socketTimeout: 60000
+  });
+};
+
+// Brevo (Sendinblue) transporter - Free 300 emails/day
+const getBrevoTransporter = () => {
+  if (!process.env.BREVO_SMTP_KEY) {
+    return null;
+  }
+  
+  return nodemailer.createTransport({
+    host: 'smtp-relay.brevo.com',
+    port: 587,
+    secure: false,
+    auth: {
+      user: process.env.BREVO_SMTP_USER || process.env.EMAIL_USER,
+      pass: process.env.BREVO_SMTP_KEY
+    }
   });
 };
 
 /**
- * Send email - Uses Gmail with retry logic
+ * Send email - Uses Brevo first (works for all emails), then Gmail, then Resend
  */
 const sendEmail = async ({ to, subject, html, from }) => {
   const fromEmail = from || `Tax Filer <${process.env.EMAIL_USER}>`;
   
   console.log('📧 Attempting to send email to:', to);
-  console.log('📧 From:', fromEmail);
   console.log('📧 Subject:', subject);
   
-  // Try Gmail first
-  const transporter = getGmailTransporter();
-  if (transporter) {
+  // Try Brevo first (works for any email)
+  const brevoTransporter = getBrevoTransporter();
+  if (brevoTransporter) {
     try {
-      console.log('📧 Using Gmail SMTP (port 587)...');
+      console.log('📧 Trying Brevo SMTP...');
       
-      // Verify connection first
-      await transporter.verify();
-      console.log('✅ Gmail SMTP connection verified');
+      const result = await brevoTransporter.sendMail({
+        from: fromEmail,
+        to: to,
+        subject: subject,
+        html: html
+      });
       
-      const result = await transporter.sendMail({
+      console.log('✅ Email sent via Brevo:', result.messageId);
+      return { success: true, provider: 'brevo', id: result.messageId };
+    } catch (error) {
+      console.log('❌ Brevo failed:', error.message);
+    }
+  }
+  
+  // Try Gmail as second option
+  const gmailTransporter = getGmailTransporter();
+  if (gmailTransporter) {
+    try {
+      console.log('📧 Trying Gmail SMTP...');
+      await gmailTransporter.verify();
+      
+      const result = await gmailTransporter.sendMail({
         from: fromEmail,
         to: to,
         subject: subject,
@@ -59,19 +90,16 @@ const sendEmail = async ({ to, subject, html, from }) => {
       });
       
       console.log('✅ Email sent via Gmail:', result.messageId);
-      console.log('✅ Response:', result.response);
       return { success: true, provider: 'gmail', id: result.messageId };
     } catch (error) {
       console.log('❌ Gmail failed:', error.message);
-      console.log('❌ Error code:', error.code);
-      console.log('❌ Full error:', JSON.stringify(error, null, 2));
     }
   }
   
-  // Try Resend as fallback
+  // Try Resend as last fallback (only works for verified domains or test emails)
   if (resend) {
     try {
-      console.log('📧 Trying Resend as fallback...');
+      console.log('📧 Trying Resend...');
       const result = await resend.emails.send({
         from: process.env.RESEND_FROM || 'Tax Filer <onboarding@resend.dev>',
         to: to,
@@ -87,7 +115,7 @@ const sendEmail = async ({ to, subject, html, from }) => {
         console.log('❌ Resend error:', result.error);
       }
     } catch (resendError) {
-      console.log('❌ Resend also failed:', resendError.message);
+      console.log('❌ Resend failed:', resendError.message);
     }
   }
   

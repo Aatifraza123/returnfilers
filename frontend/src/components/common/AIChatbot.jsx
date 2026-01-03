@@ -10,22 +10,22 @@ const MessageContent = ({ content, isUser }) => {
   const lines = content.split('\n');
   
   return (
-    <div className="space-y-2">
+    <div className="space-y-1.5">
       {lines.map((line, idx) => {
         const trimmedLine = line.trim();
         
         // Empty line
         if (!trimmedLine) {
-          return <div key={idx} className="h-1" />;
+          return <div key={idx} className="h-0.5" />;
         }
         
         // Bullet points (- or •)
         if (trimmedLine.startsWith('- ') || trimmedLine.startsWith('• ')) {
           const text = trimmedLine.replace(/^[-•]\s*/, '');
           return (
-            <div key={idx} className="flex items-start gap-2 pl-1">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-2 flex-shrink-0"></span>
-              <span>{formatText(text)}</span>
+            <div key={idx} className="flex items-start gap-1.5 pl-0.5">
+              <span className="w-1 h-1 rounded-full bg-[#D4AF37] mt-1.5 flex-shrink-0"></span>
+              <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
         }
@@ -35,9 +35,9 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^\d+[\.\)]\s*/, '');
           const num = trimmedLine.match(/^\d+/)[0];
           return (
-            <div key={idx} className="flex items-start gap-2 pl-1">
-              <span className="w-5 h-5 rounded bg-[#0B1530] text-white text-[10px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
-              <span>{formatText(text)}</span>
+            <div key={idx} className="flex items-start gap-1.5 pl-0.5">
+              <span className="w-4 h-4 rounded bg-[#0B1530] text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
+              <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
         }
@@ -45,7 +45,7 @@ const MessageContent = ({ content, isUser }) => {
         // Headers (ending with :)
         if (trimmedLine.endsWith(':') && trimmedLine.length < 40 && !trimmedLine.includes('http')) {
           return (
-            <div key={idx} className="font-semibold text-[#0B1530] mt-2 text-[13px]">
+            <div key={idx} className="font-semibold text-[#0B1530] mt-1.5 text-[12px]">
               {formatText(trimmedLine)}
             </div>
           );
@@ -53,7 +53,7 @@ const MessageContent = ({ content, isUser }) => {
         
         // Regular paragraph
         return (
-          <div key={idx}>
+          <div key={idx} className="text-[12px]">
             {formatText(trimmedLine)}
           </div>
         );
@@ -226,18 +226,18 @@ const AIChatbot = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto p-4 space-y-4 bg-gray-50">
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3 bg-gray-50">
           {messages.map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-end gap-2 max-w-[88%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-7 h-7 rounded-full flex items-center justify-center flex-shrink-0 ${
+              <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
+                <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                   msg.role === 'user' 
                     ? 'bg-[#D4AF37] text-[#0B1530]' 
                     : 'bg-[#0B1530] text-[#D4AF37]'
                 }`}>
-                  {msg.role === 'user' ? <FaUser size={11} /> : <FaRobot size={12} />}
+                  {msg.role === 'user' ? <FaUser size={10} /> : <FaRobot size={11} />}
                 </div>
-                <div className={`px-4 py-3 text-[13px] leading-relaxed ${
+                <div className={`px-3 py-2.5 text-[13px] leading-relaxed ${
                   msg.role === 'user'
                     ? 'bg-[#0B1530] text-white rounded-2xl rounded-br-sm'
                     : 'bg-white text-gray-700 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100'
@@ -251,10 +251,10 @@ const AIChatbot = () => {
           {loading && (
             <div className="flex justify-start">
               <div className="flex items-end gap-2">
-                <div className="w-7 h-7 rounded-full bg-[#0B1530] text-[#D4AF37] flex items-center justify-center">
-                  <FaRobot size={12} />
+                <div className="w-6 h-6 rounded-full bg-[#0B1530] text-[#D4AF37] flex items-center justify-center">
+                  <FaRobot size={11} />
                 </div>
-                <div className="bg-white px-4 py-3 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
+                <div className="bg-white px-3 py-2.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
                   <div className="flex gap-1">
                     <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
                     <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
@@ -269,14 +269,14 @@ const AIChatbot = () => {
 
         {/* Quick Questions */}
         {messages.length <= 2 && !loading && (
-          <div className="px-4 py-3 bg-white border-t border-gray-100 flex-shrink-0">
-            <p className="text-[11px] text-gray-400 mb-2 font-medium">Quick Questions</p>
-            <div className="flex flex-wrap gap-2">
+          <div className="px-3 py-2.5 bg-white border-t border-gray-100 flex-shrink-0">
+            <p className="text-[10px] text-gray-400 mb-1.5 font-medium">Quick Questions</p>
+            <div className="flex flex-wrap gap-1.5">
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-3 py-1.5 bg-gray-100 hover:bg-[#0B1530] text-gray-600 hover:text-white rounded-lg text-xs font-medium transition-colors"
+                  className="px-2.5 py-1 bg-gray-100 hover:bg-[#0B1530] text-gray-600 hover:text-white rounded-lg text-[11px] font-medium transition-colors"
                 >
                   {q}
                 </button>
@@ -286,7 +286,7 @@ const AIChatbot = () => {
         )}
 
         {/* Input */}
-        <div className="p-3 bg-white border-t border-gray-200 flex-shrink-0">
+        <div className="p-2.5 bg-white border-t border-gray-200 flex-shrink-0">
           <form onSubmit={sendMessage} className="flex gap-2">
             <input
               ref={inputRef}
@@ -295,20 +295,20 @@ const AIChatbot = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your question..."
               disabled={loading}
-              className="flex-1 px-4 py-2.5 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 disabled:opacity-50 placeholder-gray-400"
+              className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 disabled:opacity-50 placeholder-gray-400"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-10 h-10 bg-[#0B1530] text-[#D4AF37] rounded-xl flex items-center justify-center hover:bg-[#1a2b5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-9 h-9 bg-[#0B1530] text-[#D4AF37] rounded-xl flex items-center justify-center hover:bg-[#1a2b5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
-              <FaPaperPlane size={14} />
+              <FaPaperPlane size={13} />
             </button>
           </form>
           
-          <div className="mt-2 text-center">
-            <a href="tel:+918447127264" className="text-[11px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
-              <FaPhoneAlt size={9} /> +91 84471 27264
+          <div className="mt-1.5 text-center">
+            <a href="tel:+918447127264" className="text-[10px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
+              <FaPhoneAlt size={8} /> +91 84471 27264
             </a>
           </div>
         </div>
