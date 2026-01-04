@@ -74,8 +74,8 @@ const MessageContent = ({ content, isUser }) => {
 const formatText = (text) => {
   if (!text) return null;
   
-  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs (with or without space before), emails
-  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi);
+  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs, emails, internal routes (/path)
+  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\/[a-z][-a-z0-9]*(?:\/[a-z][-a-z0-9]*)*)/gi);
   
   return parts.map((part, idx) => {
     if (!part) return null;
@@ -90,6 +90,27 @@ const formatText = (text) => {
     }
     if (part.startsWith('+91')) {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
+    }
+    // Internal route links (e.g., /upload-documents, /services, /contact)
+    if (part.match(/^\/[a-z][-a-z0-9]*(?:\/[a-z][-a-z0-9]*)*$/i)) {
+      const routeNames = {
+        '/upload-documents': 'Upload Documents',
+        '/services': 'Our Services',
+        '/contact': 'Contact Us',
+        '/quote': 'Get Quote',
+        '/about': 'About Us',
+        '/blog': 'Blog'
+      };
+      const displayName = routeNames[part] || part;
+      return (
+        <a 
+          key={idx} 
+          href={part}
+          className="text-sky-500 hover:text-sky-600 underline font-medium"
+        >
+          {displayName}
+        </a>
+      );
     }
     // URL - clickable with sky blue color
     if (part.match(/^https?:\/\//i)) {
