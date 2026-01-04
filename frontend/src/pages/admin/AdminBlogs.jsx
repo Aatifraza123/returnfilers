@@ -319,6 +319,129 @@ const AdminBlogs = () => {
                 style={{ display: 'none' }}
                 onChange={handleImageSelect}
               />
+              
+              {/* Editor Styles */}
+              <style>{`
+                .ql-toolbar.ql-snow {
+                  border: none !important;
+                  border-bottom: 2px solid #e5e7eb !important;
+                  background: #f9fafb;
+                  padding: 12px !important;
+                  border-radius: 8px 8px 0 0;
+                  display: flex;
+                  flex-wrap: wrap;
+                  gap: 4px;
+                }
+                .ql-toolbar .ql-formats {
+                  margin-right: 8px !important;
+                }
+                .ql-toolbar button {
+                  width: 32px !important;
+                  height: 32px !important;
+                  border-radius: 6px !important;
+                }
+                .ql-toolbar button:hover {
+                  background: #e5e7eb !important;
+                }
+                .ql-toolbar button.ql-active {
+                  background: #D4AF37 !important;
+                  color: white !important;
+                }
+                .ql-toolbar button.ql-active .ql-stroke {
+                  stroke: white !important;
+                }
+                .ql-toolbar button.ql-active .ql-fill {
+                  fill: white !important;
+                }
+                .ql-container.ql-snow {
+                  border: none !important;
+                  font-size: 1rem;
+                }
+                .ql-editor {
+                  min-height: 400px;
+                  padding: 20px !important;
+                  color: #374151;
+                  line-height: 1.8;
+                }
+                .ql-editor p { 
+                  margin-bottom: 1em; 
+                  line-height: 1.75;
+                }
+                .ql-editor h1 {
+                  font-size: 2rem;
+                  font-weight: 700;
+                  color: #0B1530;
+                  margin: 1.5em 0 0.5em;
+                  font-family: Georgia, serif;
+                }
+                .ql-editor h2 { 
+                  font-size: 1.5rem; 
+                  font-weight: 700; 
+                  color: #0B1530; 
+                  margin: 1.5em 0 0.5em;
+                  font-family: Georgia, serif;
+                }
+                .ql-editor h3 { 
+                  font-size: 1.25rem; 
+                  font-weight: 600; 
+                  color: #0B1530; 
+                  margin: 1.25em 0 0.5em;
+                }
+                .ql-editor blockquote {
+                  border-left: 4px solid #D4AF37;
+                  padding: 1rem;
+                  margin: 1.5em 0;
+                  background: #fefce8;
+                  border-radius: 0 8px 8px 0;
+                }
+                .ql-editor ul, .ql-editor ol {
+                  padding-left: 1.5em;
+                  margin: 1em 0;
+                }
+                .ql-editor li {
+                  margin-bottom: 0.5em;
+                }
+                .ql-editor a {
+                  color: #D4AF37;
+                  text-decoration: underline;
+                }
+                .ql-editor img {
+                  max-width: 100%;
+                  border-radius: 8px;
+                  margin: 1em 0;
+                  cursor: pointer;
+                }
+                .ql-editor table {
+                  width: 100%;
+                  border-collapse: collapse;
+                  margin: 1em 0;
+                }
+                .ql-editor th, .ql-editor td {
+                  border: 1px solid #e5e7eb;
+                  padding: 0.75rem;
+                }
+                .ql-editor th {
+                  background: #0B1530;
+                  color: white;
+                }
+                .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+                .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+                  content: 'Normal';
+                }
+                .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+                .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+                  content: 'Heading 1';
+                }
+                .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+                .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+                  content: 'Heading 2';
+                }
+                .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+                .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+                  content: 'Heading 3';
+                }
+              `}</style>
+              
               <div className="border border-gray-300 rounded-lg overflow-hidden">
                 <ReactQuill
                   ref={quillRef}
