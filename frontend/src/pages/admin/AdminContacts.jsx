@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaEye, FaTrash, FaPhone, FaEnvelope, FaCalendarAlt, FaSearch, FaFilter, FaComment } from 'react-icons/fa';
+import { FaEye, FaTrash, FaPhone, FaEnvelope, FaCalendarAlt, FaSearch, FaFilter, FaComment, FaReply } from 'react-icons/fa';
 
 const AdminContacts = () => {
   const [contacts, setContacts] = useState([]);
@@ -80,6 +80,12 @@ const AdminContacts = () => {
     } catch (error) {
       toast.error('Failed to delete contact');
     }
+  };
+
+  const openEmailReply = (contact) => {
+    const subject = encodeURIComponent(`Re: Your Inquiry - Tax Filer`);
+    const body = encodeURIComponent(`Dear ${contact.name},\n\nThank you for contacting Tax Filer.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    window.open(`mailto:${contact.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
   const filteredContacts = contacts.filter(contact => {
@@ -233,12 +239,21 @@ const AdminContacts = () => {
                       <button
                         onClick={() => setSelectedContact(contact)}
                         className="text-blue-600 hover:text-blue-900"
+                        title="View"
                       >
                         <FaEye />
                       </button>
                       <button
+                        onClick={() => openEmailReply(contact)}
+                        className="text-green-600 hover:text-green-900"
+                        title="Reply via Email"
+                      >
+                        <FaReply />
+                      </button>
+                      <button
                         onClick={() => handleDelete(contact._id)}
                         className="text-red-600 hover:text-red-900"
+                        title="Delete"
                       >
                         <FaTrash />
                       </button>
@@ -295,6 +310,12 @@ const AdminContacts = () => {
               className="mt-6 w-full bg-[#0B1530] text-white py-2 rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
             >
               Close
+            </button>
+            <button
+              onClick={() => openEmailReply(selectedContact)}
+              className="mt-2 w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+            >
+              <FaReply /> Reply via Email
             </button>
           </div>
         </div>

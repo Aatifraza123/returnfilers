@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaTrash, FaEye, FaCheckCircle, FaTimesCircle, FaClock, FaEnvelope, FaPhone, FaBriefcase, FaFileAlt } from 'react-icons/fa';
+import { FaTrash, FaEye, FaCheckCircle, FaTimesCircle, FaClock, FaEnvelope, FaPhone, FaBriefcase, FaFileAlt, FaReply } from 'react-icons/fa';
 
 const AdminQuotes = () => {
   const [quotes, setQuotes] = useState([]);
@@ -58,6 +58,12 @@ const AdminQuotes = () => {
     } catch (error) {
       toast.error('Failed to update status');
     }
+  };
+
+  const openEmailReply = (quote) => {
+    const subject = encodeURIComponent(`Re: Your ${quote.service} Quote Request - Tax Filer`);
+    const body = encodeURIComponent(`Dear ${quote.name},\n\nThank you for requesting a quote for ${quote.service}.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    window.open(`mailto:${quote.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
   const getStatusColor = (status) => {
@@ -187,6 +193,13 @@ const AdminQuotes = () => {
                 <FaEye /> View
               </button>
               <button
+                onClick={() => openEmailReply(quote)}
+                className="bg-green-50 text-green-600 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors"
+                title="Reply via Email"
+              >
+                <FaReply />
+              </button>
+              <button
                 onClick={() => handleDelete(quote._id)}
                 className="bg-red-50 text-red-600 px-3 py-2 rounded-lg hover:bg-red-100 transition-colors"
               >
@@ -268,6 +281,12 @@ const AdminQuotes = () => {
                 <label className="text-xs font-semibold text-gray-500 uppercase">Message</label>
                 <p className="text-[#0B1530] mt-1 bg-gray-50 p-3 rounded-lg">{selectedQuote.message}</p>
               </div>
+              <button
+                onClick={() => openEmailReply(selectedQuote)}
+                className="w-full bg-green-600 text-white py-2 rounded-lg hover:bg-green-700 transition-colors flex items-center justify-center gap-2"
+              >
+                <FaReply /> Reply via Email
+              </button>
             </div>
           </div>
         </div>
