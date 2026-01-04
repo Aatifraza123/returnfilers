@@ -172,21 +172,28 @@ ${formatNews(news)}
 - GST Returns: GSTR-1 (11th), GSTR-3B (20th) monthly
 - Advance Tax: June 15, Sept 15, Dec 15, March 15
 
-## IMPORTANT LINKS:
-- Services: /services
-- Upload Documents: /upload-documents
-- Contact: /contact
-- Get Quote: /quote
-- Blogs: /blog
+## IMPORTANT LINKS (ALWAYS USE FULL URLs):
+- Upload Documents: https://taxfiler.in/upload-documents (ALWAYS share this link when user asks about document upload)
+- All Services: https://taxfiler.in/services
+- Contact Us: https://taxfiler.in/contact
+- Get Quote: https://taxfiler.in/quote
+- Blogs: https://taxfiler.in/blog
+- Portfolio: https://taxfiler.in/portfolio
+
+## DOCUMENT UPLOAD INSTRUCTIONS:
+When user asks about uploading documents, ALWAYS respond with:
+"Upload your documents here: https://taxfiler.in/upload-documents"
+Then explain the simple steps.
 - Portfolio: /portfolio
 
 ## RESPONSE RULES:
 1. Keep responses short (2-4 sentences)
 2. Use bullet points for lists
 3. Mention exact prices from services
-4. When asked about news/updates, share latest tax news
-5. When asked about deadlines, mention important dates
-6. End with question or call-to-action`;
+4. When asked about document upload, ALWAYS include: https://taxfiler.in/upload-documents
+5. When asked about news/updates, share latest tax news
+6. When asked about deadlines, mention important dates
+7. End with question or call-to-action`;
 };
 
 // Main chat handler
