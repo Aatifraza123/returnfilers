@@ -74,7 +74,7 @@ const MessageContent = ({ content, isUser }) => {
 const formatText = (text) => {
   if (!text) return null;
   
-  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs, emails
+  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs (with or without space before), emails
   const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi);
   
   return parts.map((part, idx) => {
@@ -93,15 +93,17 @@ const formatText = (text) => {
     }
     // URL - clickable with sky blue color
     if (part.match(/^https?:\/\//i)) {
+      // Clean URL - remove trailing punctuation
+      const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
       return (
         <a 
           key={idx} 
-          href={part} 
+          href={cleanUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-sky-500 hover:text-sky-600 underline break-all"
         >
-          {part}
+          {cleanUrl}
         </a>
       );
     }
@@ -116,6 +118,29 @@ const formatText = (text) => {
           {part}
         </a>
       );
+    }
+    // Check if part contains URL that wasn't split (e.g., "at:https://...")
+    if (part.includes('https://') || part.includes('http://')) {
+      const urlMatch = part.match(/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/i);
+      if (urlMatch) {
+        const url = urlMatch[1].replace(/[.,;:!?)]+$/, '');
+        const beforeUrl = part.substring(0, part.indexOf(urlMatch[1]));
+        const afterUrl = part.substring(part.indexOf(urlMatch[1]) + urlMatch[1].length);
+        return (
+          <span key={idx}>
+            {beforeUrl}
+            <a 
+              href={url} 
+              target="_blank" 
+              rel="noopener noreferrer" 
+              className="text-sky-500 hover:text-sky-600 underline break-all"
+            >
+              {url}
+            </a>
+            {afterUrl}
+          </span>
+        );
+      }
     }
     return part;
   });
