@@ -37,7 +37,7 @@ const AdminLayout = () => {
       const [contactsRes, consultationsRes, quotesRes] = await Promise.all([
         api.get('/contacts').catch(() => ({ data: { contacts: [] } })),
         api.get('/consultations').catch(() => ({ data: { consultations: [] } })),
-        api.get('/quotes').catch(() => ({ data: [] } }))
+        api.get('/quotes').catch(() => ({ data: [] }))
       ]);
 
       const contacts = contactsRes.data?.contacts || contactsRes.data?.data || [];
