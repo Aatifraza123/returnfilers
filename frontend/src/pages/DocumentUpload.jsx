@@ -112,21 +112,21 @@ const DocumentUpload = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 pb-12 flex items-center justify-center">
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center px-4 pt-20">
         <motion.div
           initial={{ opacity: 0, scale: 0.9 }}
           animate={{ opacity: 1, scale: 1 }}
-          className="bg-white rounded-xl shadow-lg p-6 text-center max-w-md mx-4"
+          className="bg-white rounded-2xl shadow-xl p-8 text-center max-w-md w-full"
         >
-          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
-            <FaCheckCircle className="text-3xl text-green-500" />
+          <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+            <FaCheckCircle className="text-4xl text-green-500" />
           </div>
-          <h2 className="text-xl font-bold text-[#0B1530] mb-2">Submitted Successfully!</h2>
-          <p className="text-gray-600 text-sm mb-4">
-            We'll review and contact you within 24-48 hours.
+          <h2 className="text-2xl font-bold text-[#0B1530] mb-3">Submitted Successfully!</h2>
+          <p className="text-gray-600 mb-6">
+            We'll review your documents and contact you within 24-48 hours.
           </p>
-          <p className="text-xs text-gray-500 mb-4">
-            Urgent? Call <strong>+91 84471 27264</strong>
+          <p className="text-sm text-gray-500 mb-6">
+            For urgent queries, call <strong>+91 84471 27264</strong>
           </p>
           <button
             onClick={() => {
@@ -134,9 +134,9 @@ const DocumentUpload = () => {
               setFormData({ name: '', email: '', phone: '', service: '', message: '' });
               setFiles([]);
             }}
-            className="px-4 py-2 bg-[#0B1530] text-white rounded-lg text-sm hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+            className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
           >
-            Submit Another
+            Submit Another Request
           </button>
         </motion.div>
       </div>
@@ -144,26 +144,29 @@ const DocumentUpload = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 pb-10">
+    <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#0B1530] py-8">
-        <div className="container mx-auto max-w-2xl px-4 text-center">
-          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Submit Documents</h1>
-          <p className="text-gray-300 text-sm">Upload securely for our team to process</p>
+      <div className="bg-[#0B1530] pt-28 pb-16">
+        <div className="container mx-auto px-4 text-center">
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Submit Your Documents</h1>
+          <p className="text-gray-300 max-w-xl mx-auto">
+            Upload your documents securely for our team to review and process your service request.
+          </p>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-2xl px-4 -mt-4">
+      {/* Form Container */}
+      <div className="container mx-auto px-4 -mt-8 pb-16">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-xl shadow-lg p-5"
+          className="bg-white rounded-2xl shadow-xl max-w-3xl mx-auto overflow-hidden"
         >
-          <form onSubmit={handleSubmit} className="space-y-4">
-            {/* Personal Details - 2 columns */}
-            <div className="grid grid-cols-2 gap-3">
+          <form onSubmit={handleSubmit} className="p-6 md:p-8">
+            {/* Personal Details */}
+            <div className="grid md:grid-cols-2 gap-5 mb-5">
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -171,30 +174,13 @@ const DocumentUpload = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Your name"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+                  placeholder="Enter your full name"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
-                  Phone <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Phone number"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
-                  required
-                />
-              </div>
-            </div>
-
-            <div className="grid grid-cols-2 gap-3">
-              <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -202,23 +188,37 @@ const DocumentUpload = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Your email"
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+                  placeholder="Enter your email"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
-                  Service <span className="text-red-500">*</span>
+                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+                  Phone Number <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Enter your phone number"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors"
+                  required
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+                  Service Required <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors bg-white"
                   required
                 >
-                  <option value="">Select service</option>
+                  <option value="">Select a service</option>
                   {services.map((service) => (
                     <option key={service} value={service}>{service}</option>
                   ))}
@@ -227,26 +227,26 @@ const DocumentUpload = () => {
             </div>
 
             {/* Message */}
-            <div>
-              <label className="block text-xs font-semibold text-[#0B1530] mb-1">
-                Message (Optional)
+            <div className="mb-5">
+              <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+                Additional Message (Optional)
               </label>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Any specific notes..."
-                rows={2}
-                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] resize-none"
+                placeholder="Any specific requirements or notes..."
+                rows={3}
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] focus:ring-1 focus:ring-[#D4AF37] transition-colors resize-none"
               />
             </div>
 
             {/* File Upload */}
-            <div>
-              <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+            <div className="mb-6">
+              <label className="block text-sm font-semibold text-[#0B1530] mb-2">
                 Upload Documents <span className="text-red-500">*</span>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[#D4AF37] transition-colors">
+              <div className="border-2 border-dashed border-gray-300 rounded-xl p-6 text-center hover:border-[#D4AF37] transition-colors cursor-pointer">
                 <input
                   type="file"
                   multiple
@@ -256,24 +256,37 @@ const DocumentUpload = () => {
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
-                  <FaCloudUploadAlt className="text-3xl text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600">Click to upload</p>
-                  <p className="text-xs text-gray-400">PDF, DOC, JPG, PNG (Max 5MB)</p>
+                  <FaCloudUploadAlt className="text-4xl text-gray-400 mx-auto mb-3" />
+                  <p className="text-gray-600 font-medium">Click to upload or drag and drop</p>
+                  <p className="text-sm text-gray-400 mt-1">
+                    PDF, DOC, JPG, PNG, XLS (Max 5MB per file, up to 10 files)
+                  </p>
                 </label>
               </div>
 
               {/* File List */}
               {files.length > 0 && (
-                <div className="mt-2 space-y-1">
+                <div className="mt-4 space-y-2">
                   {files.map((file, index) => (
-                    <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg text-sm">
-                      <div className="flex items-center gap-2">
-                        <FaFileAlt className="text-[#D4AF37] text-xs" />
-                        <span className="text-[#0B1530] truncate max-w-[180px]">{file.name}</span>
-                        <span className="text-xs text-gray-400">({(file.size / 1024 / 1024).toFixed(1)}MB)</span>
+                    <div
+                      key={index}
+                      className="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-lg"
+                    >
+                      <div className="flex items-center gap-3">
+                        <FaFileAlt className="text-[#D4AF37]" />
+                        <div>
+                          <p className="text-sm font-medium text-[#0B1530]">{file.name}</p>
+                          <p className="text-xs text-gray-500">
+                            {(file.size / 1024 / 1024).toFixed(2)} MB
+                          </p>
+                        </div>
                       </div>
-                      <button type="button" onClick={() => removeFile(index)} className="text-red-500 hover:text-red-700">
-                        <FaTimes size={12} />
+                      <button
+                        type="button"
+                        onClick={() => removeFile(index)}
+                        className="text-red-500 hover:text-red-700 p-1"
+                      >
+                        <FaTimes />
                       </button>
                     </div>
                   ))}
@@ -285,20 +298,32 @@ const DocumentUpload = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-4 bg-[#0B1530] text-white rounded-lg font-semibold text-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? (
-                <><FaSpinner className="animate-spin" /> Uploading...</>
+                <>
+                  <FaSpinner className="animate-spin" />
+                  Uploading...
+                </>
               ) : (
-                <><FaCloudUploadAlt /> Submit Documents</>
+                <>
+                  <FaCloudUploadAlt />
+                  Submit Documents
+                </>
               )}
             </button>
           </form>
 
           {/* Info Box */}
-          <div className="mt-4 p-3 bg-[#D4AF37]/10 rounded-lg text-xs">
-            <p className="font-semibold text-[#0B1530] mb-1">Required Documents:</p>
-            <p className="text-gray-600">PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)</p>
+          <div className="bg-[#0B1530]/5 px-6 md:px-8 py-5 border-t">
+            <h4 className="font-semibold text-[#0B1530] mb-2">Required Documents (varies by service):</h4>
+            <div className="flex flex-wrap gap-2 text-sm text-gray-600">
+              <span className="bg-white px-3 py-1 rounded-full border">PAN Card</span>
+              <span className="bg-white px-3 py-1 rounded-full border">Aadhaar Card</span>
+              <span className="bg-white px-3 py-1 rounded-full border">Address Proof</span>
+              <span className="bg-white px-3 py-1 rounded-full border">Bank Statement</span>
+              <span className="bg-white px-3 py-1 rounded-full border">Business Proof</span>
+            </div>
           </div>
         </motion.div>
       </div>
