@@ -36,18 +36,16 @@ const AdminLayout = () => {
   // Fetch notifications (pending items)
   const fetchNotifications = async () => {
     try {
-      const [contactsRes, consultationsRes, quotesRes, documentsRes, bookingsRes] = await Promise.all([
+      const [contactsRes, consultationsRes, quotesRes, bookingsRes] = await Promise.all([
         api.get('/contacts').catch(() => ({ data: { contacts: [] } })),
         api.get('/consultations').catch(() => ({ data: { consultations: [] } })),
         api.get('/quotes').catch(() => ({ data: [] })),
-        api.get('/documents').catch(() => ({ data: { documents: [] } })),
         api.get('/bookings').catch(() => ({ data: { bookings: [] } }))
       ]);
 
       const contacts = contactsRes.data?.contacts || contactsRes.data?.data || [];
       const consultations = consultationsRes.data?.consultations || consultationsRes.data?.data || [];
       const quotes = Array.isArray(quotesRes.data) ? quotesRes.data : (quotesRes.data?.quotes || []);
-      const documents = documentsRes.data?.documents || [];
       const bookings = bookingsRes.data?.bookings || [];
 
       // Get only PENDING notifications from all types
@@ -84,17 +82,6 @@ const AdminLayout = () => {
             time: q.createdAt,
             icon: <FaFileInvoiceDollar className="text-purple-500" />,
             link: '/admin/quotes'
-          })),
-        ...documents
-          .filter(d => d.status === 'pending')
-          .map(d => ({
-            id: d._id,
-            type: 'document',
-            title: 'New Document',
-            message: `${d.name} - ${d.service}`,
-            time: d.createdAt,
-            icon: <FaFolderOpen className="text-orange-500" />,
-            link: '/admin/documents'
           })),
         ...bookings
           .filter(b => b.status === 'pending')
@@ -147,7 +134,6 @@ const AdminLayout = () => {
     { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations', badge: null },
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
     { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
-    { path: '/admin/documents', icon: <FaFolderOpen />, label: 'Documents', badge: null },
     { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
     { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
@@ -318,7 +304,6 @@ const AdminLayout = () => {
                               className={`p-4 hover:bg-[#C9A227]/5 cursor-pointer transition-all duration-200 border-l-4 ${
                                 notification.type === 'contact' ? 'border-l-green-500' :
                                 notification.type === 'consultation' ? 'border-l-blue-500' :
-                                notification.type === 'document' ? 'border-l-orange-500' :
                                 notification.type === 'booking' ? 'border-l-teal-500' :
                                 'border-l-purple-500'
                               } ${idx !== notifications.length - 1 ? 'border-b border-gray-100' : ''}`}
@@ -327,7 +312,6 @@ const AdminLayout = () => {
                                 <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
                                   notification.type === 'contact' ? 'bg-green-100' :
                                   notification.type === 'consultation' ? 'bg-blue-100' :
-                                  notification.type === 'document' ? 'bg-orange-100' :
                                   notification.type === 'booking' ? 'bg-teal-100' :
                                   'bg-purple-100'
                                 }`}>
@@ -342,7 +326,6 @@ const AdminLayout = () => {
                                     <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold flex-shrink-0 ${
                                       notification.type === 'contact' ? 'bg-green-100 text-green-700' :
                                       notification.type === 'consultation' ? 'bg-blue-100 text-blue-700' :
-                                      notification.type === 'document' ? 'bg-orange-100 text-orange-700' :
                                       notification.type === 'booking' ? 'bg-teal-100 text-teal-700' :
                                       'bg-purple-100 text-purple-700'
                                     }`}>
