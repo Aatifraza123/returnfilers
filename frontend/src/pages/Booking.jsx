@@ -5,7 +5,7 @@ import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShiel
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 
-const services = [
+const defaultServices = [
   'GST Registration',
   'GST Return Filing',
   'Income Tax Return',
@@ -24,6 +24,11 @@ const services = [
 const Booking = () => {
   const [searchParams] = useSearchParams();
   const preSelectedService = searchParams.get('service') || '';
+  
+  // Add preSelectedService to list if not already present
+  const services = preSelectedService && !defaultServices.includes(preSelectedService)
+    ? [preSelectedService, ...defaultServices]
+    : defaultServices;
   
   const [formData, setFormData] = useState({
     name: '',
