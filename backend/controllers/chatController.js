@@ -1,5 +1,5 @@
 const axios = require('axios');
-const Service = require('../models/Service');
+const Service = require('../models/serviceModel');
 
 // Cache for services (refresh every 5 minutes)
 let servicesCache = null;
