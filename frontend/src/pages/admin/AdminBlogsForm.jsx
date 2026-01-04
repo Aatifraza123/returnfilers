@@ -379,6 +379,34 @@ const AdminBlogsForm = () => {
                     overflow-x: auto;
                     margin: 1.5em 0;
                   }
+                  /* Image Resize Styles */
+                  .ql-editor img {
+                    cursor: pointer;
+                  }
+                  .ql-editor img:hover {
+                    outline: 2px solid #D4AF37;
+                  }
+                  .image-resizer {
+                    border: 2px dashed #D4AF37 !important;
+                  }
+                  .image-resizer .resize-handle {
+                    width: 12px !important;
+                    height: 12px !important;
+                    background: #D4AF37 !important;
+                    border: 2px solid white !important;
+                    border-radius: 50% !important;
+                  }
+                  .ql-image-resize {
+                    position: absolute;
+                    border: 1px dashed #D4AF37;
+                  }
+                  .ql-image-resize .ql-image-resize-handle {
+                    width: 10px;
+                    height: 10px;
+                    background: #D4AF37;
+                    border: 1px solid white;
+                    position: absolute;
+                  }
                 `}</style>
 
                 <ReactQuill
@@ -391,7 +419,8 @@ const AdminBlogsForm = () => {
                   formats={[
                     'header', 'bold', 'italic', 'underline', 'strike',
                     'color', 'background', 'list', 'bullet', 
-                    'link', 'image', 'blockquote', 'code-block'
+                    'link', 'image', 'blockquote', 'code-block',
+                    'width', 'height', 'style'
                   ]}
                 />
               </div>
