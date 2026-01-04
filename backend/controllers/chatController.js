@@ -14,7 +14,7 @@ const getServicesFromDB = async () => {
   }
   
   try {
-    const services = await Service.find({ isActive: true }).select('title description price duration');
+    const services = await Service.find({ active: true }).select('title description price timeline');
     servicesCache = services;
     servicesCacheTime = now;
     return services;
@@ -32,8 +32,8 @@ const formatServicesForPrompt = (services) => {
   
   return services.map(s => {
     let line = `- ${s.title}`;
-    if (s.price) line += `: ${s.price}`;
-    if (s.duration) line += ` | ${s.duration}`;
+    if (s.price) line += `: ₹${s.price}`;
+    if (s.timeline) line += ` (${s.timeline})`;
     return line;
   }).join('\n');
 };
