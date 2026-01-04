@@ -106,6 +106,7 @@ const AIChatbot = () => {
   ]);
   const [input, setInput] = useState('');
   const [loading, setLoading] = useState(false);
+  const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
 
@@ -165,26 +166,124 @@ const AIChatbot = () => {
     setInput('');
     setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
     setLoading(true);
+    setIsStreaming(true);
 
     try {
       const history = messages.slice(-8).map(m => ({ role: m.role, content: m.content }));
-      const { data } = await api.post('/chat', { message: userMessage, history });
       
-      if (data.success) {
-        setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
-      } else {
-        setMessages(prev => [...prev, { 
-          role: 'assistant', 
-          content: 'Sorry, I couldn\'t process that. Please try again or call us at +91 84471 27264' 
-        }]);
+      // Add empty assistant message for streaming
+      setMessages(prev => [...prev, { role: 'assistant', content: '' }]);
+      
+      const baseURL = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+      const response = await fetch(`${baseURL}/chat/stream`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ message: userMessage, history }),
+      });
+
+      if (!response.ok) throw new Error('Stream failed');
+
+      const reader = response.body.getReader();
+      const decoder = new TextDecoder();
+      let fullResponse = '';
+
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+
+        const chunk = decoder.decode(value);
+        const lines = chunk.split('\n');
+
+        for (const line of lines) {
+          if (line.startsWith('data: ')) {
+            const data = line.slice(6);
+            if (data === '[DONE]') continue;
+            
+            try {
+              const parsed = JSON.parse(data);
+              if (parsed.content) {
+                fullResponse += parsed.content;
+                // Update the last message with streaming content
+                setMessages(prev => {
+                  const newMessages = [...prev];
+                  newMessages[newMessages.length - 1] = {
+                    role: 'assistant',
+                    content: fullResponse
+                  };
+                  return newMessages;
+                });
+              }
+              if (parsed.error) {
+                setMessages(prev => {
+                  const newMessages = [...prev];
+                  newMessages[newMessages.length - 1] = {
+                    role: 'assistant',
+                    content: parsed.error
+                  };
+                  return newMessages;
+                });
+              }
+            } catch (e) {
+              // Skip invalid JSON
+            }
+          }
+        }
+      }
+
+      // If no response received, show error
+      if (!fullResponse) {
+        setMessages(prev => {
+          const newMessages = [...prev];
+          newMessages[newMessages.length - 1] = {
+            role: 'assistant',
+            content: 'Sorry, I couldn\'t process that. Please try again or call us at +91 84471 27264'
+          };
+          return newMessages;
+        });
       }
     } catch (error) {
-      setMessages(prev => [...prev, { 
-        role: 'assistant', 
-        content: 'Connection issue. Please try again or call us at +91 84471 27264' 
-      }]);
+      console.error('Chat error:', error);
+      // Fallback to non-streaming API
+      try {
+        const history = messages.slice(-8).map(m => ({ role: m.role, content: m.content }));
+        const { data } = await api.post('/chat', { message: userMessage, history });
+        
+        if (data.success) {
+          setMessages(prev => {
+            const newMessages = [...prev];
+            if (newMessages[newMessages.length - 1]?.role === 'assistant' && !newMessages[newMessages.length - 1]?.content) {
+              newMessages[newMessages.length - 1] = { role: 'assistant', content: data.response };
+            } else {
+              newMessages.push({ role: 'assistant', content: data.response });
+            }
+            return newMessages;
+          });
+        } else {
+          throw new Error('API failed');
+        }
+      } catch (fallbackError) {
+        setMessages(prev => {
+          const newMessages = [...prev];
+          const lastMsg = newMessages[newMessages.length - 1];
+          if (lastMsg?.role === 'assistant' && !lastMsg?.content) {
+            newMessages[newMessages.length - 1] = {
+              role: 'assistant',
+              content: 'Connection issue. Please try again or call us at +91 84471 27264'
+            };
+          } else {
+            newMessages.push({
+              role: 'assistant',
+              content: 'Connection issue. Please try again or call us at +91 84471 27264'
+            });
+          }
+          return newMessages;
+        });
+      }
     } finally {
       setLoading(false);
+      setIsStreaming(false);
     }
   };
 
@@ -255,7 +354,7 @@ const AIChatbot = () => {
 
         {/* Messages */}
         <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3 bg-gray-50">
-          {messages.map((msg, idx) => (
+          {messages.filter(msg => msg.content).map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
@@ -276,7 +375,7 @@ const AIChatbot = () => {
             </div>
           ))}
           
-          {loading && (
+          {loading && messages[messages.length - 1]?.content === '' && (
             <div className="flex justify-start">
               <div className="flex items-end gap-2">
                 <div className="w-6 h-6 rounded-full bg-[#0B1530] text-[#D4AF37] flex items-center justify-center">

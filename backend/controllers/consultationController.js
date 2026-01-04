@@ -76,7 +76,7 @@ const getConsultations = async (req, res) => {
     res.json({
       success: true,
       count: consultations.length,
-      data: consultations
+      consultations: consultations
     });
   } catch (error) {
     console.error('Get consultations error:', error);

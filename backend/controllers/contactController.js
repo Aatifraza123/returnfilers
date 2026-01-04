@@ -197,7 +197,7 @@ const getContacts = async (req, res) => {
     res.json({
       success: true,
       count: contacts.length,
-      data: contacts
+      contacts: contacts
     });
   } catch (error) {
     console.error('❌ Get contacts error:', error);

@@ -233,6 +233,191 @@ const callOpenRouter = async (message, history) => {
   throw new Error('All OpenRouter models failed');
 };
 
+// Streaming chat handler (real-time response)
+const chatWithAIStream = async (req, res) => {
+  try {
+    const { message, history = [] } = req.body;
+
+    if (!message || message.trim() === '') {
+      return res.status(400).json({ success: false, message: 'Message is required' });
+    }
+
+    console.log('📨 Stream chat request:', message.substring(0, 50) + '...');
+
+    // Set headers for SSE
+    res.setHeader('Content-Type', 'text/event-stream');
+    res.setHeader('Cache-Control', 'no-cache');
+    res.setHeader('Connection', 'keep-alive');
+    res.setHeader('Access-Control-Allow-Origin', '*');
+
+    const messages = [
+      { role: 'system', content: SYSTEM_PROMPT },
+      ...history.slice(-10).map(h => ({ role: h.role, content: h.content })),
+      { role: 'user', content: message }
+    ];
+
+    let streamSuccess = false;
+
+    // Try Groq streaming first
+    if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_groq_api_key_here') {
+      try {
+        const response = await axios.post(
+          'https://api.groq.com/openai/v1/chat/completions',
+          {
+            model: 'llama-3.1-8b-instant',
+            messages,
+            max_tokens: 500,
+            temperature: 0.7,
+            stream: true
+          },
+          {
+            headers: {
+              'Authorization': `Bearer ${process.env.GROQ_API_KEY}`,
+              'Content-Type': 'application/json'
+            },
+            responseType: 'stream',
+            timeout: 30000
+          }
+        );
+
+        let buffer = '';
+        
+        response.data.on('data', (chunk) => {
+          buffer += chunk.toString();
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                res.write('data: [DONE]\n\n');
+                return;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                const content = parsed.choices?.[0]?.delta?.content;
+                if (content) {
+                  res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        });
+
+        response.data.on('end', () => {
+          if (!res.writableEnded) {
+            res.write('data: [DONE]\n\n');
+            res.end();
+          }
+        });
+
+        response.data.on('error', (err) => {
+          console.log('❌ Groq stream error:', err.message);
+          if (!res.writableEnded) {
+            res.write(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`);
+            res.end();
+          }
+        });
+
+        streamSuccess = true;
+        console.log('✅ Streaming via Groq');
+      } catch (error) {
+        console.log('❌ Groq stream failed:', error.message);
+      }
+    }
+
+    // Fallback to OpenRouter streaming
+    if (!streamSuccess && process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== 'your_openrouter_api_key_here') {
+      try {
+        const response = await axios.post(
+          'https://openrouter.ai/api/v1/chat/completions',
+          {
+            model: 'meta-llama/llama-3.2-3b-instruct:free',
+            messages,
+            max_tokens: 500,
+            temperature: 0.7,
+            stream: true
+          },
+          {
+            headers: {
+              'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`,
+              'Content-Type': 'application/json',
+              'HTTP-Referer': 'https://taxfiler.in',
+              'X-Title': 'Tax Filer AI'
+            },
+            responseType: 'stream',
+            timeout: 30000
+          }
+        );
+
+        let buffer = '';
+        
+        response.data.on('data', (chunk) => {
+          buffer += chunk.toString();
+          const lines = buffer.split('\n');
+          buffer = lines.pop() || '';
+
+          for (const line of lines) {
+            if (line.startsWith('data: ')) {
+              const data = line.slice(6);
+              if (data === '[DONE]') {
+                res.write('data: [DONE]\n\n');
+                return;
+              }
+              try {
+                const parsed = JSON.parse(data);
+                const content = parsed.choices?.[0]?.delta?.content;
+                if (content) {
+                  res.write(`data: ${JSON.stringify({ content })}\n\n`);
+                }
+              } catch (e) {
+                // Skip invalid JSON
+              }
+            }
+          }
+        });
+
+        response.data.on('end', () => {
+          if (!res.writableEnded) {
+            res.write('data: [DONE]\n\n');
+            res.end();
+          }
+        });
+
+        response.data.on('error', (err) => {
+          console.log('❌ OpenRouter stream error:', err.message);
+          if (!res.writableEnded) {
+            res.write(`data: ${JSON.stringify({ error: 'Stream error' })}\n\n`);
+            res.end();
+          }
+        });
+
+        streamSuccess = true;
+        console.log('✅ Streaming via OpenRouter');
+      } catch (error) {
+        console.log('❌ OpenRouter stream failed:', error.message);
+      }
+    }
+
+    if (!streamSuccess) {
+      res.write(`data: ${JSON.stringify({ error: 'AI unavailable. Call +91 84471 27264' })}\n\n`);
+      res.write('data: [DONE]\n\n');
+      res.end();
+    }
+
+  } catch (error) {
+    console.error('❌ Stream error:', error);
+    if (!res.writableEnded) {
+      res.write(`data: ${JSON.stringify({ error: 'Something went wrong' })}\n\n`);
+      res.write('data: [DONE]\n\n');
+      res.end();
+    }
+  }
+};
+
 // Test endpoint
 const testAI = async (req, res) => {
   const results = {
@@ -273,4 +458,4 @@ const testAI = async (req, res) => {
   });
 };
 
-module.exports = { chatWithAI, testAI };
+module.exports = { chatWithAI, chatWithAIStream, testAI };
