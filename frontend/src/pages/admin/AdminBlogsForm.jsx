@@ -244,36 +244,94 @@ const AdminBlogsForm = () => {
                   }
                   .ql-container.ql-snow {
                     border: none !important;
-                    font-size: 1.125rem; /* text-lg */
+                    font-size: 1.125rem;
                     font-family: inherit;
                   }
                   .ql-editor {
                     padding: 0 !important;
                     min-height: 400px;
-                    color: #374151; /* text-gray-700 */
+                    color: #374151;
                     line-height: 1.8;
                   }
-                  .ql-editor p { margin-bottom: 1.5em; }
+                  .ql-editor p { 
+                    margin-bottom: 1.25em; 
+                    font-size: 1rem;
+                    line-height: 1.75;
+                  }
+                  .ql-editor h1 {
+                    font-size: 2rem;
+                    font-weight: 700;
+                    color: #0B1530;
+                    margin-top: 1.5em;
+                    margin-bottom: 0.75em;
+                    font-family: Georgia, serif;
+                    line-height: 1.3;
+                  }
                   .ql-editor h2 { 
-                    font-size: 1.8rem; 
+                    font-size: 1.5rem; 
                     font-weight: 700; 
                     color: #0B1530; 
-                    margin-top: 2em; 
-                    margin-bottom: 0.8em; 
-                    font-family: serif;
+                    margin-top: 1.75em; 
+                    margin-bottom: 0.75em; 
+                    font-family: Georgia, serif;
+                    line-height: 1.3;
                   }
                   .ql-editor h3 { 
-                    font-size: 1.4rem; 
+                    font-size: 1.25rem; 
                     font-weight: 600; 
                     color: #0B1530; 
                     margin-top: 1.5em; 
-                    margin-bottom: 0.6em;
+                    margin-bottom: 0.5em;
+                    line-height: 1.4;
                   }
                   .ql-editor blockquote {
                     border-left: 4px solid #D4AF37;
-                    padding-left: 16px;
+                    padding: 1rem 1.25rem;
+                    margin: 1.5em 0;
                     font-style: italic;
                     color: #4b5563;
+                    background: #f9fafb;
+                    border-radius: 0 8px 8px 0;
+                  }
+                  .ql-editor ul, .ql-editor ol {
+                    padding-left: 1.5em;
+                    margin: 1em 0;
+                  }
+                  .ql-editor li {
+                    margin-bottom: 0.5em;
+                    line-height: 1.6;
+                  }
+                  .ql-editor a {
+                    color: #D4AF37;
+                    text-decoration: underline;
+                  }
+                  .ql-editor a:hover {
+                    color: #0B1530;
+                  }
+                  .ql-editor img {
+                    max-width: 100%;
+                    height: auto;
+                    border-radius: 12px;
+                    margin: 1.5em 0;
+                    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                  }
+                  .ql-editor strong {
+                    color: #0B1530;
+                    font-weight: 600;
+                  }
+                  .ql-editor code {
+                    background: #f3f4f6;
+                    padding: 0.2em 0.4em;
+                    border-radius: 4px;
+                    font-size: 0.9em;
+                  }
+                  .ql-editor pre {
+                    background: #1f2937;
+                    color: #e5e7eb;
+                    padding: 1rem;
+                    border-radius: 8px;
+                    overflow-x: auto;
+                    margin: 1.5em 0;
                   }
                 `}</style>
 
