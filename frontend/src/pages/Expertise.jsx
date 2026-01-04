@@ -6,7 +6,9 @@ import {
   FaChartLine,
   FaUsers,
   FaPhone,
-  FaEnvelope
+  FaEnvelope,
+  FaArrowRight,
+  FaCheckCircle
 } from 'react-icons/fa';
 
 const Expertise = () => {
@@ -14,26 +16,62 @@ const Expertise = () => {
     {
       icon: <FaFileInvoiceDollar />,
       title: 'Tax Consulting',
-      description: 'Our comprehensive tax consulting services help businesses and individuals navigate the complex world of taxation with confidence. We provide expert guidance on tax planning, compliance, and optimization strategies to minimize your tax burden while ensuring full regulatory compliance.',
-      longDescription: 'Tax consulting is crucial for any business or individual looking to optimize their financial position. Our team of experienced Chartered Accountants specializes in all aspects of taxation including income tax, GST, corporate tax, and international taxation. We stay updated with the latest tax laws and regulations to provide you with the most current and effective tax strategies. Our services include detailed tax planning to identify opportunities for tax savings, timely filing of all tax returns, representation before tax authorities, and ongoing compliance support. We work closely with clients to understand their unique financial situation and develop customized tax strategies that align with their business goals while ensuring complete compliance with all applicable tax laws.',
+      slug: 'tax-consulting',
+      description: 'Expert guidance on tax planning, compliance, and optimization strategies to minimize your tax burden while ensuring full regulatory compliance.',
+      features: [
+        'Income Tax Planning & Filing',
+        'GST Registration & Returns',
+        'Corporate Tax Advisory',
+        'Tax Audit Support',
+        'TDS Compliance',
+        'International Taxation'
+      ],
+      image: 'https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=600'
     },
     {
       icon: <FaBalanceScale />,
       title: 'Auditing',
-      description: 'Our auditing services provide independent, objective assurance that your financial statements are accurate, complete, and compliant with applicable standards. We conduct thorough examinations of your financial records, internal controls, and business processes to identify risks and opportunities for improvement.',
-      longDescription: 'Auditing is essential for maintaining financial integrity, ensuring regulatory compliance, and building stakeholder confidence. Our team of qualified auditors conducts comprehensive audits using industry best practices and the latest auditing standards. We examine your financial statements, internal controls, operational processes, and compliance with various regulations. Our audit services help identify potential risks, fraud, errors, and inefficiencies in your business operations. We provide detailed audit reports with actionable recommendations to improve your financial processes, strengthen internal controls, and enhance overall business performance. Our auditing approach is thorough yet efficient, minimizing disruption to your business while providing valuable insights.',
+      slug: 'auditing',
+      description: 'Independent, objective assurance that your financial statements are accurate, complete, and compliant with applicable standards.',
+      features: [
+        'Statutory Audit',
+        'Internal Audit',
+        'Tax Audit',
+        'GST Audit',
+        'Stock Audit',
+        'Compliance Audit'
+      ],
+      image: 'https://images.unsplash.com/photo-1450101499163-c8848c66ca85?auto=format&fit=crop&q=80&w=600'
     },
     {
       icon: <FaChartLine />,
       title: 'Financial Advisory',
-      description: 'Our financial advisory services provide strategic guidance to help businesses make informed financial decisions, optimize performance, and achieve long-term growth objectives. We combine deep financial expertise with business acumen to deliver actionable insights and recommendations.',
-      longDescription: 'Financial advisory is critical for businesses looking to grow, optimize performance, and make strategic decisions. Our team of experienced financial advisors works closely with clients to understand their business objectives, financial position, and market dynamics. We provide comprehensive financial analysis, strategic planning, and actionable recommendations to help businesses achieve their goals. Our services include financial planning and analysis to forecast future performance, investment advisory to optimize capital allocation, budgeting and forecasting to plan for growth, cash flow management to ensure liquidity, merger and acquisition advisory for strategic transactions, valuation services for various purposes, risk management to protect against uncertainties, and business restructuring to improve efficiency and profitability. We use advanced financial modeling, data analytics, and industry best practices to deliver insights that drive business value.',
+      slug: 'financial-advisory',
+      description: 'Strategic guidance to help businesses make informed financial decisions, optimize performance, and achieve long-term growth.',
+      features: [
+        'Financial Planning & Analysis',
+        'Investment Advisory',
+        'Cash Flow Management',
+        'Business Valuation',
+        'Risk Management',
+        'M&A Advisory'
+      ],
+      image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=600'
     },
     {
       icon: <FaUsers />,
       title: 'Business Setup',
-      description: 'Starting a new business requires careful planning and proper legal compliance. Our business setup services provide end-to-end assistance in company formation, registration, and legal structuring. We guide you through every step of the process, ensuring complete compliance with all applicable laws and regulations.',
-      longDescription: 'Business setup is a critical first step in your entrepreneurial journey. Our comprehensive business setup services ensure that your business is established correctly, legally compliant, and ready for operations. We help you choose the right business structure based on your needs - whether it\'s a Private Limited Company, Public Limited Company, LLP, Partnership Firm, or Sole Proprietorship. Our services include complete company registration with the Registrar of Companies, obtaining all necessary licenses and registrations including GST, MSME, Import Export Code, Professional Tax, and other state-specific registrations. We handle all documentation, filing, and compliance requirements, making the process smooth and hassle-free. Our team stays updated with the latest regulations and requirements to ensure your business setup is completed efficiently and in compliance with all applicable laws. We also provide ongoing support for compliance and regulatory requirements after setup.',
+      slug: 'business-setup',
+      description: 'End-to-end assistance in company formation, registration, and legal structuring with complete compliance support.',
+      features: [
+        'Private Limited Company',
+        'LLP Registration',
+        'Partnership Firm',
+        'GST Registration',
+        'MSME Registration',
+        'Import Export Code'
+      ],
+      image: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&q=80&w=600'
     }
   ];
 
@@ -80,8 +118,8 @@ const Expertise = () => {
       </section>
 
       {/* ==================== SERVICES DETAILED SECTION ==================== */}
-      <section className="py-8 sm:py-12 md:py-16 bg-gray-50">
-        <div className="container mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
           <motion.div
             initial="hidden"
             whileInView="visible"
@@ -93,27 +131,50 @@ const Expertise = () => {
               <motion.div
                 key={idx}
                 variants={cardVariants}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100"
+                className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-lg transition-shadow"
               >
-                <div className="p-6 md:p-8">
-                  <div className="w-12 h-12 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-4">
-                    {service.icon}
+                <div className={`grid md:grid-cols-5 ${idx % 2 === 1 ? 'md:flex-row-reverse' : ''}`}>
+                  {/* Image */}
+                  <div className={`md:col-span-2 h-48 md:h-auto ${idx % 2 === 1 ? 'md:order-2' : ''}`}>
+                    <img 
+                      src={service.image} 
+                      alt={service.title}
+                      className="w-full h-full object-cover"
+                    />
                   </div>
-
-                  <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1530] mb-4">
-                    {service.title}
-                  </h2>
-
-                  <p className="text-base text-gray-600 mb-4 leading-relaxed">
-                    {service.description}
-                  </p>
-
-                  {/* Long Description */}
-                  {service.longDescription && (
-                    <div className="text-gray-700 text-sm leading-relaxed">
-                      <p>{service.longDescription}</p>
+                  
+                  {/* Content */}
+                  <div className={`md:col-span-3 p-6 md:p-8 ${idx % 2 === 1 ? 'md:order-1' : ''}`}>
+                    <div className="flex items-center gap-3 mb-4">
+                      <div className="w-10 h-10 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#D4AF37] text-lg">
+                        {service.icon}
+                      </div>
+                      <h2 className="text-xl md:text-2xl font-bold text-[#0B1530]">
+                        {service.title}
+                      </h2>
                     </div>
-                  )}
+
+                    <p className="text-gray-600 text-sm leading-relaxed mb-5">
+                      {service.description}
+                    </p>
+
+                    {/* Features Grid */}
+                    <div className="grid grid-cols-2 gap-2 mb-5">
+                      {service.features.map((feature, fIdx) => (
+                        <div key={fIdx} className="flex items-center gap-2">
+                          <FaCheckCircle className="text-[#D4AF37] text-xs flex-shrink-0" />
+                          <span className="text-xs text-gray-700">{feature}</span>
+                        </div>
+                      ))}
+                    </div>
+
+                    <Link 
+                      to={`/expertise/${service.slug}`}
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-[#D4AF37] hover:text-[#0B1530] transition-colors group"
+                    >
+                      Learn More <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
+                    </Link>
+                  </div>
                 </div>
               </motion.div>
             ))}
