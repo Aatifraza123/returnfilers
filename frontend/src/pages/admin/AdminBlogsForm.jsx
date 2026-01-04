@@ -12,10 +12,12 @@ import { motion } from 'framer-motion';
 // Register ImageResize module
 Quill.register('modules/imageResize', ImageResize);
 
-// Blog Template
+// Blog Template with images
 const BLOG_TEMPLATE = `
 <h2>Introduction</h2>
 <p>Write a compelling introduction that explains what this article is about and why readers should care. Keep it concise and engaging.</p>
+
+<img src="https://images.unsplash.com/photo-1554224155-6726b3ff858f?auto=format&fit=crop&q=80&w=1200" alt="Blog featured image" />
 
 <h2>Main Topic Heading</h2>
 <p>Explain the main concept or topic in detail. Use clear and simple language that your audience can understand.</p>
@@ -31,6 +33,8 @@ const BLOG_TEMPLATE = `
 
 <h3>Sub-topic 2</h3>
 <p>Continue with more detailed information. Use examples where possible to illustrate your points.</p>
+
+<img src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=1200" alt="Data and analytics" />
 
 <h2>Key Benefits / Features</h2>
 <p>List the main benefits or features related to your topic:</p>
