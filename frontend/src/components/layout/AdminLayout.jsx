@@ -44,13 +44,10 @@ const AdminLayout = () => {
       const consultations = consultationsRes.data?.consultations || consultationsRes.data?.data || [];
       const quotes = Array.isArray(quotesRes.data) ? quotesRes.data : (quotesRes.data?.quotes || []);
 
-      // Get pending items from last 7 days
-      const sevenDaysAgo = new Date();
-      sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-
-      const recentNotifications = [
+      // Get only PENDING notifications from all types
+      const pendingNotifications = [
         ...contacts
-          .filter(c => c.status === 'pending' && new Date(c.createdAt) > sevenDaysAgo)
+          .filter(c => c.status === 'pending')
           .map(c => ({
             id: c._id,
             type: 'contact',
@@ -61,7 +58,7 @@ const AdminLayout = () => {
             link: '/admin/contacts'
           })),
         ...consultations
-          .filter(c => c.status === 'pending' && new Date(c.createdAt) > sevenDaysAgo)
+          .filter(c => c.status === 'pending')
           .map(c => ({
             id: c._id,
             type: 'consultation',
@@ -72,7 +69,7 @@ const AdminLayout = () => {
             link: '/admin/consultations'
           })),
         ...quotes
-          .filter(q => q.status === 'pending' && new Date(q.createdAt) > sevenDaysAgo)
+          .filter(q => q.status === 'pending')
           .map(q => ({
             id: q._id,
             type: 'quote',
@@ -82,10 +79,10 @@ const AdminLayout = () => {
             icon: <FaFileInvoiceDollar className="text-purple-500" />,
             link: '/admin/quotes'
           }))
-      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
+      ].sort((a, b) => new Date(b.time) - new Date(a.time));
 
-      setNotifications(recentNotifications);
-      setUnreadCount(recentNotifications.length);
+      setNotifications(pendingNotifications);
+      setUnreadCount(pendingNotifications.length);
     } catch (error) {
       console.error('Error fetching notifications:', error);
     }
