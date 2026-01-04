@@ -185,7 +185,7 @@ const AdminLayout = () => {
           <div className="flex items-center justify-between">
             <div className={`flex items-center ${sidebarCollapsed ? 'justify-center w-full' : 'gap-2'}`}>
               <div className={`${sidebarCollapsed ? 'w-10 h-10' : 'w-10 h-10'} rounded-lg bg-[#C9A227] flex items-center justify-center`}>
-                <FaChartPie className="text-[#0B1530] text-lg" />
+                <span className="text-[#0B1530] font-black text-lg">TF</span>
               </div>
               {!sidebarCollapsed && (
                 <div>
