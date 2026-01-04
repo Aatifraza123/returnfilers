@@ -264,32 +264,59 @@ const BlogPost = () => {
               }
               .blog-content table {
                 width: 100%;
-                border-collapse: collapse;
+                border-collapse: separate;
+                border-spacing: 0;
                 margin: 1.5em 0;
-                border-radius: 8px;
+                border-radius: 12px;
                 overflow: hidden;
-                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+                box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.1);
+                border: 1px solid #e5e7eb;
               }
               .blog-content thead {
                 background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%);
               }
-              .blog-content th {
-                padding: 1rem;
+              .blog-content thead tr th {
+                padding: 1rem 1.25rem;
                 text-align: left;
                 font-weight: 600;
                 color: white;
                 border: none;
+                font-size: 0.95rem;
+              }
+              .blog-content th {
+                padding: 1rem 1.25rem;
+                text-align: left;
+                font-weight: 600;
+                color: white;
+                background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%);
+                border: none;
+                font-size: 0.95rem;
+              }
+              .blog-content tbody tr:first-child th,
+              .blog-content tr:first-child th {
+                background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%);
+                color: white;
               }
               .blog-content td {
-                padding: 0.875rem 1rem;
+                padding: 1rem 1.25rem;
                 border-bottom: 1px solid #e5e7eb;
                 color: #374151;
+                background: white;
               }
-              .blog-content tbody tr:hover {
+              .blog-content tbody tr:nth-child(even) td {
                 background: #f9fafb;
+              }
+              .blog-content tbody tr:hover td {
+                background: #fef3c7;
               }
               .blog-content tbody tr:last-child td {
                 border-bottom: none;
+              }
+              .blog-content tr:last-child td:first-child {
+                border-bottom-left-radius: 12px;
+              }
+              .blog-content tr:last-child td:last-child {
+                border-bottom-right-radius: 12px;
               }
               .blog-content hr {
                 border: none;
