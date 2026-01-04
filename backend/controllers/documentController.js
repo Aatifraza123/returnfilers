@@ -27,6 +27,14 @@ const createDocument = async (req, res) => {
       });
     }
 
+    // Format documents array
+    const formattedDocs = documents.map(doc => ({
+      name: doc.name,
+      type: doc.type || '',
+      size: doc.size || 0,
+      data: doc.data
+    }));
+
     // Create document submission
     const doc = await Document.create({
       name: name.trim(),
@@ -34,7 +42,7 @@ const createDocument = async (req, res) => {
       phone: phone.replace(/\D/g, ''),
       service: service.trim(),
       message: message?.trim() || '',
-      documents: documents
+      documents: formattedDocs
     });
 
     console.log('Document submission saved:', doc._id);

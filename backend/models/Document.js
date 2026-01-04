@@ -1,5 +1,13 @@
 const mongoose = require('mongoose');
 
+// Subdocument schema for uploaded files
+const fileSchema = new mongoose.Schema({
+  name: { type: String, required: true },
+  type: { type: String },
+  size: { type: Number },
+  data: { type: String } // Base64 encoded
+}, { _id: false });
+
 const documentSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,12 +35,7 @@ const documentSchema = new mongoose.Schema({
     trim: true,
     default: ''
   },
-  documents: [{
-    name: String,
-    type: String,
-    size: Number,
-    data: String // Base64 encoded
-  }],
+  documents: [fileSchema],
   status: {
     type: String,
     enum: ['pending', 'reviewing', 'completed', 'rejected'],
@@ -44,10 +47,10 @@ const documentSchema = new mongoose.Schema({
   }
 }, {
   timestamps: true,
-  collection: 'documents'
+  collection: 'document_submissions'
 });
 
 documentSchema.index({ status: 1, createdAt: -1 });
 documentSchema.index({ email: 1 });
 
-module.exports = mongoose.model('Document', documentSchema);
+module.exports = mongoose.model('DocumentSubmission', documentSchema);
