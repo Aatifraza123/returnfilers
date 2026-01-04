@@ -17,6 +17,7 @@ const quoteRoutes = require('./routes/quoteRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const chatRoutes = require('./routes/chatRoutes');
+const documentRoutes = require('./routes/documentRoutes');
 
 const app = express();
 
@@ -132,6 +133,9 @@ console.log('✓ Testimonial routes registered at /api/testimonials');
 
 app.use('/api/chat', chatRoutes);
 console.log('✓ Chat routes registered at /api/chat');
+
+app.use('/api/documents', documentRoutes);
+console.log('✓ Document routes registered at /api/documents');
 
 // Public routes last - /api/blogs in publicRoutes won't be reached (blogRoutes handles it first)
 app.use('/api', publicRoutes); 

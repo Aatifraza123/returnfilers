@@ -42,6 +42,8 @@ import AdminEmails from './pages/admin/AdminEmails'
 import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
+import AdminDocuments from './pages/admin/AdminDocuments'
+import DocumentUpload from './pages/DocumentUpload'
 
 // Wrapper component to conditionally show chatbot
 const ChatbotWrapper = () => {
@@ -81,6 +83,7 @@ function App() {
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="refund-policy" element={<RefundPolicy />} />
+          <Route path="upload-documents" element={<DocumentUpload />} />
         </Route>
 
         {/* Admin Routes */}
@@ -108,6 +111,7 @@ function App() {
           <Route path="contacts" element={<AdminContacts />} />
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="documents" element={<AdminDocuments />} />
         </Route>
 
         {/* 404 Page */}

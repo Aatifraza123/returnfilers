@@ -17,7 +17,8 @@ import {
   FaFileInvoiceDollar,
   FaQuoteRight,
   FaPhone,
-  FaClock
+  FaClock,
+  FaFolderOpen
 } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
@@ -118,6 +119,7 @@ const AdminLayout = () => {
     { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations', badge: null },
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
     { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
+    { path: '/admin/documents', icon: <FaFolderOpen />, label: 'Documents', badge: null },
     { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
     { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },

@@ -116,6 +116,20 @@ ${additionalContext ? `## LATEST INFORMATION:\n${additionalContext}\n` : ''}
 - GST: PAN, Aadhaar, Address Proof, Bank Details, Business Proof
 - Company: PAN, Aadhaar, Address Proof, Photos, NOC from landlord
 
+## DOCUMENT SUBMISSION:
+- Clients can upload documents online at: /upload-documents
+- When user asks about submitting documents, applying for service, or sharing documents, guide them to upload documents page
+- Steps: 1) Fill form with details 2) Select service 3) Upload documents 4) Submit
+- We will review and contact within 24-48 hours
+- For urgent queries: Call +91 84471 27264
+
+## HOW TO APPLY FOR SERVICES:
+1. Contact Us: Call/WhatsApp at +91 84471 27264 or visit our website
+2. Share Documents: Upload documents at /upload-documents page
+3. Get a Quote: We'll provide pricing based on your requirements
+4. Assignment: We'll assign an expert to your case
+- Processing time: 3-5 working days (varies by service)
+
 ## RESPONSE RULES:
 1. Keep responses short (2-4 sentences for simple queries)
 2. Use bullet points for lists
