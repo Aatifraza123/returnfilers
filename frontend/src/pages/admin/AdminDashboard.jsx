@@ -11,12 +11,14 @@ import {
   FaComments,
   FaArrowUp,
   FaClock,
-  FaExternalLinkAlt
+  FaExternalLinkAlt,
+  FaCalendarAlt
 } from 'react-icons/fa';
 import { useAuth } from '../../context/AuthContext';
 
 const AdminDashboard = () => {
   const { user } = useAuth();
+  const [currentTime, setCurrentTime] = useState(new Date());
   const [stats, setStats] = useState({
     services: 0,
     blogs: 0,
@@ -34,6 +36,32 @@ const AdminDashboard = () => {
     const interval = setInterval(fetchDashboardData, 15000);
     return () => clearInterval(interval);
   }, []);
+
+  // Real-time clock
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setCurrentTime(new Date());
+    }, 1000);
+    return () => clearInterval(timer);
+  }, []);
+
+  const formatDate = () => {
+    return currentTime.toLocaleDateString('en-IN', {
+      weekday: 'long',
+      day: 'numeric',
+      month: 'long',
+      year: 'numeric'
+    });
+  };
+
+  const formatTime = () => {
+    return currentTime.toLocaleTimeString('en-IN', {
+      hour: '2-digit',
+      minute: '2-digit',
+      second: '2-digit',
+      hour12: true
+    });
+  };
 
   const fetchDashboardData = async () => {
     try {
@@ -188,15 +216,27 @@ const AdminDashboard = () => {
               Here's what's happening with your business today.
             </p>
           </div>
-          <a 
-            href="/" 
-            target="_blank" 
-            rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-colors shadow-lg"
-          >
-            <FaExternalLinkAlt size={14} />
-            Visit Website
-          </a>
+          <div className="flex flex-col md:flex-row items-start md:items-center gap-4">
+            {/* Real-time Clock */}
+            <div className="bg-white/10 backdrop-blur-sm rounded-xl px-5 py-3 border border-white/20">
+              <div className="flex items-center gap-3">
+                <FaCalendarAlt className="text-[#C9A227] text-lg" />
+                <div>
+                  <p className="text-xs text-gray-300">{formatDate()}</p>
+                  <p className="text-xl font-bold text-white font-mono">{formatTime()}</p>
+                </div>
+              </div>
+            </div>
+            <a 
+              href="/" 
+              target="_blank" 
+              rel="noopener noreferrer"
+              className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-colors shadow-lg"
+            >
+              <FaExternalLinkAlt size={14} />
+              Visit Website
+            </a>
+          </div>
         </div>
       </div>
 
