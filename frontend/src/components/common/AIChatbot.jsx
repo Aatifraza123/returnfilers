@@ -112,31 +112,35 @@ const formatText = (text) => {
         </a>
       );
     }
-    // URL - clickable with sky blue color
+    // URL - clickable with button style
     if (part.match(/^https?:\/\//i)) {
-      // Clean URL - remove trailing punctuation
       const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
+      // Show friendly name for known URLs
+      let displayName = cleanUrl;
+      if (cleanUrl.includes('taxfiler.in')) {
+        displayName = '🌐 taxfiler.in';
+      }
       return (
         <a 
           key={idx} 
           href={cleanUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="text-sky-500 hover:text-sky-600 underline break-all"
+          className="inline-block px-2 py-0.5 bg-sky-100 text-sky-700 rounded font-medium hover:bg-sky-200 transition-colors"
         >
-          {cleanUrl}
+          {displayName}
         </a>
       );
     }
-    // Email - clickable with sky blue color
+    // Email - clickable with button style
     if (part.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)) {
       return (
         <a 
           key={idx} 
           href={`mailto:${part}`} 
-          className="text-sky-500 hover:text-sky-600 underline"
+          className="inline-block px-2 py-0.5 bg-green-100 text-green-700 rounded font-medium hover:bg-green-200 transition-colors"
         >
-          {part}
+          ✉️ {part}
         </a>
       );
     }

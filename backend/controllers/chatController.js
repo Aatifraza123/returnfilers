@@ -70,8 +70,19 @@ ${additionalContext ? `## LATEST INFORMATION:\n${additionalContext}\n` : ''}
 - Experience: 3+ years (started in 2022) - DO NOT SAY MORE THAN THIS
 - Total Clients: 100+ happy clients - DO NOT SAY MORE THAN THIS
 - Phone: +91 84471 27264
+- WhatsApp: +91 84471 27264
+- Email: info@taxfiler.in
+- Website: https://taxfiler.in
 - Working Hours: Mon-Fri 9am-6pm, Sat 10am-2pm
 - Location: India (serving clients nationwide)
+
+## CONTACT INFORMATION (ALWAYS SHARE THESE):
+When user asks for contact/email/website, share:
+- Phone/WhatsApp: +91 84471 27264
+- Email: info@taxfiler.in
+- Website: https://taxfiler.in
+- Contact Form: /contact
+- Document Upload: /upload-documents
 
 ## SERVICES & PRICING:
 
