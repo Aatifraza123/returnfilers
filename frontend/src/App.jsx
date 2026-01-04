@@ -16,7 +16,6 @@ import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Portfolio from './pages/Portfolio'
 import Contact from './pages/Contact'
-import Payment from './pages/Payment'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
@@ -38,7 +37,6 @@ import AdminServicesForm from './pages/admin/AdminServicesAdd'
 import AdminBlogs from './pages/admin/AdminBlogs'
 import AdminPortfolio from './pages/admin/AdminPortfolio'
 import AdminReviews from './pages/admin/AdminReviews'
-import AdminPayments from './pages/admin/AdminPayments'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminEmails from './pages/admin/AdminEmails'
 import AdminQuotes from './pages/admin/AdminQuotes'
@@ -79,7 +77,6 @@ function App() {
           <Route path="blog/:id" element={<BlogPost />} />
           <Route path="portfolio" element={<Portfolio />} />
           <Route path="contact" element={<Contact />} />
-          <Route path="payment" element={<Payment />} />
           <Route path="quote" element={<Quote />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="terms-conditions" element={<TermsConditions />} />
@@ -106,7 +103,6 @@ function App() {
           <Route path="portfolio" element={<AdminPortfolio />} />
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="testimonials" element={<AdminTestimonials />} />
-          <Route path="payments" element={<AdminPayments />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="emails" element={<AdminEmails />} />
           <Route path="contacts" element={<AdminContacts />} />

@@ -14,7 +14,6 @@ const serviceRoutes = require('./routes/serviceRoutes');
 const blogRoutes = require('./routes/blogRoutes');
 const portfolioRoutes = require('./routes/portfolioRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
-const paymentRoutes = require('./routes/paymentRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
 const chatRoutes = require('./routes/chatRoutes');
@@ -121,8 +120,6 @@ console.log('✓ Contact routes registered at /api/contacts');
 app.use('/api/newsletter', newsletterRoutes);
 console.log('✓ Newsletter routes registered at /api/newsletter');
 app.use('/api/services', serviceRoutes);  // Handles all /api/services/* routes (GET, POST, PUT, DELETE)
-app.use('/api/payments', paymentRoutes);
-console.log('✓ Payment routes registered at /api/payments');
 
 // Direct test route to verify routing works
 app.get('/api/blogs/test-direct', (req, res) => {
