@@ -1,7 +1,49 @@
 const axios = require('axios');
 
-// Enhanced System Prompt for Tax Filer AI Assistant
-const SYSTEM_PROMPT = `You are "Tax Filer AI", the official AI assistant for Tax Filer - a professional CA firm in India.
+// Get current date in India timezone
+const getCurrentDate = () => {
+  return new Date().toLocaleDateString('en-IN', { 
+    timeZone: 'Asia/Kolkata',
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+};
+
+// Check if message needs real-time info
+const needsRealTimeInfo = (message) => {
+  const keywords = ['today', 'latest', 'news', 'update', 'current', 'recent', 'new', 'aaj', 'abhi', 'date', 'time', 'budget', 'announcement'];
+  const lowerMsg = message.toLowerCase();
+  return keywords.some(kw => lowerMsg.includes(kw));
+};
+
+// Search for latest tax news using DuckDuckGo (free, no API key needed)
+const searchTaxNews = async (query) => {
+  try {
+    // Use DuckDuckGo instant answer API (free)
+    const searchQuery = `${query} India tax 2025`;
+    const response = await axios.get(`https://api.duckduckgo.com/?q=${encodeURIComponent(searchQuery)}&format=json&no_html=1`, {
+      timeout: 5000
+    });
+    
+    if (response.data?.AbstractText) {
+      return response.data.AbstractText;
+    }
+    
+    // Fallback: Return general tax info
+    return null;
+  } catch (error) {
+    console.log('Search failed:', error.message);
+    return null;
+  }
+};
+
+// Get dynamic system prompt with current date
+const getSystemPrompt = (additionalContext = '') => {
+  const currentDate = getCurrentDate();
+  
+  return `You are "Tax Filer AI", the official AI assistant for Tax Filer - a professional CA firm in India.
 
 ## CRITICAL IDENTITY RULES:
 - You are Tax Filer AI, NOT a general AI assistant
@@ -9,7 +51,9 @@ const SYSTEM_PROMPT = `You are "Tax Filer AI", the official AI assistant for Tax
 - NEVER mention "knowledge cutoff", "training data", or AI limitations
 - NEVER say you are an AI language model or discuss your capabilities
 - If asked unrelated questions, politely redirect to Tax Filer services
-- Current date context: January 2026
+- Today's Date: ${currentDate}
+
+${additionalContext ? `## LATEST INFORMATION:\n${additionalContext}\n` : ''}
 
 ## STRICT RULES - NEVER VIOLATE:
 1. NEVER make up information about the company
@@ -18,6 +62,7 @@ const SYSTEM_PROMPT = `You are "Tax Filer AI", the official AI assistant for Tax
 4. ALWAYS use ONLY the information provided below
 5. If you don't know something, say "I don't have that information, please contact us at +91 84471 27264"
 6. NEVER break character or discuss being an AI
+7. When asked about date/time, use today's date: ${currentDate}
 
 ## EXACT COMPANY FACTS (USE ONLY THESE):
 - Company Name: Tax Filer
@@ -60,15 +105,16 @@ const SYSTEM_PROMPT = `You are "Tax Filer AI", the official AI assistant for Tax
 - Monthly Bookkeeping: ₹2,000-5,000/month
 - Payroll: ₹1,000-3,000/month
 
-## DEADLINES (2025-26):
-- ITR: July 31, 2025 (individuals)
-- GST: 11th (GSTR-1), 20th (GSTR-3B) monthly
+## IMPORTANT DEADLINES (FY 2025-26):
+- ITR Filing: July 31, 2025 (individuals), October 31, 2025 (audit cases)
+- GST Returns: 11th (GSTR-1), 20th (GSTR-3B) of each month
 - Advance Tax: June 15, Sept 15, Dec 15, March 15
+- TDS Returns: Quarterly (July 31, Oct 31, Jan 31, May 31)
 
 ## DOCUMENTS REQUIRED:
-- ITR: PAN, Aadhaar, Form 16, Bank Statements
-- GST: PAN, Aadhaar, Address Proof, Bank Details
-- Company: PAN, Aadhaar, Address Proof, Photos
+- ITR: PAN, Aadhaar, Form 16, Bank Statements, Investment Proofs
+- GST: PAN, Aadhaar, Address Proof, Bank Details, Business Proof
+- Company: PAN, Aadhaar, Address Proof, Photos, NOC from landlord
 
 ## RESPONSE RULES:
 1. Keep responses short (2-4 sentences for simple queries)
@@ -78,12 +124,14 @@ const SYSTEM_PROMPT = `You are "Tax Filer AI", the official AI assistant for Tax
 5. For complex queries: "Please call us at +91 84471 27264"
 6. NEVER invent facts about the company
 7. For unrelated questions: "I'm here to help with Tax Filer services. How can I assist you with tax filing, GST, or company registration?"
+8. When asked about date: "Today is ${currentDate}"
 
 ## SAMPLE ABOUT RESPONSE:
 When asked about company/team/who are you, respond:
 "Tax Filer is a professional Chartered Accountant firm established in 2022. With 3+ years of experience, we have served 100+ satisfied clients across India. We specialize in tax filing, GST services, company registration, and accounting. How can I help you today?"
 
 Remember: Stay in character as Tax Filer AI. Never break character.`;
+};
 
 // Main chat handler
 const chatWithAI = async (req, res) => {
@@ -98,11 +146,22 @@ const chatWithAI = async (req, res) => {
 
     let response = null;
     let provider = null;
+    let additionalContext = '';
+
+    // Check if user needs real-time info (news, date, updates)
+    if (needsRealTimeInfo(message)) {
+      console.log('🔍 Searching for real-time info...');
+      const searchResult = await searchTaxNews(message);
+      if (searchResult) {
+        additionalContext = searchResult;
+        console.log('✅ Found real-time info');
+      }
+    }
 
     // Try Groq first (faster)
     if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_groq_api_key_here') {
       try {
-        response = await callGroq(message, history);
+        response = await callGroq(message, history, additionalContext);
         provider = 'Groq';
       } catch (error) {
         console.log('❌ Groq error:', error.message);
@@ -112,7 +171,7 @@ const chatWithAI = async (req, res) => {
     // Fallback to OpenRouter
     if (!response && process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== 'your_openrouter_api_key_here') {
       try {
-        response = await callOpenRouter(message, history);
+        response = await callOpenRouter(message, history, additionalContext);
         provider = 'OpenRouter';
       } catch (error) {
         console.log('❌ OpenRouter error:', error.message);
@@ -158,9 +217,9 @@ const cleanResponse = (text) => {
 };
 
 // Groq API (Llama 3.1)
-const callGroq = async (message, history) => {
+const callGroq = async (message, history, additionalContext = '') => {
   const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'system', content: getSystemPrompt(additionalContext) },
     ...history.slice(-10).map(h => ({ role: h.role, content: h.content })),
     { role: 'user', content: message }
   ];
@@ -193,9 +252,9 @@ const callGroq = async (message, history) => {
 };
 
 // OpenRouter API (Free models - Llama, Mistral)
-const callOpenRouter = async (message, history) => {
+const callOpenRouter = async (message, history, additionalContext = '') => {
   const messages = [
-    { role: 'system', content: SYSTEM_PROMPT },
+    { role: 'system', content: getSystemPrompt(additionalContext) },
     ...history.slice(-10).map(h => ({ role: h.role, content: h.content })),
     { role: 'user', content: message }
   ];
@@ -259,8 +318,20 @@ const chatWithAIStream = async (req, res) => {
     res.setHeader('Connection', 'keep-alive');
     res.setHeader('Access-Control-Allow-Origin', '*');
 
+    // Check if user needs real-time info
+    let additionalContext = '';
+    if (needsRealTimeInfo(message)) {
+      console.log('🔍 Searching for real-time info...');
+      const searchResult = await searchTaxNews(message);
+      if (searchResult) {
+        additionalContext = searchResult;
+        console.log('✅ Found real-time info');
+      }
+    }
+
+    const systemPrompt = getSystemPrompt(additionalContext);
     const messages = [
-      { role: 'system', content: SYSTEM_PROMPT },
+      { role: 'system', content: systemPrompt },
       ...history.slice(-10).map(h => ({ role: h.role, content: h.content })),
       { role: 'user', content: message }
     ];
