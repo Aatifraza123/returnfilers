@@ -196,6 +196,104 @@ const Home = () => {
         </div>
       </section>
 
+      {/* ==================== ABOUT SECTION ==================== */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            
+            {/* Left: Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img 
+                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800" 
+                  alt="About Tax Filer" 
+                  className="w-full h-[400px] object-cover"
+                />
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/60 to-transparent"></div>
+              </div>
+              
+              {/* Experience Badge */}
+              <div className="absolute -bottom-6 -right-6 bg-[#D4AF37] text-[#0B1530] p-6 rounded-2xl shadow-xl">
+                <div className="text-4xl font-serif font-bold">3+</div>
+                <div className="text-sm font-bold uppercase tracking-wider">Years Experience</div>
+              </div>
+            </motion.div>
+
+            {/* Right: Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm mb-4 block">About Us</span>
+              <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-6">
+                Your Trusted Partner in Financial Success
+              </h2>
+              <p className="text-gray-600 text-base leading-relaxed mb-6">
+                Tax Filer is a professional Chartered Accountancy firm dedicated to providing comprehensive financial solutions. Since 2022, we have been helping businesses and individuals navigate the complex world of taxation, compliance, and financial planning.
+              </p>
+              <p className="text-gray-600 text-base leading-relaxed mb-8">
+                Our team of certified professionals brings expertise in Income Tax, GST, Company Registration, Auditing, and Business Advisory services. We believe in building long-term relationships based on trust, transparency, and excellence.
+              </p>
+
+              {/* Key Points */}
+              <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaAward className="text-[#D4AF37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1530]">Certified Experts</h4>
+                    <p className="text-sm text-gray-500">Qualified CAs & professionals</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaUsers className="text-[#D4AF37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1530]">100+ Clients</h4>
+                    <p className="text-sm text-gray-500">Trusted by businesses</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaLock className="text-[#D4AF37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1530]">100% Confidential</h4>
+                    <p className="text-sm text-gray-500">Your data is secure</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaCheckCircle className="text-[#D4AF37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1530]">Timely Delivery</h4>
+                    <p className="text-sm text-gray-500">Never miss deadlines</p>
+                  </div>
+                </div>
+              </div>
+
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1530] text-white rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all"
+              >
+                Learn More About Us <FaArrowRight size={12} />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
       {/* ==================== PREMIUM SERVICES SECTION ==================== */}
       <section className="py-12 md:py-16 bg-[#F9FAFB]">
         <div className="container mx-auto max-w-7xl px-6">
