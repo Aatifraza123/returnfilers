@@ -1,160 +1,177 @@
 const axios = require('axios');
 const Service = require('../models/serviceModel');
+const Testimonial = require('../models/testimonialModel');
+const Blog = require('../models/blogModel');
+const Portfolio = require('../models/portfolioModel');
 
-// Cache for services (refresh every 5 minutes)
-let servicesCache = null;
-let servicesCacheTime = 0;
-const CACHE_DURATION = 5 * 60 * 1000; // 5 minutes
+// Cache (refresh every 5 minutes)
+let dataCache = { services: null, testimonials: null, blogs: null, portfolio: null };
+let cacheTime = { services: 0, testimonials: 0, blogs: 0, portfolio: 0 };
+const CACHE_DURATION = 5 * 60 * 1000;
 
-// Fetch services from database
-const getServicesFromDB = async () => {
+// Fetch services
+const getServices = async () => {
   const now = Date.now();
-  if (servicesCache && (now - servicesCacheTime) < CACHE_DURATION) {
-    return servicesCache;
-  }
-  
+  if (dataCache.services && (now - cacheTime.services) < CACHE_DURATION) return dataCache.services;
   try {
-    const services = await Service.find({ active: true }).select('title description price timeline');
-    servicesCache = services;
-    servicesCacheTime = now;
-    return services;
-  } catch (error) {
-    console.log('Error fetching services:', error.message);
-    return servicesCache || [];
-  }
+    dataCache.services = await Service.find({ active: true }).select('title price timeline');
+    cacheTime.services = now;
+  } catch (e) { console.log('Services fetch error'); }
+  return dataCache.services || [];
 };
 
-// Format services for AI prompt
-const formatServicesForPrompt = (services) => {
-  if (!services || services.length === 0) {
-    return '(No services available - ask user to contact us)';
-  }
-  
-  return services.map(s => {
-    let line = `- ${s.title}`;
-    if (s.price) line += `: ₹${s.price}`;
-    if (s.timeline) line += ` (${s.timeline})`;
-    return line;
-  }).join('\n');
+// Fetch testimonials
+const getTestimonials = async () => {
+  const now = Date.now();
+  if (dataCache.testimonials && (now - cacheTime.testimonials) < CACHE_DURATION) return dataCache.testimonials;
+  try {
+    dataCache.testimonials = await Testimonial.find({ isActive: true }).select('name title quote rating').limit(5);
+    cacheTime.testimonials = now;
+  } catch (e) { console.log('Testimonials fetch error'); }
+  return dataCache.testimonials || [];
 };
 
-// Get current date in India timezone
+// Fetch blogs
+const getBlogs = async () => {
+  const now = Date.now();
+  if (dataCache.blogs && (now - cacheTime.blogs) < CACHE_DURATION) return dataCache.blogs;
+  try {
+    dataCache.blogs = await Blog.find({ isPublished: true }).select('title category').sort({ createdAt: -1 }).limit(5);
+    cacheTime.blogs = now;
+  } catch (e) { console.log('Blogs fetch error'); }
+  return dataCache.blogs || [];
+};
+
+// Fetch portfolio
+const getPortfolio = async () => {
+  const now = Date.now();
+  if (dataCache.portfolio && (now - cacheTime.portfolio) < CACHE_DURATION) return dataCache.portfolio;
+  try {
+    dataCache.portfolio = await Portfolio.find({ isActive: true }).select('title category client').limit(5);
+    cacheTime.portfolio = now;
+  } catch (e) { console.log('Portfolio fetch error'); }
+  return dataCache.portfolio || [];
+};
+
+// Format data for prompt
+const formatServices = (services) => {
+  if (!services?.length) return '(Contact us for services)';
+  return services.map(s => `- ${s.title}: ₹${s.price} (${s.timeline || '3-7 Days'})`).join('\n');
+};
+
+const formatTestimonials = (testimonials) => {
+  if (!testimonials?.length) return '(No reviews yet)';
+  return testimonials.map(t => `- "${t.quote?.substring(0, 80)}..." - ${t.name}, ${t.title} (${t.rating}★)`).join('\n');
+};
+
+const formatBlogs = (blogs) => {
+  if (!blogs?.length) return '(No blogs yet)';
+  return blogs.map(b => `- ${b.title} [${b.category}]`).join('\n');
+};
+
+const formatPortfolio = (portfolio) => {
+  if (!portfolio?.length) return '(No portfolio yet)';
+  return portfolio.map(p => `- ${p.title} (${p.category}) - Client: ${p.client || 'Confidential'}`).join('\n');
+};
+
+// Get current date
 const getCurrentDate = () => {
   return new Date().toLocaleDateString('en-IN', { 
-    timeZone: 'Asia/Kolkata',
-    weekday: 'long',
-    year: 'numeric',
-    month: 'long',
-    day: 'numeric'
+    timeZone: 'Asia/Kolkata', weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
   });
 };
 
-// Get dynamic system prompt with services from database
-const getSystemPrompt = async (additionalContext = '') => {
-  const currentDate = getCurrentDate();
-  const services = await getServicesFromDB();
-  const servicesText = formatServicesForPrompt(services);
+// Build system prompt with all data
+const getSystemPrompt = async () => {
+  const [services, testimonials, blogs, portfolio] = await Promise.all([
+    getServices(), getTestimonials(), getBlogs(), getPortfolio()
+  ]);
   
   return `You are "Tax Filer AI", the official AI assistant for Tax Filer - a professional CA firm in India.
 
-## CRITICAL IDENTITY RULES:
-- You are Tax Filer AI, NOT a general AI assistant
-- You ONLY discuss Tax Filer services, pricing, and tax-related topics
-- NEVER mention "knowledge cutoff", "training data", or AI limitations
-- If asked unrelated questions, politely redirect to Tax Filer services
-- Today's Date: ${currentDate}
-
-${additionalContext ? `## LATEST INFORMATION:\n${additionalContext}\n` : ''}
+## TODAY: ${getCurrentDate()}
 
 ## STRICT RULES:
-1. NEVER make up information about the company
-2. Experience: 3+ years (started 2022) - NEVER say more
-3. Clients: 100+ - NEVER say more
-4. Use ONLY the services and pricing listed below
-5. If you don't know something: "Please contact us at +91 84471 27264"
+- You are Tax Filer AI, NOT a general assistant
+- ONLY discuss Tax Filer services and tax topics
+- NEVER mention AI limitations or training data
+- Experience: 3+ years (since 2022) - NEVER say more
+- Clients: 100+ - NEVER say more
+- Use EXACT prices from services list below
+- If unsure: "Please contact us at +91 84471 27264"
 
 ## COMPANY INFO:
 - Company: Tax Filer (CA Firm)
-- Experience: 3+ years (since 2022)
-- Clients: 100+
 - Phone/WhatsApp: +91 84471 27264
 - Email: info@taxfiler.in
 - Website: https://taxfiler.in
 - Hours: Mon-Fri 9am-6pm, Sat 10am-2pm
 
-## OUR SERVICES (FROM DATABASE - USE THESE EXACT PRICES):
-${servicesText}
+## OUR SERVICES (USE EXACT PRICES):
+${formatServices(services)}
+
+## CLIENT REVIEWS:
+${formatTestimonials(testimonials)}
+
+## RECENT BLOGS:
+${formatBlogs(blogs)}
+
+## OUR WORK/PORTFOLIO:
+${formatPortfolio(portfolio)}
 
 ## IMPORTANT LINKS:
-- Document Upload: /upload-documents
-- All Services: /services
+- Services: /services
+- Upload Documents: /upload-documents
 - Contact: /contact
 - Get Quote: /quote
-
-## HOW TO APPLY:
-1. Contact us at +91 84471 27264
-2. Upload documents at /upload-documents
-3. Get quote and pay
-4. We assign an expert
+- Blogs: /blog
+- Portfolio: /portfolio
 
 ## RESPONSE RULES:
 1. Keep responses short (2-4 sentences)
 2. Use bullet points for lists
-3. Always mention exact prices from services above
-4. End with a question or call-to-action
-5. For complex queries: "Please call us at +91 84471 27264"
-
-Remember: Stay in character as Tax Filer AI.`;
+3. Mention exact prices from services
+4. When asked about reviews, share actual client testimonials
+5. When asked about blogs, mention recent blog titles
+6. End with question or call-to-action`;
 };
 
 // Main chat handler
 const chatWithAI = async (req, res) => {
   try {
     const { message, history = [] } = req.body;
+    if (!message?.trim()) return res.status(400).json({ success: false, message: 'Message required' });
 
-    if (!message || message.trim() === '') {
-      return res.status(400).json({ success: false, message: 'Message is required' });
-    }
+    console.log('📨 Chat:', message.substring(0, 50));
 
-    console.log('📨 Chat request:', message.substring(0, 50) + '...');
+    let response = null, provider = null;
 
-    let response = null;
-    let provider = null;
-
-    // Try Groq first
-    if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_groq_api_key_here') {
+    // Try Groq
+    if (process.env.GROQ_API_KEY) {
       try {
         response = await callGroq(message, history);
         provider = 'Groq';
-      } catch (error) {
-        console.log('❌ Groq error:', error.message);
-      }
+      } catch (e) { console.log('Groq error:', e.message); }
     }
 
-    // Fallback to OpenRouter
-    if (!response && process.env.OPENROUTER_API_KEY && process.env.OPENROUTER_API_KEY !== 'your_openrouter_api_key_here') {
+    // Fallback OpenRouter
+    if (!response && process.env.OPENROUTER_API_KEY) {
       try {
         response = await callOpenRouter(message, history);
         provider = 'OpenRouter';
-      } catch (error) {
-        console.log('❌ OpenRouter error:', error.message);
-      }
+      } catch (e) { console.log('OpenRouter error:', e.message); }
     }
 
     if (!response) {
-      return res.status(503).json({ 
-        success: false, 
-        message: 'AI unavailable. Please call +91 84471 27264' 
-      });
+      return res.status(503).json({ success: false, message: 'AI unavailable. Call +91 84471 27264' });
     }
 
     response = response.replace(/\n{3,}/g, '\n\n').replace(/^#{1,3}\s+/gm, '').trim();
-
-    console.log(`✅ Response via ${provider}`);
+    console.log(`✅ ${provider}`);
     res.json({ success: true, response, provider });
 
   } catch (error) {
-    console.error('❌ Chat error:', error);
+    console.error('Chat error:', error);
     res.status(500).json({ success: false, message: 'Error. Call +91 84471 27264' });
   }
 };
@@ -171,9 +188,8 @@ const callGroq = async (message, history) => {
   const response = await axios.post(
     'https://api.groq.com/openai/v1/chat/completions',
     { model: 'llama-3.1-8b-instant', messages, max_tokens: 500, temperature: 0.7 },
-    { headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}`, 'Content-Type': 'application/json' }, timeout: 30000 }
+    { headers: { 'Authorization': `Bearer ${process.env.GROQ_API_KEY}` }, timeout: 30000 }
   );
-
   return response.data?.choices?.[0]?.message?.content;
 };
 
@@ -187,20 +203,17 @@ const callOpenRouter = async (message, history) => {
   ];
 
   const models = ['meta-llama/llama-3.2-3b-instruct:free', 'mistralai/mistral-7b-instruct:free'];
-
   for (const model of models) {
     try {
       const response = await axios.post(
         'https://openrouter.ai/api/v1/chat/completions',
         { model, messages, max_tokens: 500, temperature: 0.7 },
-        { headers: { 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}`, 'Content-Type': 'application/json' }, timeout: 30000 }
+        { headers: { 'Authorization': `Bearer ${process.env.OPENROUTER_API_KEY}` }, timeout: 30000 }
       );
       if (response.data?.choices?.[0]?.message?.content) {
         return response.data.choices[0].message.content;
       }
-    } catch (err) {
-      continue;
-    }
+    } catch (e) { continue; }
   }
   throw new Error('All models failed');
 };
@@ -222,9 +235,7 @@ const chatWithAIStream = async (req, res) => {
       { role: 'user', content: message }
     ];
 
-    let success = false;
-
-    if (process.env.GROQ_API_KEY && process.env.GROQ_API_KEY !== 'your_groq_api_key_here') {
+    if (process.env.GROQ_API_KEY) {
       try {
         const response = await axios.post(
           'https://api.groq.com/openai/v1/chat/completions',
@@ -250,15 +261,13 @@ const chatWithAIStream = async (req, res) => {
         });
         response.data.on('end', () => { if (!res.writableEnded) { res.write('data: [DONE]\n\n'); res.end(); } });
         response.data.on('error', () => { if (!res.writableEnded) res.end(); });
-        success = true;
-      } catch (e) { console.log('Groq stream failed'); }
+        return;
+      } catch (e) { console.log('Stream failed'); }
     }
 
-    if (!success) {
-      res.write(`data: ${JSON.stringify({ error: 'AI unavailable. Call +91 84471 27264' })}\n\n`);
-      res.write('data: [DONE]\n\n');
-      res.end();
-    }
+    res.write(`data: ${JSON.stringify({ error: 'AI unavailable' })}\n\n`);
+    res.write('data: [DONE]\n\n');
+    res.end();
   } catch (error) {
     if (!res.writableEnded) { res.write('data: [DONE]\n\n'); res.end(); }
   }
@@ -266,8 +275,18 @@ const chatWithAIStream = async (req, res) => {
 
 // Test endpoint
 const testAI = async (req, res) => {
-  const services = await getServicesFromDB();
-  res.json({ success: true, servicesCount: services.length, services: services.map(s => s.title) });
+  const [services, testimonials, blogs, portfolio] = await Promise.all([
+    getServices(), getTestimonials(), getBlogs(), getPortfolio()
+  ]);
+  res.json({ 
+    success: true, 
+    data: {
+      services: services.length,
+      testimonials: testimonials.length,
+      blogs: blogs.length,
+      portfolio: portfolio.length
+    }
+  });
 };
 
 module.exports = { chatWithAI, chatWithAIStream, testAI };
