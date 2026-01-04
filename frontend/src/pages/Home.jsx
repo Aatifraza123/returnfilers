@@ -461,20 +461,20 @@ const Home = () => {
           </motion.div>
           
           {/* Carousel Container */}
-          <div className="relative max-w-4xl mx-auto">
+          <div className="relative max-w-5xl mx-auto">
             {/* Navigation Buttons */}
             {testimonials.length > 1 && (
               <>
                 <button
                   onClick={prevTestimonial}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
                   aria-label="Previous testimonial"
                 >
-                  <FaChevronLeft size={18} />
+                  <FaChevronLeft size={16} />
                 </button>
                 <button
                   onClick={nextTestimonial}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
                   aria-label="Next testimonial"
                 >
                   <FaChevronRight size={18} />
@@ -491,40 +491,40 @@ const Home = () => {
                   animate={{ opacity: 1, x: 0 }}
                   exit={{ opacity: 0, x: -50 }}
                   transition={{ duration: 0.3 }}
-                  className="bg-white p-8 md:p-10 rounded-2xl shadow-xl relative"
+                  className="bg-white p-6 md:p-8 rounded-2xl shadow-xl relative flex flex-col md:flex-row items-center gap-6"
                 >
-                  {/* Quote Icon */}
-                  <div className="absolute -top-5 left-8 w-14 h-14 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
-                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
-                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                    </svg>
-                  </div>
-                  
-                  {/* Stars */}
-                  <div className="flex gap-1 mb-6 pt-4 justify-center">
-                    {[...Array(5)].map((_, i) => (
-                      <FaStar 
-                        key={i} 
-                        size={20} 
-                        className={i < testimonials[currentTestimonial]?.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
-                      />
-                    ))}
-                  </div>
-                  
-                  {/* Quote */}
-                  <p className="text-gray-600 text-center text-lg md:text-xl leading-relaxed mb-8 italic">
-                    "{testimonials[currentTestimonial]?.quote}"
-                  </p>
-                  
-                  {/* Author */}
-                  <div className="flex flex-col items-center gap-3 pt-6 border-t border-gray-100">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md">
+                  {/* Left: Author */}
+                  <div className="flex flex-col items-center md:w-48 flex-shrink-0">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
                       {testimonials[currentTestimonial]?.name?.charAt(0)}
                     </div>
                     <div className="text-center">
-                      <div className="font-bold text-[#0B1530] text-lg">{testimonials[currentTestimonial]?.name}</div>
-                      <div className="text-sm text-gray-500">{testimonials[currentTestimonial]?.title}</div>
+                      <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
+                      <div className="text-xs text-gray-500">{testimonials[currentTestimonial]?.title}</div>
                     </div>
+                    {/* Stars */}
+                    <div className="flex gap-0.5 mt-2">
+                      {[...Array(5)].map((_, i) => (
+                        <FaStar 
+                          key={i} 
+                          size={14} 
+                          className={i < testimonials[currentTestimonial]?.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
+                        />
+                      ))}
+                    </div>
+                  </div>
+                  
+                  {/* Right: Quote */}
+                  <div className="flex-1 relative md:pl-6 md:border-l border-gray-100">
+                    {/* Quote Icon */}
+                    <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                      </svg>
+                    </div>
+                    <p className="text-gray-600 text-base md:text-lg leading-relaxed italic pt-8 md:pt-0 md:pl-4">
+                      "{testimonials[currentTestimonial]?.quote}"
+                    </p>
                   </div>
                 </motion.div>
               </AnimatePresence>
@@ -532,14 +532,14 @@ const Home = () => {
 
             {/* Dots Navigation */}
             {testimonials.length > 1 && (
-              <div className="flex justify-center gap-2 mt-8">
+              <div className="flex justify-center gap-2 mt-6">
                 {testimonials.map((_, idx) => (
                   <button
                     key={idx}
                     onClick={() => setCurrentTestimonial(idx)}
-                    className={`w-3 h-3 rounded-full transition-all ${
+                    className={`w-2.5 h-2.5 rounded-full transition-all ${
                       idx === currentTestimonial 
-                        ? 'bg-[#D4AF37] w-8' 
+                        ? 'bg-[#D4AF37] w-6' 
                         : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                     aria-label={`Go to testimonial ${idx + 1}`}
