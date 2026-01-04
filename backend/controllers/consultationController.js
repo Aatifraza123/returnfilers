@@ -1,4 +1,5 @@
 const Consultation = require('../models/Consultation');
+const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
 
 // @desc    Submit consultation request
@@ -92,6 +93,14 @@ const getConsultations = async (req, res) => {
 // @access  Private/Admin
 const getConsultationById = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid consultation ID format'
+      });
+    }
+
     const consultation = await Consultation.findById(req.params.id);
 
     if (!consultation) {
@@ -106,9 +115,10 @@ const getConsultationById = async (req, res) => {
       data: consultation
     });
   } catch (error) {
+    console.error('Get consultation by ID error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get consultation'
     });
   }
 };
@@ -118,6 +128,14 @@ const getConsultationById = async (req, res) => {
 // @access  Private/Admin
 const updateConsultation = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid consultation ID format'
+      });
+    }
+
     const { status } = req.body;
 
     const consultation = await Consultation.findByIdAndUpdate(
@@ -139,9 +157,10 @@ const updateConsultation = async (req, res) => {
       data: consultation
     });
   } catch (error) {
+    console.error('Update consultation error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to update consultation'
     });
   }
 };
@@ -151,6 +170,14 @@ const updateConsultation = async (req, res) => {
 // @access  Private/Admin
 const deleteConsultation = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid consultation ID format'
+      });
+    }
+
     const consultation = await Consultation.findByIdAndDelete(req.params.id);
 
     if (!consultation) {
