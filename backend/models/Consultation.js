@@ -28,11 +28,7 @@ const consultationSchema = new mongoose.Schema({
   service: {
     type: String,
     required: [true, 'Service is required for consultation'],
-    trim: true,
-    enum: {
-      values: ['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Other'],
-      message: '{VALUE} is not a valid service'
-    }
+    trim: true
   },
   message: {
     type: String,
