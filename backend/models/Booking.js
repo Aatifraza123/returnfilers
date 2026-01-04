@@ -1,5 +1,12 @@
 const mongoose = require('mongoose');
 
+const documentSchema = new mongoose.Schema({
+  name: { type: String },
+  type: { type: String },
+  size: { type: Number },
+  data: { type: String }
+}, { _id: false });
+
 const bookingSchema = new mongoose.Schema({
   name: {
     type: String,
@@ -27,12 +34,7 @@ const bookingSchema = new mongoose.Schema({
     trim: true,
     default: ''
   },
-  documents: [{
-    name: String,
-    type: String,
-    size: Number,
-    data: String
-  }],
+  documents: [documentSchema],
   status: {
     type: String,
     enum: ['pending', 'contacted', 'in-progress', 'completed', 'cancelled'],
