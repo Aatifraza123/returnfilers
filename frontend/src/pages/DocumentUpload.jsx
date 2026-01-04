@@ -33,7 +33,16 @@ const DocumentUpload = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    
+    // Phone number validation - only allow digits and max 10
+    if (name === 'phone') {
+      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
+      setFormData({ ...formData, [name]: digitsOnly });
+      return;
+    }
+    
+    setFormData({ ...formData, [name]: value });
   };
 
   const handleFileChange = (e) => {
@@ -74,6 +83,12 @@ const DocumentUpload = () => {
     
     if (!formData.name || !formData.email || !formData.phone || !formData.service) {
       toast.error('Please fill all required fields');
+      return;
+    }
+
+    // Validate phone is exactly 10 digits
+    if (formData.phone.length !== 10) {
+      toast.error('Please enter a valid 10-digit phone number');
       return;
     }
 
@@ -202,7 +217,10 @@ const DocumentUpload = () => {
                   name="phone"
                   value={formData.phone}
                   onChange={handleChange}
-                  placeholder="Enter your phone number"
+                  placeholder="9876543210"
+                  maxLength={10}
+                  pattern="[6-9][0-9]{9}"
+                  title="Enter valid 10-digit mobile number"
                   className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
                   required
                 />
