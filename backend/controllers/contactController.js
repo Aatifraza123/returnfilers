@@ -214,8 +214,11 @@ const getContacts = async (req, res) => {
 // @access  Private/Admin
 const getContactById = async (req, res) => {
   try {
+    console.log('Getting contact by ID:', req.params.id);
+    
     // Validate ObjectId
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      console.log('Invalid ObjectId format:', req.params.id);
       return res.status(400).json({
         success: false,
         message: 'Invalid contact ID format'
@@ -223,6 +226,7 @@ const getContactById = async (req, res) => {
     }
 
     const contact = await Contact.findById(req.params.id);
+    console.log('Contact found:', contact ? 'Yes' : 'No');
 
     if (!contact) {
       return res.status(404).json({
@@ -236,7 +240,7 @@ const getContactById = async (req, res) => {
       data: contact
     });
   } catch (error) {
-    console.error('Get contact by ID error:', error);
+    console.error('Get contact by ID error:', error.message, error.stack);
     res.status(500).json({
       success: false,
       message: error.message || 'Failed to get contact'
