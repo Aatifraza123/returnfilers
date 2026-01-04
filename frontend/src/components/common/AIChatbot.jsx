@@ -74,8 +74,8 @@ const MessageContent = ({ content, isUser }) => {
 const formatText = (text) => {
   if (!text) return null;
   
-  // Match: **bold**, ₹prices with ranges (various dash types), phone numbers, pipe separators
-  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?))/gi);
+  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs
+  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+)/gi);
   
   return parts.map((part, idx) => {
     if (!part) return null;
@@ -90,6 +90,20 @@ const formatText = (text) => {
     }
     if (part.startsWith('+91')) {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
+    }
+    // URL - clickable with sky blue color
+    if (part.match(/^https?:\/\//i)) {
+      return (
+        <a 
+          key={idx} 
+          href={part} 
+          target="_blank" 
+          rel="noopener noreferrer" 
+          className="text-sky-500 hover:text-sky-600 underline break-all"
+        >
+          {part}
+        </a>
+      );
     }
     return part;
   });
