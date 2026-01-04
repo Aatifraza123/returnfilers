@@ -11,12 +11,11 @@ const services = [
   'TDS Return Filing',
   'Company Registration',
   'LLP Registration',
-  'Partnership Firm Registration',
+  'Partnership Firm',
   'Trademark Registration',
   'MSME Registration',
   'Import Export Code',
   'Tax Audit',
-  'Statutory Audit',
   'Bookkeeping',
   'Other'
 ];
@@ -39,11 +38,11 @@ const DocumentUpload = () => {
 
   const handleFileChange = (e) => {
     const selectedFiles = Array.from(e.target.files);
-    const maxSize = 5 * 1024 * 1024; // 5MB per file
+    const maxSize = 5 * 1024 * 1024;
     
     const validFiles = selectedFiles.filter(file => {
       if (file.size > maxSize) {
-        toast.error(`${file.name} is too large. Max 5MB per file.`);
+        toast.error(`${file.name} is too large. Max 5MB.`);
         return false;
       }
       return true;
@@ -86,7 +85,6 @@ const DocumentUpload = () => {
     setLoading(true);
 
     try {
-      // Convert files to base64
       const documentsData = await Promise.all(
         files.map(async (file) => ({
           name: file.name,
@@ -106,8 +104,7 @@ const DocumentUpload = () => {
         toast.success('Documents submitted successfully!');
       }
     } catch (error) {
-      console.error('Submit error:', error);
-      toast.error(error.response?.data?.message || 'Failed to submit documents');
+      toast.error(error.response?.data?.message || 'Failed to submit');
     } finally {
       setLoading(false);
     }
@@ -115,62 +112,58 @@ const DocumentUpload = () => {
 
   if (submitted) {
     return (
-      <div className="min-h-screen bg-gray-50 pt-24 pb-16">
-        <div className="container mx-auto max-w-2xl px-6">
-          <motion.div
-            initial={{ opacity: 0, scale: 0.9 }}
-            animate={{ opacity: 1, scale: 1 }}
-            className="bg-white rounded-2xl shadow-xl p-8 text-center"
+      <div className="min-h-screen bg-gray-50 pt-24 pb-12 flex items-center justify-center">
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          className="bg-white rounded-xl shadow-lg p-6 text-center max-w-md mx-4"
+        >
+          <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+            <FaCheckCircle className="text-3xl text-green-500" />
+          </div>
+          <h2 className="text-xl font-bold text-[#0B1530] mb-2">Submitted Successfully!</h2>
+          <p className="text-gray-600 text-sm mb-4">
+            We'll review and contact you within 24-48 hours.
+          </p>
+          <p className="text-xs text-gray-500 mb-4">
+            Urgent? Call <strong>+91 84471 27264</strong>
+          </p>
+          <button
+            onClick={() => {
+              setSubmitted(false);
+              setFormData({ name: '', email: '', phone: '', service: '', message: '' });
+              setFiles([]);
+            }}
+            className="px-4 py-2 bg-[#0B1530] text-white rounded-lg text-sm hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
           >
-            <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
-              <FaCheckCircle className="text-4xl text-green-500" />
-            </div>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Documents Submitted Successfully!</h2>
-            <p className="text-gray-600 mb-6">
-              Thank you for submitting your documents. Our team will review them and contact you within 24-48 hours.
-            </p>
-            <p className="text-sm text-gray-500 mb-8">
-              For urgent queries, call us at <strong>+91 84471 27264</strong>
-            </p>
-            <button
-              onClick={() => {
-                setSubmitted(false);
-                setFormData({ name: '', email: '', phone: '', service: '', message: '' });
-                setFiles([]);
-              }}
-              className="px-6 py-3 bg-[#0B1530] text-white rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
-            >
-              Submit Another Request
-            </button>
-          </motion.div>
-        </div>
+            Submit Another
+          </button>
+        </motion.div>
       </div>
     );
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-24 pb-16">
+    <div className="min-h-screen bg-gray-50 pt-20 pb-10">
       {/* Header */}
-      <div className="bg-[#0B1530] py-12 mb-8">
-        <div className="container mx-auto max-w-4xl px-6 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-4">Submit Your Documents</h1>
-          <p className="text-gray-300">
-            Upload your documents securely for our team to review and process your service request.
-          </p>
+      <div className="bg-[#0B1530] py-8">
+        <div className="container mx-auto max-w-2xl px-4 text-center">
+          <h1 className="text-2xl md:text-3xl font-bold text-white mb-2">Submit Documents</h1>
+          <p className="text-gray-300 text-sm">Upload securely for our team to process</p>
         </div>
       </div>
 
-      <div className="container mx-auto max-w-4xl px-6">
+      <div className="container mx-auto max-w-2xl px-4 -mt-4">
         <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
-          className="bg-white rounded-2xl shadow-xl p-6 md:p-8"
+          className="bg-white rounded-xl shadow-lg p-5"
         >
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* Personal Details */}
-            <div className="grid md:grid-cols-2 gap-6">
+          <form onSubmit={handleSubmit} className="space-y-4">
+            {/* Personal Details - 2 columns */}
+            <div className="grid grid-cols-2 gap-3">
               <div>
-                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -178,13 +171,30 @@ const DocumentUpload = () => {
                   name="name"
                   value={formData.name}
                   onChange={handleChange}
-                  placeholder="Enter your full name"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  placeholder="Your name"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+                  Phone <span className="text-red-500">*</span>
+                </label>
+                <input
+                  type="tel"
+                  name="phone"
+                  value={formData.phone}
+                  onChange={handleChange}
+                  placeholder="Phone number"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+                  required
+                />
+              </div>
+            </div>
+
+            <div className="grid grid-cols-2 gap-3">
+              <div>
+                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -192,37 +202,23 @@ const DocumentUpload = () => {
                   name="email"
                   value={formData.email}
                   onChange={handleChange}
-                  placeholder="Enter your email"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  placeholder="Your email"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
                   required
                 />
               </div>
               <div>
-                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
-                  Phone Number <span className="text-red-500">*</span>
-                </label>
-                <input
-                  type="tel"
-                  name="phone"
-                  value={formData.phone}
-                  onChange={handleChange}
-                  placeholder="Enter your phone number"
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
-                  required
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-semibold text-[#0B1530] mb-2">
-                  Service Required <span className="text-red-500">*</span>
+                <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+                  Service <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
                   required
                 >
-                  <option value="">Select a service</option>
+                  <option value="">Select service</option>
                   {services.map((service) => (
                     <option key={service} value={service}>{service}</option>
                   ))}
@@ -232,25 +228,25 @@ const DocumentUpload = () => {
 
             {/* Message */}
             <div>
-              <label className="block text-sm font-semibold text-[#0B1530] mb-2">
-                Additional Message (Optional)
+              <label className="block text-xs font-semibold text-[#0B1530] mb-1">
+                Message (Optional)
               </label>
               <textarea
                 name="message"
                 value={formData.message}
                 onChange={handleChange}
-                placeholder="Any specific requirements or notes..."
-                rows={3}
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors resize-none"
+                placeholder="Any specific notes..."
+                rows={2}
+                className="w-full px-3 py-2 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] resize-none"
               />
             </div>
 
             {/* File Upload */}
             <div>
-              <label className="block text-sm font-semibold text-[#0B1530] mb-2">
+              <label className="block text-xs font-semibold text-[#0B1530] mb-1">
                 Upload Documents <span className="text-red-500">*</span>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-xl p-8 text-center hover:border-[#D4AF37] transition-colors">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-4 text-center hover:border-[#D4AF37] transition-colors">
                 <input
                   type="file"
                   multiple
@@ -260,37 +256,24 @@ const DocumentUpload = () => {
                   accept=".pdf,.doc,.docx,.jpg,.jpeg,.png,.xls,.xlsx"
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
-                  <FaCloudUploadAlt className="text-5xl text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-600 font-medium">Click to upload or drag and drop</p>
-                  <p className="text-sm text-gray-400 mt-2">
-                    PDF, DOC, JPG, PNG, XLS (Max 5MB per file, up to 10 files)
-                  </p>
+                  <FaCloudUploadAlt className="text-3xl text-gray-400 mx-auto mb-2" />
+                  <p className="text-sm text-gray-600">Click to upload</p>
+                  <p className="text-xs text-gray-400">PDF, DOC, JPG, PNG (Max 5MB)</p>
                 </label>
               </div>
 
               {/* File List */}
               {files.length > 0 && (
-                <div className="mt-4 space-y-2">
+                <div className="mt-2 space-y-1">
                   {files.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between bg-gray-50 px-4 py-3 rounded-lg"
-                    >
-                      <div className="flex items-center gap-3">
-                        <FaFileAlt className="text-[#D4AF37]" />
-                        <div>
-                          <p className="text-sm font-medium text-[#0B1530]">{file.name}</p>
-                          <p className="text-xs text-gray-500">
-                            {(file.size / 1024 / 1024).toFixed(2)} MB
-                          </p>
-                        </div>
+                    <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg text-sm">
+                      <div className="flex items-center gap-2">
+                        <FaFileAlt className="text-[#D4AF37] text-xs" />
+                        <span className="text-[#0B1530] truncate max-w-[180px]">{file.name}</span>
+                        <span className="text-xs text-gray-400">({(file.size / 1024 / 1024).toFixed(1)}MB)</span>
                       </div>
-                      <button
-                        type="button"
-                        onClick={() => removeFile(index)}
-                        className="text-red-500 hover:text-red-700 p-1"
-                      >
-                        <FaTimes />
+                      <button type="button" onClick={() => removeFile(index)} className="text-red-500 hover:text-red-700">
+                        <FaTimes size={12} />
                       </button>
                     </div>
                   ))}
@@ -302,32 +285,20 @@ const DocumentUpload = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-4 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
-                <>
-                  <FaSpinner className="animate-spin" />
-                  Uploading...
-                </>
+                <><FaSpinner className="animate-spin" /> Uploading...</>
               ) : (
-                <>
-                  <FaCloudUploadAlt />
-                  Submit Documents
-                </>
+                <><FaCloudUploadAlt /> Submit Documents</>
               )}
             </button>
           </form>
 
           {/* Info Box */}
-          <div className="mt-8 p-4 bg-[#D4AF37]/10 rounded-lg border border-[#D4AF37]/30">
-            <h4 className="font-semibold text-[#0B1530] mb-2">Required Documents (varies by service):</h4>
-            <ul className="text-sm text-gray-600 space-y-1">
-              <li>• PAN Card</li>
-              <li>• Aadhaar Card</li>
-              <li>• Address Proof (Electricity Bill / Rent Agreement)</li>
-              <li>• Bank Statement / Cancelled Cheque</li>
-              <li>• Business Proof (if applicable)</li>
-            </ul>
+          <div className="mt-4 p-3 bg-[#D4AF37]/10 rounded-lg text-xs">
+            <p className="font-semibold text-[#0B1530] mb-1">Required Documents:</p>
+            <p className="text-gray-600">PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)</p>
           </div>
         </motion.div>
       </div>
