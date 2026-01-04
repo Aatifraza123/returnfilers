@@ -248,11 +248,11 @@ const AdminLayout = () => {
               <div className="relative">
                 <button 
                   onClick={() => setShowNotifications(!showNotifications)}
-                  className="relative p-1.5 text-gray-600 hover:text-[#0B1530] hover:bg-gray-100 rounded-lg transition-colors"
+                  className="relative p-2 text-gray-600 hover:text-[#0B1530] hover:bg-gray-100 rounded-full transition-all duration-200"
                 >
-                  <FaBell className="text-base" />
+                  <FaBell className="text-lg" />
                   {unreadCount > 0 && (
-                    <span className="absolute -top-1 -right-1 w-5 h-5 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold">
+                    <span className="absolute -top-0.5 -right-0.5 min-w-[20px] h-5 bg-gradient-to-r from-red-500 to-red-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold px-1 shadow-lg animate-pulse">
                       {unreadCount > 9 ? '9+' : unreadCount}
                     </span>
                   )}
@@ -265,55 +265,94 @@ const AdminLayout = () => {
                       className="fixed inset-0 z-40" 
                       onClick={() => setShowNotifications(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-80 bg-white rounded-xl shadow-2xl border border-gray-200 z-50 overflow-hidden">
-                      <div className="p-3 bg-[#0B1530] text-white flex items-center justify-between">
-                        <h3 className="font-semibold text-sm">Notifications</h3>
-                        {unreadCount > 0 && (
-                          <span className="text-xs bg-[#D4AF37] text-[#0B1530] px-2 py-0.5 rounded-full font-bold">
-                            {unreadCount} new
-                          </span>
-                        )}
+                    <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+                      {/* Header */}
+                      <div className="p-4 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] text-white">
+                        <div className="flex items-center justify-between">
+                          <div className="flex items-center gap-2">
+                            <FaBell className="text-[#D4AF37]" />
+                            <h3 className="font-bold">Notifications</h3>
+                          </div>
+                          {unreadCount > 0 && (
+                            <span className="text-xs bg-[#D4AF37] text-[#0B1530] px-3 py-1 rounded-full font-bold">
+                              {unreadCount} new
+                            </span>
+                          )}
+                        </div>
                       </div>
-                      <div className="max-h-80 overflow-y-auto">
+                      
+                      {/* Notifications List */}
+                      <div className="max-h-[400px] overflow-y-auto">
                         {notifications.length > 0 ? (
-                          notifications.map((notification) => (
+                          notifications.map((notification, idx) => (
                             <div
                               key={notification.id}
                               onClick={() => handleNotificationClick(notification)}
-                              className="p-3 border-b border-gray-100 hover:bg-gray-50 cursor-pointer transition-colors"
+                              className={`p-4 hover:bg-[#D4AF37]/5 cursor-pointer transition-all duration-200 border-l-4 ${
+                                notification.type === 'contact' ? 'border-l-green-500' :
+                                notification.type === 'consultation' ? 'border-l-blue-500' :
+                                'border-l-purple-500'
+                              } ${idx !== notifications.length - 1 ? 'border-b border-gray-100' : ''}`}
                             >
                               <div className="flex items-start gap-3">
-                                <div className="w-8 h-8 rounded-full bg-gray-100 flex items-center justify-center flex-shrink-0">
+                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
+                                  notification.type === 'contact' ? 'bg-green-100' :
+                                  notification.type === 'consultation' ? 'bg-blue-100' :
+                                  'bg-purple-100'
+                                }`}>
                                   {notification.icon}
                                 </div>
                                 <div className="flex-1 min-w-0">
-                                  <p className="text-sm font-semibold text-[#0B1530]">{notification.title}</p>
-                                  <p className="text-xs text-gray-600 truncate">{notification.message}</p>
-                                  <p className="text-xs text-gray-400 mt-1 flex items-center gap-1">
-                                    <FaClock className="text-[10px]" />
-                                    {formatTimeAgo(notification.time)}
-                                  </p>
+                                  <div className="flex items-start justify-between gap-2">
+                                    <div>
+                                      <p className="text-sm font-bold text-[#0B1530]">{notification.title}</p>
+                                      <p className="text-sm text-gray-600 mt-0.5">{notification.message}</p>
+                                    </div>
+                                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold flex-shrink-0 ${
+                                      notification.type === 'contact' ? 'bg-green-100 text-green-700' :
+                                      notification.type === 'consultation' ? 'bg-blue-100 text-blue-700' :
+                                      'bg-purple-100 text-purple-700'
+                                    }`}>
+                                      {notification.type}
+                                    </span>
+                                  </div>
+                                  <div className="flex items-center gap-2 mt-2">
+                                    <FaClock className="text-[10px] text-gray-400" />
+                                    <span className="text-[11px] text-gray-400 font-medium">
+                                      {new Date(notification.time).toLocaleString('en-IN', {
+                                        day: 'numeric',
+                                        month: 'short',
+                                        hour: '2-digit',
+                                        minute: '2-digit'
+                                      })}
+                                    </span>
+                                  </div>
                                 </div>
                               </div>
                             </div>
                           ))
                         ) : (
-                          <div className="p-6 text-center text-gray-500">
-                            <FaBell className="text-3xl mx-auto mb-2 text-gray-300" />
-                            <p className="text-sm">No new notifications</p>
+                          <div className="p-8 text-center">
+                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
+                              <FaBell className="text-2xl text-gray-300" />
+                            </div>
+                            <p className="text-gray-500 font-medium">No new notifications</p>
+                            <p className="text-xs text-gray-400 mt-1">You're all caught up!</p>
                           </div>
                         )}
                       </div>
+                      
+                      {/* Footer */}
                       {notifications.length > 0 && (
-                        <div className="p-2 bg-gray-50 border-t border-gray-100">
+                        <div className="p-3 bg-gray-50 border-t border-gray-100">
                           <button
                             onClick={() => {
                               setShowNotifications(false);
                               navigate('/admin/emails');
                             }}
-                            className="w-full text-center text-xs text-[#0B1530] hover:text-[#D4AF37] font-medium py-1"
+                            className="w-full text-center text-sm text-[#0B1530] hover:text-[#D4AF37] font-semibold py-2 hover:bg-white rounded-lg transition-colors"
                           >
-                            View All Emails
+                            View All Messages →
                           </button>
                         </div>
                       )}
