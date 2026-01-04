@@ -171,21 +171,7 @@ const BlogPost = () => {
               )}
             </div>
 
-            {/* Author Bio Box */}
-            <div className="mt-12 p-6 bg-gray-50 rounded-xl border border-gray-100 flex flex-col md:flex-row gap-5 items-center md:items-start text-center md:text-left">
-               <div className="w-16 h-16 rounded-full bg-[#0B1530] flex-shrink-0 flex items-center justify-center text-2xl text-[#D4AF37]">
-                 <FaUser />
-               </div>
-               <div>
-                 <h3 className="text-lg font-bold text-[#0B1530] mb-1">Written by {blog.author || 'Editor'}</h3>
-                 <p className="text-sm text-gray-500 mb-3 leading-relaxed">
-                   Full-stack developer and UI/UX enthusiast passionate about creating intuitive digital experiences.
-                 </p>
-                 <Link to="/blog" className="text-xs font-bold text-[#D4AF37] hover:text-[#0B1530] transition-colors uppercase tracking-wide">
-                   View more articles &rarr;
-                 </Link>
-               </div>
-            </div>
+
           </motion.article>
 
         </div>
