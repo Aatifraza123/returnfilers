@@ -4,10 +4,11 @@ const Testimonial = require('../models/testimonialModel');
 const Blog = require('../models/blogModel');
 const Portfolio = require('../models/portfolioModel');
 
-// Cache (refresh every 5 minutes)
-let dataCache = { services: null, testimonials: null, blogs: null, portfolio: null };
-let cacheTime = { services: 0, testimonials: 0, blogs: 0, portfolio: 0 };
+// Cache (refresh every 5 minutes for website data, 30 min for news)
+let dataCache = { services: null, testimonials: null, blogs: null, portfolio: null, news: null };
+let cacheTime = { services: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
 const CACHE_DURATION = 5 * 60 * 1000;
+const NEWS_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes for news
 
 // Fetch services
 const getServices = async () => {
@@ -53,6 +54,44 @@ const getPortfolio = async () => {
   return dataCache.portfolio || [];
 };
 
+// Fetch tax/finance news from GNews API (free)
+const getTaxNews = async () => {
+  const now = Date.now();
+  if (dataCache.news && (now - cacheTime.news) < NEWS_CACHE_DURATION) return dataCache.news;
+  
+  try {
+    // Using GNews free API - 100 requests/day
+    const response = await axios.get('https://gnews.io/api/v4/search', {
+      params: {
+        q: 'GST OR "income tax" OR ITR OR "tax filing" India',
+        lang: 'en',
+        country: 'in',
+        max: 5,
+        apikey: process.env.GNEWS_API_KEY || '0e5e5c5c5c5c5c5c5c5c5c5c5c5c5c5c' // fallback dummy
+      },
+      timeout: 5000
+    });
+    
+    if (response.data?.articles) {
+      dataCache.news = response.data.articles.map(a => ({
+        title: a.title,
+        source: a.source?.name,
+        date: new Date(a.publishedAt).toLocaleDateString('en-IN')
+      }));
+      cacheTime.news = now;
+    }
+  } catch (e) { 
+    console.log('News fetch error:', e.message);
+    // Fallback to static important dates
+    dataCache.news = [
+      { title: 'ITR Filing Deadline: July 31, 2025 (for individuals)', source: 'Income Tax Dept', date: 'Important' },
+      { title: 'GST Returns: 11th (GSTR-1), 20th (GSTR-3B) of each month', source: 'GST Portal', date: 'Monthly' },
+      { title: 'Advance Tax: 15th June, Sept, Dec, March', source: 'Income Tax Dept', date: 'Quarterly' }
+    ];
+  }
+  return dataCache.news || [];
+};
+
 // Format data for prompt
 const formatServices = (services) => {
   if (!services?.length) return '(Contact us for services)';
@@ -74,6 +113,11 @@ const formatPortfolio = (portfolio) => {
   return portfolio.map(p => `- ${p.title} (${p.category}) - Client: ${p.client || 'Confidential'}`).join('\n');
 };
 
+const formatNews = (news) => {
+  if (!news?.length) return '(No recent news)';
+  return news.map(n => `- ${n.title} [${n.source}] - ${n.date}`).join('\n');
+};
+
 // Get current date
 const getCurrentDate = () => {
   return new Date().toLocaleDateString('en-IN', { 
@@ -83,8 +127,8 @@ const getCurrentDate = () => {
 
 // Build system prompt with all data
 const getSystemPrompt = async () => {
-  const [services, testimonials, blogs, portfolio] = await Promise.all([
-    getServices(), getTestimonials(), getBlogs(), getPortfolio()
+  const [services, testimonials, blogs, portfolio, news] = await Promise.all([
+    getServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
   ]);
   
   return `You are "Tax Filer AI", the official AI assistant for Tax Filer - a professional CA firm in India.
@@ -119,6 +163,15 @@ ${formatBlogs(blogs)}
 ## OUR WORK/PORTFOLIO:
 ${formatPortfolio(portfolio)}
 
+## LATEST TAX NEWS & UPDATES:
+${formatNews(news)}
+
+## IMPORTANT DEADLINES:
+- ITR Filing (Individuals): July 31
+- ITR Filing (Audit Cases): October 31
+- GST Returns: GSTR-1 (11th), GSTR-3B (20th) monthly
+- Advance Tax: June 15, Sept 15, Dec 15, March 15
+
 ## IMPORTANT LINKS:
 - Services: /services
 - Upload Documents: /upload-documents
@@ -131,8 +184,8 @@ ${formatPortfolio(portfolio)}
 1. Keep responses short (2-4 sentences)
 2. Use bullet points for lists
 3. Mention exact prices from services
-4. When asked about reviews, share actual client testimonials
-5. When asked about blogs, mention recent blog titles
+4. When asked about news/updates, share latest tax news
+5. When asked about deadlines, mention important dates
 6. End with question or call-to-action`;
 };
 
@@ -275,8 +328,8 @@ const chatWithAIStream = async (req, res) => {
 
 // Test endpoint
 const testAI = async (req, res) => {
-  const [services, testimonials, blogs, portfolio] = await Promise.all([
-    getServices(), getTestimonials(), getBlogs(), getPortfolio()
+  const [services, testimonials, blogs, portfolio, news] = await Promise.all([
+    getServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
   ]);
   res.json({ 
     success: true, 
@@ -284,7 +337,8 @@ const testAI = async (req, res) => {
       services: services.length,
       testimonials: testimonials.length,
       blogs: blogs.length,
-      portfolio: portfolio.length
+      portfolio: portfolio.length,
+      news: news.length
     }
   });
 };
