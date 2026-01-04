@@ -199,13 +199,13 @@ const AdminServices = () => {
                 placeholder="Search services..."
                 value={searchTerm}
                 onChange={(e) => setSearchTerm(e.target.value)}
-                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#D4AF37] text-sm"
+                className="w-full pl-10 pr-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm"
               />
             </div>
             <select
               value={filterCategory}
               onChange={(e) => setFilterCategory(e.target.value)}
-              className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#D4AF37] text-sm bg-white min-w-[150px]"
+              className="px-4 py-2.5 border border-gray-200 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm bg-white min-w-[150px]"
             >
               {categories.map(cat => (
                 <option key={cat} value={cat}>
@@ -219,7 +219,7 @@ const AdminServices = () => {
 
       {/* Service Form */}
       {showForm && (
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-[#D4AF37]">
+        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-[#C9A227]">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-[#0B1530]">
               {editingService ? '✏️ Edit Service' : '➕ Add New Service'}
@@ -234,7 +234,7 @@ const AdminServices = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Service Title *</label>
                 <input 
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm" 
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm" 
                   placeholder="e.g., Tax Consulting" 
                   value={formData.title}
                   onChange={e => setFormData({...formData, title: e.target.value})}
@@ -244,7 +244,7 @@ const AdminServices = () => {
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-1.5">Category *</label>
                 <select 
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm bg-white appearance-none cursor-pointer" 
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm bg-white appearance-none cursor-pointer" 
                   value={formData.category}
                   onChange={e => setFormData({...formData, category: e.target.value})}
                   required
@@ -260,7 +260,7 @@ const AdminServices = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Description *</label>
               <textarea 
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm resize-none" 
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none" 
                 rows="3"
                 placeholder="Describe the service..." 
                 value={formData.description}
@@ -276,7 +276,7 @@ const AdminServices = () => {
                   <FaRupeeSign className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={12} />
                   <input 
                     type="number"
-                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm" 
+                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm" 
                     placeholder="5000" 
                     value={formData.price}
                     onChange={e => setFormData({...formData, price: e.target.value})}
@@ -289,7 +289,7 @@ const AdminServices = () => {
                 <div className="relative">
                   <FaClock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={12} />
                   <select 
-                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm bg-white appearance-none cursor-pointer" 
+                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm bg-white appearance-none cursor-pointer" 
                     value={formData.timeline}
                     onChange={e => setFormData({...formData, timeline: e.target.value})}
                     required
@@ -305,7 +305,7 @@ const AdminServices = () => {
                 <div className="relative">
                   <FaTag className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={12} />
                   <input 
-                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm" 
+                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm" 
                     placeholder="FaCode" 
                     value={formData.icon}
                     onChange={e => setFormData({...formData, icon: e.target.value})}
@@ -317,7 +317,7 @@ const AdminServices = () => {
                 <div className="relative">
                   <FaImage className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" size={12} />
                   <input 
-                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm" 
+                    className="w-full border border-gray-200 p-3 pl-8 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm" 
                     placeholder="https://..." 
                     value={formData.image}
                     onChange={e => setFormData({...formData, image: e.target.value})}
@@ -329,7 +329,7 @@ const AdminServices = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Features (comma separated)</label>
               <input 
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm" 
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm" 
                 placeholder="Feature 1, Feature 2, Feature 3" 
                 value={formData.features}
                 onChange={e => setFormData({...formData, features: e.target.value})}
@@ -360,7 +360,7 @@ const AdminServices = () => {
       <div className="space-y-3">
         {loading ? (
           <div className="bg-white rounded-2xl p-12 text-center">
-            <div className="animate-spin w-10 h-10 border-4 border-[#D4AF37] border-t-transparent rounded-full mx-auto mb-4"></div>
+            <div className="animate-spin w-10 h-10 border-4 border-[#C9A227] border-t-transparent rounded-full mx-auto mb-4"></div>
             <p className="text-gray-500">Loading services...</p>
           </div>
         ) : filteredServices.length > 0 ? (
@@ -369,7 +369,7 @@ const AdminServices = () => {
               key={service._id} 
               className={`bg-white rounded-xl border-2 transition-all duration-300 overflow-hidden ${
                 expandedService === service._id 
-                  ? 'border-[#D4AF37] shadow-lg' 
+                  ? 'border-[#C9A227] shadow-lg' 
                   : 'border-gray-100 hover:border-gray-200'
               }`}
             >
@@ -408,7 +408,7 @@ const AdminServices = () => {
                           <span className="px-2.5 py-0.5 rounded-full text-xs font-semibold bg-blue-100 text-blue-700 uppercase">
                             {service.category}
                           </span>
-                          <span className="text-[#D4AF37] font-bold text-sm">
+                          <span className="text-[#C9A227] font-bold text-sm">
                             ₹{Number(service.price).toLocaleString()}
                           </span>
                         </div>
@@ -416,7 +416,7 @@ const AdminServices = () => {
                       
                       {/* Expand Icon */}
                       <div className={`p-2 rounded-full transition-colors ${
-                        expandedService === service._id ? 'bg-[#D4AF37] text-white' : 'bg-gray-100 text-gray-500'
+                        expandedService === service._id ? 'bg-[#C9A227] text-white' : 'bg-gray-100 text-gray-500'
                       }`}>
                         {expandedService === service._id ? <FaChevronUp size={12} /> : <FaChevronDown size={12} />}
                       </div>

@@ -114,7 +114,7 @@ const Expertise = () => {
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-[#D4AF37] font-semibold tracking-widest uppercase text-xs sm:text-sm mb-3 block"
+            className="text-[#C9A227] font-semibold tracking-widest uppercase text-xs sm:text-sm mb-3 block"
           >
             Our Expertise
           </motion.span>
@@ -123,7 +123,7 @@ const Expertise = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
           >
-            Comprehensive <span className="text-[#D4AF37]">Solutions</span>
+            Comprehensive <span className="text-[#C9A227]">Solutions</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -155,7 +155,7 @@ const Expertise = () => {
                 <div className="p-6 md:p-8">
                   {/* Header */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#D4AF37] text-xl flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0">
                       {service.icon}
                     </div>
                     <div>
@@ -178,7 +178,7 @@ const Expertise = () => {
                       <ul className="space-y-2.5">
                         {service.keyPoints.map((point, pIdx) => (
                           <li key={pIdx} className="flex items-start gap-2.5">
-                            <FaCheckCircle className="text-[#D4AF37] text-xs mt-1 flex-shrink-0" />
+                            <FaCheckCircle className="text-[#C9A227] text-xs mt-1 flex-shrink-0" />
                             <span className="text-sm text-gray-700">{point}</span>
                           </li>
                         ))}
@@ -193,7 +193,7 @@ const Expertise = () => {
                       <ul className="space-y-2.5">
                         {service.benefits.map((benefit, bIdx) => (
                           <li key={bIdx} className="flex items-start gap-2.5">
-                            <div className="w-5 h-5 bg-[#D4AF37] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div className="w-5 h-5 bg-[#C9A227] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
                               <FaCheckCircle className="text-white text-[8px]" />
                             </div>
                             <span className="text-sm text-gray-700 font-medium">{benefit}</span>
@@ -207,13 +207,13 @@ const Expertise = () => {
                   <div className="mt-6 pt-5 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
                     <Link 
                       to={`/expertise/${service.slug}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-[#D4AF37] hover:text-[#0B1530] transition-colors group"
+                      className="inline-flex items-center gap-2 text-sm font-semibold text-[#C9A227] hover:text-[#0B1530] transition-colors group"
                     >
                       Learn More <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B1530] text-white text-sm font-semibold rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B1530] text-white text-sm font-semibold rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
                     >
                       Get Started
                     </Link>
@@ -244,7 +244,7 @@ const Expertise = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-semibold text-sm shadow-lg hover:bg-white hover:shadow-xl transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 bg-[#C9A227] text-[#0B1530] rounded-full font-semibold text-sm shadow-lg hover:bg-white hover:shadow-xl transition-all flex items-center gap-2"
                 >
                   <FaEnvelope size={14} />
                   Contact Us

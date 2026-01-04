@@ -47,7 +47,7 @@ const RefundPolicy = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]"
           >
-            Refund <span className="text-[#D4AF37]">Policy</span>
+            Refund <span className="text-[#C9A227]">Policy</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -76,7 +76,7 @@ const RefundPolicy = () => {
                 <div key={section.id} className="relative">
                   <h2 className="text-lg md:text-xl font-bold text-[#0B1530] mb-3 flex items-center gap-2">
                     {/* Icon for mobile layout */}
-                    <span className="text-[#D4AF37]">{section.icon}</span>
+                    <span className="text-[#C9A227]">{section.icon}</span>
                     {section.title}
                   </h2>
                   <p className="text-gray-600 leading-relaxed text-sm md:text-base">
@@ -91,8 +91,8 @@ const RefundPolicy = () => {
               ))}
 
               {/* Contact Section */}
-              <div className="bg-[#0B1530]/5 p-6 rounded-lg border border-[#D4AF37]/20 mt-8 flex items-start gap-3">
-                <div className="hidden sm:block mt-1 text-[#D4AF37]">
+              <div className="bg-[#0B1530]/5 p-6 rounded-lg border border-[#C9A227]/20 mt-8 flex items-start gap-3">
+                <div className="hidden sm:block mt-1 text-[#C9A227]">
                    <FaEnvelope size={20} />
                 </div>
                 <div>
@@ -102,7 +102,7 @@ const RefundPolicy = () => {
                   </p>
                   <a 
                     href="mailto:info@caassociates.com" 
-                    className="text-[#D4AF37] font-semibold hover:text-[#0B1530] transition-colors text-sm md:text-base underline decoration-[#D4AF37]/30 underline-offset-2"
+                    className="text-[#C9A227] font-semibold hover:text-[#0B1530] transition-colors text-sm md:text-base underline decoration-[#C9A227]/30 underline-offset-2"
                   >
                     info@caassociates.com
                   </a>

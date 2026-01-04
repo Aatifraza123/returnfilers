@@ -45,13 +45,13 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 md:gap-10">
           {/* Tax Filer Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#D4AF37]">Tax Filer</h3>
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">Tax Filer</h3>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
               Professional chartered accountancy services with 3+ years of experience in taxation, auditing, and financial consulting.
             </p>
             <div className="flex space-x-4 pt-2">
               {socialLinks.map(({ href, icon: Icon }, idx) => (
-                <a key={idx} href={href} target="_blank" rel="noopener noreferrer" className="text-[#D4AF37] hover:text-white transition-colors transform hover:scale-110">
+                <a key={idx} href={href} target="_blank" rel="noopener noreferrer" className="text-[#C9A227] hover:text-white transition-colors transform hover:scale-110">
                   <Icon size={20} />
                 </a>
               ))}
@@ -66,7 +66,7 @@ const Footer = () => {
             <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Quick Links</h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {quickLinks.map(({ to, label }) => (
-                <li key={to}><Link to={to} className="text-[#D4AF37] hover:text-white transition-colors">{label}</Link></li>
+                <li key={to}><Link to={to} className="text-[#C9A227] hover:text-white transition-colors">{label}</Link></li>
               ))}
             </ul>
           </div>
@@ -76,7 +76,7 @@ const Footer = () => {
             <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Legal</h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {legalLinks.map(({ to, label }) => (
-                <li key={to}><Link to={to} className="text-[#D4AF37] hover:text-white transition-colors">{label}</Link></li>
+                <li key={to}><Link to={to} className="text-[#C9A227] hover:text-white transition-colors">{label}</Link></li>
               ))}
             </ul>
           </div>
@@ -91,12 +91,12 @@ const Footer = () => {
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 placeholder="Your email address"
-                className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-[#D4AF37] transition-all placeholder-gray-500 text-sm"
+                className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-[#C9A227] transition-all placeholder-gray-500 text-sm"
                 required
               />
               <button
                 type="submit"
-                className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-[#D4AF37] text-black rounded-full hover:bg-white transition-colors shadow-lg"
+                className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-[#C9A227] text-black rounded-full hover:bg-white transition-colors shadow-lg"
                 aria-label="Subscribe"
               >
                 <FaPaperPlane size={14} className="-ml-0.5" />

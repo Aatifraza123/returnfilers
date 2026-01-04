@@ -361,7 +361,7 @@ const AdminBlogs = () => {
         {!showForm && (
           <button 
             onClick={() => setShowForm(true)}
-            className="bg-[#0B1530] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all"
+            className="bg-[#0B1530] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#C9A227] hover:text-[#0B1530] transition-all"
           >
             <FaPlus /> Write New Blog
           </button>
@@ -431,7 +431,7 @@ const AdminBlogs = () => {
                   background: #e5e7eb !important;
                 }
                 .ql-toolbar button.ql-active {
-                  background: #D4AF37 !important;
+                  background: #C9A227 !important;
                   color: white !important;
                 }
                 .ql-toolbar button.ql-active .ql-stroke {
@@ -475,7 +475,7 @@ const AdminBlogs = () => {
                   margin: 1.25em 0 0.5em;
                 }
                 .ql-editor blockquote {
-                  border-left: 4px solid #D4AF37;
+                  border-left: 4px solid #C9A227;
                   padding: 1rem;
                   margin: 1.5em 0;
                   background: #fefce8;
@@ -489,7 +489,7 @@ const AdminBlogs = () => {
                   margin-bottom: 0.5em;
                 }
                 .ql-editor a {
-                  color: #D4AF37;
+                  color: #C9A227;
                   text-decoration: underline;
                 }
                 .ql-editor img {
@@ -667,7 +667,7 @@ const AdminBlogs = () => {
                         max="20"
                         value={tableRows}
                         onChange={(e) => setTableRows(parseInt(e.target.value) || 2)}
-                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#C9A227]"
                       />
                     </div>
                     <div>
@@ -678,14 +678,14 @@ const AdminBlogs = () => {
                         max="10"
                         value={tableCols}
                         onChange={(e) => setTableCols(parseInt(e.target.value) || 2)}
-                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#C9A227]"
                       />
                     </div>
                     <div className="flex items-end">
                       <button
                         type="button"
                         onClick={() => initTableData(tableRows, tableCols)}
-                        className="bg-[#D4AF37] text-[#0B1530] px-4 py-2 rounded-lg font-medium hover:bg-[#c9a432] transition-colors"
+                        className="bg-[#C9A227] text-[#0B1530] px-4 py-2 rounded-lg font-medium hover:bg-[#c9a432] transition-colors"
                       >
                         Create Table
                       </button>
@@ -724,7 +724,7 @@ const AdminBlogs = () => {
                                   type="text"
                                   value={cell}
                                   onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
-                                  className={`w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ${
+                                  className={`w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#C9A227] ${
                                     rowIndex === 0 
                                       ? 'bg-[#0B1530] text-white font-semibold placeholder-white/50' 
                                       : 'bg-white text-gray-700'

@@ -159,11 +159,11 @@ const AdminLayout = () => {
         <div className="p-4 border-b border-white/10 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] flex-shrink-0">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-[#D4AF37] flex items-center justify-center">
+              <div className="w-10 h-10 rounded-lg bg-[#C9A227] flex items-center justify-center">
                 <FaChartPie className="text-[#0B1530] text-lg" />
               </div>
               <div>
-                <h2 className="text-base font-bold text-[#D4AF37]">Admin Panel</h2>
+                <h2 className="text-base font-bold text-[#C9A227]">Admin Panel</h2>
                 <p className="text-xs text-gray-400">Tax Filer</p>
               </div>
             </div>
@@ -177,7 +177,7 @@ const AdminLayout = () => {
         </div>
 
         {/* Navigation */}
-        <nav className="flex-1 overflow-y-auto px-2 py-2 mt-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#D4AF37 transparent' }}>
+        <nav className="flex-1 overflow-y-auto px-2 py-2 mt-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C9A227 transparent' }}>
           <div className="space-y-1">
             {menuItems.map((item) => {
               const active = isActive(item.path);
@@ -190,12 +190,12 @@ const AdminLayout = () => {
                     flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
                     transition-all duration-200 group relative
                     ${active 
-                      ? 'bg-[#D4AF37] text-[#0B1530] font-semibold shadow-lg shadow-[#D4AF37]/20' 
+                      ? 'bg-[#C9A227] text-[#0B1530] font-semibold shadow-lg shadow-[#C9A227]/20' 
                       : 'hover:bg-white/10 text-gray-300 hover:text-white hover:translate-x-1'
                     }
                   `}
                 >
-                  <span className={`text-lg flex-shrink-0 ${active ? 'text-[#0B1530]' : 'text-gray-400 group-hover:text-[#D4AF37] transition-colors'}`}>
+                  <span className={`text-lg flex-shrink-0 ${active ? 'text-[#0B1530]' : 'text-gray-400 group-hover:text-[#C9A227] transition-colors'}`}>
                     {item.icon}
                   </span>
                   <span className="flex-1 font-medium">{item.label}</span>
@@ -269,11 +269,11 @@ const AdminLayout = () => {
                       <div className="p-4 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] text-white">
                         <div className="flex items-center justify-between">
                           <div className="flex items-center gap-2">
-                            <FaBell className="text-[#D4AF37]" />
+                            <FaBell className="text-[#C9A227]" />
                             <h3 className="font-bold">Notifications</h3>
                           </div>
                           {unreadCount > 0 && (
-                            <span className="text-xs bg-[#D4AF37] text-[#0B1530] px-3 py-1 rounded-full font-bold">
+                            <span className="text-xs bg-[#C9A227] text-[#0B1530] px-3 py-1 rounded-full font-bold">
                               {unreadCount} new
                             </span>
                           )}
@@ -287,7 +287,7 @@ const AdminLayout = () => {
                             <div
                               key={notification.id}
                               onClick={() => handleNotificationClick(notification)}
-                              className={`p-4 hover:bg-[#D4AF37]/5 cursor-pointer transition-all duration-200 border-l-4 ${
+                              className={`p-4 hover:bg-[#C9A227]/5 cursor-pointer transition-all duration-200 border-l-4 ${
                                 notification.type === 'contact' ? 'border-l-green-500' :
                                 notification.type === 'consultation' ? 'border-l-blue-500' :
                                 'border-l-purple-500'
@@ -349,7 +349,7 @@ const AdminLayout = () => {
                               setShowNotifications(false);
                               navigate('/admin/emails');
                             }}
-                            className="w-full text-center text-sm text-[#0B1530] hover:text-[#D4AF37] font-semibold py-2 hover:bg-white rounded-lg transition-colors"
+                            className="w-full text-center text-sm text-[#0B1530] hover:text-[#C9A227] font-semibold py-2 hover:bg-white rounded-lg transition-colors"
                           >
                             View All Messages →
                           </button>
@@ -360,7 +360,7 @@ const AdminLayout = () => {
                 )}
               </div>
               <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
-                <div className="w-8 h-8 rounded-full bg-[#D4AF37] flex items-center justify-center text-[#0B1530] font-bold text-sm">
+                <div className="w-8 h-8 rounded-full bg-[#C9A227] flex items-center justify-center text-[#0B1530] font-bold text-sm">
                   A
                 </div>
                 <div className="hidden md:block text-right">
@@ -373,7 +373,7 @@ const AdminLayout = () => {
         </header>
 
         {/* Main Content */}
-        <main className="flex-1 overflow-y-auto p-4 lg:p-6" style={{ scrollbarWidth: 'thin', scrollbarColor: '#D4AF37 #f3f4f6' }}>
+        <main className="flex-1 overflow-y-auto p-4 lg:p-6" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C9A227 #f3f4f6' }}>
           <Outlet />
         </main>
       </div>

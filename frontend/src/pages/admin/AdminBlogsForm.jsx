@@ -314,7 +314,7 @@ const AdminBlogsForm = () => {
                     background: #f3f4f6 !important;
                   }
                   .ql-toolbar button.ql-active {
-                    background: #D4AF37 !important;
+                    background: #C9A227 !important;
                     color: white !important;
                   }
                   .ql-toolbar button.ql-active .ql-stroke {
@@ -376,7 +376,7 @@ const AdminBlogsForm = () => {
                     line-height: 1.4;
                   }
                   .ql-editor blockquote {
-                    border-left: 4px solid #D4AF37;
+                    border-left: 4px solid #C9A227;
                     padding: 1rem 1.25rem;
                     margin: 1.5em 0;
                     font-style: italic;
@@ -394,7 +394,7 @@ const AdminBlogsForm = () => {
                     padding-left: 0.5em;
                   }
                   .ql-editor a {
-                    color: #D4AF37;
+                    color: #C9A227;
                     text-decoration: underline;
                   }
                   .ql-editor a:hover {
@@ -509,7 +509,7 @@ const AdminBlogsForm = () => {
                       setContent(BLOG_TEMPLATE);
                       toast.success('Template loaded! Customize it with your content.');
                     }}
-                    className="w-full py-3 rounded-lg font-medium text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-lg font-medium text-[#C9A227] border-2 border-[#C9A227] hover:bg-[#C9A227] hover:text-white transition-colors flex items-center justify-center gap-2"
                    >
                      <FaFileAlt />
                      Use Template
@@ -535,7 +535,7 @@ const AdminBlogsForm = () => {
                     <div className="relative">
                       <select 
                         {...register('category')} 
-                        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-[#D4AF37]"
+                        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-[#C9A227]"
                       >
                         <option>General</option>
                         <option>Tax Updates</option>
@@ -553,7 +553,7 @@ const AdminBlogsForm = () => {
                      <label className="block text-sm font-semibold text-[#0B1530] mb-2">Author</label>
                      <input 
                        {...register('author')} 
-                       className="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg focus:outline-none focus:bg-white focus:border-[#D4AF37]" 
+                       className="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg focus:outline-none focus:bg-white focus:border-[#C9A227]" 
                        placeholder="Author Name"
                        defaultValue="Admin"
                      />

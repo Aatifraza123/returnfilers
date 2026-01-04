@@ -143,7 +143,7 @@ const ExpertiseDetail = () => {
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
         <div className="text-center">
           <h1 className="text-4xl font-bold text-[#0B1530] mb-4">Page Not Found</h1>
-          <Link to="/expertise" className="text-[#D4AF37] hover:underline">← Back to Expertise</Link>
+          <Link to="/expertise" className="text-[#C9A227] hover:underline">← Back to Expertise</Link>
         </div>
       </div>
     );
@@ -159,7 +159,7 @@ const ExpertiseDetail = () => {
         </div>
         
         <div className="container mx-auto px-6 relative z-10 py-20">
-          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#D4AF37] hover:text-white mb-6 transition-colors">
+          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#C9A227] hover:text-white mb-6 transition-colors">
             <FaArrowLeft size={14} /> Back to All Services
           </Link>
           
@@ -168,10 +168,10 @@ const ExpertiseDetail = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="w-16 h-16 bg-[#D4AF37]/20 rounded-2xl flex items-center justify-center text-[#D4AF37] text-3xl mb-6">
+            <div className="w-16 h-16 bg-[#C9A227]/20 rounded-2xl flex items-center justify-center text-[#C9A227] text-3xl mb-6">
               {expertise.icon}
             </div>
-            <span className="text-[#D4AF37] font-semibold tracking-wider uppercase text-sm">{expertise.tagline}</span>
+            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-sm">{expertise.tagline}</span>
             <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mt-2 mb-4">
               {expertise.title}
             </h1>
@@ -191,7 +191,7 @@ const ExpertiseDetail = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
             >
-              <span className="text-[#D4AF37] font-bold tracking-wider uppercase text-sm">Overview</span>
+              <span className="text-[#C9A227] font-bold tracking-wider uppercase text-sm">Overview</span>
               <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0B1530] mt-2 mb-6">
                 What We Offer
               </h2>
@@ -218,7 +218,7 @@ const ExpertiseDetail = () => {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 {expertise.services.map((service, idx) => (
                   <div key={idx} className="flex items-center gap-3">
-                    <FaCheckCircle className="text-[#D4AF37] flex-shrink-0" />
+                    <FaCheckCircle className="text-[#C9A227] flex-shrink-0" />
                     <span className="text-gray-700">{service}</span>
                   </div>
                 ))}
@@ -232,7 +232,7 @@ const ExpertiseDetail = () => {
       <section className="py-16 bg-[#F9FAFB]">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
-            <span className="text-[#D4AF37] font-bold tracking-wider uppercase text-sm">Benefits</span>
+            <span className="text-[#C9A227] font-bold tracking-wider uppercase text-sm">Benefits</span>
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0B1530] mt-2">
               Why Choose Us
             </h2>
@@ -248,7 +248,7 @@ const ExpertiseDetail = () => {
                 transition={{ delay: idx * 0.1 }}
                 className="bg-white p-6 rounded-xl shadow-sm hover:shadow-lg transition-shadow"
               >
-                <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#D4AF37] text-xl mb-4">
+                <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl mb-4">
                   <FaCheckCircle />
                 </div>
                 <h3 className="text-lg font-bold text-[#0B1530] mb-2">{benefit.title}</h3>
@@ -263,7 +263,7 @@ const ExpertiseDetail = () => {
       <section className="py-16 bg-white">
         <div className="container mx-auto px-6 max-w-6xl">
           <div className="text-center mb-12">
-            <span className="text-[#D4AF37] font-bold tracking-wider uppercase text-sm">Our Process</span>
+            <span className="text-[#C9A227] font-bold tracking-wider uppercase text-sm">Our Process</span>
             <h2 className="text-3xl md:text-4xl font-serif font-bold text-[#0B1530] mt-2">
               How We Work
             </h2>
@@ -279,11 +279,11 @@ const ExpertiseDetail = () => {
                 transition={{ delay: idx * 0.1 }}
                 className="relative"
               >
-                <div className="text-6xl font-bold text-[#D4AF37]/20 mb-2">{step.step}</div>
+                <div className="text-6xl font-bold text-[#C9A227]/20 mb-2">{step.step}</div>
                 <h3 className="text-xl font-bold text-[#0B1530] mb-2">{step.title}</h3>
                 <p className="text-gray-600 text-sm">{step.desc}</p>
                 {idx < expertise.process.length - 1 && (
-                  <div className="hidden md:block absolute top-8 right-0 w-1/2 h-0.5 bg-[#D4AF37]/30" />
+                  <div className="hidden md:block absolute top-8 right-0 w-1/2 h-0.5 bg-[#C9A227]/30" />
                 )}
               </motion.div>
             ))}
@@ -306,7 +306,7 @@ const ExpertiseDetail = () => {
               Contact us today for a free consultation and let our experts help you.
             </p>
             <div className="flex flex-wrap justify-center gap-4">
-              <Link to="/contact" className="px-8 py-3 bg-[#D4AF37] text-[#0B1530] rounded-lg font-bold hover:bg-white transition-colors">
+              <Link to="/contact" className="px-8 py-3 bg-[#C9A227] text-[#0B1530] rounded-lg font-bold hover:bg-white transition-colors">
                 Contact Us
               </Link>
               <a href="tel:+918447127264" className="px-8 py-3 border-2 border-white text-white rounded-lg font-bold hover:bg-white hover:text-[#0B1530] transition-colors">

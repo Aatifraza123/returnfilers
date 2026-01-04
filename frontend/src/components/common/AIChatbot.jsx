@@ -33,7 +33,7 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^[-•*]\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#D4AF37] mt-1.5 flex-shrink-0"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227] mt-1.5 flex-shrink-0"></span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -83,7 +83,7 @@ const formatText = (text) => {
       return <strong key={idx} className="font-semibold text-[#0B1530]">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith('₹')) {
-      return <span key={idx} className="font-semibold text-[#0B1530] bg-[#D4AF37]/20 px-1 rounded">{part}</span>;
+      return <span key={idx} className="font-semibold text-[#0B1530] bg-[#C9A227]/20 px-1 rounded">{part}</span>;
     }
     if (part.startsWith('|')) {
       return <span key={idx} className="text-gray-500 text-[11px]">{part}</span>;
@@ -106,7 +106,7 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={part}
-          className="inline-block px-2 py-0.5 bg-[#D4AF37]/20 text-[#0B1530] rounded font-semibold hover:bg-[#D4AF37] transition-colors"
+          className="inline-block px-2 py-0.5 bg-[#C9A227]/20 text-[#0B1530] rounded font-semibold hover:bg-[#C9A227] transition-colors"
         >
           {displayName}
         </a>
@@ -399,8 +399,8 @@ const AIChatbot = () => {
           className="relative group"
         >
           <div className="w-14 h-14 md:w-16 md:h-16 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors group-hover:scale-110 duration-200">
-            <FaRobot size={24} className="text-[#D4AF37] md:text-[28px]" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-[#D4AF37] rounded-full animate-pulse"></span>
+            <FaRobot size={24} className="text-[#C9A227] md:text-[28px]" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-[#C9A227] rounded-full animate-pulse"></span>
           </div>
         </button>
       </div>
@@ -414,8 +414,8 @@ const AIChatbot = () => {
         {/* Header */}
         <div className="bg-[#0B1530] text-white p-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#D4AF37]/20 rounded-full flex items-center justify-center">
-              <FaRobot size={18} className="text-[#D4AF37]" />
+            <div className="w-10 h-10 bg-[#C9A227]/20 rounded-full flex items-center justify-center">
+              <FaRobot size={18} className="text-[#C9A227]" />
             </div>
             <div>
               <h3 className="font-bold text-sm">Tax Filer AI</h3>
@@ -449,8 +449,8 @@ const AIChatbot = () => {
               <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                   msg.role === 'user' 
-                    ? 'bg-[#D4AF37] text-[#0B1530]' 
-                    : 'bg-[#0B1530] text-[#D4AF37]'
+                    ? 'bg-[#C9A227] text-[#0B1530]' 
+                    : 'bg-[#0B1530] text-[#C9A227]'
                 }`}>
                   {msg.role === 'user' ? <FaUser size={10} /> : <FaRobot size={11} />}
                 </div>
@@ -468,7 +468,7 @@ const AIChatbot = () => {
           {loading && messages[messages.length - 1]?.content === '' && (
             <div className="flex justify-start">
               <div className="flex items-end gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#0B1530] text-[#D4AF37] flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-[#0B1530] text-[#C9A227] flex items-center justify-center">
                   <FaRobot size={11} />
                 </div>
                 <div className="bg-white px-3 py-2.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
@@ -512,12 +512,12 @@ const AIChatbot = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your question..."
               disabled={loading}
-              className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#D4AF37]/50 disabled:opacity-50 placeholder-gray-400"
+              className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227]/50 disabled:opacity-50 placeholder-gray-400"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#0B1530] text-[#D4AF37] rounded-xl flex items-center justify-center hover:bg-[#1a2b5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-9 h-9 bg-[#0B1530] text-[#C9A227] rounded-xl flex items-center justify-center hover:bg-[#1a2b5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaPaperPlane size={13} />
             </button>

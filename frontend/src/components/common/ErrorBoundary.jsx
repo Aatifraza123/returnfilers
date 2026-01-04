@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component {
                 this.setState({ hasError: false, error: null });
                 window.location.href = '/';
               }}
-              className="px-6 py-3 bg-[#0B1530] text-white rounded-lg hover:bg-[#D4AF37] transition-colors"
+              className="px-6 py-3 bg-[#0B1530] text-white rounded-lg hover:bg-[#C9A227] transition-colors"
             >
               Go to Home
             </button>

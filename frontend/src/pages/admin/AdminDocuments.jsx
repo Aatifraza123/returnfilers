@@ -120,7 +120,7 @@ const AdminDocuments = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C9A227]"></div>
       </div>
     );
   }
@@ -169,7 +169,7 @@ const AdminDocuments = () => {
               placeholder="Search by name, email, or service..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#D4AF37]"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#C9A227]"
             />
           </div>
           <div className="relative">
@@ -177,7 +177,7 @@ const AdminDocuments = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="pl-10 pr-8 py-2 border rounded-lg focus:outline-none focus:border-[#D4AF37] appearance-none bg-white"
+              className="pl-10 pr-8 py-2 border rounded-lg focus:outline-none focus:border-[#C9A227] appearance-none bg-white"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -224,7 +224,7 @@ const AdminDocuments = () => {
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1 text-sm">
-                      <FaFileAlt className="text-[#D4AF37]" />
+                      <FaFileAlt className="text-[#C9A227]" />
                       {doc.documents?.length || 0} file(s)
                     </div>
                   </td>
@@ -284,7 +284,7 @@ const AdminDocuments = () => {
           <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
             <div className="sticky top-0 bg-[#0B1530] text-white p-4 flex justify-between items-center">
               <h2 className="text-xl font-bold">Document Details</h2>
-              <button onClick={() => setViewingDoc(null)} className="text-white hover:text-[#D4AF37]">
+              <button onClick={() => setViewingDoc(null)} className="text-white hover:text-[#C9A227]">
                 <FaTimes size={20} />
               </button>
             </div>
@@ -324,7 +324,7 @@ const AdminDocuments = () => {
                   {viewingDoc.documents?.map((file, idx) => (
                     <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <FaFileAlt className="text-[#D4AF37]" />
+                        <FaFileAlt className="text-[#C9A227]" />
                         <div>
                           <p className="font-medium text-sm">{file.name}</p>
                           <p className="text-xs text-gray-500">
@@ -334,7 +334,7 @@ const AdminDocuments = () => {
                       </div>
                       <button
                         onClick={() => downloadFile(file)}
-                        className="flex items-center gap-1 px-3 py-1 bg-[#0B1530] text-white rounded text-sm hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+                        className="flex items-center gap-1 px-3 py-1 bg-[#0B1530] text-white rounded text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
                       >
                         <FaDownload size={12} /> Download
                       </button>

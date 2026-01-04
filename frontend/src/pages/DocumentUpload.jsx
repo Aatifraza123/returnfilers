@@ -156,7 +156,7 @@ const DocumentUpload = () => {
               setFiles([]);
               setConsent(false);
             }}
-            className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+            className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
           >
             Submit Another Request
           </button>
@@ -197,7 +197,7 @@ const DocumentUpload = () => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your full name"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
                   required
                 />
               </div>
@@ -211,7 +211,7 @@ const DocumentUpload = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
                   required
                 />
               </div>
@@ -228,7 +228,7 @@ const DocumentUpload = () => {
                   maxLength={10}
                   pattern="[6-9][0-9]{9}"
                   title="Enter valid 10-digit mobile number"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
                   required
                 />
               </div>
@@ -240,7 +240,7 @@ const DocumentUpload = () => {
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors bg-white"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors bg-white"
                   required
                 >
                   <option value="">Select a service</option>
@@ -262,7 +262,7 @@ const DocumentUpload = () => {
                 onChange={handleChange}
                 placeholder="Any specific requirements or notes..."
                 rows={2}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] transition-colors resize-none"
+                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors resize-none"
               />
             </div>
 
@@ -271,7 +271,7 @@ const DocumentUpload = () => {
               <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
                 Upload Documents <span className="text-red-500">*</span>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-[#D4AF37] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-[#C9A227] transition-colors cursor-pointer">
                 <input
                   type="file"
                   multiple
@@ -296,7 +296,7 @@ const DocumentUpload = () => {
                       className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
                     >
                       <div className="flex items-center gap-2">
-                        <FaFileAlt className="text-[#D4AF37] text-sm" />
+                        <FaFileAlt className="text-[#C9A227] text-sm" />
                         <div>
                           <p className="text-sm font-medium text-[#0B1530]">{file.name}</p>
                           <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
@@ -318,7 +318,7 @@ const DocumentUpload = () => {
                   type="checkbox"
                   checked={consent}
                   onChange={(e) => setConsent(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-[#D4AF37] border-gray-300 rounded focus:ring-[#D4AF37]"
+                  className="mt-1 w-4 h-4 text-[#C9A227] border-gray-300 rounded focus:ring-[#C9A227]"
                 />
                 <span className="text-sm text-gray-700">
                   I agree to the <strong>Terms & Conditions</strong> and authorize Tax Filer to securely store and process my documents for the requested service. I understand that my data will be kept <strong>100% confidential</strong> and will only be used for professional purposes.
@@ -346,7 +346,7 @@ const DocumentUpload = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <><FaSpinner className="animate-spin" /> Uploading...</>

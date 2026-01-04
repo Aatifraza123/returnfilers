@@ -50,7 +50,7 @@ const Services = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader size="lg" color="#D4AF37" />
+        <Loader size="lg" color="#C9A227" />
       </div>
     );
   }
@@ -63,7 +63,7 @@ const Services = () => {
       {/* Hero Section */}
       <section className="bg-[#0B1530] py-16 md:py-20">
         <div className="container mx-auto px-6 text-center max-w-3xl">
-          <span className="inline-block px-4 py-1 rounded-full bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-semibold uppercase tracking-wider mb-4">
+          <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-xs font-semibold uppercase tracking-wider mb-4">
             Our Services
           </span>
           <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mb-4">
@@ -105,7 +105,7 @@ const Services = () => {
               {filteredServices.map((service, index) => (
                 <div
                   key={service._id || index}
-                  className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-[#D4AF37]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-[#C9A227]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
                   {/* Image */}
                   <Link to={`/services/${service._id}`} className="block relative h-48 overflow-hidden">
@@ -136,7 +136,7 @@ const Services = () => {
                   <div className="p-5 flex flex-col flex-grow">
                     {/* Price & Timeline Row */}
                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
-                      <div className="flex items-center gap-1 text-[#D4AF37]">
+                      <div className="flex items-center gap-1 text-[#C9A227]">
                         <FaRupeeSign size={14} />
                         <span className="text-xl font-bold">
                           {service.price && !isNaN(Number(service.price)) 
@@ -160,12 +160,12 @@ const Services = () => {
                       <div className="space-y-1.5 mb-4">
                         {service.features.slice(0, 2).map((feature, idx) => (
                           <div key={idx} className="flex items-center gap-2">
-                            <FaCheck size={8} className="text-[#D4AF37]" />
+                            <FaCheck size={8} className="text-[#C9A227]" />
                             <span className="text-xs text-gray-600 line-clamp-1">{feature}</span>
                           </div>
                         ))}
                         {service.features.length > 2 && (
-                          <p className="text-[10px] text-[#D4AF37] font-medium">
+                          <p className="text-[10px] text-[#C9A227] font-medium">
                             +{service.features.length - 2} more
                           </p>
                         )}
@@ -182,7 +182,7 @@ const Services = () => {
                       </Link>
                       <button
                         onClick={() => openModal(service)}
-                        className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-white bg-[#0B1530] rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all"
+                        className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-white bg-[#0B1530] rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-all"
                       >
                         Book Now <FaArrowRight size={9} />
                       </button>
@@ -200,7 +200,7 @@ const Services = () => {
               <p className="text-gray-500 text-sm mb-5">Try selecting a different category</p>
               <button 
                 onClick={() => setFilter('all')}
-                className="text-[#D4AF37] font-semibold text-sm hover:underline"
+                className="text-[#C9A227] font-semibold text-sm hover:underline"
               >
                 View All Services
               </button>
@@ -220,7 +220,7 @@ const Services = () => {
           </p>
           <button
             onClick={() => openModal({ title: 'Custom Service' })}
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#D4AF37] text-[#0B1530] rounded-xl font-bold text-sm hover:bg-white transition-colors shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0B1530] rounded-xl font-bold text-sm hover:bg-white transition-colors shadow-xl"
           >
             Get Custom Quote <FaArrowRight size={12} />
           </button>

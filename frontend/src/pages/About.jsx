@@ -70,7 +70,7 @@ const About = () => {
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 0.2 }}
-            className="text-[#D4AF37] font-bold tracking-widest uppercase text-base md:text-lg mb-5 block"
+            className="text-[#C9A227] font-bold tracking-widest uppercase text-base md:text-lg mb-5 block"
           >
             Who We Are
           </motion.span>
@@ -80,7 +80,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight"
           >
-            About <span className="text-[#D4AF37]">Tax Filer</span>
+            About <span className="text-[#C9A227]">Tax Filer</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -106,7 +106,7 @@ const About = () => {
                 transition={{ delay: index * 0.1 }}
                 className="text-center px-2"
               >
-                <div className="text-[#D4AF37] text-3xl mb-2 flex justify-center">{stat.icon}</div>
+                <div className="text-[#C9A227] text-3xl mb-2 flex justify-center">{stat.icon}</div>
                 <h3 className="text-2xl md:text-3xl font-bold text-[#0B1530] mb-1">{stat.value}</h3>
                 <p className="text-gray-500 text-xs md:text-sm uppercase tracking-wide font-medium">{stat.label}</p>
               </motion.div>
@@ -125,7 +125,7 @@ const About = () => {
                initial={{ scale: 0 }}
                whileInView={{ scale: 1 }}
                viewport={{ once: true }}
-               className="w-16 h-16 md:w-20 md:h-20 bg-[#D4AF37] rounded-full flex items-center justify-center text-[#0B1530] text-2xl md:text-3xl mb-6 shadow-lg shadow-[#D4AF37]/20"
+               className="w-16 h-16 md:w-20 md:h-20 bg-[#C9A227] rounded-full flex items-center justify-center text-[#0B1530] text-2xl md:text-3xl mb-6 shadow-lg shadow-[#C9A227]/20"
             >
                <FaHandshake />
             </motion.div>
@@ -134,7 +134,7 @@ const About = () => {
               initial={{ opacity: 0, y: 15 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[#D4AF37] font-bold tracking-[0.2em] uppercase text-sm md:text-base mb-4"
+              className="text-[#C9A227] font-bold tracking-[0.2em] uppercase text-sm md:text-base mb-4"
             >
               Our Journey
             </motion.span>
@@ -146,7 +146,7 @@ const About = () => {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-serif font-bold mb-4"
             >
-              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-amber-200">2022</span>
+              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-amber-200">2022</span>
             </motion.h2>
 
             <div className="max-w-4xl mx-auto">
@@ -235,7 +235,7 @@ const About = () => {
                 {/* Basic Info */}
                 <div className="px-5 pt-3 pb-3 text-center bg-white relative z-10 h-[30%] flex flex-col justify-center transition-all duration-500 group-hover:h-auto group-hover:pt-2">
                   <h3 className="text-lg md:text-xl font-bold text-[#0B1530]">{member.name}</h3>
-                  <p className="text-[#D4AF37] font-medium text-xs md:text-sm mt-1">{member.position}</p>
+                  <p className="text-[#C9A227] font-medium text-xs md:text-sm mt-1">{member.position}</p>
                   <p className="text-xs text-gray-400 mt-1 group-hover:hidden transition-opacity">{member.qualification}</p>
                 </div>
 

@@ -36,7 +36,7 @@ const Header = () => {
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#D4AF37] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md group-hover:shadow-lg transition-shadow">
+          <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md group-hover:shadow-lg transition-shadow">
             TF
           </div>
           <span className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-[#0B1530] tracking-tight">
@@ -52,7 +52,7 @@ const Header = () => {
                 to={link.to}
                 className={({ isActive }) =>
                   `text-base font-sans font-medium transition-all duration-200 relative group ${
-                    isActive ? 'text-[#D4AF37] font-semibold' : 'text-gray-800 hover:text-[#0B1530]'
+                    isActive ? 'text-[#C9A227] font-semibold' : 'text-gray-800 hover:text-[#0B1530]'
                   }`
                 }
               >
@@ -61,7 +61,7 @@ const Header = () => {
                     {link.label}
                     {/* Underline that appears when active OR hovered */}
                     <span
-                      className={`absolute -bottom-1 left-0 h-0.5 bg-[#D4AF37] transition-all duration-300 ${
+                      className={`absolute -bottom-1 left-0 h-0.5 bg-[#C9A227] transition-all duration-300 ${
                         isActive ? 'w-full' : 'w-0 group-hover:w-full'
                       }`}
                     />
@@ -76,7 +76,7 @@ const Header = () => {
         <div className="hidden lg:block">
           <Link
             to="/quote"
-            className="bg-[#0B1530] text-white px-6 py-2.5 rounded-full text-base font-medium hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all duration-300 shadow-lg hover:shadow-xl"
+            className="bg-[#0B1530] text-white px-6 py-2.5 rounded-full text-base font-medium hover:bg-[#C9A227] hover:text-[#0B1530] transition-all duration-300 shadow-lg hover:shadow-xl"
           >
             Get Quote
           </Link>
@@ -108,7 +108,7 @@ const Header = () => {
                     onClick={() => setMobileMenu(false)}
                     className={({ isActive }) =>
                       `flex items-center justify-between text-lg font-serif font-medium ${
-                        isActive ? 'text-[#D4AF37]' : 'text-[#0B1530]'
+                        isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
                       }`
                     }
                   >
@@ -120,7 +120,7 @@ const Header = () => {
               <li className="pt-4 mt-2 border-t border-gray-100">
                 <Link
                   to="/quote"
-                  className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all shadow-md"
+                  className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
                   onClick={() => setMobileMenu(false)}
                 >
                   Get Quote

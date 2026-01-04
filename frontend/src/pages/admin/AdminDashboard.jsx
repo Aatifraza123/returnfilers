@@ -192,7 +192,7 @@ const AdminDashboard = () => {
             href="/" 
             target="_blank" 
             rel="noopener noreferrer"
-            className="flex items-center gap-2 px-5 py-2.5 bg-[#D4AF37] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-colors shadow-lg"
+            className="flex items-center gap-2 px-5 py-2.5 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-colors shadow-lg"
           >
             <FaExternalLinkAlt size={14} />
             Visit Website
@@ -217,7 +217,7 @@ const AdminDashboard = () => {
               <div className="text-right">
                 <p className="text-3xl font-bold text-[#0B1530] mb-1">
                   {loading ? (
-                    <span className="inline-block w-8 h-8 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin"></span>
+                    <span className="inline-block w-8 h-8 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin"></span>
                   ) : (
                     card.count
                   )}
@@ -240,13 +240,13 @@ const AdminDashboard = () => {
         {/* Quick Actions */}
         <div className="lg:col-span-2 bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <h2 className="text-xl font-bold text-[#0B1530] mb-6 flex items-center gap-2">
-            <FaPlus className="text-[#D4AF37]" />
+            <FaPlus className="text-[#C9A227]" />
             Quick Actions
           </h2>
           <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
             <Link 
               to="/admin/services/add" 
-              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#C9A227] hover:bg-[#C9A227]/5 transition-all group"
             >
               <div className="bg-blue-100 text-blue-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
                 <FaPlus />
@@ -259,7 +259,7 @@ const AdminDashboard = () => {
 
             <Link 
               to="/admin/blogs" 
-              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#C9A227] hover:bg-[#C9A227]/5 transition-all group"
             >
               <div className="bg-yellow-100 text-yellow-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
                 <FaBlog />
@@ -272,7 +272,7 @@ const AdminDashboard = () => {
 
             <Link 
               to="/admin/consultations" 
-              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#C9A227] hover:bg-[#C9A227]/5 transition-all group"
             >
               <div className="bg-green-100 text-green-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
                 <FaComments />
@@ -285,7 +285,7 @@ const AdminDashboard = () => {
 
             <Link 
               to="/admin/portfolio" 
-              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#D4AF37] hover:bg-[#D4AF37]/5 transition-all group"
+              className="flex items-center gap-4 p-4 border-2 border-gray-200 rounded-xl hover:border-[#C9A227] hover:bg-[#C9A227]/5 transition-all group"
             >
               <div className="bg-indigo-100 text-indigo-600 p-3 rounded-lg group-hover:scale-110 transition-transform">
                 <FaBriefcase />
@@ -301,7 +301,7 @@ const AdminDashboard = () => {
         {/* Recent Activity */}
         <div className="bg-white p-6 rounded-2xl shadow-sm border border-gray-100">
           <h2 className="text-xl font-bold text-[#0B1530] mb-6 flex items-center gap-2">
-            <FaClock className="text-[#D4AF37]" />
+            <FaClock className="text-[#C9A227]" />
             Recent Activity
           </h2>
           <div className="space-y-3 max-h-[400px] overflow-y-auto">

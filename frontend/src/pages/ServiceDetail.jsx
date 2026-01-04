@@ -56,7 +56,7 @@ const ServiceDetail = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader size="lg" color="#D4AF37" />
+        <Loader size="lg" color="#C9A227" />
       </div>
     );
   }
@@ -88,13 +88,13 @@ const ServiceDetail = () => {
 
         <div className="container mx-auto px-6 max-w-5xl relative z-10 pb-10">
           {/* Breadcrumb */}
-          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#D4AF37] text-sm mb-4">
+          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-4">
             <FaArrowLeft size={10} /> Back to Services
           </Link>
 
           <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
             <div>
-              <span className="inline-block px-3 py-1 bg-[#D4AF37] text-[#0B1530] text-[10px] font-bold uppercase rounded mb-3">
+              <span className="inline-block px-3 py-1 bg-[#C9A227] text-[#0B1530] text-[10px] font-bold uppercase rounded mb-3">
                 {service.category}
               </span>
               <h1 className="text-2xl md:text-3xl font-bold text-white">
@@ -117,7 +117,7 @@ const ServiceDetail = () => {
               </div>
               <button
                 onClick={() => setIsModalOpen(true)}
-                className="px-5 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+                className="px-5 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
               >
                 Book Now
               </button>
@@ -137,7 +137,7 @@ const ServiceDetail = () => {
               {/* About Service */}
               <div className="bg-white p-5 md:p-6 rounded-xl border border-gray-100">
                 <h2 className="text-base font-bold text-[#0B1530] mb-3 flex items-center gap-2">
-                  <FaFileAlt className="text-[#D4AF37]" size={14} />
+                  <FaFileAlt className="text-[#C9A227]" size={14} />
                   About This Service
                 </h2>
                 <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
@@ -149,13 +149,13 @@ const ServiceDetail = () => {
               {service.features && service.features.length > 0 && (
                 <div className="bg-white p-5 md:p-6 rounded-xl border border-gray-100">
                   <h2 className="text-base font-bold text-[#0B1530] mb-4 flex items-center gap-2">
-                    <FaCheck className="text-[#D4AF37]" size={14} />
+                    <FaCheck className="text-[#C9A227]" size={14} />
                     What's Included
                   </h2>
                   <div className="grid sm:grid-cols-2 gap-2">
                     {service.features.map((feature, idx) => (
                       <div key={idx} className="flex items-center gap-2 p-2.5 bg-gray-50 rounded-lg">
-                        <FaCheck className="text-[#D4AF37] text-xs" />
+                        <FaCheck className="text-[#C9A227] text-xs" />
                         <span className="text-gray-700 text-sm">{feature}</span>
                       </div>
                     ))}
@@ -169,7 +169,7 @@ const ServiceDetail = () => {
                 <div className="grid sm:grid-cols-2 gap-3">
                   {benefits.map((benefit, idx) => (
                     <div key={idx} className="flex items-center gap-3 p-3 bg-white/5 rounded-lg border border-white/10">
-                      <div className="w-8 h-8 bg-[#D4AF37] rounded-lg flex items-center justify-center text-[#0B1530] flex-shrink-0">
+                      <div className="w-8 h-8 bg-[#C9A227] rounded-lg flex items-center justify-center text-[#0B1530] flex-shrink-0">
                         {benefit.icon}
                       </div>
                       <div>
@@ -190,21 +190,21 @@ const ServiceDetail = () => {
                 <h3 className="font-bold text-[#0B1530] text-sm mb-3">Quick Info</h3>
                 <div className="space-y-3">
                   <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-                    <FaClock className="text-[#D4AF37]" size={14} />
+                    <FaClock className="text-[#C9A227]" size={14} />
                     <div>
                       <p className="text-[10px] text-gray-500">Timeline</p>
                       <p className="font-semibold text-[#0B1530] text-sm">{service.timeline || '3-7 Days'}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3 pb-3 border-b border-gray-100">
-                    <FaFileAlt className="text-[#D4AF37]" size={14} />
+                    <FaFileAlt className="text-[#C9A227]" size={14} />
                     <div>
                       <p className="text-[10px] text-gray-500">Category</p>
                       <p className="font-semibold text-[#0B1530] text-sm capitalize">{service.category}</p>
                     </div>
                   </div>
                   <div className="flex items-center gap-3">
-                    <FaShieldAlt className="text-[#D4AF37]" size={14} />
+                    <FaShieldAlt className="text-[#C9A227]" size={14} />
                     <div>
                       <p className="text-[10px] text-gray-500">Support</p>
                       <p className="font-semibold text-[#0B1530] text-sm">Dedicated Expert</p>
@@ -214,7 +214,7 @@ const ServiceDetail = () => {
               </div>
 
               {/* CTA Card */}
-              <div className="bg-[#D4AF37] p-5 rounded-xl">
+              <div className="bg-[#C9A227] p-5 rounded-xl">
                 <h3 className="font-bold text-[#0B1530] mb-1">Ready to Start?</h3>
                 <p className="text-sm text-[#0B1530]/70 mb-3">Book a free consultation</p>
                 <button
@@ -264,10 +264,10 @@ const ServiceDetail = () => {
                     <h3 className="absolute bottom-2 left-3 right-3 text-white font-semibold text-sm line-clamp-1">{s.title}</h3>
                   </div>
                   <div className="p-3 flex items-center justify-between">
-                    <span className="text-[#D4AF37] font-semibold text-sm">
+                    <span className="text-[#C9A227] font-semibold text-sm">
                       ₹{s.price && !isNaN(Number(s.price)) ? Number(s.price).toLocaleString() : 'Quote'}
                     </span>
-                    <span className="text-xs text-gray-500 group-hover:text-[#D4AF37]">View →</span>
+                    <span className="text-xs text-gray-500 group-hover:text-[#C9A227]">View →</span>
                   </div>
                 </Link>
               ))}

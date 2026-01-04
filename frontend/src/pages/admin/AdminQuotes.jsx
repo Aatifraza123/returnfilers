@@ -158,20 +158,20 @@ const AdminQuotes = () => {
 
             <div className="space-y-2 mb-4">
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaEnvelope className="text-[#D4AF37]" />
+                <FaEnvelope className="text-[#C9A227]" />
                 <span className="truncate">{quote.email}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaPhone className="text-[#D4AF37]" />
+                <FaPhone className="text-[#C9A227]" />
                 <span>{quote.phone}</span>
               </div>
               <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaBriefcase className="text-[#D4AF37]" />
+                <FaBriefcase className="text-[#C9A227]" />
                 <span className="capitalize">{quote.service}</span>
               </div>
               {quote.budget && (
                 <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <FaFileAlt className="text-[#D4AF37]" />
+                  <FaFileAlt className="text-[#C9A227]" />
                   <span className="capitalize">{quote.budget.replace('-', ' - ')}</span>
                 </div>
               )}

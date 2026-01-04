@@ -109,7 +109,7 @@ const AdminConsultations = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#D4AF37]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C9A227]"></div>
       </div>
     );
   }
@@ -158,7 +158,7 @@ const AdminConsultations = () => {
               placeholder="Search by name, email, or service..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37]"
+              className="w-full pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227]"
             />
           </div>
           <div className="relative">
@@ -166,7 +166,7 @@ const AdminConsultations = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#D4AF37] appearance-none bg-white"
+              className="pl-10 pr-8 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] appearance-none bg-white"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -206,7 +206,7 @@ const AdminConsultations = () => {
                   </td>
                   <td className="px-6 py-4 whitespace-nowrap">
                     <div className="flex items-center gap-2">
-                      <FaBriefcase className="text-[#D4AF37]" size={14} />
+                      <FaBriefcase className="text-[#C9A227]" size={14} />
                       <span className="text-sm text-gray-900">{consultation.service}</span>
                     </div>
                   </td>
@@ -304,7 +304,7 @@ const AdminConsultations = () => {
             </div>
             <button
               onClick={() => setSelectedConsultation(null)}
-              className="mt-6 w-full bg-[#0B1530] text-white py-2 rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
+              className="mt-6 w-full bg-[#0B1530] text-white py-2 rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
             >
               Close
             </button>

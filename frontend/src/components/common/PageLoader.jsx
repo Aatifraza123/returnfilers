@@ -11,7 +11,7 @@ const PageLoader = () => {
           transition={{ duration: 0.3 }}
           className="mb-6"
         >
-          <div className="w-16 h-16 mx-auto bg-[#D4AF37] rounded-xl flex items-center justify-center">
+          <div className="w-16 h-16 mx-auto bg-[#C9A227] rounded-xl flex items-center justify-center">
             <span className="text-2xl font-bold text-[#0B1530]">TF</span>
           </div>
         </motion.div>
@@ -21,7 +21,7 @@ const PageLoader = () => {
           initial={{ opacity: 0 }}
           animate={{ opacity: 1 }}
           transition={{ delay: 0.2 }}
-          className="text-2xl font-serif font-bold text-[#D4AF37] mb-2"
+          className="text-2xl font-serif font-bold text-[#C9A227] mb-2"
         >
           Tax Filer
         </motion.h2>
@@ -31,7 +31,7 @@ const PageLoader = () => {
           {[0, 1, 2].map((i) => (
             <motion.div
               key={i}
-              className="w-2 h-2 bg-[#D4AF37] rounded-full"
+              className="w-2 h-2 bg-[#C9A227] rounded-full"
               animate={{
                 scale: [1, 1.3, 1],
                 opacity: [0.5, 1, 0.5],

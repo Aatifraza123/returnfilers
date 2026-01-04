@@ -30,7 +30,7 @@ const Portfolio = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader size="xl" color="#D4AF37" />
+        <Loader size="xl" color="#C9A227" />
       </div>
     );
   }
@@ -55,7 +55,7 @@ const Portfolio = () => {
             transition={{ duration: 0.8 }}
             className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]"
           >
-            Success <span className="text-[#D4AF37]">Stories</span>
+            Success <span className="text-[#C9A227]">Stories</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -108,14 +108,14 @@ const Portfolio = () => {
 
                     {/* Client Name - Modern */}
                     <div className="absolute bottom-0 left-0 right-0 p-4 bg-gradient-to-t from-black/80 to-transparent">
-                      <p className="text-[#D4AF37] font-semibold uppercase tracking-wide text-[10px] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Client</p>
+                      <p className="text-[#C9A227] font-semibold uppercase tracking-wide text-[10px] mb-1 opacity-0 group-hover:opacity-100 transition-opacity duration-300">Client</p>
                       <h3 className="text-white text-base md:text-lg font-bold drop-shadow-lg">{item.client}</h3>
                     </div>
                   </div>
 
                   {/* Content Area - Modern */}
                   <div className="p-4 md:p-5 flex flex-col flex-grow bg-white relative z-10">
-                    <h2 className="text-base md:text-lg font-bold text-[#0B1530] mb-2 group-hover:text-[#D4AF37] transition-colors duration-300 line-clamp-2">
+                    <h2 className="text-base md:text-lg font-bold text-[#0B1530] mb-2 group-hover:text-[#C9A227] transition-colors duration-300 line-clamp-2">
                       {item.title}
                     </h2>
                     
@@ -125,9 +125,9 @@ const Portfolio = () => {
 
                     {/* Outcome Box - Modern */}
                     {item.outcome && (
-                      <div className="relative pl-4 border-l-4 border-[#D4AF37] py-2.5 bg-gradient-to-r from-[#D4AF37]/5 to-transparent rounded-r-lg">
+                      <div className="relative pl-4 border-l-4 border-[#C9A227] py-2.5 bg-gradient-to-r from-[#C9A227]/5 to-transparent rounded-r-lg">
                         <div className="flex items-center gap-2 mb-1.5">
-                           <FaChartLine className="text-[#D4AF37] text-sm" />
+                           <FaChartLine className="text-[#C9A227] text-sm" />
                            <span className="text-[#0B1530] font-semibold text-xs uppercase tracking-wide">Key Outcome</span>
                         </div>
                         <p className="text-gray-700 text-xs md:text-sm italic line-clamp-2 leading-relaxed">
@@ -138,7 +138,7 @@ const Portfolio = () => {
                   </div>
 
                   {/* Hover Effect Border */}
-                  <div className="absolute inset-0 rounded-2xl border-2 border-[#D4AF37]/0 group-hover:border-[#D4AF37]/30 transition-all duration-300 pointer-events-none"></div>
+                  <div className="absolute inset-0 rounded-2xl border-2 border-[#C9A227]/0 group-hover:border-[#C9A227]/30 transition-all duration-300 pointer-events-none"></div>
                 </motion.div>
               ))}
             </div>

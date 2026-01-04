@@ -87,7 +87,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all border-t-4 border-[#D4AF37]">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all border-t-4 border-[#C9A227]">
                 
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">
@@ -203,7 +203,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#0B1530] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                    className="w-full bg-[#0B1530] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-4"
                   >
                     {loading ? 'Submitting...' : 'Confirm Booking'}
                   </button>

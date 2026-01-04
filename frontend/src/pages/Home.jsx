@@ -113,7 +113,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#D4AF37] font-medium text-sm mb-6 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#C9A227] font-medium text-sm mb-6 backdrop-blur-sm"
               >
                 <FaBriefcase className="text-xs" /> Since 2022
               </motion.div>
@@ -125,7 +125,7 @@ const Home = () => {
                 className="text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-6"
               >
                 Financial Clarity for <br />
-                <span className="text-[#D4AF37]">Modern Business</span>
+                <span className="text-[#C9A227]">Modern Business</span>
               </motion.h1>
 
               <motion.p
@@ -146,7 +146,7 @@ const Home = () => {
                 {/* UPDATED: Button triggers Modal */}
                 <button
                   onClick={openModal}
-                  className="px-8 py-3.5 bg-[#D4AF37] text-[#0B1530] rounded-full font-semibold text-base shadow-lg hover:bg-white transition-all hover:-translate-y-0.5"
+                  className="px-8 py-3.5 bg-[#C9A227] text-[#0B1530] rounded-full font-semibold text-base shadow-lg hover:bg-white transition-all hover:-translate-y-0.5"
                 >
                   Book Consultation
                 </button>
@@ -167,13 +167,13 @@ const Home = () => {
                 className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6 border-t border-white/10"
               >
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 3+ Years Exp.
+                  <FaCheckCircle className="text-[#C9A227]" /> 3+ Years Exp.
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> 100+ Clients
+                  <FaCheckCircle className="text-[#C9A227]" /> 100+ Clients
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#D4AF37]" /> Certified Experts
+                  <FaCheckCircle className="text-[#C9A227]" /> Certified Experts
                 </div>
               </motion.div>
             </div>
@@ -202,7 +202,7 @@ const Home = () => {
                   transition={{ delay: 0.8 }}
                   className="absolute bottom-8 -left-6 bg-white p-5 rounded-xl shadow-xl flex items-center gap-4 max-w-xs"
                >
-                  <div className="w-12 h-12 bg-[#0B1530] rounded-full flex items-center justify-center text-[#D4AF37] text-xl">
+                  <div className="w-12 h-12 bg-[#0B1530] rounded-full flex items-center justify-center text-[#C9A227] text-xl">
                      <FaUserTie />
                   </div>
                   <div>
@@ -246,7 +246,7 @@ const Home = () => {
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
             >
-              <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm mb-4 block">About Us</span>
+              <span className="text-[#C9A227] font-bold tracking-widest uppercase text-sm mb-4 block">About Us</span>
               <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-6">
                 Your Trusted Partner in Financial Success
               </h2>
@@ -260,8 +260,8 @@ const Home = () => {
               {/* Key Points */}
               <div className="grid sm:grid-cols-2 gap-4 mb-8">
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaUsers className="text-[#D4AF37]" />
+                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaUsers className="text-[#C9A227]" />
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0B1530]">100+ Clients</h4>
@@ -269,8 +269,8 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaLock className="text-[#D4AF37]" />
+                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaLock className="text-[#C9A227]" />
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0B1530]">100% Confidential</h4>
@@ -278,8 +278,8 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaCheckCircle className="text-[#D4AF37]" />
+                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaCheckCircle className="text-[#C9A227]" />
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0B1530]">Timely Delivery</h4>
@@ -287,8 +287,8 @@ const Home = () => {
                   </div>
                 </div>
                 <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaChartLine className="text-[#D4AF37]" />
+                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaChartLine className="text-[#C9A227]" />
                   </div>
                   <div>
                     <h4 className="font-bold text-[#0B1530]">3+ Years Experience</h4>
@@ -299,7 +299,7 @@ const Home = () => {
 
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 text-[#0B1530] font-semibold hover:text-[#D4AF37] transition-all group"
+                className="inline-flex items-center gap-2 text-[#0B1530] font-semibold hover:text-[#C9A227] transition-all group"
               >
                 Learn More About Us <FaArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </Link>
@@ -318,7 +318,7 @@ const Home = () => {
             variants={containerVariants}
             className="text-center mb-16"
           >
-            <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm">Our Expertise</span>
+            <span className="text-[#C9A227] font-bold tracking-widest uppercase text-sm">Our Expertise</span>
             <h2 className="text-3xl lg:text-4xl font-serif font-bold mt-3 mb-3 text-[#0B1530]">
               Comprehensive Solutions
             </h2>
@@ -339,16 +339,16 @@ const Home = () => {
                 key={idx}
                 variants={cardVariants}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-[#D4AF37]/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-[#C9A227]/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
               >
-                <div className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-6 group-hover:bg-[#0B1530] group-hover:text-[#D4AF37] transition-colors">
+                <div className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-6 group-hover:bg-[#0B1530] group-hover:text-[#C9A227] transition-colors">
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-bold text-[#0B1530] mb-3">{service.title}</h3>
                 <p className="text-gray-600 text-base leading-relaxed mb-6">
                    {service.desc}
                 </p>
-                <Link to={`/expertise/${service.slug}`} className="text-base font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
+                <Link to={`/expertise/${service.slug}`} className="text-base font-bold text-[#0B1530] hover:text-[#C9A227] flex items-center gap-2 transition-colors">
                   Read More <FaArrowRight size={12} />
                 </Link>
               </motion.div>
@@ -373,7 +373,7 @@ const Home = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm mb-4 block"
+              className="text-[#C9A227] font-bold tracking-widest uppercase text-sm mb-4 block"
             >
               Why Choose Us
             </motion.span>
@@ -407,7 +407,7 @@ const Home = () => {
             >
                 {features.map((feature, idx) => (
                     <div key={idx} className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-colors">
-                        <div className="text-[#D4AF37] text-3xl mb-4 flex justify-center">{feature.icon}</div>
+                        <div className="text-[#C9A227] text-3xl mb-4 flex justify-center">{feature.icon}</div>
                         <h4 className="text-white font-bold text-lg mb-2">{feature.title}</h4>
                         <p className="text-gray-400 text-sm">{feature.desc}</p>
                     </div>
@@ -417,7 +417,7 @@ const Home = () => {
       </section>
 
       {/* ==================== STATS STRIP ==================== */}
-      <section className="py-8 bg-[#D4AF37]">
+      <section className="py-8 bg-[#C9A227]">
         <div className="container mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap justify-around items-center gap-8 text-[#0B1530]">
              <div className="text-center">
@@ -449,7 +449,7 @@ const Home = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <span className="inline-block px-4 py-1.5 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+            <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
               Client Reviews
             </span>
             <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
@@ -467,14 +467,14 @@ const Home = () => {
               <>
                 <button
                   onClick={prevTestimonial}
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
                   aria-label="Previous testimonial"
                 >
                   <FaChevronLeft size={16} />
                 </button>
                 <button
                   onClick={nextTestimonial}
-                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
                   aria-label="Next testimonial"
                 >
                   <FaChevronRight size={18} />
@@ -521,7 +521,7 @@ const Home = () => {
                         <FaStar 
                           key={i} 
                           size={14} 
-                          className={i < testimonials[currentTestimonial]?.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
+                          className={i < testimonials[currentTestimonial]?.rating ? 'text-[#C9A227]' : 'text-gray-200'} 
                         />
                       ))}
                     </div>
@@ -530,7 +530,7 @@ const Home = () => {
                   {/* Right: Quote */}
                   <div className="flex-1 relative md:pl-6 md:border-l border-gray-100">
                     {/* Quote Icon */}
-                    <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                    <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center shadow-lg">
                       <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                         <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                       </svg>
@@ -552,7 +552,7 @@ const Home = () => {
                     onClick={() => setCurrentTestimonial(idx)}
                     className={`w-2.5 h-2.5 rounded-full transition-all ${
                       idx === currentTestimonial 
-                        ? 'bg-[#D4AF37] w-6' 
+                        ? 'bg-[#C9A227] w-6' 
                         : 'bg-gray-300 hover:bg-gray-400'
                     }`}
                     aria-label={`Go to testimonial ${idx + 1}`}
@@ -577,7 +577,7 @@ const Home = () => {
           {/* UPDATED: Button triggers Modal */}
           <button
             onClick={openModal}
-            className="inline-block rounded-full bg-[#D4AF37] px-10 py-4 text-[#0B1530] font-bold text-base hover:bg-white transition-all duration-300"
+            className="inline-block rounded-full bg-[#C9A227] px-10 py-4 text-[#0B1530] font-bold text-base hover:bg-white transition-all duration-300"
           >
             Book Consultation
           </button>

@@ -50,7 +50,7 @@ const Login = () => {
       
       {/* Background Decorative Elements */}
       <div className="absolute top-0 left-0 w-full h-1/2 bg-[#0B1530] rounded-b-[50px] z-0"></div>
-      <div className="absolute top-10 right-10 w-24 h-24 bg-[#D4AF37] rounded-full opacity-20 blur-xl"></div>
+      <div className="absolute top-10 right-10 w-24 h-24 bg-[#C9A227] rounded-full opacity-20 blur-xl"></div>
       <div className="absolute bottom-10 left-10 w-32 h-32 bg-[#0B1530] rounded-full opacity-10 blur-xl"></div>
 
       {/* Main Card Container */}
@@ -147,7 +147,7 @@ const Login = () => {
             {/* Forgot Password (Login only) */}
             {isLogin && (
               <div className="flex justify-end">
-                <Link to="/forgot-password" class="text-xs font-semibold text-[#0B1530] hover:text-[#D4AF37] transition-colors">
+                <Link to="/forgot-password" class="text-xs font-semibold text-[#0B1530] hover:text-[#C9A227] transition-colors">
                   Forgot Password?
                 </Link>
               </div>
@@ -194,7 +194,7 @@ const Login = () => {
               {isLogin ? "Don't have an account?" : "Already have an account?"}
               <button
                 onClick={() => setIsLogin(!isLogin)}
-                className="ml-2 font-bold text-[#0B1530] hover:text-[#D4AF37] transition-colors underline decoration-transparent hover:decoration-[#D4AF37]"
+                className="ml-2 font-bold text-[#0B1530] hover:text-[#C9A227] transition-colors underline decoration-transparent hover:decoration-[#C9A227]"
               >
                 {isLogin ? 'Sign Up' : 'Login'}
               </button>

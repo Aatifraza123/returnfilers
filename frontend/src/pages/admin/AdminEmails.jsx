@@ -328,7 +328,7 @@ const AdminEmails = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block w-12 h-12 border-4 border-[#D4AF37] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="inline-block w-12 h-12 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="text-gray-600">Loading emails...</p>
         </div>
       </div>
@@ -349,7 +349,7 @@ const AdminEmails = () => {
           </div>
           <button
             onClick={() => setShowBulkEmailModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#D4AF37] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium"
           >
             <FaPaperPlane className="text-sm" />
             Send Bulk Email
@@ -364,7 +364,7 @@ const AdminEmails = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent text-sm min-w-[200px]"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent text-sm min-w-[200px]"
           >
             <option value="all">All Emails ({emails?.length || 0})</option>
             <option value="contact">Contacts ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
@@ -380,7 +380,7 @@ const AdminEmails = () => {
               placeholder="Search by name, email, phone, topic..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
             />
           </div>
         </div>
@@ -455,7 +455,7 @@ const AdminEmails = () => {
                         <select
                           value={email.status || 'pending'}
                           onChange={(e) => handleStatusUpdate(email._id, email.emailType, e.target.value)}
-                          className={`text-xs px-2 py-1 rounded-full font-semibold border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ${
+                          className={`text-xs px-2 py-1 rounded-full font-semibold border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C9A227] ${
                             email.status === 'closed' ? 'bg-green-100 text-green-800' :
                             email.status === 'contacted' ? 'bg-blue-100 text-blue-800' :
                             'bg-yellow-100 text-yellow-800'
@@ -555,7 +555,7 @@ const AdminEmails = () => {
               {selectedEmail.message && (
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Message</label>
-                  <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-[#D4AF37]">
+                  <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-[#C9A227]">
                     <p className="text-gray-700 leading-relaxed text-sm">
                       {selectedEmail.message}
                     </p>
@@ -612,7 +612,7 @@ const AdminEmails = () => {
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent bg-white"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent bg-white"
                   disabled={sendingBulkEmail}
                 >
                   <option value="all">All Recipients ({emails?.length || 0})</option>
@@ -633,7 +633,7 @@ const AdminEmails = () => {
                 <select
                   value={bulkEmailData.template}
                   onChange={(e) => handleTemplateChange(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
                   disabled={sendingBulkEmail}
                 >
                   <option value="blank">Blank Template</option>
@@ -655,7 +655,7 @@ const AdminEmails = () => {
                   value={bulkEmailData.subject}
                   onChange={(e) => setBulkEmailData({ ...bulkEmailData, subject: e.target.value })}
                   placeholder="Enter email subject"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
                   disabled={sendingBulkEmail}
                 />
               </div>
@@ -707,7 +707,7 @@ const AdminEmails = () => {
               <button
                 onClick={handleSendBulkEmail}
                 disabled={sendingBulkEmail || !bulkEmailData.subject || !bulkEmailData.message}
-                className="px-6 py-2 bg-[#D4AF37] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                className="px-6 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 {sendingBulkEmail ? (
                   <>

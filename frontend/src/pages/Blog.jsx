@@ -45,7 +45,7 @@ const Blog = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <Loader size="xl" color="#D4AF37" />
+        <Loader size="xl" color="#C9A227" />
       </div>
     );
   }
@@ -70,7 +70,7 @@ const Blog = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-0 right-0 w-72 h-72 bg-[#D4AF37]/8 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
+            className="absolute top-0 right-0 w-72 h-72 bg-[#C9A227]/8 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
           ></motion.div>
           <motion.div
             animate={{
@@ -84,7 +84,7 @@ const Blog = () => {
               ease: "easeInOut",
               delay: 0.5,
             }}
-            className="absolute bottom-0 left-0 w-72 h-72 bg-[#D4AF37]/8 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
+            className="absolute bottom-0 left-0 w-72 h-72 bg-[#C9A227]/8 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
           ></motion.div>
         </div>
         
@@ -95,16 +95,16 @@ const Blog = () => {
             initial={{ opacity: 0, scale: 0.8, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", type: "spring", stiffness: 100 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#D4AF37]/20 backdrop-blur-sm border border-[#D4AF37]/30 mb-4"
+            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A227]/20 backdrop-blur-sm border border-[#C9A227]/30 mb-4"
           >
             <motion.div
               initial={{ rotate: -180, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <FaBookOpen className="text-[#D4AF37]" size={12} />
+              <FaBookOpen className="text-[#C9A227]" size={12} />
             </motion.div>
-            <span className="text-[#D4AF37] font-semibold tracking-wider uppercase text-[10px] sm:text-xs">
+            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-[10px] sm:text-xs">
               Insights & News
             </span>
           </motion.div>
@@ -119,7 +119,7 @@ const Blog = () => {
               initial={{ opacity: 0, x: 50 }}
               animate={{ opacity: 1, x: 0 }}
               transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#D4AF37] to-[#F5D76E]"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-[#F5D76E]"
             >Blog</motion.span>
           </motion.h1>
           
@@ -152,7 +152,7 @@ const Blog = () => {
               >
                 <div className="relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200/60">
                   {/* Featured Badge */}
-                  <div className="absolute top-6 left-6 z-20 bg-gradient-to-r from-[#D4AF37] to-[#F5D76E] px-4 py-2 rounded-full shadow-lg">
+                  <div className="absolute top-6 left-6 z-20 bg-gradient-to-r from-[#C9A227] to-[#F5D76E] px-4 py-2 rounded-full shadow-lg">
                     <span className="text-[#0B1530] text-xs font-bold uppercase tracking-wider">Featured</span>
                   </div>
 
@@ -189,18 +189,18 @@ const Blog = () => {
                     <div className="p-6 md:p-8 flex flex-col justify-center bg-gradient-to-br from-white to-gray-50">
                       <div className="flex items-center gap-3 mb-3 text-[10px] text-gray-500">
                         <span className="flex items-center gap-1">
-                          <FaCalendarAlt className="text-[#D4AF37]" size={10} />
+                          <FaCalendarAlt className="text-[#C9A227]" size={10} />
                           {featuredBlog.createdAt ? format(new Date(featuredBlog.createdAt), 'MMM dd, yyyy') : 'Draft'}
                         </span>
                         {featuredBlog.readTime && (
                           <span className="flex items-center gap-1">
-                            <FaClock className="text-[#D4AF37]" size={10} />
+                            <FaClock className="text-[#C9A227]" size={10} />
                             {featuredBlog.readTime}
                           </span>
                         )}
                       </div>
 
-                      <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1530] mb-3 group-hover:text-[#D4AF37] transition-colors line-clamp-2">
+                      <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1530] mb-3 group-hover:text-[#C9A227] transition-colors line-clamp-2">
                         {featuredBlog.title}
                       </h2>
                       
@@ -210,7 +210,7 @@ const Blog = () => {
 
                       <motion.div
                         whileHover={{ x: 5 }}
-                        className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#D4AF37] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#C9A227] transition-colors"
                       >
                         Read Full Article
                         <FaArrowRight className="group-hover:translate-x-1 transition-transform" size={12} />
@@ -303,18 +303,18 @@ const Blog = () => {
                         {/* Date & Read Time */}
                         <div className="flex items-center gap-2 mb-3 text-[10px] text-gray-500">
                           <span className="flex items-center gap-1">
-                            <FaCalendarAlt className="text-[#D4AF37]" size={9} />
+                            <FaCalendarAlt className="text-[#C9A227]" size={9} />
                             {blog.createdAt ? format(new Date(blog.createdAt), 'MMM dd, yyyy') : 'Draft'}
                           </span>
                           {blog.readTime && (
                             <span className="flex items-center gap-1">
-                              <FaClock className="text-[#D4AF37]" size={9} />
+                              <FaClock className="text-[#C9A227]" size={9} />
                               {blog.readTime}
                             </span>
                           )}
                         </div>
 
-                        <h3 className="text-lg md:text-xl font-serif font-bold text-[#0B1530] mb-2 line-clamp-2 group-hover:text-[#D4AF37] transition-colors duration-300">
+                        <h3 className="text-lg md:text-xl font-serif font-bold text-[#0B1530] mb-2 line-clamp-2 group-hover:text-[#C9A227] transition-colors duration-300">
                           {blog.title}
                         </h3>
                         
@@ -326,7 +326,7 @@ const Blog = () => {
                         <div className="mt-auto pt-3 border-t border-gray-100/50">
                           <motion.div
                             whileHover={{ x: 5 }}
-                            className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#D4AF37] transition-colors"
+                            className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#C9A227] transition-colors"
                           >
                             Read Article
                             <FaArrowRight className="group-hover:translate-x-1 transition-transform" size={10} />
@@ -335,7 +335,7 @@ const Blog = () => {
                       </div>
 
                       {/* Decorative Corner */}
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#D4AF37]/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#C9A227]/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </Link>
                 </motion.div>

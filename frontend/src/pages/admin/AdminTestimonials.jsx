@@ -154,7 +154,7 @@ const AdminTestimonials = () => {
 
       {/* Form */}
       {showForm && (
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-[#D4AF37]">
+        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-[#C9A227]">
           <div className="flex justify-between items-center mb-6">
             <h2 className="text-xl font-bold text-[#0B1530]">
               {editingTestimonial ? '✏️ Edit Testimonial' : '➕ Add Testimonial'}
@@ -174,7 +174,7 @@ const AdminTestimonials = () => {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Customer name"
                   required
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
                 />
               </div>
               <div>
@@ -185,7 +185,7 @@ const AdminTestimonials = () => {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="CEO, Company Name"
                   required
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
                 />
               </div>
             </div>
@@ -198,7 +198,7 @@ const AdminTestimonials = () => {
                 placeholder="What did the customer say..."
                 required
                 rows="3"
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm resize-none"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
               />
             </div>
 
@@ -228,7 +228,7 @@ const AdminTestimonials = () => {
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   placeholder="https://..."
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#D4AF37] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
                 />
               </div>
               <div>
@@ -271,7 +271,7 @@ const AdminTestimonials = () => {
       {/* Testimonials Grid */}
       {loading ? (
         <div className="bg-white rounded-2xl p-12 text-center">
-          <div className="animate-spin w-10 h-10 border-4 border-[#D4AF37] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-10 h-10 border-4 border-[#C9A227] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-500">Loading testimonials...</p>
         </div>
       ) : testimonials.length > 0 ? (
@@ -315,7 +315,7 @@ const AdminTestimonials = () => {
                   </div>
 
                   <div className="mt-3 relative">
-                    <FaQuoteLeft className="absolute -left-1 -top-1 text-[#D4AF37]/20" size={20} />
+                    <FaQuoteLeft className="absolute -left-1 -top-1 text-[#C9A227]/20" size={20} />
                     <p className="text-gray-600 text-sm leading-relaxed pl-5 line-clamp-3">
                       {testimonial.quote}
                     </p>

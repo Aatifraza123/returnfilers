@@ -84,7 +84,7 @@ const Contact = () => {
           <motion.span 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
-            className="text-[#D4AF37] font-semibold tracking-widest uppercase text-sm mb-3 block"
+            className="text-[#C9A227] font-semibold tracking-widest uppercase text-sm mb-3 block"
           >
             We are here to help
           </motion.span>
@@ -120,13 +120,13 @@ const Contact = () => {
                 viewport={{ once: true }}
                 className="bg-white rounded-xl shadow-lg p-10 border border-gray-100 relative overflow-hidden" // Increased padding
               >
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#D4AF37]"></div>
+                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C9A227]"></div>
                 <h2 className="text-2xl font-serif font-bold mb-8 text-[#0B1530]">Contact Information</h2>
                 
                 <div className="space-y-6">
                   <div className="flex items-start group">
                     <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaMapMarkerAlt className="text-[#0B1530] text-xl group-hover:text-[#D4AF37] transition-colors" />
+                      <FaMapMarkerAlt className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Office Address</h3>
@@ -139,7 +139,7 @@ const Contact = () => {
 
                   <div className="flex items-start group">
                     <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaPhone className="text-[#0B1530] text-xl group-hover:text-[#D4AF37] transition-colors" />
+                      <FaPhone className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
@@ -150,7 +150,7 @@ const Contact = () => {
 
                   <div className="flex items-start group">
                     <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaEnvelope className="text-[#0B1530] text-xl group-hover:text-[#D4AF37] transition-colors" />
+                      <FaEnvelope className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
@@ -169,7 +169,7 @@ const Contact = () => {
                  className="grid md:grid-cols-2 gap-8"
               >
                  <div className="bg-[#0B1530] text-white p-6 rounded-xl shadow-md">
-                    <div className="flex items-center gap-3 mb-4 text-[#D4AF37]">
+                    <div className="flex items-center gap-3 mb-4 text-[#C9A227]">
                        <FaClock size={18} />
                        <h3 className="font-bold text-base">Office Hours</h3>
                     </div>
@@ -204,7 +204,7 @@ const Contact = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-xl shadow-xl border-t-4 border-[#D4AF37]"
+              className="bg-white p-8 rounded-xl shadow-xl border-t-4 border-[#C9A227]"
             >
               <h2 className="text-2xl font-serif font-bold mb-2 text-[#0B1530]">Send a Message</h2>
               <p className="text-gray-500 text-sm mb-6">Fill out the form below and we'll get back to you.</p>
@@ -291,7 +291,7 @@ const Contact = () => {
             viewport={{ once: true }}
             className="text-center mb-10 md:mb-14"
           >
-            <span className="inline-block px-4 py-1.5 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+            <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
               Got Questions?
             </span>
             <h2 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-[#0B1530] mb-4">
@@ -315,7 +315,7 @@ const Contact = () => {
                   transition={{ delay: idx * 0.08 }}
                   className={`bg-white rounded-2xl border-2 transition-all duration-300 overflow-hidden ${
                     isOpen 
-                      ? 'border-[#D4AF37] shadow-lg shadow-[#D4AF37]/10' 
+                      ? 'border-[#C9A227] shadow-lg shadow-[#C9A227]/10' 
                       : 'border-gray-100 hover:border-gray-200 hover:shadow-md'
                   }`}
                 >
@@ -326,7 +326,7 @@ const Contact = () => {
                     {/* Number Badge */}
                     <div className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 font-bold text-sm transition-colors ${
                       isOpen 
-                        ? 'bg-[#D4AF37] text-[#0B1530]' 
+                        ? 'bg-[#C9A227] text-[#0B1530]' 
                         : 'bg-[#0B1530]/5 text-[#0B1530]'
                     }`}>
                       {String(idx + 1).padStart(2, '0')}
@@ -334,7 +334,7 @@ const Contact = () => {
                     
                     <div className="flex-1">
                       <h3 className={`text-sm md:text-base font-semibold transition-colors ${
-                        isOpen ? 'text-[#D4AF37]' : 'text-[#0B1530]'
+                        isOpen ? 'text-[#C9A227]' : 'text-[#0B1530]'
                       }`}>
                         {faq.question}
                       </h3>
@@ -346,7 +346,7 @@ const Contact = () => {
                       transition={{ duration: 0.3 }}
                       className={`w-8 h-8 rounded-full flex items-center justify-center flex-shrink-0 transition-colors ${
                         isOpen 
-                          ? 'bg-[#D4AF37] text-[#0B1530]' 
+                          ? 'bg-[#C9A227] text-[#0B1530]' 
                           : 'bg-gray-100 text-gray-500'
                       }`}
                     >
@@ -384,7 +384,7 @@ const Contact = () => {
             <p className="text-gray-500 mb-4">Still have questions?</p>
             <button 
               onClick={() => window.dispatchEvent(new CustomEvent('openChatbot'))}
-              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1530] text-white rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all shadow-lg hover:shadow-xl"
+              className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1530] text-white rounded-full font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg hover:shadow-xl"
             >
               <FaRobot size={18} />
               Chat with AI

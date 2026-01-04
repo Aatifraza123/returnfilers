@@ -1,6 +1,6 @@
 import { motion } from 'framer-motion'
 
-const Loader = ({ size = 'md', color = '#D4AF37' }) => {
+const Loader = ({ size = 'md', color = '#C9A227' }) => {
   const sizes = {
     sm: 'w-8 h-8',
     md: 'w-12 h-12',

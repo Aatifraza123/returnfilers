@@ -65,7 +65,7 @@ const TermsConditions = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]"
           >
-            Terms & <span className="text-[#D4AF37]">Conditions</span>
+            Terms & <span className="text-[#C9A227]">Conditions</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -94,7 +94,7 @@ const TermsConditions = () => {
                 <div key={section.id} className="relative">
                   <h2 className="text-lg md:text-xl font-bold text-[#0B1530] mb-3 flex items-center gap-2">
                     {/* Icon for mobile layout */}
-                    {section.icon && <span className="text-[#D4AF37]">{section.icon}</span>}
+                    {section.icon && <span className="text-[#C9A227]">{section.icon}</span>}
                     {section.title}
                   </h2>
                   <p className="text-gray-600 leading-relaxed text-sm md:text-base">
@@ -109,14 +109,14 @@ const TermsConditions = () => {
               ))}
 
               {/* Contact Section */}
-              <div className="bg-[#0B1530]/5 p-6 rounded-lg border border-[#D4AF37]/20 mt-8">
+              <div className="bg-[#0B1530]/5 p-6 rounded-lg border border-[#C9A227]/20 mt-8">
                 <h2 className="text-lg font-bold text-[#0B1530] mb-2">8. Contact Us</h2>
                 <p className="text-gray-600 mb-3 text-sm md:text-base">
                   If you have any questions about these Terms & Conditions, please contact us at:
                 </p>
                 <a 
                   href="mailto:info@caassociates.com" 
-                  className="text-[#D4AF37] font-semibold hover:text-[#0B1530] transition-colors text-sm md:text-base underline decoration-[#D4AF37]/30 underline-offset-2"
+                  className="text-[#C9A227] font-semibold hover:text-[#0B1530] transition-colors text-sm md:text-base underline decoration-[#C9A227]/30 underline-offset-2"
                 >
                   info@caassociates.com
                 </a>
