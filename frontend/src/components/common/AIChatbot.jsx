@@ -374,18 +374,32 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button */}
-      <button
-        onClick={() => setIsOpen(true)}
+      {/* Floating Chat Button with Tooltip */}
+      <div
         className={`fixed bottom-6 right-4 md:right-6 z-50 transition-all duration-300 ${
           isOpen ? 'scale-0 opacity-0' : isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
         }`}
       >
-        <div className="w-14 h-14 md:w-16 md:h-16 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors">
-          <FaRobot size={24} className="text-[#D4AF37] md:text-[28px]" />
-          <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-[#D4AF37] rounded-full animate-pulse"></span>
+        {/* Tooltip Message */}
+        <div className="absolute bottom-full right-0 mb-3 animate-bounce-slow">
+          <div className="bg-white px-4 py-2.5 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap">
+            <p className="text-sm font-medium text-[#0B1530]">👋 Need help with taxes?</p>
+            <p className="text-xs text-gray-500">Chat with our AI assistant</p>
+            {/* Arrow */}
+            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-r border-b border-gray-100 transform rotate-45"></div>
+          </div>
         </div>
-      </button>
+        
+        <button
+          onClick={() => setIsOpen(true)}
+          className="relative group"
+        >
+          <div className="w-14 h-14 md:w-16 md:h-16 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors group-hover:scale-110 duration-200">
+            <FaRobot size={24} className="text-[#D4AF37] md:text-[28px]" />
+            <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-[#D4AF37] rounded-full animate-pulse"></span>
+          </div>
+        </button>
+      </div>
 
       {/* Chat Window */}
       <div 
