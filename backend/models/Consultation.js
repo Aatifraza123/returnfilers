@@ -41,7 +41,7 @@ const consultationSchema = new mongoose.Schema({
   },
   status: {
     type: String,
-    enum: ['pending', 'contacted', 'closed'],
+    enum: ['pending', 'contacted', 'closed', 'completed', 'cancelled'],
     default: 'pending'
   }
 }, {
