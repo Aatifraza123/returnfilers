@@ -166,14 +166,30 @@ const Home = () => {
                className="hidden lg:block relative h-[500px]"
             >
                {/* Main Image */}
-               <div className="relative w-full h-full rounded-2xl overflow-hidden border-[6px] border-white/10 shadow-2xl">
+               <div className="relative w-full h-full rounded-t-[10rem] rounded-b-[2rem] overflow-hidden border-[6px] border-white/10 shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2000&auto=format&fit=crop" 
+                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" 
                     alt="Tax and Finance Professional" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-[#0B1530]/10 mix-blend-multiply"></div>
+                  <div className="absolute inset-0 bg-[#0B1530]/20 mix-blend-multiply"></div>
                </div>
+
+               {/* Modern Floating Badge */}
+               <motion.div 
+                  initial={{ y: 20, opacity: 0 }}
+                  animate={{ y: 0, opacity: 1 }}
+                  transition={{ delay: 0.8 }}
+                  className="absolute bottom-8 -left-6 bg-white p-5 rounded-xl shadow-xl flex items-center gap-4 max-w-xs"
+               >
+                  <div className="w-12 h-12 bg-[#0B1530] rounded-full flex items-center justify-center text-[#D4AF37] text-xl">
+                     <FaUserTie />
+                  </div>
+                  <div>
+                     <p className="text-[#0B1530] font-bold text-lg">Expert Advice</p>
+                     <p className="text-gray-500 text-sm">Strategic financial planning.</p>
+                  </div>
+               </motion.div>
             </motion.div>
 
           </div>
