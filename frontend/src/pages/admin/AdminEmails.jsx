@@ -296,6 +296,8 @@ const AdminEmails = () => {
   };
 
   const getFilteredEmails = () => {
+    if (!emails || !Array.isArray(emails)) return [];
+    
     let filtered = emails;
     
     // Filter by type
@@ -364,10 +366,10 @@ const AdminEmails = () => {
             onChange={(e) => setFilterType(e.target.value)}
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent text-sm min-w-[200px]"
           >
-            <option value="all">All Emails ({emails.length})</option>
-            <option value="contact">Contacts ({emails.filter(e => e.emailType === 'contact').length})</option>
-            <option value="consultation">Consultations ({emails.filter(e => e.emailType === 'consultation').length})</option>
-            <option value="newsletter">Newsletter ({emails.filter(e => e.emailType === 'newsletter').length})</option>
+            <option value="all">All Emails ({emails?.length || 0})</option>
+            <option value="contact">Contacts ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
+            <option value="consultation">Consultations ({emails?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
+            <option value="newsletter">Newsletter ({emails?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
           </select>
 
           {/* Search */}
@@ -613,10 +615,10 @@ const AdminEmails = () => {
                   className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#D4AF37] focus:border-transparent bg-white"
                   disabled={sendingBulkEmail}
                 >
-                  <option value="all">All Recipients ({emails.length})</option>
-                  <option value="contact">Contacts Only ({emails.filter(e => e.emailType === 'contact').length})</option>
-                  <option value="consultation">Consultations Only ({emails.filter(e => e.emailType === 'consultation').length})</option>
-                  <option value="newsletter">Newsletter Subscribers ({emails.filter(e => e.emailType === 'newsletter').length})</option>
+                  <option value="all">All Recipients ({emails?.length || 0})</option>
+                  <option value="contact">Contacts Only ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
+                  <option value="consultation">Consultations Only ({emails?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
+                  <option value="newsletter">Newsletter Subscribers ({emails?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
                 </select>
                 <p className="text-xs text-gray-500 mt-1">
                   Selected: <span className="font-semibold text-[#0B1530]">{filteredEmails.length} recipients</span>
