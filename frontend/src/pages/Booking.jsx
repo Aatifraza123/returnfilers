@@ -1,4 +1,5 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
+import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock, FaCalendarCheck } from 'react-icons/fa';
 import api from '../api/axios';
@@ -21,13 +22,23 @@ const services = [
 ];
 
 const Booking = () => {
+  const [searchParams] = useSearchParams();
+  const preSelectedService = searchParams.get('service') || '';
+  
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: '',
+    service: preSelectedService,
     message: ''
   });
+  
+  // Update service when URL param changes
+  useEffect(() => {
+    if (preSelectedService) {
+      setFormData(prev => ({ ...prev, service: preSelectedService }));
+    }
+  }, [preSelectedService]);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
@@ -97,7 +108,10 @@ const Booking = () => {
     setLoading(true);
 
     try {
-      // If documents uploaded, use documents API
+      // Prepare booking data
+      const bookingData = { ...formData };
+      
+      // If documents uploaded, convert to base64
       if (files.length > 0) {
         const documentsData = await Promise.all(
           files.map(async (file) => ({
@@ -107,15 +121,11 @@ const Booking = () => {
             data: await convertToBase64(file)
           }))
         );
-
-        await api.post('/documents', {
-          ...formData,
-          documents: documentsData
-        });
-      } else {
-        // No documents - use consultation API
-        await api.post('/consultations', formData);
+        bookingData.documents = documentsData;
       }
+
+      // Always use bookings API
+      await api.post('/bookings', bookingData);
 
       setSubmitted(true);
       toast.success('Booking submitted successfully!');

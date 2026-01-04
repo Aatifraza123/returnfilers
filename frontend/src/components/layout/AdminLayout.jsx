@@ -18,7 +18,8 @@ import {
   FaQuoteRight,
   FaPhone,
   FaClock,
-  FaFolderOpen
+  FaFolderOpen,
+  FaCalendarCheck
 } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
@@ -35,17 +36,19 @@ const AdminLayout = () => {
   // Fetch notifications (pending items)
   const fetchNotifications = async () => {
     try {
-      const [contactsRes, consultationsRes, quotesRes, documentsRes] = await Promise.all([
+      const [contactsRes, consultationsRes, quotesRes, documentsRes, bookingsRes] = await Promise.all([
         api.get('/contacts').catch(() => ({ data: { contacts: [] } })),
         api.get('/consultations').catch(() => ({ data: { consultations: [] } })),
         api.get('/quotes').catch(() => ({ data: [] })),
-        api.get('/documents').catch(() => ({ data: { documents: [] } }))
+        api.get('/documents').catch(() => ({ data: { documents: [] } })),
+        api.get('/bookings').catch(() => ({ data: { bookings: [] } }))
       ]);
 
       const contacts = contactsRes.data?.contacts || contactsRes.data?.data || [];
       const consultations = consultationsRes.data?.consultations || consultationsRes.data?.data || [];
       const quotes = Array.isArray(quotesRes.data) ? quotesRes.data : (quotesRes.data?.quotes || []);
       const documents = documentsRes.data?.documents || [];
+      const bookings = bookingsRes.data?.bookings || [];
 
       // Get only PENDING notifications from all types
       const pendingNotifications = [
@@ -92,6 +95,17 @@ const AdminLayout = () => {
             time: d.createdAt,
             icon: <FaFolderOpen className="text-orange-500" />,
             link: '/admin/documents'
+          })),
+        ...bookings
+          .filter(b => b.status === 'pending')
+          .map(b => ({
+            id: b._id,
+            type: 'booking',
+            title: 'New Booking',
+            message: `${b.name} - ${b.service}`,
+            time: b.createdAt,
+            icon: <FaCalendarCheck className="text-teal-500" />,
+            link: '/admin/bookings'
           }))
       ].sort((a, b) => new Date(b.time) - new Date(a.time));
 
@@ -129,6 +143,7 @@ const AdminLayout = () => {
   const menuItems = [
     { path: '/admin/dashboard', icon: <FaChartPie />, label: 'Dashboard', badge: null },
     { path: '/admin/emails', icon: <FaInbox />, label: 'Emails', badge: null },
+    { path: '/admin/bookings', icon: <FaCalendarCheck />, label: 'Bookings', badge: null },
     { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations', badge: null },
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
     { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
@@ -304,6 +319,7 @@ const AdminLayout = () => {
                                 notification.type === 'contact' ? 'border-l-green-500' :
                                 notification.type === 'consultation' ? 'border-l-blue-500' :
                                 notification.type === 'document' ? 'border-l-orange-500' :
+                                notification.type === 'booking' ? 'border-l-teal-500' :
                                 'border-l-purple-500'
                               } ${idx !== notifications.length - 1 ? 'border-b border-gray-100' : ''}`}
                             >
@@ -312,6 +328,7 @@ const AdminLayout = () => {
                                   notification.type === 'contact' ? 'bg-green-100' :
                                   notification.type === 'consultation' ? 'bg-blue-100' :
                                   notification.type === 'document' ? 'bg-orange-100' :
+                                  notification.type === 'booking' ? 'bg-teal-100' :
                                   'bg-purple-100'
                                 }`}>
                                   {notification.icon}
@@ -326,6 +343,7 @@ const AdminLayout = () => {
                                       notification.type === 'contact' ? 'bg-green-100 text-green-700' :
                                       notification.type === 'consultation' ? 'bg-blue-100 text-blue-700' :
                                       notification.type === 'document' ? 'bg-orange-100 text-orange-700' :
+                                      notification.type === 'booking' ? 'bg-teal-100 text-teal-700' :
                                       'bg-purple-100 text-purple-700'
                                     }`}>
                                       {notification.type}

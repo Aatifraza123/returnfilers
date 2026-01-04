@@ -3,7 +3,6 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
-import ConsultationModal from '../components/common/ConsultationModal';
 import { 
   FaCheck, 
   FaRupeeSign, 
@@ -23,7 +22,10 @@ const ServiceDetail = () => {
   const [service, setService] = useState(null);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
-  const [isModalOpen, setIsModalOpen] = useState(false);
+
+  const handleBookNow = () => {
+    navigate(`/booking?service=${encodeURIComponent(service.title)}`);
+  };
 
   useEffect(() => {
     fetchService();
@@ -72,7 +74,6 @@ const ServiceDetail = () => {
 
   return (
     <main className="font-sans text-gray-800 bg-gray-50">
-      <ConsultationModal isOpen={isModalOpen} closeModal={() => setIsModalOpen(false)} preSelectedService={service.title} />
 
       {/* Hero Section */}
       <section className="relative min-h-[40vh] flex items-end">
@@ -116,7 +117,7 @@ const ServiceDetail = () => {
                 </div>
               </div>
               <button
-                onClick={() => setIsModalOpen(true)}
+                onClick={handleBookNow}
                 className="px-5 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
               >
                 Book Now
@@ -216,9 +217,9 @@ const ServiceDetail = () => {
               {/* CTA Card */}
               <div className="bg-[#C9A227] p-5 rounded-xl">
                 <h3 className="font-bold text-[#0B1530] mb-1">Ready to Start?</h3>
-                <p className="text-sm text-[#0B1530]/70 mb-3">Book a free consultation</p>
+                <p className="text-sm text-[#0B1530]/70 mb-3">Book your service now</p>
                 <button
-                  onClick={() => setIsModalOpen(true)}
+                  onClick={handleBookNow}
                   className="w-full bg-[#0B1530] text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-white hover:text-[#0B1530] transition-colors"
                 >
                   Book Now

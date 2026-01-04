@@ -1,26 +1,18 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader'; 
 import { FaCheck, FaSearch, FaArrowRight, FaRupeeSign, FaClock } from 'react-icons/fa';
-import ConsultationModal from '../components/common/ConsultationModal';
 
 const Services = () => {
+  const navigate = useNavigate();
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedService, setSelectedService] = useState(null);
 
-  const openModal = (service) => {
-    setSelectedService(service);
-    setIsModalOpen(true);
-  };
-  
-  const closeModal = () => {
-    setIsModalOpen(false);
-    setSelectedService(null);
+  const handleBookNow = (service) => {
+    navigate(`/booking?service=${encodeURIComponent(service.title)}`);
   };
 
   useEffect(() => {
@@ -57,8 +49,6 @@ const Services = () => {
 
   return (
     <main className="font-sans text-gray-800 bg-white">
-      
-      <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} preSelectedService={selectedService?.title} />
       
       {/* Hero Section */}
       <section className="bg-[#0B1530] py-16 md:py-20">
@@ -181,7 +171,7 @@ const Services = () => {
                         View Details
                       </Link>
                       <button
-                        onClick={() => openModal(service)}
+                        onClick={() => handleBookNow(service)}
                         className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-white bg-[#0B1530] rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-all"
                       >
                         Book Now <FaArrowRight size={9} />
@@ -218,12 +208,12 @@ const Services = () => {
           <p className="text-gray-400 text-sm md:text-base mb-8">
             Get a personalized quote for your specific requirements
           </p>
-          <button
-            onClick={() => openModal({ title: 'Custom Service' })}
+          <Link
+            to="/booking?service=Custom%20Service"
             className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0B1530] rounded-xl font-bold text-sm hover:bg-white transition-colors shadow-xl"
           >
             Get Custom Quote <FaArrowRight size={12} />
-          </button>
+          </Link>
         </div>
       </section>
     </main>

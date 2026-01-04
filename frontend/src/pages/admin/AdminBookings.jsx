@@ -1,0 +1,252 @@
+import { useState, useEffect } from 'react';
+import api from '../../api/axios';
+import toast from 'react-hot-toast';
+import { FaEye, FaTrash, FaDownload, FaCalendarCheck, FaSearch, FaFileAlt } from 'react-icons/fa';
+
+const AdminBookings = () => {
+  const [bookings, setBookings] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [selectedBooking, setSelectedBooking] = useState(null);
+  const [filter, setFilter] = useState('all');
+
+  useEffect(() => {
+    fetchBookings();
+  }, []);
+
+  const fetchBookings = async () => {
+    try {
+      const token = localStorage.getItem('token');
+      const { data } = await api.get('/bookings', {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      setBookings(data.bookings || []);
+    } catch (error) {
+      toast.error('Failed to fetch bookings');
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const updateStatus = async (id, status) => {
+    try {
+      const token = localStorage.getItem('token');
+      await api.patch(`/bookings/${id}`, { status }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Status updated');
+      fetchBookings();
+    } catch (error) {
+      toast.error('Failed to update');
+    }
+  };
+
+  const deleteBooking = async (id) => {
+    if (!window.confirm('Delete this booking?')) return;
+    try {
+      const token = localStorage.getItem('token');
+      await api.delete(`/bookings/${id}`, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Deleted');
+      fetchBookings();
+      setSelectedBooking(null);
+    } catch (error) {
+      toast.error('Failed to delete');
+    }
+  };
+
+  const downloadDocument = (doc) => {
+    const link = document.createElement('a');
+    link.href = doc.data;
+    link.download = doc.name;
+    link.click();
+  };
+
+  const filteredBookings = filter === 'all' 
+    ? bookings 
+    : bookings.filter(b => b.status === filter);
+
+  const statusColors = {
+    pending: 'bg-yellow-100 text-yellow-700',
+    contacted: 'bg-blue-100 text-blue-700',
+    'in-progress': 'bg-purple-100 text-purple-700',
+    completed: 'bg-green-100 text-green-700',
+    cancelled: 'bg-red-100 text-red-700'
+  };
+
+  if (loading) {
+    return <div className="flex items-center justify-center h-64">Loading...</div>;
+  }
+
+  return (
+    <div className="space-y-6">
+      {/* Header */}
+      <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+        <div>
+          <h1 className="text-2xl font-bold text-[#0B1530]">Bookings</h1>
+          <p className="text-sm text-gray-600">Manage service bookings</p>
+        </div>
+        <div className="flex items-center gap-2">
+          <select
+            value={filter}
+            onChange={(e) => setFilter(e.target.value)}
+            className="px-3 py-2 border rounded-lg text-sm"
+          >
+            <option value="all">All ({bookings.length})</option>
+            <option value="pending">Pending ({bookings.filter(b => b.status === 'pending').length})</option>
+            <option value="contacted">Contacted</option>
+            <option value="in-progress">In Progress</option>
+            <option value="completed">Completed</option>
+            <option value="cancelled">Cancelled</option>
+          </select>
+        </div>
+      </div>
+
+      {/* Table */}
+      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Customer</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Service</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Docs</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Status</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Date</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {filteredBookings.length > 0 ? (
+                filteredBookings.map((booking) => (
+                  <tr key={booking._id} className="hover:bg-gray-50">
+                    <td className="p-4">
+                      <p className="font-semibold text-sm text-[#0B1530]">{booking.name}</p>
+                      <p className="text-xs text-gray-500">{booking.email}</p>
+                      <p className="text-xs text-gray-500">{booking.phone}</p>
+                    </td>
+                    <td className="p-4">
+                      <span className="text-sm font-medium">{booking.service}</span>
+                    </td>
+                    <td className="p-4">
+                      {booking.documents?.length > 0 ? (
+                        <span className="flex items-center gap-1 text-xs text-green-600">
+                          <FaFileAlt /> {booking.documents.length}
+                        </span>
+                      ) : (
+                        <span className="text-xs text-gray-400">None</span>
+                      )}
+                    </td>
+                    <td className="p-4">
+                      <select
+                        value={booking.status}
+                        onChange={(e) => updateStatus(booking._id, e.target.value)}
+                        className={`text-xs px-2 py-1 rounded-full font-semibold ${statusColors[booking.status]}`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="in-progress">In Progress</option>
+                        <option value="completed">Completed</option>
+                        <option value="cancelled">Cancelled</option>
+                      </select>
+                    </td>
+                    <td className="p-4 text-xs text-gray-500">
+                      {new Date(booking.createdAt).toLocaleDateString('en-IN')}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedBooking(booking)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                        >
+                          <FaEye size={14} />
+                        </button>
+                        <button
+                          onClick={() => deleteBooking(booking._id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="p-8 text-center text-gray-500">
+                    No bookings found
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      {/* Detail Modal */}
+      {selectedBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-[#0B1530]">Booking Details</h2>
+                <button onClick={() => setSelectedBooking(null)} className="text-gray-400 hover:text-gray-600">✕</button>
+              </div>
+            </div>
+            <div className="p-6 space-y-4">
+              <div className="grid grid-cols-2 gap-4">
+                <div>
+                  <p className="text-xs text-gray-500">Name</p>
+                  <p className="font-semibold">{selectedBooking.name}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Phone</p>
+                  <p className="font-semibold">{selectedBooking.phone}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Email</p>
+                  <p className="font-semibold">{selectedBooking.email}</p>
+                </div>
+                <div>
+                  <p className="text-xs text-gray-500">Service</p>
+                  <p className="font-semibold">{selectedBooking.service}</p>
+                </div>
+              </div>
+              
+              {selectedBooking.message && (
+                <div>
+                  <p className="text-xs text-gray-500">Message</p>
+                  <p className="text-sm bg-gray-50 p-3 rounded-lg">{selectedBooking.message}</p>
+                </div>
+              )}
+
+              {selectedBooking.documents?.length > 0 && (
+                <div>
+                  <p className="text-xs text-gray-500 mb-2">Documents ({selectedBooking.documents.length})</p>
+                  <div className="space-y-2">
+                    {selectedBooking.documents.map((doc, idx) => (
+                      <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
+                        <div className="flex items-center gap-2">
+                          <FaFileAlt className="text-[#C9A227]" />
+                          <span className="text-sm">{doc.name}</span>
+                        </div>
+                        <button
+                          onClick={() => downloadDocument(doc)}
+                          className="text-blue-600 hover:text-blue-800"
+                        >
+                          <FaDownload size={14} />
+                        </button>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+};
+
+export default AdminBookings;

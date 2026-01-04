@@ -43,6 +43,7 @@ import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminDocuments from './pages/admin/AdminDocuments'
+import AdminBookings from './pages/admin/AdminBookings'
 import Booking from './pages/Booking'
 
 // Wrapper component to conditionally show chatbot
@@ -113,6 +114,7 @@ function App() {
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="documents" element={<AdminDocuments />} />
+          <Route path="bookings" element={<AdminBookings />} />
         </Route>
 
         {/* 404 Page */}
