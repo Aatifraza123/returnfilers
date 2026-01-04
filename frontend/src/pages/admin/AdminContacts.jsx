@@ -21,7 +21,7 @@ const AdminContacts = () => {
       const { data } = await api.get('/contacts');
       
       if (data.success) {
-        setContacts(data.data);
+        setContacts(data.contacts || data.data || []);
       }
     } catch (error) {
       console.error('Error fetching contacts:', error);

@@ -21,7 +21,7 @@ const AdminConsultations = () => {
       const { data } = await api.get('/consultations');
       
       if (data.success) {
-        setConsultations(data.data);
+        setConsultations(data.consultations || data.data || []);
       }
     } catch (error) {
       console.error('Error fetching consultations:', error);
