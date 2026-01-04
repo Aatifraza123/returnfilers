@@ -309,20 +309,20 @@ const Home = () => {
       </section>
 
       {/* ==================== PREMIUM SERVICES SECTION ==================== */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-12 md:py-16 bg-[#F9FAFB]">
         <div className="container mx-auto max-w-7xl px-6">
           <motion.div
             initial="hidden"
             whileInView="visible"
             viewport={{ once: true }}
             variants={containerVariants}
-            className="text-center mb-14"
+            className="text-center mb-16"
           >
-            <span className="inline-block px-4 py-1.5 bg-[#D4AF37]/10 text-[#D4AF37] text-xs font-bold uppercase tracking-wider rounded-full mb-4">Our Expertise</span>
-            <h2 className="text-3xl lg:text-4xl font-serif font-bold mb-4 text-[#0B1530]">
+            <span className="text-[#D4AF37] font-bold tracking-widest uppercase text-sm">Our Expertise</span>
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold mt-3 mb-3 text-[#0B1530]">
               Comprehensive Solutions
             </h2>
-            <p className="text-gray-500 max-w-2xl mx-auto">
+            <p className="text-gray-600 max-w-2xl mx-auto text-base font-light">
               Navigating the complexities of finance with precision and integrity.
             </p>
           </motion.div>
@@ -338,24 +338,19 @@ const Home = () => {
               <motion.div
                 key={idx}
                 variants={cardVariants}
-                whileHover={{ y: -8 }}
-                className="relative bg-gradient-to-b from-white to-gray-50 p-6 rounded-xl border border-gray-100 hover:border-[#D4AF37]/40 shadow-sm hover:shadow-2xl transition-all duration-300 group overflow-hidden"
+                whileHover={{ y: -5 }}
+                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-[#D4AF37]/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
               >
-                {/* Decorative corner */}
-                <div className="absolute top-0 right-0 w-20 h-20 bg-[#D4AF37]/5 rounded-bl-full group-hover:bg-[#D4AF37]/10 transition-colors"></div>
-                
-                <div className="relative z-10">
-                  <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#D4AF37] text-xl mb-5 group-hover:scale-110 transition-transform">
-                    {service.icon}
-                  </div>
-                  <h3 className="text-lg font-bold text-[#0B1530] mb-2">{service.title}</h3>
-                  <p className="text-gray-500 text-sm leading-relaxed mb-5">
-                     {service.desc}
-                  </p>
-                  <Link to={`/expertise/${service.slug}`} className="inline-flex items-center gap-2 text-sm font-semibold text-[#D4AF37] hover:text-[#0B1530] transition-colors group/link">
-                    Learn More <FaArrowRight size={10} className="group-hover/link:translate-x-1 transition-transform" />
-                  </Link>
+                <div className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-6 group-hover:bg-[#0B1530] group-hover:text-[#D4AF37] transition-colors">
+                  {service.icon}
                 </div>
+                <h3 className="text-xl font-bold text-[#0B1530] mb-3">{service.title}</h3>
+                <p className="text-gray-600 text-base leading-relaxed mb-6">
+                   {service.desc}
+                </p>
+                <Link to={`/expertise/${service.slug}`} className="text-base font-bold text-[#0B1530] hover:text-[#D4AF37] flex items-center gap-2 transition-colors">
+                  Read More <FaArrowRight size={12} />
+                </Link>
               </motion.div>
             ))}
           </motion.div>
