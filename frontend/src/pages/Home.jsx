@@ -1,5 +1,5 @@
-import { useState, useEffect } from 'react';
-import { motion } from 'framer-motion';
+import { useState, useEffect, useCallback } from 'react';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import ConsultationModal from '../components/common/ConsultationModal'; // Import the Modal
 import api from '../api/axios';
@@ -14,16 +14,36 @@ import {
   FaUserTie,
   FaStar,
   FaArrowRight,
-  FaBriefcase
+  FaBriefcase,
+  FaChevronLeft,
+  FaChevronRight
 } from 'react-icons/fa';
 
 const Home = () => {
   // State to control the modal
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
+  const [currentTestimonial, setCurrentTestimonial] = useState(0);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
+
+  // Carousel navigation
+  const nextTestimonial = useCallback(() => {
+    setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
+  }, [testimonials.length]);
+
+  const prevTestimonial = useCallback(() => {
+    setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
+  }, [testimonials.length]);
+
+  // Auto-slide every 5 seconds
+  useEffect(() => {
+    if (testimonials.length > 1) {
+      const interval = setInterval(nextTestimonial, 5000);
+      return () => clearInterval(interval);
+    }
+  }, [testimonials.length, nextTestimonial]);
 
   // Fetch testimonials
   useEffect(() => {
@@ -440,112 +460,93 @@ const Home = () => {
             </p>
           </motion.div>
           
-          {/* Marquee Container */}
-          <div className="relative">
-            {/* Gradient Overlays */}
-            <div className="absolute left-0 top-0 bottom-0 w-32 bg-gradient-to-r from-gray-50 to-transparent z-10 pointer-events-none"></div>
-            <div className="absolute right-0 top-0 bottom-0 w-32 bg-gradient-to-l from-gray-50 to-transparent z-10 pointer-events-none"></div>
-            
-            {/* Marquee */}
-            <div className="overflow-hidden py-4">
-              <motion.div
-                className="flex gap-6"
-                animate={{
-                  x: [0, '-50%'],
-                }}
-                transition={{
-                  x: {
-                    repeat: Infinity,
-                    repeatType: "loop",
-                    duration: 25,
-                    ease: "linear",
-                  },
-                }}
-              >
-                {/* First set of testimonials */}
-                {testimonials.map((t, idx) => (
-                  <div
-                    key={`first-${idx}`}
-                    className="flex-shrink-0 w-[380px] md:w-[420px] bg-transparent p-7 rounded-2xl relative group"
-                  >
-                    {/* Quote Icon */}
-                    <div className="absolute -top-3 -left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                      </svg>
+          {/* Carousel Container */}
+          <div className="relative max-w-4xl mx-auto">
+            {/* Navigation Buttons */}
+            {testimonials.length > 1 && (
+              <>
+                <button
+                  onClick={prevTestimonial}
+                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 md:-translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  aria-label="Previous testimonial"
+                >
+                  <FaChevronLeft size={18} />
+                </button>
+                <button
+                  onClick={nextTestimonial}
+                  className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-4 md:translate-x-12 z-10 w-12 h-12 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#D4AF37] hover:text-white transition-all"
+                  aria-label="Next testimonial"
+                >
+                  <FaChevronRight size={18} />
+                </button>
+              </>
+            )}
+
+            {/* Testimonial Card */}
+            <div className="overflow-hidden px-4">
+              <AnimatePresence mode="wait">
+                <motion.div
+                  key={currentTestimonial}
+                  initial={{ opacity: 0, x: 50 }}
+                  animate={{ opacity: 1, x: 0 }}
+                  exit={{ opacity: 0, x: -50 }}
+                  transition={{ duration: 0.3 }}
+                  className="bg-white p-8 md:p-10 rounded-2xl shadow-xl relative"
+                >
+                  {/* Quote Icon */}
+                  <div className="absolute -top-5 left-8 w-14 h-14 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
+                    <svg className="w-7 h-7 text-white" fill="currentColor" viewBox="0 0 24 24">
+                      <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                    </svg>
+                  </div>
+                  
+                  {/* Stars */}
+                  <div className="flex gap-1 mb-6 pt-4 justify-center">
+                    {[...Array(5)].map((_, i) => (
+                      <FaStar 
+                        key={i} 
+                        size={20} 
+                        className={i < testimonials[currentTestimonial]?.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
+                      />
+                    ))}
+                  </div>
+                  
+                  {/* Quote */}
+                  <p className="text-gray-600 text-center text-lg md:text-xl leading-relaxed mb-8 italic">
+                    "{testimonials[currentTestimonial]?.quote}"
+                  </p>
+                  
+                  {/* Author */}
+                  <div className="flex flex-col items-center gap-3 pt-6 border-t border-gray-100">
+                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md">
+                      {testimonials[currentTestimonial]?.name?.charAt(0)}
                     </div>
-                    
-                    {/* Stars */}
-                    <div className="flex gap-1 mb-4 pt-2">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar 
-                          key={i} 
-                          size={16} 
-                          className={i < t.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
-                        />
-                      ))}
-                    </div>
-                    
-                    {/* Quote */}
-                    <p className="text-gray-600 mb-6 text-sm md:text-base leading-relaxed line-clamp-4">
-                      "{t.quote}"
-                    </p>
-                    
-                    {/* Author */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-lg shadow-md">
-                        {t.name?.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="font-bold text-[#0B1530] text-base">{t.name}</div>
-                        <div className="text-xs text-gray-500">{t.title}</div>
-                      </div>
+                    <div className="text-center">
+                      <div className="font-bold text-[#0B1530] text-lg">{testimonials[currentTestimonial]?.name}</div>
+                      <div className="text-sm text-gray-500">{testimonials[currentTestimonial]?.title}</div>
                     </div>
                   </div>
-                ))}
-                {/* Duplicate for seamless loop */}
-                {testimonials.map((t, idx) => (
-                  <div
-                    key={`second-${idx}`}
-                    className="flex-shrink-0 w-[380px] md:w-[420px] bg-transparent p-7 rounded-2xl relative group"
-                  >
-                    {/* Quote Icon */}
-                    <div className="absolute -top-3 -left-3 w-10 h-10 bg-[#D4AF37] rounded-full flex items-center justify-center shadow-lg">
-                      <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
-                        <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
-                      </svg>
-                    </div>
-                    
-                    {/* Stars */}
-                    <div className="flex gap-1 mb-4 pt-2">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar 
-                          key={i} 
-                          size={16} 
-                          className={i < t.rating ? 'text-[#D4AF37]' : 'text-gray-200'} 
-                        />
-                      ))}
-                    </div>
-                    
-                    {/* Quote */}
-                    <p className="text-gray-600 mb-6 text-sm md:text-base leading-relaxed line-clamp-4">
-                      "{t.quote}"
-                    </p>
-                    
-                    {/* Author */}
-                    <div className="flex items-center gap-3 pt-4 border-t border-gray-100">
-                      <div className="w-12 h-12 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-lg shadow-md">
-                        {t.name?.charAt(0)}
-                      </div>
-                      <div>
-                        <div className="font-bold text-[#0B1530] text-base">{t.name}</div>
-                        <div className="text-xs text-gray-500">{t.title}</div>
-                      </div>
-                    </div>
-                  </div>
-                ))}
-              </motion.div>
+                </motion.div>
+              </AnimatePresence>
             </div>
+
+            {/* Dots Navigation */}
+            {testimonials.length > 1 && (
+              <div className="flex justify-center gap-2 mt-8">
+                {testimonials.map((_, idx) => (
+                  <button
+                    key={idx}
+                    onClick={() => setCurrentTestimonial(idx)}
+                    className={`w-3 h-3 rounded-full transition-all ${
+                      idx === currentTestimonial 
+                        ? 'bg-[#D4AF37] w-8' 
+                        : 'bg-gray-300 hover:bg-gray-400'
+                    }`}
+                    aria-label={`Go to testimonial ${idx + 1}`}
+                  />
+                ))}
+              </div>
+            )}
           </div>
         </div>
       </section>

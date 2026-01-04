@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock } from 'react-icons/fa';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 
@@ -31,6 +31,7 @@ const DocumentUpload = () => {
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
+  const [consent, setConsent] = useState(false);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -97,6 +98,11 @@ const DocumentUpload = () => {
       return;
     }
 
+    if (!consent) {
+      toast.error('Please accept the terms and conditions');
+      return;
+    }
+
     setLoading(true);
 
     try {
@@ -148,6 +154,7 @@ const DocumentUpload = () => {
               setSubmitted(false);
               setFormData({ name: '', email: '', phone: '', service: '', message: '' });
               setFiles([]);
+              setConsent(false);
             }}
             className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-colors"
           >
@@ -302,6 +309,37 @@ const DocumentUpload = () => {
                   ))}
                 </div>
               )}
+            </div>
+
+            {/* Consent Checkbox */}
+            <div className="mb-5 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+              <label className="flex items-start gap-3 cursor-pointer">
+                <input
+                  type="checkbox"
+                  checked={consent}
+                  onChange={(e) => setConsent(e.target.checked)}
+                  className="mt-1 w-4 h-4 text-[#D4AF37] border-gray-300 rounded focus:ring-[#D4AF37]"
+                />
+                <span className="text-sm text-gray-700">
+                  I agree to the <strong>Terms & Conditions</strong> and authorize Tax Filer to securely store and process my documents for the requested service. I understand that my data will be kept <strong>100% confidential</strong> and will only be used for professional purposes.
+                </span>
+              </label>
+            </div>
+
+            {/* Trust Badges */}
+            <div className="flex flex-wrap items-center justify-center gap-4 mb-5 py-3 border-y border-gray-100">
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <FaShieldAlt className="text-green-500" />
+                <span>100% Secure</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <FaLock className="text-green-500" />
+                <span>Data Encrypted</span>
+              </div>
+              <div className="flex items-center gap-2 text-xs text-gray-600">
+                <FaCheckCircle className="text-green-500" />
+                <span>Confidential</span>
+              </div>
             </div>
 
             {/* Submit Button */}
