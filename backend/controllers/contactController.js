@@ -1,4 +1,5 @@
 const Contact = require('../models/Contact');
+const mongoose = require('mongoose');
 const { sendEmail, sendBulkEmails } = require('../utils/emailService');
 const nodemailer = require('nodemailer');
 
@@ -213,6 +214,14 @@ const getContacts = async (req, res) => {
 // @access  Private/Admin
 const getContactById = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid contact ID format'
+      });
+    }
+
     const contact = await Contact.findById(req.params.id);
 
     if (!contact) {
@@ -227,9 +236,10 @@ const getContactById = async (req, res) => {
       data: contact
     });
   } catch (error) {
+    console.error('Get contact by ID error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to get contact'
     });
   }
 };
@@ -239,6 +249,14 @@ const getContactById = async (req, res) => {
 // @access  Private/Admin
 const updateContact = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid contact ID format'
+      });
+    }
+
     const { status } = req.body;
 
     const contact = await Contact.findByIdAndUpdate(
@@ -260,9 +278,10 @@ const updateContact = async (req, res) => {
       data: contact
     });
   } catch (error) {
+    console.error('Update contact error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to update contact'
     });
   }
 };
@@ -272,6 +291,14 @@ const updateContact = async (req, res) => {
 // @access  Private/Admin
 const deleteContact = async (req, res) => {
   try {
+    // Validate ObjectId
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+      return res.status(400).json({
+        success: false,
+        message: 'Invalid contact ID format'
+      });
+    }
+
     const contact = await Contact.findByIdAndDelete(req.params.id);
 
     if (!contact) {
@@ -286,9 +313,10 @@ const deleteContact = async (req, res) => {
       message: 'Contact deleted successfully'
     });
   } catch (error) {
+    console.error('Delete contact error:', error);
     res.status(500).json({
       success: false,
-      message: error.message
+      message: error.message || 'Failed to delete contact'
     });
   }
 };
