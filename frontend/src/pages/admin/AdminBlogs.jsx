@@ -30,11 +30,64 @@ const AdminBlogs = () => {
   const [showTableModal, setShowTableModal] = useState(false);
   const [tableRows, setTableRows] = useState(3);
   const [tableCols, setTableCols] = useState(3);
+  const [tableData, setTableData] = useState([]);
   const [formData, setFormData] = useState({
     title: '', content: '', image: ''
   });
   const quillRef = useRef(null);
   const fileInputRef = useRef(null);
+
+  // Initialize table data when modal opens
+  const initTableData = (rows, cols) => {
+    const data = [];
+    for (let r = 0; r < rows; r++) {
+      const row = [];
+      for (let c = 0; c < cols; c++) {
+        row.push(r === 0 ? `Header ${c + 1}` : 'Cell');
+      }
+      data.push(row);
+    }
+    setTableData(data);
+  };
+
+  // Update cell value
+  const updateCell = (rowIndex, colIndex, value) => {
+    const newData = [...tableData];
+    newData[rowIndex][colIndex] = value;
+    setTableData(newData);
+  };
+
+  // Add row
+  const addRow = () => {
+    const newRow = tableData[0].map(() => 'Cell');
+    setTableData([...tableData, newRow]);
+  };
+
+  // Remove row
+  const removeRow = (index) => {
+    if (tableData.length <= 2) {
+      toast.error('Table must have at least 2 rows');
+      return;
+    }
+    const newData = tableData.filter((_, i) => i !== index);
+    setTableData(newData);
+  };
+
+  // Add column
+  const addColumn = () => {
+    const newData = tableData.map((row, i) => [...row, i === 0 ? 'Header' : 'Cell']);
+    setTableData(newData);
+  };
+
+  // Remove column
+  const removeColumn = (index) => {
+    if (tableData[0].length <= 2) {
+      toast.error('Table must have at least 2 columns');
+      return;
+    }
+    const newData = tableData.map(row => row.filter((_, i) => i !== index));
+    setTableData(newData);
+  };
 
   // Helper for Token Headers
   const getConfig = () => {
@@ -221,17 +274,19 @@ const AdminBlogs = () => {
 
     const range = quill.getSelection(true);
     
-    // Create table HTML
+    // Create table HTML from tableData
     let tableHtml = '<table><thead><tr>';
-    for (let c = 0; c < tableCols; c++) {
-      tableHtml += `<th>Header ${c + 1}</th>`;
-    }
+    // First row is header
+    tableData[0].forEach(cell => {
+      tableHtml += `<th>${cell}</th>`;
+    });
     tableHtml += '</tr></thead><tbody>';
-    for (let r = 0; r < tableRows - 1; r++) {
+    // Rest are body rows
+    for (let r = 1; r < tableData.length; r++) {
       tableHtml += '<tr>';
-      for (let c = 0; c < tableCols; c++) {
-        tableHtml += '<td>Cell</td>';
-      }
+      tableData[r].forEach(cell => {
+        tableHtml += `<td>${cell}</td>`;
+      });
       tableHtml += '</tr>';
     }
     tableHtml += '</tbody></table><p><br></p>';
@@ -239,8 +294,9 @@ const AdminBlogs = () => {
     // Insert at cursor position
     quill.clipboard.dangerouslyPasteHTML(range.index, tableHtml);
     setShowTableModal(false);
+    setTableData([]);
     toast.success('Table inserted!');
-  }, [tableRows, tableCols]);
+  }, [tableData]);
 
   // Advanced Quill modules configuration
   const quillModules = useMemo(() => ({
@@ -580,54 +636,159 @@ const AdminBlogs = () => {
         </div>
       )}
 
-      {/* Table Insert Modal */}
+      {/* Table Editor Modal */}
       {showTableModal && (
         <>
           <div 
             className="fixed inset-0 bg-black/50 z-40"
             onClick={() => setShowTableModal(false)}
           />
-          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl p-6 z-50 w-80">
-            <h3 className="text-lg font-bold text-[#0B1530] mb-4">Insert Table</h3>
-            <div className="space-y-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Rows</label>
-                <input
-                  type="number"
-                  min="2"
-                  max="20"
-                  value={tableRows}
-                  onChange={(e) => setTableRows(parseInt(e.target.value) || 2)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1">Columns</label>
-                <input
-                  type="number"
-                  min="2"
-                  max="10"
-                  value={tableCols}
-                  onChange={(e) => setTableCols(parseInt(e.target.value) || 2)}
-                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
-                />
-              </div>
-              <div className="flex gap-3 pt-2">
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl z-50 w-[90%] max-w-3xl max-h-[90vh] overflow-hidden">
+            <div className="p-4 bg-[#0B1530] text-white flex justify-between items-center">
+              <h3 className="text-lg font-bold">Table Editor</h3>
+              <button 
+                onClick={() => setShowTableModal(false)}
+                className="text-white/70 hover:text-white text-xl"
+              >
+                ✕
+              </button>
+            </div>
+            
+            <div className="p-4 overflow-auto max-h-[60vh]">
+              {tableData.length === 0 ? (
+                <div className="space-y-4">
+                  <p className="text-gray-600 text-sm">Select table size to start:</p>
+                  <div className="flex gap-4">
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Rows</label>
+                      <input
+                        type="number"
+                        min="2"
+                        max="20"
+                        value={tableRows}
+                        onChange={(e) => setTableRows(parseInt(e.target.value) || 2)}
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Columns</label>
+                      <input
+                        type="number"
+                        min="2"
+                        max="10"
+                        value={tableCols}
+                        onChange={(e) => setTableCols(parseInt(e.target.value) || 2)}
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                      />
+                    </div>
+                    <div className="flex items-end">
+                      <button
+                        type="button"
+                        onClick={() => initTableData(tableRows, tableCols)}
+                        className="bg-[#D4AF37] text-[#0B1530] px-4 py-2 rounded-lg font-medium hover:bg-[#c9a432] transition-colors"
+                      >
+                        Create Table
+                      </button>
+                    </div>
+                  </div>
+                </div>
+              ) : (
+                <div>
+                  {/* Action Buttons */}
+                  <div className="flex gap-2 mb-4">
+                    <button
+                      type="button"
+                      onClick={addRow}
+                      className="px-3 py-1.5 text-xs bg-green-100 text-green-700 rounded hover:bg-green-200 transition-colors"
+                    >
+                      + Add Row
+                    </button>
+                    <button
+                      type="button"
+                      onClick={addColumn}
+                      className="px-3 py-1.5 text-xs bg-blue-100 text-blue-700 rounded hover:bg-blue-200 transition-colors"
+                    >
+                      + Add Column
+                    </button>
+                  </div>
+                  
+                  {/* Table Editor */}
+                  <div className="overflow-x-auto">
+                    <table className="w-full border-collapse">
+                      <tbody>
+                        {tableData.map((row, rowIndex) => (
+                          <tr key={rowIndex} className={rowIndex === 0 ? 'bg-[#0B1530]' : 'bg-white'}>
+                            {row.map((cell, colIndex) => (
+                              <td key={colIndex} className="border border-gray-300 p-0">
+                                <input
+                                  type="text"
+                                  value={cell}
+                                  onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
+                                  className={`w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#D4AF37] ${
+                                    rowIndex === 0 
+                                      ? 'bg-[#0B1530] text-white font-semibold placeholder-white/50' 
+                                      : 'bg-white text-gray-700'
+                                  }`}
+                                  placeholder={rowIndex === 0 ? 'Header' : 'Cell'}
+                                />
+                              </td>
+                            ))}
+                            <td className="border-0 pl-2">
+                              {rowIndex > 0 && (
+                                <button
+                                  type="button"
+                                  onClick={() => removeRow(rowIndex)}
+                                  className="text-red-500 hover:text-red-700 text-sm"
+                                  title="Remove row"
+                                >
+                                  ✕
+                                </button>
+                              )}
+                            </td>
+                          </tr>
+                        ))}
+                        {/* Column remove buttons */}
+                        <tr>
+                          {tableData[0]?.map((_, colIndex) => (
+                            <td key={colIndex} className="border-0 pt-2 text-center">
+                              <button
+                                type="button"
+                                onClick={() => removeColumn(colIndex)}
+                                className="text-red-500 hover:text-red-700 text-xs"
+                                title="Remove column"
+                              >
+                                ✕ Remove
+                              </button>
+                            </td>
+                          ))}
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              )}
+            </div>
+            
+            <div className="p-4 bg-gray-50 border-t flex justify-end gap-3">
+              <button
+                type="button"
+                onClick={() => {
+                  setShowTableModal(false);
+                  setTableData([]);
+                }}
+                className="px-4 py-2 text-gray-600 hover:text-gray-800 transition-colors"
+              >
+                Cancel
+              </button>
+              {tableData.length > 0 && (
                 <button
                   type="button"
                   onClick={insertTable}
-                  className="flex-1 bg-[#0B1530] text-white py-2 rounded-lg font-medium hover:bg-[#1a2b5c] transition-colors"
+                  className="px-6 py-2 bg-[#0B1530] text-white rounded-lg font-medium hover:bg-[#1a2b5c] transition-colors"
                 >
-                  Insert
+                  Insert Table
                 </button>
-                <button
-                  type="button"
-                  onClick={() => setShowTableModal(false)}
-                  className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors"
-                >
-                  Cancel
-                </button>
-              </div>
+              )}
             </div>
           </div>
         </>
