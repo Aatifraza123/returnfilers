@@ -299,9 +299,9 @@ const Home = () => {
 
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 px-6 py-3 bg-[#0B1530] text-white rounded-full font-semibold hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all"
+                className="inline-flex items-center gap-2 text-[#0B1530] font-semibold hover:text-[#D4AF37] transition-all group"
               >
-                Learn More About Us <FaArrowRight size={12} />
+                Learn More About Us <FaArrowRight size={12} className="group-hover:translate-x-1 transition-transform" />
               </Link>
             </motion.div>
           </div>
