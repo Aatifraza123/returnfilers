@@ -74,8 +74,8 @@ const MessageContent = ({ content, isUser }) => {
 const formatText = (text) => {
   if (!text) return null;
   
-  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs
-  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+)/gi);
+  // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs, emails
+  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,})/gi);
   
   return parts.map((part, idx) => {
     if (!part) return null;
@@ -100,6 +100,18 @@ const formatText = (text) => {
           target="_blank" 
           rel="noopener noreferrer" 
           className="text-sky-500 hover:text-sky-600 underline break-all"
+        >
+          {part}
+        </a>
+      );
+    }
+    // Email - clickable with sky blue color
+    if (part.match(/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/i)) {
+      return (
+        <a 
+          key={idx} 
+          href={`mailto:${part}`} 
+          className="text-sky-500 hover:text-sky-600 underline"
         >
           {part}
         </a>
