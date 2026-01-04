@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader'; 
-import { FaCheck, FaSearch, FaArrowRight, FaRupeeSign, FaClock, FaEye } from 'react-icons/fa';
+import { FaCheck, FaSearch, FaArrowRight, FaRupeeSign, FaClock } from 'react-icons/fa';
 import ConsultationModal from '../components/common/ConsultationModal';
 
 const Services = () => {
@@ -101,95 +101,90 @@ const Services = () => {
         <div className="container mx-auto px-6 max-w-7xl">
           
           {filteredServices.length > 0 ? (
-            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-8">
+            <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredServices.map((service, index) => (
                 <div
                   key={service._id || index}
-                  className="group bg-white rounded-2xl overflow-hidden border border-gray-100 hover:border-[#D4AF37]/30 shadow-sm hover:shadow-xl transition-all duration-500 flex flex-col"
+                  className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-[#D4AF37]/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
                 >
                   {/* Image */}
-                  <Link to={`/services/${service._id}`} className="block relative h-56 overflow-hidden">
+                  <Link to={`/services/${service._id}`} className="block relative h-48 overflow-hidden">
                     <img
                       src={service.image || "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80"} 
                       alt={service.title}
-                      className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-700"
+                      className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
                       onError={(e) => { e.target.src = "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80"; }}
                     />
                     
                     {/* Gradient Overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-black/20 to-transparent" />
+                    <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                     
                     {/* Category Badge */}
-                    <span className="absolute top-4 left-4 px-3 py-1.5 bg-white text-[#0B1530] text-[11px] font-bold uppercase tracking-wide rounded-lg shadow-md">
+                    <span className="absolute top-3 left-3 px-2.5 py-1 bg-white/95 text-[#0B1530] text-[10px] font-bold uppercase tracking-wide rounded-md">
                       {service.category}
                     </span>
 
-                    {/* View Button on Hover */}
-                    <div className="absolute inset-0 flex items-center justify-center opacity-0 group-hover:opacity-100 transition-all duration-300">
-                      <span className="flex items-center gap-2 px-5 py-2.5 bg-white text-[#0B1530] text-sm font-bold rounded-full shadow-xl transform translate-y-4 group-hover:translate-y-0 transition-transform duration-300">
-                        <FaEye size={14} /> View Details
-                      </span>
-                    </div>
-
-                    {/* Price Badge */}
-                    <div className="absolute bottom-4 left-4 right-4 flex items-end justify-between">
-                      <h3 className="text-xl font-bold text-white line-clamp-2 pr-4 drop-shadow-lg">
+                    {/* Title on Image */}
+                    <div className="absolute bottom-3 left-3 right-3">
+                      <h3 className="text-lg font-bold text-white line-clamp-2 drop-shadow-lg">
                         {service.title}
                       </h3>
-                      <div className="flex-shrink-0 bg-[#D4AF37] text-[#0B1530] px-4 py-2 rounded-xl font-bold text-base shadow-lg flex items-center gap-1">
-                        <FaRupeeSign size={12} />
-                        {service.price && !isNaN(Number(service.price)) 
-                          ? Number(service.price).toLocaleString() 
-                          : 'Quote'}
-                      </div>
                     </div>
                   </Link>
 
                   {/* Content */}
-                  <div className="p-6 flex flex-col flex-grow">
+                  <div className="p-5 flex flex-col flex-grow">
+                    {/* Price & Timeline Row */}
+                    <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
+                      <div className="flex items-center gap-1 text-[#D4AF37]">
+                        <FaRupeeSign size={14} />
+                        <span className="text-xl font-bold">
+                          {service.price && !isNaN(Number(service.price)) 
+                            ? Number(service.price).toLocaleString() 
+                            : 'Quote'}
+                        </span>
+                      </div>
+                      <div className="flex items-center gap-1.5 text-gray-400 text-xs">
+                        <FaClock size={10} />
+                        <span>{service.timeline || '3-7 Days'}</span>
+                      </div>
+                    </div>
+
                     {/* Description */}
-                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-3 mb-5 flex-grow">
+                    <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-4 flex-grow">
                       {service.description}
                     </p>
 
                     {/* Features */}
                     {service.features && service.features.length > 0 && (
-                      <div className="space-y-2 mb-5 pb-5 border-b border-gray-100">
-                        {service.features.slice(0, 3).map((feature, idx) => (
-                          <div key={idx} className="flex items-center gap-2.5">
-                            <div className="w-5 h-5 rounded-full bg-[#D4AF37]/10 flex items-center justify-center flex-shrink-0">
-                              <FaCheck size={9} className="text-[#D4AF37]" />
-                            </div>
-                            <span className="text-sm text-gray-600 line-clamp-1">{feature}</span>
+                      <div className="space-y-1.5 mb-4">
+                        {service.features.slice(0, 2).map((feature, idx) => (
+                          <div key={idx} className="flex items-center gap-2">
+                            <FaCheck size={8} className="text-[#D4AF37]" />
+                            <span className="text-xs text-gray-600 line-clamp-1">{feature}</span>
                           </div>
                         ))}
-                        {service.features.length > 3 && (
-                          <p className="text-xs text-[#D4AF37] font-medium pl-7">
-                            +{service.features.length - 3} more features
+                        {service.features.length > 2 && (
+                          <p className="text-[10px] text-[#D4AF37] font-medium">
+                            +{service.features.length - 2} more
                           </p>
                         )}
                       </div>
                     )}
 
-                    {/* Timeline Badge */}
-                    <div className="flex items-center gap-2 mb-5 text-gray-400 text-xs">
-                      <FaClock size={12} />
-                      <span>Delivery: {service.timeline || '3-7 Working Days'}</span>
-                    </div>
-
                     {/* Buttons */}
-                    <div className="grid grid-cols-2 gap-3 mt-auto">
+                    <div className="grid grid-cols-2 gap-2 mt-auto">
                       <Link
                         to={`/services/${service._id}`}
-                        className="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-[#0B1530] bg-gray-100 rounded-xl hover:bg-gray-200 transition-colors"
+                        className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-[#0B1530] bg-gray-100 rounded-lg hover:bg-gray-200 transition-colors"
                       >
-                        Learn More
+                        View Details
                       </Link>
                       <button
                         onClick={() => openModal(service)}
-                        className="flex items-center justify-center gap-2 py-3 text-sm font-semibold text-white bg-[#0B1530] rounded-xl hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all shadow-lg shadow-[#0B1530]/20"
+                        className="flex items-center justify-center gap-1.5 py-2.5 text-xs font-semibold text-white bg-[#0B1530] rounded-lg hover:bg-[#D4AF37] hover:text-[#0B1530] transition-all"
                       >
-                        Book Now <FaArrowRight size={11} />
+                        Book Now <FaArrowRight size={9} />
                       </button>
                     </div>
                   </div>
