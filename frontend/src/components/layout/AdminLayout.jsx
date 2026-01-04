@@ -19,7 +19,9 @@ import {
   FaPhone,
   FaClock,
   FaFolderOpen,
-  FaCalendarCheck
+  FaCalendarCheck,
+  FaChevronLeft,
+  FaChevronRight
 } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
@@ -29,9 +31,18 @@ const AdminLayout = () => {
   const navigate = useNavigate();
   const { user, logout } = useAuth();
   const [sidebarOpen, setSidebarOpen] = useState(false);
+  const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
+    const saved = localStorage.getItem('sidebarCollapsed');
+    return saved ? JSON.parse(saved) : false;
+  });
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+
+  // Save collapsed state to localStorage
+  useEffect(() => {
+    localStorage.setItem('sidebarCollapsed', JSON.stringify(sidebarCollapsed));
+  }, [sidebarCollapsed]);
 
   // Fetch notifications (pending items)
   const fetchNotifications = async () => {
@@ -164,22 +175,24 @@ const AdminLayout = () => {
       {/* Sidebar */}
       <aside className={`
         fixed lg:static inset-y-0 left-0 z-50
-        w-56 bg-gradient-to-b from-[#0B1530] to-[#1a2b5e] text-white
-        transform transition-transform duration-300 ease-in-out
+        ${sidebarCollapsed ? 'w-16' : 'w-56'} bg-gradient-to-b from-[#0B1530] to-[#1a2b5e] text-white
+        transform transition-all duration-300 ease-in-out
         ${sidebarOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
         shadow-2xl flex flex-col h-screen
       `}>
         {/* Sidebar Header */}
-        <div className="p-4 border-b border-white/10 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] flex-shrink-0">
+        <div className={`${sidebarCollapsed ? 'p-2' : 'p-4'} border-b border-white/10 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] flex-shrink-0`}>
           <div className="flex items-center justify-between">
-            <div className="flex items-center gap-2">
-              <div className="w-10 h-10 rounded-lg bg-[#C9A227] flex items-center justify-center">
+            <div className={`flex items-center ${sidebarCollapsed ? 'justify-center w-full' : 'gap-2'}`}>
+              <div className={`${sidebarCollapsed ? 'w-10 h-10' : 'w-10 h-10'} rounded-lg bg-[#C9A227] flex items-center justify-center`}>
                 <FaChartPie className="text-[#0B1530] text-lg" />
               </div>
-              <div>
-                <h2 className="text-base font-bold text-[#C9A227]">Admin Panel</h2>
-                <p className="text-xs text-gray-400">Tax Filer</p>
-              </div>
+              {!sidebarCollapsed && (
+                <div>
+                  <h2 className="text-base font-bold text-[#C9A227]">Admin Panel</h2>
+                  <p className="text-xs text-gray-400">Tax Filer</p>
+                </div>
+              )}
             </div>
             <button 
               onClick={() => setSidebarOpen(false)}
@@ -200,8 +213,9 @@ const AdminLayout = () => {
                   key={item.path}
                   to={item.path}
                   onClick={() => setSidebarOpen(false)}
+                  title={sidebarCollapsed ? item.label : ''}
                   className={`
-                    flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm
+                    flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 rounded-lg text-sm
                     transition-all duration-200 group relative
                     ${active 
                       ? 'bg-[#C9A227] text-[#0B1530] font-semibold shadow-lg shadow-[#C9A227]/20' 
@@ -212,14 +226,18 @@ const AdminLayout = () => {
                   <span className={`text-lg flex-shrink-0 ${active ? 'text-[#0B1530]' : 'text-gray-400 group-hover:text-[#C9A227] transition-colors'}`}>
                     {item.icon}
                   </span>
-                  <span className="flex-1 font-medium">{item.label}</span>
-                  {item.badge && (
-                    <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                      {item.badge}
-                    </span>
-                  )}
-                  {active && (
-                    <span className="absolute right-2 w-1.5 h-1.5 bg-[#0B1530] rounded-full"></span>
+                  {!sidebarCollapsed && (
+                    <>
+                      <span className="flex-1 font-medium">{item.label}</span>
+                      {item.badge && (
+                        <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                          {item.badge}
+                        </span>
+                      )}
+                      {active && (
+                        <span className="absolute right-2 w-1.5 h-1.5 bg-[#0B1530] rounded-full"></span>
+                      )}
+                    </>
                   )}
                 </Link>
               );
@@ -227,14 +245,33 @@ const AdminLayout = () => {
           </div>
         </nav>
 
+        {/* Collapse Toggle Button (Desktop Only) */}
+        <div className="hidden lg:block px-2 py-2 border-t border-white/10">
+          <button 
+            onClick={() => setSidebarCollapsed(!sidebarCollapsed)}
+            className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 w-full rounded-lg hover:bg-white/10 text-gray-300 hover:text-[#C9A227] transition-all group text-sm font-medium`}
+            title={sidebarCollapsed ? 'Expand Sidebar' : 'Collapse Sidebar'}
+          >
+            {sidebarCollapsed ? (
+              <FaChevronRight className="text-base group-hover:scale-110 transition-transform" />
+            ) : (
+              <>
+                <FaChevronLeft className="text-base group-hover:scale-110 transition-transform" />
+                <span>Collapse</span>
+              </>
+            )}
+          </button>
+        </div>
+
         {/* Logout Button */}
         <div className="p-3 border-t border-white/10 bg-white/5 flex-shrink-0">
           <button 
             onClick={handleLogout}
-            className="flex items-center gap-3 px-3 py-2.5 w-full rounded-lg hover:bg-red-600/20 text-red-400 hover:text-red-300 transition-all group text-sm font-medium"
+            title={sidebarCollapsed ? 'Logout' : ''}
+            className={`flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 w-full rounded-lg hover:bg-red-600/20 text-red-400 hover:text-red-300 transition-all group text-sm font-medium`}
           >
             <FaSignOutAlt className="text-base group-hover:scale-110 transition-transform" />
-            <span>Logout</span>
+            {!sidebarCollapsed && <span>Logout</span>}
           </button>
         </div>
       </aside>
