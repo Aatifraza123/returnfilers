@@ -6,11 +6,53 @@ import toast from 'react-hot-toast';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
-import { FaArrowLeft, FaSave, FaImage, FaCloudUploadAlt, FaMagic } from 'react-icons/fa';
+import { FaArrowLeft, FaSave, FaImage, FaCloudUploadAlt, FaMagic, FaFileAlt } from 'react-icons/fa';
 import { motion } from 'framer-motion';
 
 // Register ImageResize module
 Quill.register('modules/imageResize', ImageResize);
+
+// Blog Template
+const BLOG_TEMPLATE = `
+<h2>Introduction</h2>
+<p>Write a compelling introduction that explains what this article is about and why readers should care. Keep it concise and engaging.</p>
+
+<h2>Main Topic Heading</h2>
+<p>Explain the main concept or topic in detail. Use clear and simple language that your audience can understand.</p>
+
+<h3>Sub-topic 1</h3>
+<p>Break down complex topics into smaller sections. This makes the content easier to read and understand.</p>
+
+<ul>
+<li><strong>Point 1:</strong> Explain the first key point</li>
+<li><strong>Point 2:</strong> Explain the second key point</li>
+<li><strong>Point 3:</strong> Explain the third key point</li>
+</ul>
+
+<h3>Sub-topic 2</h3>
+<p>Continue with more detailed information. Use examples where possible to illustrate your points.</p>
+
+<h2>Key Benefits / Features</h2>
+<p>List the main benefits or features related to your topic:</p>
+
+<ol>
+<li><strong>Benefit 1</strong> - Description of the first benefit</li>
+<li><strong>Benefit 2</strong> - Description of the second benefit</li>
+<li><strong>Benefit 3</strong> - Description of the third benefit</li>
+</ol>
+
+<h2>Important Information</h2>
+<p>Include any critical information, deadlines, or requirements that readers need to know.</p>
+
+<blockquote>
+<strong>Pro Tip:</strong> Add a helpful tip or important note that provides extra value to your readers.
+</blockquote>
+
+<h2>Conclusion</h2>
+<p>Summarize the key points of your article. Include a call-to-action encouraging readers to take the next step.</p>
+
+<p><strong>Need help?</strong> Contact us today for a free consultation. Our expert team is here to assist you.</p>
+`;
 
 // Custom Link Handler
 const Link = Quill.import('formats/link');
@@ -368,6 +410,22 @@ const AdminBlogsForm = () => {
                    {loading ? <span className="animate-spin">⏳</span> : <FaMagic />}
                    {isEditMode ? 'Update Story' : 'Publish Story'}
                  </button>
+                 {!isEditMode && (
+                   <button 
+                    type="button"
+                    onClick={() => {
+                      if (content && content.length > 50) {
+                        if (!window.confirm('This will replace your current content. Continue?')) return;
+                      }
+                      setContent(BLOG_TEMPLATE);
+                      toast.success('Template loaded! Customize it with your content.');
+                    }}
+                    className="w-full py-3 rounded-lg font-medium text-[#D4AF37] border-2 border-[#D4AF37] hover:bg-[#D4AF37] hover:text-white transition-colors flex items-center justify-center gap-2"
+                   >
+                     <FaFileAlt />
+                     Use Template
+                   </button>
+                 )}
                  <button 
                   type="button"
                   onClick={() => navigate('/admin/blogs')}
