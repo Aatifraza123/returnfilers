@@ -166,30 +166,14 @@ const Home = () => {
                className="hidden lg:block relative h-[500px]"
             >
                {/* Main Image */}
-               <div className="relative w-full h-full rounded-t-[10rem] rounded-b-[2rem] overflow-hidden border-[6px] border-white/10 shadow-2xl">
+               <div className="relative w-full h-full rounded-2xl overflow-hidden border-[6px] border-white/10 shadow-2xl">
                   <img 
-                    src="https://images.unsplash.com/photo-1460925895917-afdab827c52f?q=80&w=2426&auto=format&fit=crop" 
+                    src="https://images.unsplash.com/photo-1554224155-8d04cb21cd6c?q=80&w=2000&auto=format&fit=crop" 
                     alt="Tax and Finance Professional" 
                     className="w-full h-full object-cover"
                   />
-                  <div className="absolute inset-0 bg-[#0B1530]/20 mix-blend-multiply"></div>
+                  <div className="absolute inset-0 bg-[#0B1530]/10 mix-blend-multiply"></div>
                </div>
-
-               {/* Modern Floating Badge */}
-               <motion.div 
-                  initial={{ y: 20, opacity: 0 }}
-                  animate={{ y: 0, opacity: 1 }}
-                  transition={{ delay: 0.8 }}
-                  className="absolute bottom-8 -left-6 bg-white p-5 rounded-xl shadow-xl flex items-center gap-4 max-w-xs"
-               >
-                  <div className="w-12 h-12 bg-[#0B1530] rounded-full flex items-center justify-center text-[#D4AF37] text-xl">
-                     <FaUserTie />
-                  </div>
-                  <div>
-                     <p className="text-[#0B1530] font-bold text-lg">Expert Advice</p>
-                     <p className="text-gray-500 text-sm">Strategic financial planning.</p>
-                  </div>
-               </motion.div>
             </motion.div>
 
           </div>
@@ -211,17 +195,11 @@ const Home = () => {
             >
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img 
-                  src="https://images.unsplash.com/photo-1556761175-5973dc0f32e7?auto=format&fit=crop&q=80&w=800" 
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800" 
                   alt="About Tax Filer" 
                   className="w-full h-[400px] object-cover"
                 />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/60 to-transparent"></div>
-              </div>
-              
-              {/* Experience Badge */}
-              <div className="absolute -bottom-6 -right-6 bg-[#D4AF37] text-[#0B1530] p-6 rounded-2xl shadow-xl">
-                <div className="text-4xl font-serif font-bold">3+</div>
-                <div className="text-sm font-bold uppercase tracking-wider">Years Experience</div>
+                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/40 to-transparent"></div>
               </div>
             </motion.div>
 
@@ -247,15 +225,6 @@ const Home = () => {
               <div className="grid sm:grid-cols-2 gap-4 mb-8">
                 <div className="flex items-start gap-3">
                   <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaAward className="text-[#D4AF37]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0B1530]">Certified Experts</h4>
-                    <p className="text-sm text-gray-500">Qualified CAs & professionals</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
                     <FaUsers className="text-[#D4AF37]" />
                   </div>
                   <div>
@@ -279,6 +248,15 @@ const Home = () => {
                   <div>
                     <h4 className="font-bold text-[#0B1530]">Timely Delivery</h4>
                     <p className="text-sm text-gray-500">Never miss deadlines</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div className="w-10 h-10 bg-[#D4AF37]/10 rounded-lg flex items-center justify-center flex-shrink-0">
+                    <FaChartLine className="text-[#D4AF37]" />
+                  </div>
+                  <div>
+                    <h4 className="font-bold text-[#0B1530]">3+ Years Experience</h4>
+                    <p className="text-sm text-gray-500">Since 2022</p>
                   </div>
                 </div>
               </div>
