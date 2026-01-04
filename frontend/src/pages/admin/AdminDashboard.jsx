@@ -40,12 +40,13 @@ const AdminDashboard = () => {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
 
-      const [servicesRes, blogsRes, consultRes, contactRes, portfolioRes] = await Promise.all([
+      const [servicesRes, blogsRes, consultRes, contactRes, portfolioRes, quotesRes] = await Promise.all([
         api.get('/admin/services', config).catch(() => ({ data: { services: [] } })),
         api.get('/admin/blogs', config).catch(() => ({ data: [] })),
         api.get('/consultations', config).catch(() => ({ data: { data: [] } })),
         api.get('/contacts', config).catch(() => ({ data: { data: [] } })),
-        api.get('/portfolio', config).catch(() => ({ data: { portfolio: [] } }))
+        api.get('/portfolio', config).catch(() => ({ data: { portfolio: [] } })),
+        api.get('/quotes', config).catch(() => ({ data: [] }))
       ]);
 
       // Handle different response formats from different endpoints
@@ -59,8 +60,9 @@ const AdminDashboard = () => {
       // Handle different response formats
       const consultations = consultRes?.data?.data || consultRes?.data?.consultations || [];
       const contacts = contactRes?.data?.data || contactRes?.data?.contacts || [];
+      const quotes = Array.isArray(quotesRes.data) ? quotesRes.data : (quotesRes.data?.quotes || []);
       
-      console.log('Dashboard - Consultations:', consultations.length, '| Contacts:', contacts.length);
+      console.log('Dashboard - Consultations:', consultations.length, '| Contacts:', contacts.length, '| Quotes:', quotes.length);
       
       // Portfolio
       const portfolio = portfolioRes.data.portfolio || [];
@@ -73,11 +75,41 @@ const AdminDashboard = () => {
         contact: contacts.length
       });
 
-      // Set recent activity
+      // Set recent activity - combine all recent items
       const recent = [
-        ...consultations.slice(0, 3).map(c => ({ type: 'consultation', data: c, time: c.createdAt })),
-        ...contacts.slice(0, 3).map(c => ({ type: 'contact', data: c, time: c.createdAt }))
-      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 5);
+        ...consultations.map(c => ({ 
+          type: 'consultation', 
+          name: c.name,
+          detail: c.service || 'Consultation Request',
+          status: c.status,
+          time: c.createdAt,
+          link: '/admin/consultations'
+        })),
+        ...contacts.map(c => ({ 
+          type: 'contact', 
+          name: c.name,
+          detail: c.message?.substring(0, 50) + '...' || 'Contact Message',
+          status: c.status,
+          time: c.createdAt,
+          link: '/admin/contacts'
+        })),
+        ...quotes.map(q => ({ 
+          type: 'quote', 
+          name: q.name,
+          detail: q.service || 'Quote Request',
+          status: q.status,
+          time: q.createdAt,
+          link: '/admin/quotes'
+        })),
+        ...blogs.slice(0, 5).map(b => ({ 
+          type: 'blog', 
+          name: b.title,
+          detail: 'Blog Published',
+          status: 'published',
+          time: b.createdAt,
+          link: '/admin/blogs'
+        }))
+      ].sort((a, b) => new Date(b.time) - new Date(a.time)).slice(0, 10);
 
       setRecentActivity(recent);
     } catch (error) {
@@ -272,27 +304,50 @@ const AdminDashboard = () => {
             <FaClock className="text-[#D4AF37]" />
             Recent Activity
           </h2>
-          <div className="space-y-4">
+          <div className="space-y-3 max-h-[400px] overflow-y-auto">
             {recentActivity.length > 0 ? (
               recentActivity.map((activity, idx) => (
-                <div key={idx} className="flex items-start gap-3 pb-4 border-b border-gray-100 last:border-0">
-                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white ${
-                    activity.type === 'consultation' ? 'bg-green-500' : 'bg-pink-500'
+                <Link 
+                  key={idx} 
+                  to={activity.link}
+                  className="flex items-start gap-3 p-3 rounded-lg hover:bg-gray-50 transition-colors border-b border-gray-100 last:border-0"
+                >
+                  <div className={`w-10 h-10 rounded-full flex items-center justify-center text-white flex-shrink-0 ${
+                    activity.type === 'consultation' ? 'bg-green-500' : 
+                    activity.type === 'contact' ? 'bg-pink-500' :
+                    activity.type === 'quote' ? 'bg-purple-500' :
+                    'bg-yellow-500'
                   }`}>
-                    {activity.type === 'consultation' ? <FaComments /> : <FaEnvelope />}
+                    {activity.type === 'consultation' ? <FaComments size={14} /> : 
+                     activity.type === 'contact' ? <FaEnvelope size={14} /> :
+                     activity.type === 'quote' ? <FaBriefcase size={14} /> :
+                     <FaBlog size={14} />}
                   </div>
                   <div className="flex-1 min-w-0">
-                    <p className="text-sm font-semibold text-[#0B1530] truncate">
-                      {activity.type === 'consultation' 
-                        ? `New consultation from ${activity.data.name}`
-                        : `New contact from ${activity.data.name}`
-                      }
-                    </p>
-                    <p className="text-xs text-gray-500">
-                      {new Date(activity.time).toLocaleString()}
+                    <div className="flex items-center gap-2">
+                      <p className="text-sm font-semibold text-[#0B1530] truncate">
+                        {activity.name}
+                      </p>
+                      <span className={`text-[10px] px-1.5 py-0.5 rounded-full font-medium ${
+                        activity.status === 'pending' ? 'bg-yellow-100 text-yellow-700' :
+                        activity.status === 'contacted' ? 'bg-blue-100 text-blue-700' :
+                        activity.status === 'completed' || activity.status === 'published' ? 'bg-green-100 text-green-700' :
+                        'bg-gray-100 text-gray-700'
+                      }`}>
+                        {activity.status || 'new'}
+                      </span>
+                    </div>
+                    <p className="text-xs text-gray-500 truncate">{activity.detail}</p>
+                    <p className="text-[10px] text-gray-400 mt-1">
+                      {new Date(activity.time).toLocaleString('en-IN', { 
+                        day: 'numeric', 
+                        month: 'short', 
+                        hour: '2-digit', 
+                        minute: '2-digit' 
+                      })}
                     </p>
                   </div>
-                </div>
+                </Link>
               ))
             ) : (
               <p className="text-gray-500 text-sm text-center py-8">No recent activity</p>
