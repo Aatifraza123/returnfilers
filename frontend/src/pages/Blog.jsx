@@ -7,6 +7,14 @@ import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
 import { FaCalendarAlt, FaArrowRight, FaBookOpen, FaClock } from 'react-icons/fa';
 
+// Helper function to strip HTML tags and get plain text
+const stripHtml = (html) => {
+  if (!html) return '';
+  const tmp = document.createElement('div');
+  tmp.innerHTML = html;
+  return tmp.textContent || tmp.innerText || '';
+};
+
 const Blog = () => {
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -197,7 +205,7 @@ const Blog = () => {
                       </h2>
                       
                       <p className="text-gray-600 text-sm md:text-base leading-relaxed mb-4 line-clamp-3">
-                        {featuredBlog.content?.substring(0, 180)}...
+                        {stripHtml(featuredBlog.content)?.substring(0, 180)}...
                       </p>
 
                       <motion.div
@@ -311,7 +319,7 @@ const Blog = () => {
                         </h3>
                         
                         <p className="text-gray-600 text-xs md:text-sm leading-relaxed mb-4 flex-grow line-clamp-3">
-                          {blog.content?.substring(0, 130)}...
+                          {stripHtml(blog.content)?.substring(0, 130)}...
                         </p>
 
                         {/* Read More Button - Modern Design */}
