@@ -6,7 +6,8 @@ const {
   getBookings,
   getBookingById,
   updateBooking,
-  deleteBooking
+  deleteBooking,
+  replyToBooking
 } = require('../controllers/bookingController');
 
 // Public
@@ -14,6 +15,7 @@ router.post('/', createBooking);
 
 // Admin
 router.get('/', protect, admin, getBookings);
+router.post('/reply', protect, admin, replyToBooking);
 router.get('/:id', protect, admin, getBookingById);
 router.patch('/:id', protect, admin, updateBooking);
 router.delete('/:id', protect, admin, deleteBooking);

@@ -128,6 +128,55 @@ const deleteBooking = async (req, res) => {
   }
 };
 
+// @desc    Reply to booking via email
+// @route   POST /api/bookings/reply
+// @access  Private/Admin
+const replyToBooking = async (req, res) => {
+  try {
+    const { bookingId, to, subject, message } = req.body;
+
+    if (!to || !subject || !message) {
+      return res.status(400).json({ success: false, message: 'Please provide to, subject, and message' });
+    }
+
+    const html = `
+      <!DOCTYPE html>
+      <html>
+      <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
+        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px;">
+          <tr><td align="center">
+            <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
+              <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+                <h1 style="color:#D4AF37;margin:0;">Tax Filer</h1>
+              </td></tr>
+              <tr><td style="padding:30px;">
+                <div style="white-space:pre-line;color:#333;line-height:1.6;">${message}</div>
+              </td></tr>
+              <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
+                <p style="color:#D4AF37;margin:0;font-weight:bold;">Tax Filer</p>
+                <p style="color:#fff;margin:5px 0 0;font-size:12px;">+91 84471 27264 | info@taxfiler.in</p>
+              </td></tr>
+            </table>
+          </td></tr>
+        </table>
+      </body>
+      </html>
+    `;
+
+    await sendEmail({ to, subject, html });
+
+    // Update booking status to contacted
+    if (bookingId) {
+      await Booking.findByIdAndUpdate(bookingId, { status: 'contacted' });
+    }
+
+    res.json({ success: true, message: 'Email sent successfully' });
+  } catch (error) {
+    console.error('Reply email error:', error);
+    res.status(500).json({ success: false, message: error.message || 'Failed to send email' });
+  }
+};
+
 // Helper: Send email
 const sendBookingEmail = async (booking) => {
   const adminEmail = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
@@ -172,4 +221,4 @@ const sendBookingEmail = async (booking) => {
   console.log('Booking email sent');
 };
 
-module.exports = { createBooking, getBookings, getBookingById, updateBooking, deleteBooking };
+module.exports = { createBooking, getBookings, getBookingById, updateBooking, deleteBooking, replyToBooking };

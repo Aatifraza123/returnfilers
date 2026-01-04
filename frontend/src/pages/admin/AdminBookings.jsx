@@ -1,13 +1,16 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaEye, FaTrash, FaDownload, FaCalendarCheck, FaSearch, FaFileAlt } from 'react-icons/fa';
+import { FaEye, FaTrash, FaDownload, FaCalendarCheck, FaSearch, FaFileAlt, FaReply, FaPaperPlane } from 'react-icons/fa';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [showReplyModal, setShowReplyModal] = useState(false);
+  const [replyData, setReplyData] = useState({ subject: '', message: '' });
+  const [sending, setSending] = useState(false);
 
   useEffect(() => {
     fetchBookings();
@@ -60,6 +63,43 @@ const AdminBookings = () => {
     link.href = doc.data;
     link.download = doc.name;
     link.click();
+  };
+
+  const openReplyModal = (booking) => {
+    setSelectedBooking(booking);
+    setReplyData({
+      subject: `Re: Your ${booking.service} Booking - Tax Filer`,
+      message: `Dear ${booking.name},\n\nThank you for booking our ${booking.service} service.\n\n[Your message here]\n\nBest regards,\nTax Filer Team\n+91 84471 27264`
+    });
+    setShowReplyModal(true);
+  };
+
+  const sendReply = async () => {
+    if (!replyData.subject || !replyData.message) {
+      toast.error('Please fill subject and message');
+      return;
+    }
+    setSending(true);
+    try {
+      const token = localStorage.getItem('token');
+      await api.post('/bookings/reply', {
+        bookingId: selectedBooking._id,
+        to: selectedBooking.email,
+        subject: replyData.subject,
+        message: replyData.message
+      }, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
+      toast.success('Email sent successfully!');
+      setShowReplyModal(false);
+      setReplyData({ subject: '', message: '' });
+      // Update status to contacted
+      updateStatus(selectedBooking._id, 'contacted');
+    } catch (error) {
+      toast.error(error.response?.data?.message || 'Failed to send email');
+    } finally {
+      setSending(false);
+    }
   };
 
   const filteredBookings = filter === 'all' 
@@ -158,12 +198,21 @@ const AdminBookings = () => {
                         <button
                           onClick={() => setSelectedBooking(booking)}
                           className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                          title="View Details"
                         >
                           <FaEye size={14} />
                         </button>
                         <button
+                          onClick={() => openReplyModal(booking)}
+                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                          title="Reply via Email"
+                        >
+                          <FaReply size={14} />
+                        </button>
+                        <button
                           onClick={() => deleteBooking(booking._id)}
                           className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          title="Delete"
                         >
                           <FaTrash size={14} />
                         </button>
@@ -241,6 +290,69 @@ const AdminBookings = () => {
                   </div>
                 </div>
               )}
+
+              {/* Reply Button in Detail Modal */}
+              <button
+                onClick={() => {
+                  setSelectedBooking(null);
+                  setTimeout(() => openReplyModal(selectedBooking), 100);
+                }}
+                className="w-full mt-4 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors flex items-center justify-center gap-2"
+              >
+                <FaReply /> Reply via Email
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Reply Modal */}
+      {showReplyModal && selectedBooking && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
+          <div className="bg-white rounded-xl max-w-lg w-full max-h-[90vh] overflow-y-auto">
+            <div className="p-6 border-b bg-[#0B1530] rounded-t-xl">
+              <div className="flex items-center justify-between">
+                <h2 className="text-lg font-bold text-white flex items-center gap-2">
+                  <FaReply className="text-[#C9A227]" /> Reply to {selectedBooking.name}
+                </h2>
+                <button onClick={() => setShowReplyModal(false)} className="text-gray-400 hover:text-white">✕</button>
+              </div>
+              <p className="text-sm text-gray-400 mt-1">To: {selectedBooking.email}</p>
+            </div>
+            <div className="p-6 space-y-4">
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Subject</label>
+                <input
+                  type="text"
+                  value={replyData.subject}
+                  onChange={(e) => setReplyData({ ...replyData, subject: e.target.value })}
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-[#C9A227]"
+                />
+              </div>
+              <div>
+                <label className="block text-xs font-semibold text-gray-600 mb-1">Message</label>
+                <textarea
+                  value={replyData.message}
+                  onChange={(e) => setReplyData({ ...replyData, message: e.target.value })}
+                  rows={10}
+                  className="w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:border-[#C9A227] resize-none"
+                />
+              </div>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowReplyModal(false)}
+                  className="flex-1 py-2.5 border border-gray-300 rounded-lg font-semibold text-sm hover:bg-gray-50"
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={sendReply}
+                  disabled={sending}
+                  className="flex-1 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors flex items-center justify-center gap-2 disabled:opacity-50"
+                >
+                  {sending ? 'Sending...' : <><FaPaperPlane /> Send Email</>}
+                </button>
+              </div>
             </div>
           </div>
         </div>
