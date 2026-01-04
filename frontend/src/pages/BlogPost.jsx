@@ -162,7 +162,7 @@ const BlogPost = () => {
                 font-size: 1.0625rem;
               }
               .blog-content p {
-                margin-bottom: 1.25em;
+                margin-bottom: 1em;
                 line-height: 1.75;
               }
               .blog-content h1 {
@@ -170,7 +170,7 @@ const BlogPost = () => {
                 font-weight: 700;
                 color: #0B1530;
                 margin-top: 1.5em;
-                margin-bottom: 0.75em;
+                margin-bottom: 0.5em;
                 font-family: Georgia, serif;
                 line-height: 1.3;
               }
@@ -178,16 +178,18 @@ const BlogPost = () => {
                 font-size: 1.5rem;
                 font-weight: 700;
                 color: #0B1530;
-                margin-top: 1.75em;
-                margin-bottom: 0.75em;
+                margin-top: 1.5em;
+                margin-bottom: 0.5em;
                 font-family: Georgia, serif;
                 line-height: 1.3;
+                padding-bottom: 0.5em;
+                border-bottom: 2px solid #D4AF37;
               }
               .blog-content h3 {
                 font-size: 1.25rem;
                 font-weight: 600;
                 color: #0B1530;
-                margin-top: 1.5em;
+                margin-top: 1.25em;
                 margin-bottom: 0.5em;
                 line-height: 1.4;
               }
@@ -195,7 +197,7 @@ const BlogPost = () => {
                 font-size: 1.125rem;
                 font-weight: 600;
                 color: #0B1530;
-                margin-top: 1.25em;
+                margin-top: 1em;
                 margin-bottom: 0.5em;
               }
               .blog-content ul, .blog-content ol {
@@ -205,6 +207,7 @@ const BlogPost = () => {
               .blog-content li {
                 margin-bottom: 0.5em;
                 line-height: 1.6;
+                padding-left: 0.5em;
               }
               .blog-content ul li {
                 list-style-type: disc;
@@ -226,15 +229,16 @@ const BlogPost = () => {
                 margin: 1.5em 0;
                 font-style: italic;
                 color: #4b5563;
-                background: #f9fafb;
+                background: #fefce8;
                 border-radius: 0 8px 8px 0;
               }
               .blog-content img {
                 max-width: 100%;
                 height: auto;
                 border-radius: 12px;
-                margin: 1.5em 0;
-                box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                margin: 1.5em auto;
+                display: block;
+                box-shadow: 0 4px 15px -3px rgba(0, 0, 0, 0.15);
               }
               .blog-content strong, .blog-content b {
                 color: #0B1530;
@@ -262,24 +266,44 @@ const BlogPost = () => {
                 width: 100%;
                 border-collapse: collapse;
                 margin: 1.5em 0;
+                border-radius: 8px;
+                overflow: hidden;
+                box-shadow: 0 1px 3px rgba(0,0,0,0.1);
               }
-              .blog-content th, .blog-content td {
-                border: 1px solid #e5e7eb;
-                padding: 0.75rem;
-                text-align: left;
+              .blog-content thead {
+                background: linear-gradient(135deg, #0B1530 0%, #1a2b5c 100%);
               }
               .blog-content th {
-                background: #f9fafb;
+                padding: 1rem;
+                text-align: left;
                 font-weight: 600;
-                color: #0B1530;
+                color: white;
+                border: none;
+              }
+              .blog-content td {
+                padding: 0.875rem 1rem;
+                border-bottom: 1px solid #e5e7eb;
+                color: #374151;
+              }
+              .blog-content tbody tr:hover {
+                background: #f9fafb;
+              }
+              .blog-content tbody tr:last-child td {
+                border-bottom: none;
               }
               .blog-content hr {
                 border: none;
-                border-top: 1px solid #e5e7eb;
+                border-top: 2px solid #e5e7eb;
                 margin: 2em 0;
               }
               .blog-content > *:first-child {
                 margin-top: 0;
+              }
+              .blog-content iframe, .blog-content .ql-video {
+                width: 100%;
+                height: 400px;
+                border-radius: 12px;
+                margin: 1.5em 0;
               }
             `}</style>
             

@@ -139,11 +139,13 @@ const AdminBlogsForm = () => {
   const quillModules = useMemo(() => ({
     toolbar: {
       container: [
-        [{ 'header': [2, 3, false] }],
+        [{ 'header': [1, 2, 3, false] }],
         ['bold', 'italic', 'underline', 'strike'],
         [{ 'color': [] }, { 'background': [] }],
-        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-        ['link', 'image', 'blockquote', 'code-block'],
+        [{ 'align': [] }],
+        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+        ['link', 'image', 'video'],
+        ['blockquote', 'code-block'],
         ['clean']
       ],
       handlers: {
@@ -280,17 +282,60 @@ const AdminBlogsForm = () => {
                 <style>{`
                   .ql-toolbar.ql-snow {
                     border: none !important;
-                    border-bottom: 1px solid #f3f4f6 !important;
+                    border-bottom: 2px solid #f3f4f6 !important;
                     position: sticky;
                     top: 0;
                     background: white;
                     z-index: 10;
-                    padding: 12px 0 !important;
+                    padding: 12px 8px !important;
                     margin-bottom: 24px;
+                    border-radius: 8px 8px 0 0;
+                    display: flex;
+                    flex-wrap: wrap;
+                    gap: 4px;
+                  }
+                  .ql-toolbar .ql-formats {
+                    margin-right: 8px !important;
+                    padding-right: 8px;
+                    border-right: 1px solid #e5e7eb;
+                  }
+                  .ql-toolbar .ql-formats:last-child {
+                    border-right: none;
+                  }
+                  .ql-toolbar button {
+                    width: 32px !important;
+                    height: 32px !important;
+                    border-radius: 6px !important;
+                    display: flex !important;
+                    align-items: center !important;
+                    justify-content: center !important;
+                  }
+                  .ql-toolbar button:hover {
+                    background: #f3f4f6 !important;
+                  }
+                  .ql-toolbar button.ql-active {
+                    background: #D4AF37 !important;
+                    color: white !important;
+                  }
+                  .ql-toolbar button.ql-active .ql-stroke {
+                    stroke: white !important;
+                  }
+                  .ql-toolbar button.ql-active .ql-fill {
+                    fill: white !important;
+                  }
+                  .ql-toolbar .ql-picker {
+                    height: 32px !important;
+                  }
+                  .ql-toolbar .ql-picker-label {
+                    border-radius: 6px !important;
+                    padding: 4px 8px !important;
+                  }
+                  .ql-toolbar .ql-picker-label:hover {
+                    background: #f3f4f6 !important;
                   }
                   .ql-container.ql-snow {
                     border: none !important;
-                    font-size: 1.125rem;
+                    font-size: 1.0625rem;
                     font-family: inherit;
                   }
                   .ql-editor {
@@ -300,7 +345,7 @@ const AdminBlogsForm = () => {
                     line-height: 1.8;
                   }
                   .ql-editor p { 
-                    margin-bottom: 1.25em; 
+                    margin-bottom: 1em; 
                     font-size: 1rem;
                     line-height: 1.75;
                   }
@@ -309,7 +354,7 @@ const AdminBlogsForm = () => {
                     font-weight: 700;
                     color: #0B1530;
                     margin-top: 1.5em;
-                    margin-bottom: 0.75em;
+                    margin-bottom: 0.5em;
                     font-family: Georgia, serif;
                     line-height: 1.3;
                   }
@@ -317,8 +362,8 @@ const AdminBlogsForm = () => {
                     font-size: 1.5rem; 
                     font-weight: 700; 
                     color: #0B1530; 
-                    margin-top: 1.75em; 
-                    margin-bottom: 0.75em; 
+                    margin-top: 1.5em; 
+                    margin-bottom: 0.5em; 
                     font-family: Georgia, serif;
                     line-height: 1.3;
                   }
@@ -326,7 +371,7 @@ const AdminBlogsForm = () => {
                     font-size: 1.25rem; 
                     font-weight: 600; 
                     color: #0B1530; 
-                    margin-top: 1.5em; 
+                    margin-top: 1.25em; 
                     margin-bottom: 0.5em;
                     line-height: 1.4;
                   }
@@ -336,7 +381,7 @@ const AdminBlogsForm = () => {
                     margin: 1.5em 0;
                     font-style: italic;
                     color: #4b5563;
-                    background: #f9fafb;
+                    background: #fefce8;
                     border-radius: 0 8px 8px 0;
                   }
                   .ql-editor ul, .ql-editor ol {
@@ -346,6 +391,7 @@ const AdminBlogsForm = () => {
                   .ql-editor li {
                     margin-bottom: 0.5em;
                     line-height: 1.6;
+                    padding-left: 0.5em;
                   }
                   .ql-editor a {
                     color: #D4AF37;
@@ -360,6 +406,7 @@ const AdminBlogsForm = () => {
                     border-radius: 12px;
                     margin: 1.5em 0;
                     box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+                    cursor: pointer;
                   }
                   .ql-editor strong {
                     color: #0B1530;
@@ -379,6 +426,43 @@ const AdminBlogsForm = () => {
                     overflow-x: auto;
                     margin: 1.5em 0;
                   }
+                  .ql-editor .ql-video {
+                    width: 100%;
+                    height: 400px;
+                    border-radius: 12px;
+                    margin: 1.5em 0;
+                  }
+                  .ql-editor table {
+                    width: 100%;
+                    border-collapse: collapse;
+                    margin: 1.5em 0;
+                  }
+                  .ql-editor th, .ql-editor td {
+                    border: 1px solid #e5e7eb;
+                    padding: 0.75rem;
+                    text-align: left;
+                  }
+                  .ql-editor th {
+                    background: #f9fafb;
+                    font-weight: 600;
+                    color: #0B1530;
+                  }
+                  .ql-snow .ql-picker.ql-header .ql-picker-label::before,
+                  .ql-snow .ql-picker.ql-header .ql-picker-item::before {
+                    content: 'Normal';
+                  }
+                  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="1"]::before,
+                  .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="1"]::before {
+                    content: 'Heading 1';
+                  }
+                  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="2"]::before,
+                  .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="2"]::before {
+                    content: 'Heading 2';
+                  }
+                  .ql-snow .ql-picker.ql-header .ql-picker-label[data-value="3"]::before,
+                  .ql-snow .ql-picker.ql-header .ql-picker-item[data-value="3"]::before {
+                    content: 'Heading 3';
+                  }
                 `}</style>
 
                 <ReactQuill
@@ -390,8 +474,9 @@ const AdminBlogsForm = () => {
                   modules={quillModules}
                   formats={[
                     'header', 'bold', 'italic', 'underline', 'strike',
-                    'color', 'background', 'list', 'bullet', 
-                    'link', 'image', 'blockquote', 'code-block'
+                    'color', 'background', 'align', 'list', 'bullet', 'indent',
+                    'link', 'image', 'video', 'blockquote', 'code-block',
+                    'width', 'height', 'style'
                   ]}
                 />
               </div>
