@@ -495,8 +495,21 @@ const Home = () => {
                 >
                   {/* Left: Author */}
                   <div className="flex flex-col items-center md:w-48 flex-shrink-0">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
-                      {testimonials[currentTestimonial]?.name?.charAt(0)}
+                    <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
+                      {testimonials[currentTestimonial]?.image ? (
+                        <img 
+                          src={testimonials[currentTestimonial].image} 
+                          alt={testimonials[currentTestimonial]?.name}
+                          className="w-full h-full object-cover"
+                          onError={(e) => {
+                            e.target.style.display = 'none';
+                            e.target.nextSibling.style.display = 'flex';
+                          }}
+                        />
+                      ) : null}
+                      <span className={testimonials[currentTestimonial]?.image ? 'hidden' : 'flex'}>
+                        {testimonials[currentTestimonial]?.name?.charAt(0)}
+                      </span>
                     </div>
                     <div className="text-center">
                       <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
