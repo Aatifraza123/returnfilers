@@ -75,7 +75,7 @@ const formatText = (text) => {
   if (!text) return null;
   
   // Match: **bold**, ₹prices, phone numbers, pipe separators, URLs, emails, internal routes (/path)
-  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\/upload-documents|\/services|\/contact|\/quote|\/about|\/blog)/gi);
+  const parts = text.split(/(\*\*[^*]+\*\*|₹[\d,]+(?:\s*[-–—]\s*₹?[\d,]+)?(?:\/\w+)?|\+91\s*\d{5}\s*\d{5}|\|\s*[\d\w-]+\s*(?:days?|hours?|weeks?)|https?:\/\/[^\s<>"{}|\\^`\[\]]+|[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}|\/booking|\/services|\/contact|\/quote|\/about|\/blog)/gi);
   
   return parts.map((part, idx) => {
     if (!part) return null;
@@ -91,10 +91,10 @@ const formatText = (text) => {
     if (part.startsWith('+91')) {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
     }
-    // Internal route links (e.g., /upload-documents, /services, /contact)
-    if (part === '/upload-documents' || part === '/services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog') {
+    // Internal route links (e.g., /booking, /services, /contact)
+    if (part === '/booking' || part === '/services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog') {
       const routeNames = {
-        '/upload-documents': '📄 Upload Documents',
+        '/booking': '📅 Book Now',
         '/services': 'Our Services',
         '/contact': 'Contact Us',
         '/quote': 'Get Quote',

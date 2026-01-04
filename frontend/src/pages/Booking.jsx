@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion } from 'framer-motion';
-import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock } from 'react-icons/fa';
+import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock, FaCalendarCheck } from 'react-icons/fa';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 
@@ -20,7 +20,7 @@ const services = [
   'Other'
 ];
 
-const DocumentUpload = () => {
+const Booking = () => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -35,14 +35,11 @@ const DocumentUpload = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-    
-    // Phone number validation - only allow digits and max 10
     if (name === 'phone') {
       const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
       setFormData({ ...formData, [name]: digitsOnly });
       return;
     }
-    
     setFormData({ ...formData, [name]: value });
   };
 
@@ -62,7 +59,6 @@ const DocumentUpload = () => {
       toast.error('Maximum 10 files allowed');
       return;
     }
-
     setFiles([...files, ...validFiles]);
   };
 
@@ -87,43 +83,42 @@ const DocumentUpload = () => {
       return;
     }
 
-    // Validate phone is exactly 10 digits
     if (formData.phone.length !== 10) {
       toast.error('Please enter a valid 10-digit phone number');
       return;
     }
 
-    if (files.length === 0) {
-      toast.error('Please upload at least one document');
-      return;
-    }
-
-    if (!consent) {
-      toast.error('Please accept the terms and conditions');
+    // Consent required only if documents are uploaded
+    if (files.length > 0 && !consent) {
+      toast.error('Please accept the terms to upload documents');
       return;
     }
 
     setLoading(true);
 
     try {
-      const documentsData = await Promise.all(
-        files.map(async (file) => ({
-          name: file.name,
-          type: file.type,
-          size: file.size,
-          data: await convertToBase64(file)
-        }))
-      );
+      // If documents uploaded, use documents API
+      if (files.length > 0) {
+        const documentsData = await Promise.all(
+          files.map(async (file) => ({
+            name: file.name,
+            type: file.type,
+            size: file.size,
+            data: await convertToBase64(file)
+          }))
+        );
 
-      const { data } = await api.post('/documents', {
-        ...formData,
-        documents: documentsData
-      });
-
-      if (data.success) {
-        setSubmitted(true);
-        toast.success('Documents submitted successfully!');
+        await api.post('/documents', {
+          ...formData,
+          documents: documentsData
+        });
+      } else {
+        // No documents - use consultation API
+        await api.post('/consultations', formData);
       }
+
+      setSubmitted(true);
+      toast.success('Booking submitted successfully!');
     } catch (error) {
       toast.error(error.response?.data?.message || 'Failed to submit');
     } finally {
@@ -142,9 +137,9 @@ const DocumentUpload = () => {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <FaCheckCircle className="text-4xl text-green-500" />
           </div>
-          <h2 className="text-2xl font-bold text-[#0B1530] mb-3">Submitted Successfully!</h2>
+          <h2 className="text-2xl font-bold text-[#0B1530] mb-3">Booking Confirmed!</h2>
           <p className="text-gray-600 mb-6">
-            We'll review your documents and contact you within 24-48 hours.
+            We'll review your request and contact you within 24 hours.
           </p>
           <p className="text-sm text-gray-500 mb-6">
             For urgent queries, call <strong>+91 84471 27264</strong>
@@ -158,7 +153,7 @@ const DocumentUpload = () => {
             }}
             className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
           >
-            Submit Another Request
+            Book Another Service
           </button>
         </motion.div>
       </div>
@@ -170,9 +165,9 @@ const DocumentUpload = () => {
       {/* Header */}
       <div className="bg-[#0B1530] pt-28 pb-16">
         <div className="container mx-auto px-4 text-center">
-          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Submit Your Documents</h1>
+          <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Book a Service</h1>
           <p className="text-gray-300 max-w-xl mx-auto">
-            Upload your documents securely for our team to review and process your service request.
+            Fill in your details to book our professional services. You can also upload documents if ready.
           </p>
         </div>
       </div>
@@ -266,10 +261,10 @@ const DocumentUpload = () => {
               />
             </div>
 
-            {/* File Upload */}
-            <div className="mb-5">
+            {/* File Upload - Optional */}
+            <div className="mb-4">
               <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
-                Upload Documents <span className="text-red-500">*</span>
+                Upload Documents <span className="text-gray-400">(Optional)</span>
               </label>
               <div className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-[#C9A227] transition-colors cursor-pointer">
                 <input
@@ -282,8 +277,8 @@ const DocumentUpload = () => {
                 />
                 <label htmlFor="file-upload" className="cursor-pointer">
                   <FaCloudUploadAlt className="text-3xl text-gray-400 mx-auto mb-2" />
-                  <p className="text-sm text-gray-600 font-medium">Click to upload</p>
-                  <p className="text-xs text-gray-400 mt-1">PDF, DOC, JPG, PNG, XLS (Max 5MB)</p>
+                  <p className="text-sm text-gray-600 font-medium">Click to upload documents</p>
+                  <p className="text-xs text-gray-400 mt-1">PDF, DOC, JPG, PNG, XLS (Max 5MB each)</p>
                 </label>
               </div>
 
@@ -291,10 +286,7 @@ const DocumentUpload = () => {
               {files.length > 0 && (
                 <div className="mt-3 space-y-2">
                   {files.map((file, index) => (
-                    <div
-                      key={index}
-                      className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg"
-                    >
+                    <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg">
                       <div className="flex items-center gap-2">
                         <FaFileAlt className="text-[#C9A227] text-sm" />
                         <div>
@@ -311,36 +303,40 @@ const DocumentUpload = () => {
               )}
             </div>
 
-            {/* Consent Checkbox */}
-            <div className="mb-5 p-4 bg-blue-50 border border-blue-100 rounded-lg">
-              <label className="flex items-start gap-3 cursor-pointer">
-                <input
-                  type="checkbox"
-                  checked={consent}
-                  onChange={(e) => setConsent(e.target.checked)}
-                  className="mt-1 w-4 h-4 text-[#C9A227] border-gray-300 rounded focus:ring-[#C9A227]"
-                />
-                <span className="text-sm text-gray-700">
-                  I agree to the <strong>Terms & Conditions</strong> and authorize Tax Filer to securely store and process my documents for the requested service. I understand that my data will be kept <strong>100% confidential</strong> and will only be used for professional purposes.
-                </span>
-              </label>
-            </div>
+            {/* Consent - Only show if files uploaded */}
+            {files.length > 0 && (
+              <div className="mb-5 p-4 bg-blue-50 border border-blue-100 rounded-lg">
+                <label className="flex items-start gap-3 cursor-pointer">
+                  <input
+                    type="checkbox"
+                    checked={consent}
+                    onChange={(e) => setConsent(e.target.checked)}
+                    className="mt-1 w-4 h-4 text-[#C9A227] border-gray-300 rounded focus:ring-[#C9A227]"
+                  />
+                  <span className="text-sm text-gray-700">
+                    I agree to the <strong>Terms & Conditions</strong> and authorize Tax Filer to securely store and process my documents. My data will be kept <strong>100% confidential</strong>.
+                  </span>
+                </label>
+              </div>
+            )}
 
-            {/* Trust Badges */}
-            <div className="flex flex-wrap items-center justify-center gap-4 mb-5 py-3 border-y border-gray-100">
-              <div className="flex items-center gap-2 text-xs text-gray-600">
-                <FaShieldAlt className="text-green-500" />
-                <span>100% Secure</span>
+            {/* Trust Badges - Only show if files uploaded */}
+            {files.length > 0 && (
+              <div className="flex flex-wrap items-center justify-center gap-4 mb-5 py-3 border-y border-gray-100">
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FaShieldAlt className="text-green-500" />
+                  <span>100% Secure</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FaLock className="text-green-500" />
+                  <span>Data Encrypted</span>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-600">
+                  <FaCheckCircle className="text-green-500" />
+                  <span>Confidential</span>
+                </div>
               </div>
-              <div className="flex items-center gap-2 text-xs text-gray-600">
-                <FaLock className="text-green-500" />
-                <span>Data Encrypted</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-gray-600">
-                <FaCheckCircle className="text-green-500" />
-                <span>Confidential</span>
-              </div>
-            </div>
+            )}
 
             {/* Submit Button */}
             <button
@@ -349,9 +345,9 @@ const DocumentUpload = () => {
               className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
-                <><FaSpinner className="animate-spin" /> Uploading...</>
+                <><FaSpinner className="animate-spin" /> Submitting...</>
               ) : (
-                <><FaCloudUploadAlt /> Submit Documents</>
+                <><FaCalendarCheck /> {files.length > 0 ? 'Book & Upload Documents' : 'Book Service'}</>
               )}
             </button>
           </form>
@@ -359,7 +355,7 @@ const DocumentUpload = () => {
           {/* Info Box */}
           <div className="bg-gray-50 px-5 md:px-6 py-4 border-t">
             <p className="text-xs text-gray-600">
-              <span className="font-semibold text-[#0B1530]">Required:</span> PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)
+              <span className="font-semibold text-[#0B1530]">Common Documents:</span> PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)
             </p>
           </div>
         </motion.div>
@@ -368,4 +364,4 @@ const DocumentUpload = () => {
   );
 };
 
-export default DocumentUpload;
+export default Booking;
