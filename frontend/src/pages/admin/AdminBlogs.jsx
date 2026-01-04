@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useRef, useCallback } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaTrash, FaEdit, FaPlus } from 'react-icons/fa';
+import { FaTrash, FaEdit, FaPlus, FaTable } from 'react-icons/fa';
 import ReactQuill, { Quill } from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 import ImageResize from 'quill-image-resize';
@@ -27,6 +27,9 @@ const AdminBlogs = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingBlog, setEditingBlog] = useState(null);
+  const [showTableModal, setShowTableModal] = useState(false);
+  const [tableRows, setTableRows] = useState(3);
+  const [tableCols, setTableCols] = useState(3);
   const [formData, setFormData] = useState({
     title: '', content: '', image: ''
   });
@@ -210,6 +213,34 @@ const AdminBlogs = () => {
       quill.setSelection(newIndex + offset);
     }
   }, []);
+
+  // Function to insert table
+  const insertTable = useCallback(() => {
+    const quill = quillRef.current?.getEditor();
+    if (!quill) return;
+
+    const range = quill.getSelection(true);
+    
+    // Create table HTML
+    let tableHtml = '<table><thead><tr>';
+    for (let c = 0; c < tableCols; c++) {
+      tableHtml += `<th>Header ${c + 1}</th>`;
+    }
+    tableHtml += '</tr></thead><tbody>';
+    for (let r = 0; r < tableRows - 1; r++) {
+      tableHtml += '<tr>';
+      for (let c = 0; c < tableCols; c++) {
+        tableHtml += '<td>Cell</td>';
+      }
+      tableHtml += '</tr>';
+    }
+    tableHtml += '</tbody></table><p><br></p>';
+
+    // Insert at cursor position
+    quill.clipboard.dangerouslyPasteHTML(range.index, tableHtml);
+    setShowTableModal(false);
+    toast.success('Table inserted!');
+  }, [tableRows, tableCols]);
 
   // Advanced Quill modules configuration
   const quillModules = useMemo(() => ({
@@ -472,6 +503,14 @@ const AdminBlogs = () => {
                 <div className="flex gap-2">
                   <button
                     type="button"
+                    onClick={() => setShowTableModal(true)}
+                    className="px-3 py-1.5 text-xs bg-[#0B1530] text-white hover:bg-[#1a2b5c] rounded border border-[#0B1530] transition-colors flex items-center gap-1"
+                    title="Insert Table"
+                  >
+                    <FaTable /> Insert Table
+                  </button>
+                  <button
+                    type="button"
                     onClick={() => moveContent('up')}
                     className="px-3 py-1.5 text-xs bg-gray-100 hover:bg-gray-200 rounded border border-gray-300 transition-colors"
                     title="Move content up (Shift+Alt+↑)"
@@ -539,6 +578,59 @@ const AdminBlogs = () => {
         <div className="text-center py-20 text-gray-500">
           No blogs found. Click "Write New Blog" to start.
         </div>
+      )}
+
+      {/* Table Insert Modal */}
+      {showTableModal && (
+        <>
+          <div 
+            className="fixed inset-0 bg-black/50 z-40"
+            onClick={() => setShowTableModal(false)}
+          />
+          <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl p-6 z-50 w-80">
+            <h3 className="text-lg font-bold text-[#0B1530] mb-4">Insert Table</h3>
+            <div className="space-y-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Rows</label>
+                <input
+                  type="number"
+                  min="2"
+                  max="20"
+                  value={tableRows}
+                  onChange={(e) => setTableRows(parseInt(e.target.value) || 2)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                />
+              </div>
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1">Columns</label>
+                <input
+                  type="number"
+                  min="2"
+                  max="10"
+                  value={tableCols}
+                  onChange={(e) => setTableCols(parseInt(e.target.value) || 2)}
+                  className="w-full border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#D4AF37]"
+                />
+              </div>
+              <div className="flex gap-3 pt-2">
+                <button
+                  type="button"
+                  onClick={insertTable}
+                  className="flex-1 bg-[#0B1530] text-white py-2 rounded-lg font-medium hover:bg-[#1a2b5c] transition-colors"
+                >
+                  Insert
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setShowTableModal(false)}
+                  className="flex-1 bg-gray-200 text-gray-700 py-2 rounded-lg font-medium hover:bg-gray-300 transition-colors"
+                >
+                  Cancel
+                </button>
+              </div>
+            </div>
+          </div>
+        </>
       )}
     </div>
   );
