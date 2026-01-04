@@ -15,25 +15,25 @@ const protect = async (req, res, next) => {
       // Get user from the token
       req.user = await User.findById(decoded.id).select('-password');
 
+      if (!req.user) {
+        return res.status(401).json({ message: 'User not found' });
+      }
+
       next();
     } catch (error) {
-      console.log(error);
-      res.status(401).json({ message: 'Not authorized' });
+      console.log('Auth error:', error.message);
+      res.status(401).json({ message: 'Not authorized, token invalid' });
     }
-  }
-
-  if (!token) {
+  } else {
     return res.status(401).json({ message: 'Not authorized, no token' });
   }
 };
 
 const admin = (req, res, next) => {
-  if (req.user && req.user.isAdmin) { // Assuming you have an isAdmin flag, or just remove this check for now
+  if (req.user && req.user.role === 'admin') {
     next();
   } else {
-    // For now, let's allow it if they are logged in, or check your User model
-    // If you don't have isAdmin field, just call next()
-    next(); 
+    res.status(403).json({ message: 'Not authorized as admin' });
   }
 };
 
