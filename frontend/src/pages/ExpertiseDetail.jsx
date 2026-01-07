@@ -8,7 +8,8 @@ import {
   FaCheckCircle,
   FaArrowLeft,
   FaPhone,
-  FaWhatsapp
+  FaWhatsapp,
+  FaCode
 } from 'react-icons/fa';
 
 const expertiseData = {
@@ -130,6 +131,36 @@ const expertiseData = {
       { step: '02', title: 'Structure', desc: 'Recommend the best legal structure' },
       { step: '03', title: 'Registration', desc: 'Complete all registrations and filings' },
       { step: '04', title: 'Handover', desc: 'Deliver documents and provide ongoing support' }
+    ]
+  },
+  'web-development': {
+    icon: <FaCode />,
+    title: 'Web Development',
+    tagline: 'Professional Digital Solutions',
+    heroImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop',
+    description: 'Professional website and web application development services to establish your digital presence and grow your business online.',
+    overview: 'In today\'s digital age, having a professional online presence is essential for business success. We create modern, responsive, and SEO-optimized websites that help you reach more customers and grow your business.',
+    services: [
+      'Business & Corporate Websites',
+      'E-commerce Development',
+      'Custom Web Applications',
+      'Landing Pages',
+      'Portfolio Websites',
+      'Blog & Content Websites',
+      'Website Redesign',
+      'Website Maintenance'
+    ],
+    benefits: [
+      { title: 'Professional Presence', desc: 'Establish credibility with a modern website' },
+      { title: 'Mobile Responsive', desc: 'Perfect display on all devices' },
+      { title: 'SEO Optimized', desc: 'Rank higher on Google search results' },
+      { title: '24/7 Availability', desc: 'Your business is always accessible online' }
+    ],
+    process: [
+      { step: '01', title: 'Discovery', desc: 'Understand your business needs and goals' },
+      { step: '02', title: 'Design', desc: 'Create modern UI/UX design mockups' },
+      { step: '03', title: 'Development', desc: 'Build your website with latest technologies' },
+      { step: '04', title: 'Launch', desc: 'Deploy and provide ongoing support' }
     ]
   }
 };

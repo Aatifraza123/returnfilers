@@ -8,7 +8,8 @@ import {
   FaPhone,
   FaEnvelope,
   FaCheckCircle,
-  FaArrowRight
+  FaArrowRight,
+  FaCode
 } from 'react-icons/fa';
 
 const Expertise = () => {
@@ -91,6 +92,26 @@ const Expertise = () => {
         'Complete documentation',
         'Post-setup compliance support',
         'Expert legal guidance'
+      ]
+    },
+    {
+      icon: <FaCode />,
+      title: 'Web Development',
+      slug: 'web-development',
+      description: 'Professional website and web application development services to establish your digital presence and grow your business online.',
+      keyPoints: [
+        'Business & Corporate websites',
+        'E-commerce website development',
+        'Custom web applications',
+        'Mobile responsive design',
+        'SEO optimized websites',
+        'Website maintenance & support'
+      ],
+      benefits: [
+        'Professional online presence',
+        'Increase customer reach',
+        'Mobile-friendly design',
+        '24/7 online availability'
       ]
     }
   ];
