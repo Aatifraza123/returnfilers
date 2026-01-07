@@ -2,9 +2,8 @@ import { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
-  FaCode, FaCheckCircle, FaPhone, FaStar, FaQuoteLeft, 
-  FaChevronLeft, FaChevronRight, FaLaptopCode, FaMobileAlt, 
-  FaPaintBrush, FaRocket 
+  FaCode, FaCheckCircle, FaStar, 
+  FaChevronLeft, FaChevronRight 
 } from 'react-icons/fa';
 import api from '../api/axios';
 
@@ -208,65 +207,128 @@ const DigitalServices = () => {
         </div>
       </section>
 
-      {/* Testimonials - Glassmorphic Slider */}
+      {/* Testimonials Section */}
       {testimonials.length > 0 && (
-        <section className="py-24 bg-[#0B1530] relative overflow-hidden">
-           <div className="absolute top-0 left-0 w-full h-full bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-5"></div>
-           {/* Decorative Blurs */}
-           <div className="absolute -left-20 top-20 w-72 h-72 bg-[#C9A227] rounded-full blur-[100px] opacity-10" />
-           
-          <div className="container mx-auto px-4 max-w-5xl relative z-10">
-            <motion.div 
+        <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+          <div className="container mx-auto max-w-7xl px-6">
+            {/* Section Header */}
+            <motion.div
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-center mb-16"
+              className="text-center mb-12"
             >
-              <h2 className="text-4xl md:text-5xl font-serif font-bold text-white mb-6">Client Success Stories</h2>
+              <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+                Client Reviews
+              </span>
+              <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+                Trusted by Clients
+              </h2>
+              <p className="text-gray-500 max-w-xl mx-auto">
+                See what our clients say about their web development experience
+              </p>
             </motion.div>
-
-            <div className="relative">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={currentTestimonial}
-                  initial={{ opacity: 0, scale: 0.95 }}
-                  animate={{ opacity: 1, scale: 1 }}
-                  exit={{ opacity: 0, scale: 1.05 }}
-                  transition={{ duration: 0.4 }}
-                  className="bg-white/5 backdrop-blur-md border border-white/10 p-8 md:p-12 rounded-3xl text-center relative max-w-3xl mx-auto"
-                >
-                  <FaQuoteLeft className="text-4xl text-[#C9A227]/20 mx-auto mb-8" />
-                  
-                  <p className="text-xl md:text-2xl text-gray-200 leading-relaxed italic mb-8 font-serif">
-                    "{testimonials[currentTestimonial]?.quote}"
-                  </p>
-
-                  <div className="flex flex-col items-center gap-4">
-                    <div className="w-16 h-16 rounded-full bg-gradient-to-br from-[#C9A227] to-[#F0E68C] flex items-center justify-center text-[#0B1530] font-bold text-2xl">
-                      {testimonials[currentTestimonial]?.name?.charAt(0)}
-                    </div>
-                    <div>
-                      <h4 className="text-white font-bold text-lg">{testimonials[currentTestimonial]?.name}</h4>
-                      <p className="text-[#C9A227] text-sm">{testimonials[currentTestimonial]?.title}</p>
-                    </div>
-                    <div className="flex gap-1 text-[#C9A227]">
-                      {[...Array(5)].map((_, i) => (
-                        <FaStar key={i} size={14} className={i < (testimonials[currentTestimonial]?.rating || 5) ? 'opacity-100' : 'opacity-30'} />
-                      ))}
-                    </div>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
+            
+            {/* Carousel Container */}
+            <div className="relative max-w-5xl mx-auto">
               {/* Navigation Buttons */}
-              <div className="flex justify-center gap-4 mt-8">
-                <button onClick={prevTestimonial} className="p-3 rounded-full bg-white/5 hover:bg-[#C9A227] hover:text-[#0B1530] text-white transition-all border border-white/10">
-                  <FaChevronLeft />
-                </button>
-                <button onClick={nextTestimonial} className="p-3 rounded-full bg-white/5 hover:bg-[#C9A227] hover:text-[#0B1530] text-white transition-all border border-white/10">
-                  <FaChevronRight />
-                </button>
+              {testimonials.length > 1 && (
+                <>
+                  <button
+                    onClick={prevTestimonial}
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
+                    aria-label="Previous testimonial"
+                  >
+                    <FaChevronLeft size={16} />
+                  </button>
+                  <button
+                    onClick={nextTestimonial}
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
+                    aria-label="Next testimonial"
+                  >
+                    <FaChevronRight size={18} />
+                  </button>
+                </>
+              )}
+
+              {/* Testimonial Card */}
+              <div className="overflow-hidden px-4">
+                <AnimatePresence mode="wait">
+                  <motion.div
+                    key={currentTestimonial}
+                    initial={{ opacity: 0, x: 50 }}
+                    animate={{ opacity: 1, x: 0 }}
+                    exit={{ opacity: 0, x: -50 }}
+                    transition={{ duration: 0.3 }}
+                    className="bg-white p-6 md:p-8 rounded-2xl shadow-xl relative flex flex-col md:flex-row items-center gap-6"
+                  >
+                    {/* Left: Author */}
+                    <div className="flex flex-col items-center md:w-48 flex-shrink-0">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
+                        {testimonials[currentTestimonial]?.image ? (
+                          <img 
+                            src={testimonials[currentTestimonial].image} 
+                            alt={testimonials[currentTestimonial]?.name}
+                            className="w-full h-full object-cover"
+                            onError={(e) => {
+                              e.target.style.display = 'none';
+                              e.target.nextSibling.style.display = 'flex';
+                            }}
+                          />
+                        ) : null}
+                        <span className={testimonials[currentTestimonial]?.image ? 'hidden' : 'flex'}>
+                          {testimonials[currentTestimonial]?.name?.charAt(0)}
+                        </span>
+                      </div>
+                      <div className="text-center">
+                        <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
+                        <div className="text-xs text-gray-500">{testimonials[currentTestimonial]?.title}</div>
+                      </div>
+                      {/* Stars */}
+                      <div className="flex gap-0.5 mt-2">
+                        {[...Array(5)].map((_, i) => (
+                          <FaStar 
+                            key={i} 
+                            size={14} 
+                            className={i < testimonials[currentTestimonial]?.rating ? 'text-[#C9A227]' : 'text-gray-200'} 
+                          />
+                        ))}
+                      </div>
+                    </div>
+                    
+                    {/* Right: Quote */}
+                    <div className="flex-1 relative md:pl-6 md:border-l border-gray-100">
+                      {/* Quote Icon */}
+                      <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center shadow-lg">
+                        <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
+                          <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
+                        </svg>
+                      </div>
+                      <p className="text-gray-600 text-base md:text-lg leading-relaxed italic pt-8 md:pt-0 md:pl-4">
+                        "{testimonials[currentTestimonial]?.quote}"
+                      </p>
+                    </div>
+                  </motion.div>
+                </AnimatePresence>
               </div>
+
+              {/* Dots Navigation */}
+              {testimonials.length > 1 && (
+                <div className="flex justify-center gap-2 mt-6">
+                  {testimonials.map((_, idx) => (
+                    <button
+                      key={idx}
+                      onClick={() => setCurrentTestimonial(idx)}
+                      className={`w-2.5 h-2.5 rounded-full transition-all ${
+                        idx === currentTestimonial 
+                          ? 'bg-[#C9A227] w-6' 
+                          : 'bg-gray-300 hover:bg-gray-400'
+                      }`}
+                      aria-label={`Go to testimonial ${idx + 1}`}
+                    />
+                  ))}
+                </div>
+              )}
             </div>
           </div>
         </section>
