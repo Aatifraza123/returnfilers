@@ -23,7 +23,13 @@ const defaultServices = [
 ];
 
 // Services that don't require document upload
-const noDocumentServices = ['Web Development'];
+const noDocumentServices = [
+  'Web Development',
+  'Web Development - Basic Website',
+  'Web Development - Business Website', 
+  'Web Development - E-commerce Website',
+  'Web Development - Custom Web Application'
+];
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
