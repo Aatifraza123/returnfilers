@@ -59,14 +59,23 @@ const DigitalServices = () => {
         
         setServices(servicesRes.data.services.filter(s => s.active) || []);
         
-        // Refined Filter Logic
-        const webTestimonials = testimonialsRes.data.data?.filter(t => 
-          t.isActive && (
-            t.service?.toLowerCase().includes('web') || 
-            t.service?.toLowerCase().includes('website') ||
-            t.service?.toLowerCase().includes('development')
-          )
-        ) || [];
+        // Filter only Web Development testimonials
+        const allTestimonials = testimonialsRes.data.data || [];
+        console.log('All testimonials:', allTestimonials.map(t => ({ name: t.name, service: t.service, active: t.isActive })));
+        
+        const webTestimonials = allTestimonials.filter(t => {
+          if (!t.isActive || !t.service) return false;
+          const service = t.service.toLowerCase();
+          const isWebDev = service.includes('web') || 
+                          service.includes('website') || 
+                          service.includes('development') ||
+                          service.includes('e-commerce') ||
+                          service.includes('ecommerce');
+          console.log(`${t.name} (${t.service}): ${isWebDev ? 'INCLUDED' : 'EXCLUDED'}`);
+          return isWebDev;
+        });
+        
+        console.log('Filtered web testimonials:', webTestimonials.map(t => ({ name: t.name, service: t.service })));
         setTestimonials(webTestimonials);
       } catch (error) {
         console.error('Failed to fetch data', error);
