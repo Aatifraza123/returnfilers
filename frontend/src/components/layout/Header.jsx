@@ -8,6 +8,7 @@ const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
   const [services, setServices] = useState([]);
 
   // Fetch services
@@ -138,18 +139,75 @@ const Header = () => {
             <ul className="flex flex-col p-6 space-y-4">
               {navLinks.map((link) => (
                 <li key={link.to}>
-                  <NavLink
-                    to={link.to}
-                    onClick={() => setMobileMenu(false)}
-                    className={({ isActive }) =>
-                      `flex items-center justify-between text-lg font-medium ${
-                        isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
-                      }`
-                    }
-                  >
-                    {link.label}
-                    <FaChevronRight className="text-xs text-gray-400" />
-                  </NavLink>
+                  {link.hasDropdown ? (
+                    <div>
+                      <button
+                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
+                        className="flex items-center justify-between w-full text-lg font-medium text-[#0B1530]"
+                      >
+                        {link.label}
+                        <FaChevronDown className={`text-xs text-gray-400 transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`} />
+                      </button>
+                      
+                      {/* Mobile Services Dropdown */}
+                      <AnimatePresence>
+                        {mobileServicesOpen && (
+                          <motion.div
+                            initial={{ height: 0, opacity: 0 }}
+                            animate={{ height: 'auto', opacity: 1 }}
+                            exit={{ height: 0, opacity: 0 }}
+                            className="mt-2 ml-4 space-y-2 overflow-hidden"
+                          >
+                            {services.length > 0 && services.map((service) => (
+                              <Link
+                                key={service._id}
+                                to={`/services/${service.slug || service._id}`}
+                                onClick={() => {
+                                  setMobileMenu(false);
+                                  setMobileServicesOpen(false);
+                                }}
+                                className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
+                              >
+                                {service.title}
+                              </Link>
+                            ))}
+                            <Link
+                              to="/digital-services"
+                              onClick={() => {
+                                setMobileMenu(false);
+                                setMobileServicesOpen(false);
+                              }}
+                              className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                            >
+                              🌐 Digital Services
+                            </Link>
+                            <Link
+                              to="/services"
+                              onClick={() => {
+                                setMobileMenu(false);
+                                setMobileServicesOpen(false);
+                              }}
+                              className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                            >
+                              View All →
+                            </Link>
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+                  ) : (
+                    <NavLink
+                      to={link.to}
+                      onClick={() => setMobileMenu(false)}
+                      className={({ isActive }) =>
+                        `flex items-center justify-between text-lg font-medium ${
+                          isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
+                        }`
+                      }
+                    >
+                      {link.label}
+                    </NavLink>
+                  )}
                 </li>
               ))}
               <li className="pt-4 mt-2 border-t border-gray-100">
