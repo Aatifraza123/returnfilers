@@ -152,6 +152,13 @@ const Quote = () => {
                   <option value="audit">Audit Services</option>
                   <option value="consulting">Business Consulting</option>
                   <option value="financial">Financial Planning</option>
+                  <optgroup label="Web Development">
+                    <option value="web-basic">Basic Website (₹9,999)</option>
+                    <option value="web-business">Business Website (₹14,999)</option>
+                    <option value="web-ecommerce">E-commerce Website (₹24,999)</option>
+                    <option value="web-custom">Custom Web Application (₹39,999)</option>
+                  </optgroup>
+                  <option value="data-analysis">Data Analysis (₹9,999)</option>
                   <option value="other">Other</option>
                 </select>
               </div>
