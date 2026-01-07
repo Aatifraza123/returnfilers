@@ -333,7 +333,7 @@ const AdminLayout = () => {
                 <FaBars className="text-lg" />
               </button>
               <h1 className="text-lg font-bold text-[#0B1530]">
-                {menuItems.find(item => isActive(item.path))?.label || 'Dashboard'}
+                {menuSections.flatMap(s => s.items).find(item => isActive(item.path))?.label || 'Dashboard'}
               </h1>
             </div>
             
