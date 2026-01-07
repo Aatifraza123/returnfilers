@@ -137,7 +137,7 @@ const expertiseData = {
     icon: <FaCode />,
     title: 'Web Development',
     tagline: 'Professional Digital Solutions',
-    heroImage: 'https://images.unsplash.com/photo-1461749280684-dccba630e2f6?q=80&w=2069&auto=format&fit=crop',
+    heroImage: 'https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&q=80',
     description: 'Professional website and web application development services to establish your digital presence and grow your business online.',
     overview: 'In today\'s digital age, having a professional online presence is essential for business success. We create modern, responsive, and SEO-optimized websites that help you reach more customers and grow your business.',
     services: [
