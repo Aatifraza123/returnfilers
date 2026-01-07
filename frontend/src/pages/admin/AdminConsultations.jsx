@@ -9,6 +9,7 @@ const AdminConsultations = () => {
   const [selectedConsultation, setSelectedConsultation] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [activeTab, setActiveTab] = useState('tax'); // 'tax' or 'webdev'
 
   useEffect(() => {
     fetchConsultations();
@@ -91,7 +92,19 @@ const AdminConsultations = () => {
     window.open(`mailto:${consultation.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
-  const filteredConsultations = consultations.filter(consultation => {
+  // Separate consultations into tax and web development
+  const webDevKeywords = ['web development', 'basic website', 'business website', 'e-commerce website', 'custom web application', 'web', 'website', 'development'];
+  const isWebDevConsultation = (service) => {
+    return webDevKeywords.some(keyword => service.toLowerCase().includes(keyword.toLowerCase()));
+  };
+
+  const taxConsultations = consultations.filter(c => !isWebDevConsultation(c.service));
+  const webDevConsultations = consultations.filter(c => isWebDevConsultation(c.service));
+
+  // Apply filter based on active tab
+  const currentConsultations = activeTab === 'tax' ? taxConsultations : webDevConsultations;
+
+  const filteredConsultations = currentConsultations.filter(consultation => {
     const matchesSearch = 
       consultation.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       consultation.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -128,27 +141,64 @@ const AdminConsultations = () => {
         <p className="text-gray-600">Manage all consultation requests from clients</p>
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-2 border-b mb-6">
+        <button
+          onClick={() => {
+            setActiveTab('tax');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'tax'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Tax Services
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {taxConsultations.length}
+          </span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('webdev');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'webdev'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Web Development
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {webDevConsultations.length}
+          </span>
+        </button>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Total</p>
-          <p className="text-2xl font-bold text-[#0B1530]">{consultations.length}</p>
+          <p className="text-2xl font-bold text-[#0B1530]">{currentConsultations.length}</p>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Pending</p>
           <p className="text-2xl font-bold text-yellow-600">
-            {consultations.filter(c => c.status === 'pending').length}
+            {currentConsultations.filter(c => c.status === 'pending').length}
           </p>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Contacted</p>
           <p className="text-2xl font-bold text-blue-600">
-            {consultations.filter(c => c.status === 'contacted').length}
+            {currentConsultations.filter(c => c.status === 'contacted').length}
           </p>
         </div>
         <div className="bg-green-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Completed</p>
           <p className="text-2xl font-bold text-green-600">
+            {currentConsultations.filter(c => c.status === 'completed').length}
             {consultations.filter(c => c.status === 'completed').length}
           </p>
         </div>
