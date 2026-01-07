@@ -107,7 +107,7 @@ const expertiseData = {
     icon: <FaUsers />,
     title: 'Business Setup',
     tagline: 'End-to-End Company Formation',
-    heroImage: 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=2070&auto=format&fit=crop',
+    heroImage: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcR-2pPKi0VWbJ1IZ1-z_Iap1430Hf4RS0kmvw&s',
     description: 'Complete assistance in company formation, registration, and legal structuring to get your business started right.',
     overview: 'Business setup is a critical first step in your entrepreneurial journey. We ensure your business is established correctly, legally compliant, and ready for operations.',
     services: [
