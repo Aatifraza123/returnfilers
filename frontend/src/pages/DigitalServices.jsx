@@ -3,7 +3,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link } from 'react-router-dom';
 import { 
   FaCode, FaCheckCircle, FaStar, 
-  FaChevronLeft, FaChevronRight 
+  FaChevronLeft, FaChevronRight, FaPlus, FaMinus 
 } from 'react-icons/fa';
 import api from '../api/axios';
 
@@ -26,6 +26,42 @@ const DigitalServices = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [openFaq, setOpenFaq] = useState(null);
+
+  const faqs = [
+    {
+      question: "How long does it take to build a website?",
+      answer: "The timeline depends on the package you choose. Basic websites take 5-7 days, Business websites 7-10 days, E-commerce sites 15-20 days, and Custom applications 20-30 days. We provide regular updates throughout the development process."
+    },
+    {
+      question: "Do you provide website maintenance after launch?",
+      answer: "Yes! All our packages include free support ranging from 1 month to 1 year depending on the package. After that, we offer affordable maintenance plans to keep your website updated and secure."
+    },
+    {
+      question: "Will my website be mobile-friendly?",
+      answer: "Absolutely! All our websites are fully responsive and optimized for mobile devices, tablets, and desktops. We ensure your site looks great and functions perfectly on all screen sizes."
+    },
+    {
+      question: "Can I update the website content myself?",
+      answer: "Yes! We provide an easy-to-use admin panel where you can update content, images, and manage your website without any technical knowledge. We also provide training on how to use it."
+    },
+    {
+      question: "Do you provide hosting and domain services?",
+      answer: "We can help you set up hosting and domain registration, or work with your existing providers. We'll guide you through the entire process and recommend the best options for your needs."
+    },
+    {
+      question: "What if I need changes after the website is live?",
+      answer: "Minor changes are included in your free support period. For major updates or new features, we offer flexible pricing based on the scope of work. We're always here to help your website grow with your business."
+    },
+    {
+      question: "Will my website be SEO optimized?",
+      answer: "Yes! All our packages include basic to advanced SEO optimization. We implement best practices for on-page SEO, meta tags, site speed, and mobile optimization to help your website rank better in search engines."
+    },
+    {
+      question: "What payment methods do you accept?",
+      answer: "We accept bank transfers, UPI, and online payments. For larger projects, we offer flexible payment plans with milestone-based payments to make it easier for you."
+    }
+  ];
 
   useEffect(() => {
     const fetchData = async () => {
@@ -204,6 +240,91 @@ const DigitalServices = () => {
               ))}
             </div>
           )}
+        </div>
+      </section>
+
+      {/* FAQ Section */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto px-4 max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+              Got Questions?
+            </span>
+            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-500 max-w-2xl mx-auto">
+              Find answers to common questions about our web development services
+            </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {faqs.map((faq, index) => (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 }}
+                className="bg-white border-2 border-gray-100 rounded-xl overflow-hidden hover:border-[#C9A227]/30 transition-all"
+              >
+                <button
+                  onClick={() => setOpenFaq(openFaq === index ? null : index)}
+                  className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
+                >
+                  <span className="font-semibold text-[#0B1530] pr-4">{faq.question}</span>
+                  <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-[#C9A227]/10 flex items-center justify-center text-[#C9A227] transition-transform ${openFaq === index ? 'rotate-180' : ''}`}>
+                    {openFaq === index ? <FaMinus size={14} /> : <FaPlus size={14} />}
+                  </div>
+                </button>
+                
+                <AnimatePresence>
+                  {openFaq === index && (
+                    <motion.div
+                      initial={{ height: 0, opacity: 0 }}
+                      animate={{ height: 'auto', opacity: 1 }}
+                      exit={{ height: 0, opacity: 0 }}
+                      transition={{ duration: 0.3 }}
+                      className="overflow-hidden"
+                    >
+                      <div className="px-6 pb-5 text-gray-600 leading-relaxed border-t border-gray-100 pt-4">
+                        {faq.answer}
+                      </div>
+                    </motion.div>
+                  )}
+                </AnimatePresence>
+              </motion.div>
+            ))}
+          </div>
+
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="mt-12 text-center p-6 bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] rounded-2xl text-white"
+          >
+            <h3 className="text-xl font-bold mb-2">Still have questions?</h3>
+            <p className="text-gray-300 mb-4">We're here to help! Contact us for more information.</p>
+            <div className="flex flex-col sm:flex-row gap-3 justify-center">
+              <Link
+                to="/contact"
+                className="px-6 py-3 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-all"
+              >
+                Contact Us
+              </Link>
+              <a
+                href="tel:+918447127264"
+                className="px-6 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#0B1530] transition-all"
+              >
+                Call: +91 84471 27264
+              </a>
+            </div>
+          </motion.div>
         </div>
       </section>
 
