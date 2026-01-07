@@ -1,51 +1,31 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
-import { FaFileContract, FaGavel, FaExclamationCircle, FaRegCopyright, FaShieldAlt } from 'react-icons/fa';
+import { FaFileContract } from 'react-icons/fa';
+import api from '../api/axios';
 
 const TermsConditions = () => {
-  const sections = [
-    {
-      id: 'intro',
-      title: '1. Introduction',
-      icon: <FaFileContract />,
-      content: `These Terms and Conditions govern your use of our website and services. By accessing or using our website, you agree to be bound by these terms. If you disagree with any part of these terms, you may not access the service.`,
-    },
-    {
-      id: 'services',
-      title: '2. Services',
-      icon: <FaGavel />,
-      content: `We provide professional chartered accountancy services including tax consulting, auditing, and financial advisory. All services are subject to these terms and any specific engagement letters signed between us and the client.`,
-    },
-    {
-      id: 'payments',
-      title: '3. Payments',
-      icon: <FaExclamationCircle />,
-      content: `All payments must be made in advance unless otherwise agreed in writing. We accept bank transfers, UPI, and major credit cards. Late payments may incur additional interest charges of 1.5% per month.`,
-    },
-    {
-      id: 'refunds',
-      title: '4. Refunds',
-      icon: <FaShieldAlt />,
-      content: `Our refund policy is strictly outlined in our separate Refund Policy document. Generally, fees paid for completed services are non-refundable. Retainers may be refunded on a pro-rata basis if the engagement is terminated early.`,
-    },
-    {
-      id: 'ip',
-      title: '5. Intellectual Property',
-      icon: <FaRegCopyright />,
-      content: `All content on this website, including text, graphics, logos, and software, is the property of ReturnFilers and is protected by international copyright laws.`,
-    },
-    {
-      id: 'liability',
-      title: '6. Limitation of Liability',
-      icon: null,
-      content: `We are not liable for any indirect, incidental, special, consequential or punitive damages, including without limitation, loss of profits, data, use, goodwill, or other intangible losses, resulting from your access to or use of or inability to access or use the service.`,
-    },
-    {
-      id: 'changes',
-      title: '7. Changes to Terms',
-      icon: null,
-      content: `We reserve the right, at our sole discretion, to modify or replace these Terms at any time. What constitutes a material change will be determined at our sole discretion.`,
-    },
-  ];
+  const [content, setContent] = useState('');
+  const [lastUpdated, setLastUpdated] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    fetchTermsConditions();
+  }, []);
+
+  const fetchTermsConditions = async () => {
+    try {
+      const { data } = await api.get('/settings');
+      if (data.success) {
+        setContent(data.data.termsConditions || 'Terms & Conditions content will be available soon.');
+        setLastUpdated(data.data.lastUpdated);
+      }
+    } catch (error) {
+      console.error('Error fetching terms:', error);
+      setContent('Unable to load terms & conditions. Please try again later.');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
@@ -74,8 +54,14 @@ const TermsConditions = () => {
             className="text-sm md:text-base text-gray-600 max-w-2xl mx-auto"
           >
             Please read these terms carefully before using our services.
-            <br />
-            <span className="text-xs text-gray-500 mt-2 block">Last updated: November 28, 2025</span>
+            {lastUpdated && (
+              <>
+                <br />
+                <span className="text-xs text-gray-500 mt-2 block">
+                  Last updated: {new Date(lastUpdated).toLocaleDateString('en-IN', { year: 'numeric', month: 'long', day: 'numeric' })}
+                </span>
+              </>
+            )}
           </motion.p>
         </div>
       </section>
@@ -83,21 +69,32 @@ const TermsConditions = () => {
       {/* ==================== CONTENT SECTION ==================== */}
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-6 max-w-4xl">
-          <motion.div
-            initial={{ opacity: 0, y: 30 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.3 }}
-            className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200/60"
-          >
-            <div className="space-y-8">
-              {sections.map((section, index) => (
-                <div key={section.id} className="relative">
-                  <h2 className="text-lg md:text-xl font-bold text-[#0B1530] mb-3 flex items-center gap-2">
-                    {/* Icon for mobile layout */}
-                    {section.icon && <span className="text-[#C9A227]">{section.icon}</span>}
-                    {section.title}
-                  </h2>
-                  <p className="text-gray-600 leading-relaxed text-sm md:text-base">
+          {loading ? (
+            <div className="flex items-center justify-center py-12">
+              <div className="animate-spin w-12 h-12 border-4 border-[#C9A227] border-t-transparent rounded-full"></div>
+            </div>
+          ) : (
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              animate={{ opacity: 1, y: 0 }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200/60"
+            >
+              <div className="prose prose-gray max-w-none">
+                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+                  {content}
+                </div>
+              </div>
+            </motion.div>
+          )}
+        </div>
+      </section>
+
+    </div>
+  );
+};
+
+export default TermsConditions;
                     {section.content}
                   </p>
                   

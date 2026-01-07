@@ -139,19 +139,44 @@ const AdminLayout = () => {
     navigate(notification.link);
   };
 
-  const menuItems = [
-    { path: '/admin/dashboard', icon: <FaChartPie />, label: 'Dashboard', badge: null },
-    { path: '/admin/emails', icon: <FaInbox />, label: 'Emails', badge: null },
-    { path: '/admin/bookings', icon: <FaCalendarCheck />, label: 'Bookings', badge: null },
-    { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations', badge: null },
-    { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
-    { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
-    { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
-    { path: '/admin/digital-services', icon: <FaFolderOpen />, label: 'Digital Services', badge: null },
-    { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
-    { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
-    { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
-    { path: '/admin/settings', icon: <FaCog />, label: 'Settings', badge: null },
+  const menuSections = [
+    {
+      title: 'Overview',
+      items: [
+        { path: '/admin/dashboard', icon: <FaChartPie />, label: 'Dashboard', badge: null },
+      ]
+    },
+    {
+      title: 'Communications',
+      items: [
+        { path: '/admin/emails', icon: <FaInbox />, label: 'Emails', badge: null },
+        { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
+      ]
+    },
+    {
+      title: 'Client Requests',
+      items: [
+        { path: '/admin/bookings', icon: <FaCalendarCheck />, label: 'Bookings', badge: null },
+        { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations', badge: null },
+        { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
+      ]
+    },
+    {
+      title: 'Services & Content',
+      items: [
+        { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
+        { path: '/admin/digital-services', icon: <FaFolderOpen />, label: 'Digital Services', badge: null },
+        { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
+        { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
+        { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
+      ]
+    },
+    {
+      title: 'Settings',
+      items: [
+        { path: '/admin/settings', icon: <FaCog />, label: 'Settings', badge: null },
+      ]
+    }
   ];
 
   const handleLogout = () => {
@@ -208,43 +233,59 @@ const AdminLayout = () => {
 
         {/* Navigation */}
         <nav className="flex-1 overflow-y-auto px-2 py-2 mt-2" style={{ scrollbarWidth: 'thin', scrollbarColor: '#C9A227 transparent' }}>
-          <div className="space-y-1">
-            {menuItems.map((item) => {
-              const active = isActive(item.path);
-              return (
-                <Link
-                  key={item.path}
-                  to={item.path}
-                  onClick={() => setSidebarOpen(false)}
-                  title={sidebarCollapsed ? item.label : ''}
-                  className={`
-                    flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 rounded-lg text-sm
-                    transition-all duration-200 group relative
-                    ${active 
-                      ? 'bg-[#C9A227] text-[#0B1530] font-semibold shadow-lg shadow-[#C9A227]/20' 
-                      : 'hover:bg-white/10 text-gray-300 hover:text-white hover:translate-x-1'
-                    }
-                  `}
-                >
-                  <span className={`text-lg flex-shrink-0 ${active ? 'text-[#0B1530]' : 'text-gray-400 group-hover:text-[#C9A227] transition-colors'}`}>
-                    {item.icon}
-                  </span>
-                  {!sidebarCollapsed && (
-                    <>
-                      <span className="flex-1 font-medium">{item.label}</span>
-                      {item.badge && (
-                        <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
-                          {item.badge}
+          <div className="space-y-6">
+            {menuSections.map((section, sectionIdx) => (
+              <div key={sectionIdx}>
+                {/* Section Title */}
+                {!sidebarCollapsed && (
+                  <div className="px-3 mb-2">
+                    <h3 className="text-xs font-bold text-gray-500 uppercase tracking-wider">
+                      {section.title}
+                    </h3>
+                  </div>
+                )}
+                
+                {/* Section Items */}
+                <div className="space-y-1">
+                  {section.items.map((item) => {
+                    const active = isActive(item.path);
+                    return (
+                      <Link
+                        key={item.path}
+                        to={item.path}
+                        onClick={() => setSidebarOpen(false)}
+                        title={sidebarCollapsed ? item.label : ''}
+                        className={`
+                          flex items-center ${sidebarCollapsed ? 'justify-center' : 'gap-3'} px-3 py-2.5 rounded-lg text-sm
+                          transition-all duration-200 group relative
+                          ${active 
+                            ? 'bg-[#C9A227] text-[#0B1530] font-semibold shadow-lg shadow-[#C9A227]/20' 
+                            : 'hover:bg-white/10 text-gray-300 hover:text-white hover:translate-x-1'
+                          }
+                        `}
+                      >
+                        <span className={`text-lg flex-shrink-0 ${active ? 'text-[#0B1530]' : 'text-gray-400 group-hover:text-[#C9A227] transition-colors'}`}>
+                          {item.icon}
                         </span>
-                      )}
-                      {active && (
-                        <span className="absolute right-2 w-1.5 h-1.5 bg-[#0B1530] rounded-full"></span>
-                      )}
-                    </>
-                  )}
-                </Link>
-              );
-            })}
+                        {!sidebarCollapsed && (
+                          <>
+                            <span className="flex-1 font-medium">{item.label}</span>
+                            {item.badge && (
+                              <span className="bg-red-500 text-white text-xs px-2 py-0.5 rounded-full font-bold">
+                                {item.badge}
+                              </span>
+                            )}
+                            {active && (
+                              <span className="absolute right-2 w-1.5 h-1.5 bg-[#0B1530] rounded-full"></span>
+                            )}
+                          </>
+                        )}
+                      </Link>
+                    );
+                  })}
+                </div>
+              </div>
+            ))}
           </div>
         </nav>
 
