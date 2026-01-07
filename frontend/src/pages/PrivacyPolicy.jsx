@@ -33,18 +33,20 @@ const PrivacyPolicy = () => {
     const parts = text.split(emailRegex);
     
     return parts.map((part, index) => {
-      if (emailRegex.test(part)) {
+      // Reset regex lastIndex for each test
+      const testRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$/i;
+      if (testRegex.test(part)) {
         return (
           <a 
             key={index} 
             href={`mailto:${part}`} 
-            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors"
+            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors font-medium"
           >
             {part}
           </a>
         );
       }
-      return part;
+      return <span key={index}>{part}</span>;
     });
   };
 
