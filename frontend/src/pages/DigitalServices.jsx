@@ -92,7 +92,7 @@ const DigitalServices = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
           >
-            Web <span className="text-[#C9A227]">Development</span>
+            Digital <span className="text-[#C9A227]">Services</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
