@@ -20,6 +20,7 @@ const chatRoutes = require('./routes/chatRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const digitalServiceRoutes = require('./routes/digitalServiceRoutes');
+const settingsRoutes = require('./routes/settingsRoutes');
 
 const app = express();
 
@@ -144,6 +145,9 @@ console.log('✓ Booking routes registered at /api/bookings');
 
 app.use('/api/digital-services', digitalServiceRoutes);
 console.log('✓ Digital Service routes registered at /api/digital-services');
+
+app.use('/api/settings', settingsRoutes);
+console.log('✓ Settings routes registered at /api/settings');
 
 // Public routes last - /api/blogs in publicRoutes won't be reached (blogRoutes handles it first)
 app.use('/api', publicRoutes); 

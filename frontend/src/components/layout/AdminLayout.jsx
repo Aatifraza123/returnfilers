@@ -21,7 +21,8 @@ import {
   FaFolderOpen,
   FaCalendarCheck,
   FaChevronLeft,
-  FaChevronRight
+  FaChevronRight,
+  FaCog
 } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
@@ -150,6 +151,7 @@ const AdminLayout = () => {
     { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
     { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
+    { path: '/admin/settings', icon: <FaCog />, label: 'Settings', badge: null },
   ];
 
   const handleLogout = () => {
