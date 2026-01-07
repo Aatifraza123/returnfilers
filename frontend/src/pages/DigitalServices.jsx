@@ -271,24 +271,6 @@ const DigitalServices = () => {
           </div>
         </section>
       )}
-
-      {/* CTA Section */}
-      <section className="py-24 bg-white text-center">
-        <div className="container mx-auto px-4">
-          <h2 className="text-4xl font-serif font-bold text-[#0B1530] mb-6">Ready to Start Your Project?</h2>
-          <p className="text-gray-600 max-w-2xl mx-auto mb-10 text-lg">
-            Let's discuss how we can help you achieve your digital goals.
-          </p>
-          <div className="flex flex-col sm:flex-row justify-center gap-4">
-            <Link to="/contact" className="px-10 py-4 bg-[#0B1530] text-white rounded-xl font-bold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-xl">
-              Start a Project
-            </Link>
-            <a href="tel:+918447127264" className="px-10 py-4 border-2 border-[#0B1530] text-[#0B1530] rounded-xl font-bold hover:bg-[#0B1530] hover:text-white transition-all flex items-center justify-center gap-2">
-              <FaPhone size={16} /> +91 84471 27264
-            </a>
-          </div>
-        </div>
-      </section>
     </main>
   );
 };
