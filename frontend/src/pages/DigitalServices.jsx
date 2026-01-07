@@ -172,17 +172,30 @@ const DigitalServices = () => {
                           </div>
 
                           <div className="p-8 mt-auto">
-                            <Link
-                              to={`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`}
-                              className={`
-                                block w-full py-4 rounded-xl font-bold text-center transition-all duration-300
-                                ${pkg.name === 'Business Website' 
-                                  ? 'bg-[#C9A227] text-[#0B1530] hover:bg-white' 
-                                  : 'bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]'}
-                              `}
-                            >
-                              Get Started
-                            </Link>
+                            <div className="flex gap-3">
+                              <Link
+                                to={`/digital-services/${service.slug}/${pkg.name.toLowerCase().replace(/\s+/g, '-')}`}
+                                className={`
+                                  flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm
+                                  ${pkg.name === 'Business Website' 
+                                    ? 'border-2 border-[#C9A227] text-[#C9A227] hover:bg-[#C9A227] hover:text-[#0B1530]' 
+                                    : 'border-2 border-[#0B1530] text-[#0B1530] hover:bg-[#0B1530] hover:text-white'}
+                                `}
+                              >
+                                Details
+                              </Link>
+                              <Link
+                                to={`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`}
+                                className={`
+                                  flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm
+                                  ${pkg.name === 'Business Website' 
+                                    ? 'bg-[#C9A227] text-[#0B1530] hover:bg-white' 
+                                    : 'bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]'}
+                                `}
+                              >
+                                Get Started
+                              </Link>
+                            </div>
                           </div>
                         </motion.div>
                       ))}
