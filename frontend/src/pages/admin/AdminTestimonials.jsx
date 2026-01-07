@@ -8,6 +8,7 @@ const AdminTestimonials = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingTestimonial, setEditingTestimonial] = useState(null);
+  const [activeTab, setActiveTab] = useState('tax'); // 'tax' or 'webdev'
   const [formData, setFormData] = useState({
     name: '',
     title: '',
@@ -136,6 +137,12 @@ const AdminTestimonials = () => {
     ));
   };
 
+  // Filter testimonials based on active tab
+  const webDevServices = ['Web Development', 'E-commerce Website', 'Business Website', 'Custom Web Application'];
+  const currentTestimonials = activeTab === 'tax'
+    ? testimonials.filter(t => !webDevServices.includes(t.service))
+    : testimonials.filter(t => webDevServices.includes(t.service));
+
   return (
     <div className="p-4 md:p-6 max-w-6xl mx-auto">
       {/* Header */}
@@ -153,6 +160,36 @@ const AdminTestimonials = () => {
             Add Testimonial
           </button>
         )}
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b mb-6">
+        <button
+          onClick={() => setActiveTab('tax')}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'tax'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Tax Services
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {testimonials.filter(t => !['Web Development', 'E-commerce Website', 'Business Website', 'Custom Web Application'].includes(t.service)).length}
+          </span>
+        </button>
+        <button
+          onClick={() => setActiveTab('webdev')}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'webdev'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Web Development
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {testimonials.filter(t => ['Web Development', 'E-commerce Website', 'Business Website', 'Custom Web Application'].includes(t.service)).length}
+          </span>
+        </button>
       </div>
 
       {/* Form */}
@@ -296,9 +333,9 @@ const AdminTestimonials = () => {
           <div className="animate-spin w-10 h-10 border-4 border-[#C9A227] border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-500">Loading testimonials...</p>
         </div>
-      ) : testimonials.length > 0 ? (
+      ) : currentTestimonials.length > 0 ? (
         <div className="grid md:grid-cols-2 gap-4">
-          {testimonials.map((testimonial) => (
+          {currentTestimonials.map((testimonial) => (
             <div
               key={testimonial._id}
               className={`bg-white rounded-xl border-2 p-5 transition-all ${
