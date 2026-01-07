@@ -9,6 +9,7 @@ const AdminQuotes = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
   const [selectedQuote, setSelectedQuote] = useState(null);
+  const [activeTab, setActiveTab] = useState('tax'); // 'tax' or 'webdev'
 
   const getConfig = () => {
     const token = localStorage.getItem('token');
@@ -88,7 +89,19 @@ const AdminQuotes = () => {
     }
   };
 
-  const filteredQuotes = quotes.filter(quote => {
+  // Separate quotes into tax and web development
+  const webDevKeywords = ['web-basic', 'web-business', 'web-ecommerce', 'web-custom', 'web development', 'website'];
+  const isWebDevQuote = (service) => {
+    return webDevKeywords.some(keyword => service.toLowerCase().includes(keyword.toLowerCase()));
+  };
+
+  const taxQuotes = quotes.filter(q => !isWebDevQuote(q.service));
+  const webDevQuotes = quotes.filter(q => isWebDevQuote(q.service));
+
+  // Apply filter based on active tab
+  const currentQuotes = activeTab === 'tax' ? taxQuotes : webDevQuotes;
+
+  const filteredQuotes = currentQuotes.filter(quote => {
     const matchesSearch = 
       quote.name?.toLowerCase().includes(searchTerm.toLowerCase()) ||
       quote.email?.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -106,7 +119,7 @@ const AdminQuotes = () => {
 
   return (
     <div className="p-6">
-      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-8 gap-4">
+      <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
           <h1 className="text-3xl font-bold text-[#0B1530]">Quote Requests</h1>
           <p className="text-gray-500 mt-1">Total: {quotes.length} | Filtered: {filteredQuotes.length}</p>
@@ -116,6 +129,42 @@ const AdminQuotes = () => {
           className="bg-[#0B1530] text-white px-4 py-2 rounded-lg hover:bg-[#1a2b5c] transition-all text-sm"
         >
           Refresh Data
+        </button>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b mb-6">
+        <button
+          onClick={() => {
+            setActiveTab('tax');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'tax'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Tax Services
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {taxQuotes.length}
+          </span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('webdev');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'webdev'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Web Development
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {webDevQuotes.length}
+          </span>
         </button>
       </div>
 

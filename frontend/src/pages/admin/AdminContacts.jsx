@@ -9,6 +9,7 @@ const AdminContacts = () => {
   const [selectedContact, setSelectedContact] = useState(null);
   const [searchTerm, setSearchTerm] = useState('');
   const [filterStatus, setFilterStatus] = useState('all');
+  const [activeTab, setActiveTab] = useState('tax'); // 'tax' or 'webdev'
 
   useEffect(() => {
     fetchContacts();
@@ -88,7 +89,19 @@ const AdminContacts = () => {
     window.open(`mailto:${contact.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
-  const filteredContacts = contacts.filter(contact => {
+  // Separate contacts - check if message mentions web development
+  const webDevKeywords = ['web development', 'website', 'web design', 'web dev', 'ecommerce', 'e-commerce'];
+  const isWebDevContact = (message) => {
+    return webDevKeywords.some(keyword => message.toLowerCase().includes(keyword));
+  };
+
+  const taxContacts = contacts.filter(c => !isWebDevContact(c.message));
+  const webDevContacts = contacts.filter(c => isWebDevContact(c.message));
+
+  // Apply filter based on active tab
+  const currentContacts = activeTab === 'tax' ? taxContacts : webDevContacts;
+
+  const filteredContacts = currentContacts.filter(contact => {
     const matchesSearch = 
       contact.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
       contact.email.toLowerCase().includes(searchTerm.toLowerCase()) ||
@@ -124,28 +137,64 @@ const AdminContacts = () => {
         <p className="text-gray-600">Manage all general inquiries and messages</p>
       </div>
 
+      {/* Tabs */}
+      <div className="flex gap-2 border-b mb-6">
+        <button
+          onClick={() => {
+            setActiveTab('tax');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'tax'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Tax Services
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {taxContacts.length}
+          </span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('webdev');
+            setFilterStatus('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'webdev'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Web Development
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {webDevContacts.length}
+          </span>
+        </button>
+      </div>
+
       {/* Stats Cards */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Total</p>
-          <p className="text-2xl font-bold text-[#0B1530]">{contacts.length}</p>
+          <p className="text-2xl font-bold text-[#0B1530]">{currentContacts.length}</p>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Pending</p>
           <p className="text-2xl font-bold text-yellow-600">
-            {contacts.filter(c => c.status === 'pending').length}
+            {currentContacts.filter(c => c.status === 'pending').length}
           </p>
         </div>
         <div className="bg-blue-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Read</p>
           <p className="text-2xl font-bold text-blue-600">
-            {contacts.filter(c => c.status === 'read').length}
+            {currentContacts.filter(c => c.status === 'read').length}
           </p>
         </div>
         <div className="bg-green-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Replied</p>
           <p className="text-2xl font-bold text-green-600">
-            {contacts.filter(c => c.status === 'replied').length}
+            {currentContacts.filter(c => c.status === 'replied').length}
           </p>
         </div>
       </div>
