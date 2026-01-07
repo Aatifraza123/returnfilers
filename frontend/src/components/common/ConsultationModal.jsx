@@ -181,10 +181,10 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       <option value="Business Registration">Business Registration</option>
                       <option value="Financial Advisory">Financial Advisory</option>
                       <optgroup label="Web Development">
-                        <option value="Web Development - Basic Website">Basic Website (₹9,999)</option>
-                        <option value="Web Development - Business Website">Business Website (₹14,999)</option>
-                        <option value="Web Development - E-commerce Website">E-commerce Website (₹24,999)</option>
-                        <option value="Web Development - Custom Web Application">Custom Web Application (₹39,999)</option>
+                        <option value="Web Development - Basic Website">Basic Website</option>
+                        <option value="Web Development - Business Website">Business Website</option>
+                        <option value="Web Development - E-commerce Website">E-commerce Website</option>
+                        <option value="Web Development - Custom Web Application">Custom Web Application</option>
                       </optgroup>
                       <option value="Other">Other</option>
                     </select>
