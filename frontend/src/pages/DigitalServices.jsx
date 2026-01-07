@@ -99,12 +99,13 @@ const DigitalServices = () => {
   const nextTestimonial = () => setCurrentTestimonial((prev) => (prev + 1) % testimonials.length);
   const prevTestimonial = () => setCurrentTestimonial((prev) => (prev - 1 + testimonials.length) % testimonials.length);
 
-  // 2. Custom Skeleton Loader
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B1530] flex flex-col items-center justify-center space-y-4">
-        <div className="w-16 h-16 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin"></div>
-        <p className="text-[#C9A227] font-serif tracking-widest animate-pulse">LOADING EXPERIENCE...</p>
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <div className="text-center">
+          <div className="w-16 h-16 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
+          <p className="text-gray-600">Loading...</p>
+        </div>
       </div>
     );
   }
