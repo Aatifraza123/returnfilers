@@ -80,7 +80,7 @@ const About = () => {
             transition={{ duration: 0.8 }}
             className="text-4xl md:text-5xl font-serif font-bold mb-6 leading-tight"
           >
-            About <span className="text-[#C9A227]">Tax Filer</span>
+            About <span className="text-[#C9A227]">ReturnFilers</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}

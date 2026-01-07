@@ -31,7 +31,7 @@ const TermsConditions = () => {
       id: 'ip',
       title: '5. Intellectual Property',
       icon: <FaRegCopyright />,
-      content: `All content on this website, including text, graphics, logos, and software, is the property of Tax Filer and is protected by international copyright laws.`,
+      content: `All content on this website, including text, graphics, logos, and software, is the property of ReturnFilers and is protected by international copyright laws.`,
     },
     {
       id: 'liability',

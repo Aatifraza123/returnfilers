@@ -22,15 +22,15 @@ router.get('/test-email', async (req, res) => {
     
     const result = await sendEmail({
       to: testEmail,
-      subject: 'Test Email from Tax Filer',
+      subject: 'Test Email from ReturnFilers',
       html: `
         <div style="font-family: Arial, sans-serif; padding: 20px; background: #f5f5f5;">
           <div style="max-width: 500px; margin: 0 auto; background: white; padding: 30px; border-radius: 10px;">
             <h1 style="color: #0B1530; margin: 0 0 20px;">✅ Email Test Successful!</h1>
-            <p style="color: #666;">This is a test email from Tax Filer.</p>
+            <p style="color: #666;">This is a test email from ReturnFilers.</p>
             <p style="color: #666;">Time: ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
             <hr style="border: none; border-top: 1px solid #eee; margin: 20px 0;">
-            <p style="color: #D4AF37; font-weight: bold;">Tax Filer</p>
+            <p style="color: #D4AF37; font-weight: bold;">ReturnFilers</p>
           </div>
         </div>
       `

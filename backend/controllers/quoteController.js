@@ -105,7 +105,7 @@ const sendQuoteEmails = async (quote) => {
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                 </td>
               </tr>
             </table>
@@ -139,7 +139,7 @@ const sendQuoteEmails = async (quote) => {
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                 </td>
               </tr>
             </table>

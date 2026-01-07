@@ -18,7 +18,7 @@ const sendEmail = async ({ to, subject, html, from }) => {
   
   try {
     const result = await resend.emails.send({
-      from: process.env.RESEND_FROM || 'Tax Filer <onboarding@resend.dev>',
+      from: process.env.RESEND_FROM || 'ReturnFilers <onboarding@resend.dev>',
       to: to,
       subject: subject,
       html: html

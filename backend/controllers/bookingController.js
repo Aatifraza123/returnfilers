@@ -147,14 +147,14 @@ const replyToBooking = async (req, res) => {
           <tr><td align="center">
             <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
               <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
-                <h1 style="color:#D4AF37;margin:0;">Tax Filer</h1>
+                <h1 style="color:#D4AF37;margin:0;">ReturnFilers</h1>
               </td></tr>
               <tr><td style="padding:30px;">
                 <div style="white-space:pre-line;color:#333;line-height:1.6;">${message}</div>
               </td></tr>
               <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-                <p style="color:#D4AF37;margin:0;font-weight:bold;">Tax Filer</p>
-                <p style="color:#fff;margin:5px 0 0;font-size:12px;">+91 84471 27264 | info@taxfiler.in</p>
+                <p style="color:#D4AF37;margin:0;font-weight:bold;">ReturnFilers</p>
+                <p style="color:#fff;margin:5px 0 0;font-size:12px;">+91 84471 27264 | info@returnfilers.in</p>
               </td></tr>
             </table>
           </td></tr>
@@ -204,7 +204,7 @@ const sendBookingEmail = async (booking) => {
               <p style="margin-top:20px;color:#666;font-size:12px;">ID: ${booking._id}</p>
             </td></tr>
             <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-              <p style="color:#D4AF37;margin:0;font-weight:bold;">Tax Filer</p>
+              <p style="color:#D4AF37;margin:0;font-weight:bold;">ReturnFilers</p>
             </td></tr>
           </table>
         </td></tr>

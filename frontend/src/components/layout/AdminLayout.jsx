@@ -191,7 +191,7 @@ const AdminLayout = () => {
               {!sidebarCollapsed && (
                 <div>
                   <h2 className="text-base font-bold text-[#C9A227]">Admin Panel</h2>
-                  <p className="text-xs text-gray-400">Tax Filer</p>
+                  <p className="text-xs text-gray-400">ReturnFilers</p>
                 </div>
               )}
             </div>

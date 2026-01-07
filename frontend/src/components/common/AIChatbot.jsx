@@ -118,8 +118,8 @@ const formatText = (text) => {
       const cleanUrl = part.replace(/[.,;:!?)]+$/, '');
       // Show friendly name for known URLs
       let displayName = cleanUrl;
-      if (cleanUrl.includes('taxfiler.in')) {
-        displayName = '🌐 taxfiler.in';
+      if (cleanUrl.includes('returnfilers.in')) {
+        displayName = '🌐 returnfilers.in';
       }
       return (
         <a 
@@ -178,7 +178,7 @@ const AIChatbot = () => {
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
-      content: 'Hello! 👋 Welcome to Tax Filer.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
+      content: 'Hello! 👋 Welcome to ReturnFilers.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
     }
   ]);
   const [input, setInput] = useState('');
@@ -230,7 +230,7 @@ const AIChatbot = () => {
     setMessages([
       { 
         role: 'assistant', 
-        content: 'Hello! 👋 Welcome to Tax Filer.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
+        content: 'Hello! 👋 Welcome to ReturnFilers.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
       }
     ]);
   };
@@ -427,7 +427,7 @@ const AIChatbot = () => {
               <FaRobot size={18} className="text-[#C9A227]" />
             </div>
             <div>
-              <h3 className="font-bold text-sm">Tax Filer AI</h3>
+              <h3 className="font-bold text-sm">ReturnFilers AI</h3>
               <div className="flex items-center gap-1.5 text-xs text-gray-400">
                 <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
                 Online

@@ -64,8 +64,8 @@ const AdminBookings = () => {
   };
 
   const openEmailReply = (booking) => {
-    const subject = encodeURIComponent(`Re: Your ${booking.service} Booking - Tax Filer`);
-    const body = encodeURIComponent(`Dear ${booking.name},\n\nThank you for booking our ${booking.service} service.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    const subject = encodeURIComponent(`Re: Your ${booking.service} Booking - ReturnFilers`);
+    const body = encodeURIComponent(`Dear ${booking.name},\n\nThank you for booking our ${booking.service} service.\n\n\n\nBest regards,\nReturnFilers Team\n+91 84471 27264`);
     window.open(`mailto:${booking.email}?subject=${subject}&body=${body}`, '_blank');
   };
 

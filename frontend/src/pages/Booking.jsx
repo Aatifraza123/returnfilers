@@ -387,7 +387,7 @@ const Booking = () => {
                     className="mt-1 w-4 h-4 text-[#C9A227] border-gray-300 rounded focus:ring-[#C9A227]"
                   />
                   <span className="text-sm text-gray-700">
-                    I agree to the <strong>Terms & Conditions</strong> and authorize Tax Filer to securely store and process my documents. My data will be kept <strong>100% confidential</strong>.
+                    I agree to the <strong>Terms & Conditions</strong> and authorize ReturnFilers to securely store and process my documents. My data will be kept <strong>100% confidential</strong>.
                   </span>
                 </label>
               </div>

@@ -37,55 +37,55 @@ const AdminEmails = () => {
       message: ''
     },
     welcome: {
-      subject: 'Welcome to Tax Filer',
+      subject: 'Welcome to ReturnFilers',
       message: `
         <h2 style="color: #0B1530;">Welcome!</h2>
-        <p>Thank you for reaching out to Tax Filer. We're excited to work with you!</p>
+        <p>Thank you for reaching out to ReturnFilers. We're excited to work with you!</p>
         <p>Our team of professional chartered accountants is dedicated to providing you with exceptional service.</p>
         <p>We will be in touch with you soon.</p>
         <br>
-        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
+        <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
       `
     },
     followup: {
       subject: 'Following up on your inquiry',
       message: `
         <h2 style="color: #0B1530;">Following Up</h2>
-        <p>We wanted to follow up regarding your recent inquiry with Tax Filer.</p>
+        <p>We wanted to follow up regarding your recent inquiry with ReturnFilers.</p>
         <p>If you have any questions or need further assistance, please don't hesitate to reach out to us.</p>
         <p>We're here to help!</p>
         <br>
-        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
+        <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
       `
     },
     thankyou: {
-      subject: 'Thank you for choosing Tax Filer',
+      subject: 'Thank you for choosing ReturnFilers',
       message: `
         <h2 style="color: #0B1530;">Thank You!</h2>
-        <p>We sincerely appreciate you choosing Tax Filer for your financial needs.</p>
+        <p>We sincerely appreciate you choosing ReturnFilers for your financial needs.</p>
         <p>Your trust in our services means a lot to us, and we're committed to delivering the best results.</p>
         <p>If you have any questions, feel free to contact us anytime.</p>
         <br>
-        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
+        <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
       `
     },
     reminder: {
-      subject: 'Reminder: Important Update from Tax Filer',
+      subject: 'Reminder: Important Update from ReturnFilers',
       message: `
         <h2 style="color: #0B1530;">Reminder</h2>
-        <p>This is a friendly reminder regarding your pending matters with Tax Filer.</p>
+        <p>This is a friendly reminder regarding your pending matters with ReturnFilers.</p>
         <p>Please review the details and let us know if you need any clarification.</p>
         <p>We're here to assist you!</p>
         <br>
-        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
+        <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
       `
     },
     newsletter: {
-      subject: 'Tax Filer Newsletter - Latest Updates',
+      subject: 'ReturnFilers Newsletter - Latest Updates',
       message: `
         <h2 style="color: #0B1530;">Newsletter</h2>
         <p>Welcome to our latest newsletter!</p>
-        <p>Here are some important updates and insights from Tax Filer:</p>
+        <p>Here are some important updates and insights from ReturnFilers:</p>
         <ul>
           <li>Tax planning tips for the upcoming quarter</li>
           <li>Recent regulatory changes</li>
@@ -93,7 +93,7 @@ const AdminEmails = () => {
         </ul>
         <p>Stay informed and reach out if you need any assistance.</p>
         <br>
-        <p>Best regards,<br><strong>Tax Filer Team</strong></p>
+        <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
       `
     }
   };

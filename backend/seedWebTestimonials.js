@@ -8,7 +8,7 @@ const webTestimonials = [
     name: 'Rajesh Kumar',
     title: 'CEO, TechStart Solutions',
     service: 'Web Development',
-    quote: 'Tax Filer created an amazing website for our startup. The design is modern, fast, and exactly what we needed. Their team was professional and delivered on time!',
+    quote: 'ReturnFilers created an amazing website for our startup. The design is modern, fast, and exactly what we needed. Their team was professional and delivered on time!',
     rating: 5,
     isActive: true
   },
@@ -32,7 +32,7 @@ const webTestimonials = [
     name: 'Sneha Reddy',
     title: 'Founder, Digital Marketing Agency',
     service: 'Custom Web Application',
-    quote: 'We needed a custom CRM system and Tax Filer delivered beyond expectations. The application is robust, user-friendly, and has improved our workflow significantly.',
+    quote: 'We needed a custom CRM system and ReturnFilers delivered beyond expectations. The application is robust, user-friendly, and has improved our workflow significantly.',
     rating: 5,
     isActive: true
   }

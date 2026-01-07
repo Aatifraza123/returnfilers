@@ -84,8 +84,8 @@ const AdminContacts = () => {
   };
 
   const openEmailReply = (contact) => {
-    const subject = encodeURIComponent(`Re: Your Inquiry - Tax Filer`);
-    const body = encodeURIComponent(`Dear ${contact.name},\n\nThank you for contacting Tax Filer.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    const subject = encodeURIComponent(`Re: Your Inquiry - ReturnFilers`);
+    const body = encodeURIComponent(`Dear ${contact.name},\n\nThank you for contacting ReturnFilers.\n\n\n\nBest regards,\nReturnFilers Team\n+91 84471 27264`);
     window.open(`mailto:${contact.email}?subject=${subject}&body=${body}`, '_blank');
   };
 

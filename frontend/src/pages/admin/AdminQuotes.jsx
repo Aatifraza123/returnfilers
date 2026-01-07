@@ -62,8 +62,8 @@ const AdminQuotes = () => {
   };
 
   const openEmailReply = (quote) => {
-    const subject = encodeURIComponent(`Re: Your ${quote.service} Quote Request - Tax Filer`);
-    const body = encodeURIComponent(`Dear ${quote.name},\n\nThank you for requesting a quote for ${quote.service}.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    const subject = encodeURIComponent(`Re: Your ${quote.service} Quote Request - ReturnFilers`);
+    const body = encodeURIComponent(`Dear ${quote.name},\n\nThank you for requesting a quote for ${quote.service}.\n\n\n\nBest regards,\nReturnFilers Team\n+91 84471 27264`);
     window.open(`mailto:${quote.email}?subject=${subject}&body=${body}`, '_blank');
   };
 

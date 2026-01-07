@@ -254,7 +254,7 @@ const sendConsultationEmails = async (consultation) => {
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                   <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                 </td>
               </tr>
@@ -283,14 +283,14 @@ const sendConsultationEmails = async (consultation) => {
               <tr>
                 <td style="padding: 30px;">
                   <p style="color: #333; font-size: 16px; line-height: 1.6;">Dear ${consultation.name},</p>
-                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for choosing Tax Filer. We have received your consultation request for <strong>${consultation.service}</strong>.</p>
+                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for choosing ReturnFilers. We have received your consultation request for <strong>${consultation.service}</strong>.</p>
                   <p style="color: #666; font-size: 14px; line-height: 1.6;">Our team will contact you at <strong>${consultation.phone}</strong> within 24 hours.</p>
                   <p style="color: #666; font-size: 14px; line-height: 1.6;">For urgent queries, call us at <strong>+91 84471 27264</strong></p>
                 </td>
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                   <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                 </td>
               </tr>

@@ -23,7 +23,7 @@ const PageLoader = () => {
           transition={{ delay: 0.2 }}
           className="text-2xl font-serif font-bold text-[#C9A227] mb-2"
         >
-          Tax Filer
+          ReturnFilers
         </motion.h2>
 
         {/* Loading dots */}

@@ -233,7 +233,7 @@ const Home = () => {
               <div className="relative rounded-2xl overflow-hidden shadow-2xl">
                 <img 
                   src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800" 
-                  alt="About Tax Filer" 
+                  alt="About ReturnFilers" 
                   className="w-full h-[400px] object-cover"
                 />
                 <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/40 to-transparent"></div>
@@ -252,7 +252,7 @@ const Home = () => {
                 Your Trusted Partner in Financial Success
               </h2>
               <p className="text-gray-600 text-base leading-relaxed mb-6">
-                Tax Filer is a professional Chartered Accountancy firm dedicated to providing comprehensive financial solutions. Since 2022, we have been helping businesses and individuals navigate the complex world of taxation, compliance, and financial planning.
+                ReturnFilers is a professional Chartered Accountancy firm dedicated to providing comprehensive financial solutions. Since 2022, we have been helping businesses and individuals navigate the complex world of taxation, compliance, and financial planning.
               </p>
               <p className="text-gray-600 text-base leading-relaxed mb-8">
                 Our team of certified professionals brings expertise in Income Tax, GST, Company Registration, Auditing, and Business Advisory services. We believe in building long-term relationships based on trust, transparency, and excellence.

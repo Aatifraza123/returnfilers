@@ -81,7 +81,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
                 <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
                   <tr>
                     <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">Tax Filer</h1>
+                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">ReturnFilers</h1>
                     </td>
                   </tr>
                   <tr>
@@ -92,7 +92,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
                   </tr>
                   <tr>
                     <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-weight: bold;">Tax Filer</p>
+                      <p style="color: #D4AF37; margin: 0; font-weight: bold;">ReturnFilers</p>
                       <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                     </td>
                   </tr>
@@ -375,7 +375,7 @@ const sendContactEmails = async (contact) => {
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                   <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                 </td>
               </tr>
@@ -404,7 +404,7 @@ const sendContactEmails = async (contact) => {
               <tr>
                 <td style="padding: 30px;">
                   <p style="color: #333; font-size: 16px; line-height: 1.6;">Dear ${contact.name},</p>
-                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for reaching out to Tax Filer. We have received your message and our team will get back to you within 24 hours.</p>
+                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for reaching out to ReturnFilers. We have received your message and our team will get back to you within 24 hours.</p>
                   <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
                     <p style="margin: 0; color: #666; font-size: 14px;"><strong>Your Message:</strong></p>
                     <p style="margin: 10px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">${contact.message}</p>
@@ -414,7 +414,7 @@ const sendContactEmails = async (contact) => {
               </tr>
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">Tax Filer</p>
+                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
                   <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
                 </td>
               </tr>
@@ -442,7 +442,7 @@ const sendContactEmails = async (contact) => {
     console.log('Sending customer confirmation email...');
     await sendEmail({
       to: contact.email,
-      subject: 'Thank you for contacting Tax Filer',
+      subject: 'Thank you for contacting ReturnFilers',
       html: customerHtml
     });
     console.log('✅ Customer email sent');

@@ -87,8 +87,8 @@ const AdminConsultations = () => {
   };
 
   const openEmailReply = (consultation) => {
-    const subject = encodeURIComponent(`Re: Your ${consultation.service} Consultation - Tax Filer`);
-    const body = encodeURIComponent(`Dear ${consultation.name},\n\nThank you for your interest in our ${consultation.service} service.\n\n\n\nBest regards,\nTax Filer Team\n+91 84471 27264`);
+    const subject = encodeURIComponent(`Re: Your ${consultation.service} Consultation - ReturnFilers`);
+    const body = encodeURIComponent(`Dear ${consultation.name},\n\nThank you for your interest in our ${consultation.service} service.\n\n\n\nBest regards,\nReturnFilers Team\n+91 84471 27264`);
     window.open(`mailto:${consultation.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
