@@ -30,7 +30,7 @@ const TermsConditions = () => {
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
       
-      {/* ==================== HERO SECTION - SIMPLE ==================== */}
+      {/* Hero Section */}
       <section className="py-6 md:py-8 border-b border-gray-200">
         <div className="container mx-auto px-6 text-center max-w-4xl">
           <motion.span 
@@ -66,7 +66,7 @@ const TermsConditions = () => {
         </div>
       </section>
 
-      {/* ==================== CONTENT SECTION ==================== */}
+      {/* Content Section */}
       <section className="py-8 md:py-12">
         <div className="container mx-auto px-6 max-w-4xl">
           {loading ? (
