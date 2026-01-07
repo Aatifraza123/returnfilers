@@ -1,17 +1,47 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt } from 'react-icons/fa';
+import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle } from 'react-icons/fa';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
-  const [activeTab, setActiveTab] = useState('company'); // 'company', 'privacy', 'terms', 'refund'
+  const [activeTab, setActiveTab] = useState('company'); // 'company', 'social', 'hours', 'seo', 'about', 'privacy', 'terms', 'refund'
   const [settings, setSettings] = useState({
     companyName: '',
     email: '',
     phone: '',
     address: '',
+    socialMedia: {
+      facebook: '',
+      instagram: '',
+      linkedin: '',
+      twitter: '',
+      youtube: '',
+      whatsapp: ''
+    },
+    businessHours: {
+      weekdays: '',
+      saturday: '',
+      sunday: '',
+      holidays: ''
+    },
+    seo: {
+      metaTitle: '',
+      metaDescription: '',
+      metaKeywords: '',
+      googleAnalyticsId: '',
+      googleTagManagerId: '',
+      facebookPixelId: ''
+    },
+    about: {
+      yearEstablished: 2022,
+      yearsOfExperience: 3,
+      clientsServed: 100,
+      teamSize: 5,
+      missionStatement: '',
+      visionStatement: ''
+    },
     privacyPolicy: '',
     termsConditions: '',
     refundPolicy: '',
@@ -53,7 +83,18 @@ const AdminSettings = () => {
   };
 
   const handleChange = (field, value) => {
-    setSettings(prev => ({ ...prev, [field]: value }));
+    if (field.includes('.')) {
+      const [parent, child] = field.split('.');
+      setSettings(prev => ({
+        ...prev,
+        [parent]: {
+          ...prev[parent],
+          [child]: value
+        }
+      }));
+    } else {
+      setSettings(prev => ({ ...prev, [field]: value }));
+    }
   };
 
   if (loading) {
@@ -100,7 +141,51 @@ const AdminSettings = () => {
           }`}
         >
           <FaBuilding className="inline mr-2" size={14} />
-          Company Info
+          Company
+        </button>
+        <button
+          onClick={() => setActiveTab('social')}
+          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
+            activeTab === 'social'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <FaShareAlt className="inline mr-2" size={14} />
+          Social Media
+        </button>
+        <button
+          onClick={() => setActiveTab('hours')}
+          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
+            activeTab === 'hours'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <FaClock className="inline mr-2" size={14} />
+          Business Hours
+        </button>
+        <button
+          onClick={() => setActiveTab('seo')}
+          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
+            activeTab === 'seo'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <FaSearch className="inline mr-2" size={14} />
+          SEO
+        </button>
+        <button
+          onClick={() => setActiveTab('about')}
+          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
+            activeTab === 'about'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          <FaInfoCircle className="inline mr-2" size={14} />
+          About
         </button>
         <button
           onClick={() => setActiveTab('privacy')}
@@ -111,7 +196,7 @@ const AdminSettings = () => {
           }`}
         >
           <FaFileAlt className="inline mr-2" size={14} />
-          Privacy Policy
+          Privacy
         </button>
         <button
           onClick={() => setActiveTab('terms')}
@@ -122,7 +207,7 @@ const AdminSettings = () => {
           }`}
         >
           <FaFileAlt className="inline mr-2" size={14} />
-          Terms & Conditions
+          Terms
         </button>
         <button
           onClick={() => setActiveTab('refund')}
@@ -133,7 +218,7 @@ const AdminSettings = () => {
           }`}
         >
           <FaFileAlt className="inline mr-2" size={14} />
-          Refund Policy
+          Refund
         </button>
       </div>
 
@@ -190,6 +275,277 @@ const AdminSettings = () => {
               <textarea
                 value={settings.address}
                 onChange={(e) => handleChange('address', e.target.value)}
+                rows="3"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'social' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Social Media Links</h2>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.facebook || ''}
+                  onChange={(e) => handleChange('socialMedia.facebook', e.target.value)}
+                  placeholder="https://facebook.com/yourpage"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.instagram || ''}
+                  onChange={(e) => handleChange('socialMedia.instagram', e.target.value)}
+                  placeholder="https://instagram.com/yourprofile"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.linkedin || ''}
+                  onChange={(e) => handleChange('socialMedia.linkedin', e.target.value)}
+                  placeholder="https://linkedin.com/company/yourcompany"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter/X</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.twitter || ''}
+                  onChange={(e) => handleChange('socialMedia.twitter', e.target.value)}
+                  placeholder="https://twitter.com/yourhandle"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">YouTube</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.youtube || ''}
+                  onChange={(e) => handleChange('socialMedia.youtube', e.target.value)}
+                  placeholder="https://youtube.com/@yourchannel"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Business</label>
+                <input
+                  type="url"
+                  value={settings.socialMedia?.whatsapp || ''}
+                  onChange={(e) => handleChange('socialMedia.whatsapp', e.target.value)}
+                  placeholder="https://wa.me/918447127264"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'hours' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Business Hours</h2>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Weekdays (Mon-Fri)</label>
+              <input
+                type="text"
+                value={settings.businessHours?.weekdays || ''}
+                onChange={(e) => handleChange('businessHours.weekdays', e.target.value)}
+                placeholder="Monday - Friday: 9:00 AM - 6:00 PM"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Saturday</label>
+              <input
+                type="text"
+                value={settings.businessHours?.saturday || ''}
+                onChange={(e) => handleChange('businessHours.saturday', e.target.value)}
+                placeholder="Saturday: 10:00 AM - 2:00 PM"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Sunday</label>
+              <input
+                type="text"
+                value={settings.businessHours?.sunday || ''}
+                onChange={(e) => handleChange('businessHours.sunday', e.target.value)}
+                placeholder="Sunday: Closed"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Holidays</label>
+              <input
+                type="text"
+                value={settings.businessHours?.holidays || ''}
+                onChange={(e) => handleChange('businessHours.holidays', e.target.value)}
+                placeholder="Closed on public holidays"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'seo' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-[#0B1530] mb-4">SEO Settings</h2>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Meta Title</label>
+              <input
+                type="text"
+                value={settings.seo?.metaTitle || ''}
+                onChange={(e) => handleChange('seo.metaTitle', e.target.value)}
+                placeholder="ReturnFilers - Professional CA Services"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Recommended: 50-60 characters</p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Meta Description</label>
+              <textarea
+                value={settings.seo?.metaDescription || ''}
+                onChange={(e) => handleChange('seo.metaDescription', e.target.value)}
+                placeholder="Expert Chartered Accountant services for tax filing, GST, auditing, and business registration."
+                rows="3"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
+              />
+              <p className="text-xs text-gray-500 mt-1">Recommended: 150-160 characters</p>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Meta Keywords</label>
+              <input
+                type="text"
+                value={settings.seo?.metaKeywords || ''}
+                onChange={(e) => handleChange('seo.metaKeywords', e.target.value)}
+                placeholder="CA, Chartered Accountant, Tax Filing, GST, Audit"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Comma-separated keywords</p>
+            </div>
+            
+            <div className="grid md:grid-cols-3 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Google Analytics ID</label>
+                <input
+                  type="text"
+                  value={settings.seo?.googleAnalyticsId || ''}
+                  onChange={(e) => handleChange('seo.googleAnalyticsId', e.target.value)}
+                  placeholder="G-XXXXXXXXXX"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Google Tag Manager ID</label>
+                <input
+                  type="text"
+                  value={settings.seo?.googleTagManagerId || ''}
+                  onChange={(e) => handleChange('seo.googleTagManagerId', e.target.value)}
+                  placeholder="GTM-XXXXXXX"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook Pixel ID</label>
+                <input
+                  type="text"
+                  value={settings.seo?.facebookPixelId || ''}
+                  onChange={(e) => handleChange('seo.facebookPixelId', e.target.value)}
+                  placeholder="XXXXXXXXXXXXXXX"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+            </div>
+          </div>
+        )}
+
+        {activeTab === 'about' && (
+          <div className="space-y-4">
+            <h2 className="text-xl font-bold text-[#0B1530] mb-4">About Company</h2>
+            
+            <div className="grid md:grid-cols-2 gap-4">
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Year Established</label>
+                <input
+                  type="number"
+                  value={settings.about?.yearEstablished || 2022}
+                  onChange={(e) => handleChange('about.yearEstablished', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Years of Experience</label>
+                <input
+                  type="number"
+                  value={settings.about?.yearsOfExperience || 3}
+                  onChange={(e) => handleChange('about.yearsOfExperience', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Clients Served</label>
+                <input
+                  type="number"
+                  value={settings.about?.clientsServed || 100}
+                  onChange={(e) => handleChange('about.clientsServed', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Team Size</label>
+                <input
+                  type="number"
+                  value={settings.about?.teamSize || 5}
+                  onChange={(e) => handleChange('about.teamSize', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Mission Statement</label>
+              <textarea
+                value={settings.about?.missionStatement || ''}
+                onChange={(e) => handleChange('about.missionStatement', e.target.value)}
+                placeholder="Our mission is to..."
+                rows="3"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
+              />
+            </div>
+            
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Vision Statement</label>
+              <textarea
+                value={settings.about?.visionStatement || ''}
+                onChange={(e) => handleChange('about.visionStatement', e.target.value)}
+                placeholder="Our vision is to..."
                 rows="3"
                 className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
               />
