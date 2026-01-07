@@ -7,20 +7,6 @@ import {
 } from 'react-icons/fa';
 import api from '../api/axios';
 
-// 1. Icon Mapping for Dynamic Service Icons
-const iconMap = {
-  'web': <FaLaptopCode />,
-  'app': <FaMobileAlt />,
-  'design': <FaPaintBrush />,
-  'seo': <FaRocket />,
-  'default': <FaCode />
-};
-
-const getIcon = (iconName) => {
-  const key = iconName?.toLowerCase() || 'default';
-  return iconMap[Object.keys(iconMap).find(k => key.includes(k))] || iconMap.default;
-};
-
 const DigitalServices = () => {
   const [services, setServices] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
@@ -152,7 +138,7 @@ const DigitalServices = () => {
                   {/* Service Header */}
                   <div className="text-center mb-16">
                     <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-[#0B1530] text-[#C9A227] text-3xl mb-6 shadow-xl shadow-[#0B1530]/20">
-                      {getIcon(service.icon || service.title)}
+                      <FaCode />
                     </div>
                     <h2 className="text-4xl md:text-5xl font-bold text-[#0B1530] mb-4 font-serif">{service.title}</h2>
                     <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">{service.description}</p>
