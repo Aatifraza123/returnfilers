@@ -16,7 +16,7 @@ const getServices = async () => {
   const now = Date.now();
   if (dataCache.services && (now - cacheTime.services) < CACHE_DURATION) return dataCache.services;
   try {
-    dataCache.services = await Service.find({ active: true }).select('title price timeline');
+    dataCache.services = await Service.find({ active: true }).select('title price timeline category description');
     cacheTime.services = now;
   } catch (e) { console.log('Services fetch error'); }
   return dataCache.services || [];
@@ -107,7 +107,12 @@ const getTaxNews = async () => {
 // Format data for prompt
 const formatServices = (services) => {
   if (!services?.length) return '(Contact us for services)';
-  return services.map(s => `- ${s.title}: ₹${s.price} (${s.timeline || '3-7 Days'})`).join('\n');
+  return services.map(s => {
+    let line = `- ${s.title}: ₹${s.price} (${s.timeline || '3-7 Days'})`;
+    if (s.category) line += ` [${s.category}]`;
+    if (s.description) line += `\n  ${s.description.substring(0, 150)}...`;
+    return line;
+  }).join('\n');
 };
 
 const formatDigitalServices = (digitalServices) => {
@@ -391,6 +396,12 @@ const chatWithAIStream = async (req, res) => {
 
 // Test endpoint
 const testAI = async (req, res) => {
+  // Force refresh cache if ?refresh=true
+  if (req.query.refresh === 'true') {
+    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, portfolio: null, news: null };
+    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
+  }
+  
   const [services, digitalServices, testimonials, blogs, portfolio, news] = await Promise.all([
     getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
   ]);
@@ -403,7 +414,12 @@ const testAI = async (req, res) => {
       blogs: blogs.length,
       portfolio: portfolio.length,
       news: news.length
-    }
+    },
+    details: {
+      services: services.map(s => ({ title: s.title, price: s.price })),
+      digitalServices: digitalServices.map(d => ({ title: d.title, packages: d.packages?.length }))
+    },
+    cacheInfo: 'Data refreshes every 5 minutes automatically'
   });
 };
 
