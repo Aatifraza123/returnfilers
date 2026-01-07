@@ -18,6 +18,7 @@ const AdminDigitalServices = () => {
     timeline: '',
     description: '',
     features: [''],
+    packages: [],
     active: true
   });
 
@@ -59,6 +60,45 @@ const AdminDigitalServices = () => {
     setFormData({ ...formData, features: newFeatures });
   };
 
+  const addPackage = () => {
+    setFormData({
+      ...formData,
+      packages: [
+        ...formData.packages,
+        { name: '', price: '', timeline: '', features: [''] }
+      ]
+    });
+  };
+
+  const removePackage = (index) => {
+    const newPackages = formData.packages.filter((_, i) => i !== index);
+    setFormData({ ...formData, packages: newPackages });
+  };
+
+  const handlePackageChange = (pkgIndex, field, value) => {
+    const newPackages = [...formData.packages];
+    newPackages[pkgIndex][field] = value;
+    setFormData({ ...formData, packages: newPackages });
+  };
+
+  const handlePackageFeatureChange = (pkgIndex, featureIndex, value) => {
+    const newPackages = [...formData.packages];
+    newPackages[pkgIndex].features[featureIndex] = value;
+    setFormData({ ...formData, packages: newPackages });
+  };
+
+  const addPackageFeature = (pkgIndex) => {
+    const newPackages = [...formData.packages];
+    newPackages[pkgIndex].features.push('');
+    setFormData({ ...formData, packages: newPackages });
+  };
+
+  const removePackageFeature = (pkgIndex, featureIndex) => {
+    const newPackages = [...formData.packages];
+    newPackages[pkgIndex].features = newPackages[pkgIndex].features.filter((_, i) => i !== featureIndex);
+    setFormData({ ...formData, packages: newPackages });
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -90,6 +130,7 @@ const AdminDigitalServices = () => {
       timeline: service.timeline,
       description: service.description,
       features: service.features.length > 0 ? service.features : [''],
+      packages: service.packages || [],
       active: service.active
     });
     setEditMode(true);
@@ -117,6 +158,7 @@ const AdminDigitalServices = () => {
       timeline: '',
       description: '',
       features: [''],
+      packages: [],
       active: true
     });
     setEditMode(false);
@@ -146,48 +188,85 @@ const AdminDigitalServices = () => {
         </button>
       </div>
 
-      <div className="grid md:grid-cols-2 gap-6">
+      <div className="space-y-6">
         {services.map((service) => (
           <motion.div
             key={service._id}
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="bg-white rounded-lg shadow-md p-6 border border-gray-100"
+            className="bg-white rounded-lg shadow-md border border-gray-100 overflow-hidden"
           >
-            <div className="flex justify-between items-start mb-4">
-              <div className="flex items-center gap-3">
-                <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl">
-                  {service.icon === 'FaCode' ? <FaCode /> : <FaChartBar />}
+            {/* Service Header */}
+            <div className="p-6 bg-gray-50 border-b">
+              <div className="flex justify-between items-start">
+                <div className="flex items-center gap-3">
+                  <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl">
+                    {service.icon === 'FaCode' ? <FaCode /> : <FaChartBar />}
+                  </div>
+                  <div>
+                    <h3 className="text-lg font-bold text-[#0B1530]">{service.title}</h3>
+                    <p className="text-sm text-gray-500">{service.timeline}</p>
+                  </div>
                 </div>
-                <div>
-                  <h3 className="text-lg font-bold text-[#0B1530]">{service.title}</h3>
-                  <p className="text-sm text-gray-500">{service.timeline}</p>
+                <div className="flex items-center gap-2">
+                  <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
+                    service.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
+                  }`}>
+                    {service.active ? 'Active' : 'Inactive'}
+                  </span>
                 </div>
               </div>
-              <span className={`px-3 py-1 rounded-full text-xs font-semibold ${
-                service.active ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'
-              }`}>
-                {service.active ? 'Active' : 'Inactive'}
-              </span>
+              <p className="text-gray-600 text-sm mt-3">{service.description}</p>
+              
+              <div className="flex gap-2 mt-4">
+                <button
+                  onClick={() => handleEdit(service)}
+                  className="flex items-center gap-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
+                >
+                  <FaEdit /> Edit Service
+                </button>
+                <button
+                  onClick={() => handleDelete(service._id)}
+                  className="flex items-center gap-2 px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
+                >
+                  <FaTrash /> Delete
+                </button>
+              </div>
             </div>
 
-            <p className="text-2xl font-bold text-[#C9A227] mb-3">₹{service.price}</p>
-            <p className="text-gray-600 text-sm mb-4">{service.description}</p>
-
-            <div className="flex gap-2">
-              <button
-                onClick={() => handleEdit(service)}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600 transition-colors text-sm"
-              >
-                <FaEdit /> Edit
-              </button>
-              <button
-                onClick={() => handleDelete(service._id)}
-                className="flex-1 flex items-center justify-center gap-2 px-3 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors text-sm"
-              >
-                <FaTrash /> Delete
-              </button>
-            </div>
+            {/* Packages */}
+            {service.packages && service.packages.length > 0 && (
+              <div className="p-6">
+                <h4 className="font-bold text-[#0B1530] mb-4 flex items-center gap-2">
+                  <span className="text-[#C9A227]">📦</span> Packages ({service.packages.length})
+                </h4>
+                <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
+                  {service.packages.map((pkg, idx) => (
+                    <div key={idx} className="border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A227] transition-colors">
+                      <div className="flex items-start justify-between mb-2">
+                        <h5 className="font-bold text-[#0B1530] text-sm">{pkg.name}</h5>
+                        {pkg.name === 'Business Website' && (
+                          <span className="text-xs bg-[#C9A227] text-white px-2 py-0.5 rounded-full">Popular</span>
+                        )}
+                      </div>
+                      <p className="text-2xl font-bold text-[#C9A227] mb-1">₹{pkg.price}</p>
+                      <p className="text-xs text-gray-500 mb-3">{pkg.timeline}</p>
+                      <ul className="space-y-1">
+                        {pkg.features.slice(0, 3).map((feature, fIdx) => (
+                          <li key={fIdx} className="text-xs text-gray-600 flex items-start gap-1">
+                            <span className="text-[#C9A227] mt-0.5">✓</span>
+                            <span>{feature}</span>
+                          </li>
+                        ))}
+                        {pkg.features.length > 3 && (
+                          <li className="text-xs text-gray-400 italic">+{pkg.features.length - 3} more</li>
+                        )}
+                      </ul>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
           </motion.div>
         ))}
       </div>
@@ -325,6 +404,96 @@ const AdminDigitalServices = () => {
                 >
                   + Add Feature
                 </button>
+              </div>
+
+              {/* Packages Section */}
+              <div className="border-t pt-4">
+                <div className="flex items-center justify-between mb-3">
+                  <label className="block text-sm font-semibold text-gray-700">
+                    Packages (Optional)
+                  </label>
+                  <button
+                    type="button"
+                    onClick={addPackage}
+                    className="text-sm px-3 py-1 bg-[#C9A227] text-[#0B1530] rounded-lg hover:bg-[#0B1530] hover:text-white font-semibold"
+                  >
+                    + Add Package
+                  </button>
+                </div>
+
+                {formData.packages.map((pkg, pkgIndex) => (
+                  <div key={pkgIndex} className="mb-6 p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
+                    <div className="flex items-center justify-between mb-3">
+                      <h4 className="font-bold text-[#0B1530]">Package {pkgIndex + 1}</h4>
+                      <button
+                        type="button"
+                        onClick={() => removePackage(pkgIndex)}
+                        className="text-red-500 hover:text-red-700"
+                      >
+                        <FaTrash size={14} />
+                      </button>
+                    </div>
+
+                    <div className="grid md:grid-cols-3 gap-3 mb-3">
+                      <input
+                        type="text"
+                        value={pkg.name}
+                        onChange={(e) => handlePackageChange(pkgIndex, 'name', e.target.value)}
+                        placeholder="Package Name"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      />
+                      <input
+                        type="text"
+                        value={pkg.price}
+                        onChange={(e) => handlePackageChange(pkgIndex, 'price', e.target.value)}
+                        placeholder="Price (e.g., 9999)"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      />
+                      <input
+                        type="text"
+                        value={pkg.timeline}
+                        onChange={(e) => handlePackageChange(pkgIndex, 'timeline', e.target.value)}
+                        placeholder="Timeline (e.g., 5-7 Days)"
+                        className="px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                      />
+                    </div>
+
+                    <div>
+                      <label className="text-xs font-semibold text-gray-600 mb-2 block">Package Features</label>
+                      {pkg.features.map((feature, featureIndex) => (
+                        <div key={featureIndex} className="flex gap-2 mb-2">
+                          <input
+                            type="text"
+                            value={feature}
+                            onChange={(e) => handlePackageFeatureChange(pkgIndex, featureIndex, e.target.value)}
+                            placeholder="Feature"
+                            className="flex-1 px-3 py-2 border border-gray-300 rounded-lg text-sm"
+                          />
+                          {pkg.features.length > 1 && (
+                            <button
+                              type="button"
+                              onClick={() => removePackageFeature(pkgIndex, featureIndex)}
+                              className="px-2 py-1 bg-red-500 text-white rounded-lg hover:bg-red-600 text-xs"
+                            >
+                              <FaTrash size={10} />
+                            </button>
+                          )}
+                        </div>
+                      ))}
+                      <button
+                        type="button"
+                        onClick={() => addPackageFeature(pkgIndex)}
+                        className="text-xs text-[#C9A227] hover:text-[#0B1530] font-semibold"
+                      >
+                        + Add Feature
+                      </button>
+                    </div>
+                  </div>
+                ))}
+
+                {formData.packages.length === 0 && (
+                  <p className="text-sm text-gray-500 italic">No packages added. Click "+ Add Package" to create pricing tiers.</p>
+                )}
               </div>
 
               <div className="flex items-center gap-2">

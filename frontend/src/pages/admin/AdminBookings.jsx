@@ -8,6 +8,7 @@ const AdminBookings = () => {
   const [loading, setLoading] = useState(true);
   const [selectedBooking, setSelectedBooking] = useState(null);
   const [filter, setFilter] = useState('all');
+  const [activeTab, setActiveTab] = useState('regular'); // 'regular' or 'webdev'
 
   useEffect(() => {
     fetchBookings();
@@ -68,9 +69,20 @@ const AdminBookings = () => {
     window.open(`mailto:${booking.email}?subject=${subject}&body=${body}`, '_blank');
   };
 
+  // Separate bookings into regular and web development
+  const webDevKeywords = ['web development', 'basic website', 'business website', 'e-commerce website', 'custom web application'];
+  const isWebDevBooking = (service) => {
+    return webDevKeywords.some(keyword => service.toLowerCase().includes(keyword.toLowerCase()));
+  };
+
+  const regularBookings = bookings.filter(b => !isWebDevBooking(b.service));
+  const webDevBookings = bookings.filter(b => isWebDevBooking(b.service));
+
+  // Apply filter based on active tab
+  const currentBookings = activeTab === 'regular' ? regularBookings : webDevBookings;
   const filteredBookings = filter === 'all' 
-    ? bookings 
-    : bookings.filter(b => b.status === filter);
+    ? currentBookings 
+    : currentBookings.filter(b => b.status === filter);
 
   const statusColors = {
     pending: 'bg-yellow-100 text-yellow-700',
@@ -98,14 +110,50 @@ const AdminBookings = () => {
             onChange={(e) => setFilter(e.target.value)}
             className="px-3 py-2 border rounded-lg text-sm"
           >
-            <option value="all">All ({bookings.length})</option>
-            <option value="pending">Pending ({bookings.filter(b => b.status === 'pending').length})</option>
+            <option value="all">All ({currentBookings.length})</option>
+            <option value="pending">Pending ({currentBookings.filter(b => b.status === 'pending').length})</option>
             <option value="contacted">Contacted</option>
             <option value="in-progress">In Progress</option>
             <option value="completed">Completed</option>
             <option value="cancelled">Cancelled</option>
           </select>
         </div>
+      </div>
+
+      {/* Tabs */}
+      <div className="flex gap-2 border-b">
+        <button
+          onClick={() => {
+            setActiveTab('regular');
+            setFilter('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'regular'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Regular Bookings
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {regularBookings.length}
+          </span>
+        </button>
+        <button
+          onClick={() => {
+            setActiveTab('webdev');
+            setFilter('all');
+          }}
+          className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
+            activeTab === 'webdev'
+              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              : 'text-gray-500 hover:text-gray-700'
+          }`}
+        >
+          Web Development Bookings
+          <span className="ml-2 px-2 py-0.5 bg-gray-100 text-gray-600 rounded-full text-xs">
+            {webDevBookings.length}
+          </span>
+        </button>
       </div>
 
       {/* Table */}
