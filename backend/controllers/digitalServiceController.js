@@ -26,7 +26,7 @@ exports.getDigitalServiceById = async (req, res) => {
 // Create digital service
 exports.createDigitalService = async (req, res) => {
   try {
-    const { title, slug, icon, price, timeline, description, features, active } = req.body;
+    const { title, slug, icon, price, timeline, description, features, packages, active } = req.body;
     
     const service = await DigitalService.create({
       title,
@@ -36,6 +36,7 @@ exports.createDigitalService = async (req, res) => {
       timeline,
       description,
       features,
+      packages: packages || [],
       active
     });
     
