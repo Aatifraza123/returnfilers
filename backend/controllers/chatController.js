@@ -27,7 +27,7 @@ const getDigitalServices = async () => {
   const now = Date.now();
   if (dataCache.digitalServices && (now - cacheTime.digitalServices) < CACHE_DURATION) return dataCache.digitalServices;
   try {
-    dataCache.digitalServices = await DigitalService.find({ active: true }).select('title packages');
+    dataCache.digitalServices = await DigitalService.find({ active: true }).select('title description packages');
     cacheTime.digitalServices = now;
   } catch (e) { console.log('Digital services fetch error'); }
   return dataCache.digitalServices || [];
@@ -120,9 +120,17 @@ const formatDigitalServices = (digitalServices) => {
   let result = [];
   digitalServices.forEach(service => {
     result.push(`\n${service.title}:`);
+    if (service.description) {
+      result.push(`  ${service.description.substring(0, 200)}`);
+    }
     if (service.packages && service.packages.length > 0) {
+      result.push(`  Packages:`);
       service.packages.forEach(pkg => {
-        result.push(`  - ${pkg.name}: ₹${pkg.price} (${pkg.timeline})`);
+        result.push(`    • ${pkg.name}: ₹${pkg.price} (${pkg.timeline || 'Contact for timeline'})`);
+        if (pkg.features && pkg.features.length > 0) {
+          const topFeatures = pkg.features.slice(0, 3).join(', ');
+          result.push(`      Features: ${topFeatures}`);
+        }
       });
     }
   });
@@ -188,13 +196,7 @@ ${formatServices(services)}
 ## DIGITAL SERVICES (WEB DEVELOPMENT):
 ${formatDigitalServices(digitalServices)}
 
-We offer professional web development services with 4 packages:
-- Basic Website (₹9,999): Perfect for small businesses, 5-7 days delivery
-- Business Website (₹14,999): Most popular, includes blog & advanced SEO, 7-10 days
-- E-commerce Website (₹24,999): Full online store with payment gateway, 15-20 days
-- Custom Web Application (₹39,999): Tailored solutions for unique needs, 20-30 days
-
-All packages include mobile responsive design, free support, and professional quality.
+All web development packages include mobile responsive design, professional quality, and dedicated support. Timelines and features vary by package.
 
 ## CLIENT REVIEWS:
 ${formatTestimonials(testimonials)}
