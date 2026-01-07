@@ -31,6 +31,23 @@ const digitalServiceSchema = new mongoose.Schema({
   features: [{
     type: String
   }],
+  // New field for service types/packages
+  packages: [{
+    name: {
+      type: String,
+      required: true
+    },
+    price: {
+      type: String,
+      required: true
+    },
+    features: [{
+      type: String
+    }],
+    timeline: {
+      type: String
+    }
+  }],
   active: {
     type: Boolean,
     default: true

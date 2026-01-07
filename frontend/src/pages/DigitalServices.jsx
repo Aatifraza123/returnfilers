@@ -63,72 +63,137 @@ const DigitalServices = () => {
 
       {/* Services Section */}
       <section className="py-16">
-        <div className="container mx-auto px-4 max-w-6xl">
+        <div className="container mx-auto px-4 max-w-7xl">
           {services.length === 0 ? (
             <div className="text-center py-12 text-gray-500">
               No digital services available at the moment.
             </div>
           ) : (
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="space-y-16">
               {services.map((service, idx) => (
-                <motion.div
-                  key={service._id}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: idx * 0.1 }}
-                  className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow"
-                >
-                  {/* Header */}
-                  <div className="bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] p-6 text-white">
-                    <div className="flex items-center gap-4 mb-4">
-                      <div className="w-14 h-14 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl">
+                <div key={service._id}>
+                  {/* Service Header */}
+                  <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    whileInView={{ opacity: 1, y: 0 }}
+                    viewport={{ once: true }}
+                    className="text-center mb-8"
+                  >
+                    <div className="flex items-center justify-center gap-3 mb-4">
+                      <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-2xl">
                         {getIcon(service.icon)}
                       </div>
-                      <div>
-                        <h2 className="text-2xl font-bold">{service.title}</h2>
-                        <p className="text-gray-300 text-sm">{service.timeline}</p>
-                      </div>
+                      <h2 className="text-3xl font-bold text-[#0B1530]">{service.title}</h2>
                     </div>
-                    <div className="flex items-baseline gap-1">
-                      <span className="text-3xl font-bold text-[#C9A227]">₹{service.price}</span>
-                      <span className="text-gray-400 text-sm">onwards</span>
-                    </div>
-                  </div>
+                    <p className="text-gray-600 max-w-2xl mx-auto">{service.description}</p>
+                  </motion.div>
 
-                  {/* Content */}
-                  <div className="p-6">
-                    <p className="text-gray-600 mb-6">{service.description}</p>
-                    
-                    <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">What's Included</h3>
-                    <ul className="space-y-3 mb-6">
-                      {service.features.map((feature, fIdx) => (
-                        <li key={fIdx} className="flex items-start gap-3">
-                          <FaCheckCircle className="text-[#C9A227] mt-0.5 flex-shrink-0" />
-                          <span className="text-gray-700 text-sm">{feature}</span>
-                        </li>
+                  {/* Packages or Single Service */}
+                  {service.packages && service.packages.length > 0 ? (
+                    <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+                      {service.packages.map((pkg, pIdx) => (
+                        <motion.div
+                          key={pIdx}
+                          initial={{ opacity: 0, y: 20 }}
+                          whileInView={{ opacity: 1, y: 0 }}
+                          viewport={{ once: true }}
+                          transition={{ delay: pIdx * 0.1 }}
+                          className="bg-white rounded-xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-2xl hover:border-[#C9A227]/30 transition-all"
+                        >
+                          <div className="bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] p-6 text-white text-center">
+                            <h3 className="text-xl font-bold mb-2">{pkg.name}</h3>
+                            <div className="flex items-baseline justify-center gap-1 mb-2">
+                              <span className="text-3xl font-bold text-[#C9A227]">₹{pkg.price}</span>
+                            </div>
+                            <p className="text-gray-300 text-sm">{pkg.timeline}</p>
+                          </div>
+
+                          <div className="p-6">
+                            <ul className="space-y-3 mb-6">
+                              {pkg.features.map((feature, fIdx) => (
+                                <li key={fIdx} className="flex items-start gap-2">
+                                  <FaCheckCircle className="text-[#C9A227] mt-0.5 flex-shrink-0 text-sm" />
+                                  <span className="text-gray-700 text-sm">{feature}</span>
+                                </li>
+                              ))}
+                            </ul>
+
+                            <div className="space-y-2">
+                              <Link
+                                to={`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`}
+                                className="block w-full bg-[#0B1530] text-white py-2.5 rounded-lg font-semibold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors text-sm"
+                              >
+                                Book Now
+                              </Link>
+                              <a
+                                href="https://wa.me/918447127264"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="block w-full bg-[#25D366] text-white py-2.5 rounded-lg font-semibold text-center hover:bg-[#128C7E] transition-colors text-sm"
+                              >
+                                WhatsApp
+                              </a>
+                            </div>
+                          </div>
+                        </motion.div>
                       ))}
-                    </ul>
-
-                    {/* CTA */}
-                    <div className="flex gap-3">
-                      <Link
-                        to={`/booking?service=${encodeURIComponent(service.title)}`}
-                        className="flex-1 bg-[#0B1530] text-white py-3 rounded-lg font-semibold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
-                      >
-                        Book Now
-                      </Link>
-                      <a
-                        href="https://wa.me/918447127264"
-                        target="_blank"
-                        rel="noopener noreferrer"
-                        className="w-12 h-12 bg-[#25D366] text-white rounded-lg flex items-center justify-center hover:bg-[#128C7E] transition-colors"
-                      >
-                        <FaWhatsapp size={20} />
-                      </a>
                     </div>
-                  </div>
-                </motion.div>
+                  ) : (
+                    <motion.div
+                      initial={{ opacity: 0, y: 20 }}
+                      whileInView={{ opacity: 1, y: 0 }}
+                      viewport={{ once: true }}
+                      className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 max-w-2xl mx-auto"
+                    >
+                      <div className="bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] p-6 text-white">
+                        <div className="flex items-center gap-4 mb-4">
+                          <div className="w-14 h-14 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl">
+                            {getIcon(service.icon)}
+                          </div>
+                          <div>
+                            <h2 className="text-2xl font-bold">{service.title}</h2>
+                            <p className="text-gray-300 text-sm">{service.timeline}</p>
+                          </div>
+                        </div>
+                        <div className="flex items-baseline gap-1">
+                          <span className="text-3xl font-bold text-[#C9A227]">₹{service.price}</span>
+                          <span className="text-gray-400 text-sm">onwards</span>
+                        </div>
+                      </div>
+
+                      <div className="p-6">
+                        <p className="text-gray-600 mb-6">{service.description}</p>
+                        
+                        <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">What's Included</h3>
+                        <ul className="space-y-3 mb-6">
+                          {service.features.map((feature, fIdx) => (
+                            <li key={fIdx} className="flex items-start gap-3">
+                              <FaCheckCircle className="text-[#C9A227] mt-0.5 flex-shrink-0" />
+                              <span className="text-gray-700 text-sm">{feature}</span>
+                            </li>
+                          ))}
+                        </ul>
+
+                        <div className="flex gap-3">
+                          <Link
+                            to={`/booking?service=${encodeURIComponent(service.title)}`}
+                            className="flex-1 bg-[#0B1530] text-white py-3 rounded-lg font-semibold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                          >
+                            Book Now
+                          </Link>
+                          <a
+                            href="https://wa.me/918447127264"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="w-12 h-12 bg-[#25D366] text-white rounded-lg flex items-center justify-center hover:bg-[#128C7E] transition-colors"
+                          >
+                            <FaWhatsapp size={20} />
+                          </a>
+                        </div>
+                      </div>
+                    </motion.div>
+                  )}
+                </div>
               ))}
             </div>
           )}

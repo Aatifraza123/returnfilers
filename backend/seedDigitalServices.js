@@ -8,18 +8,76 @@ const digitalServices = [
     title: 'Web Development',
     slug: 'web-development',
     icon: 'FaCode',
-    price: '14999',
-    timeline: '7-15 Days',
+    price: '9999',
+    timeline: '5-20 Days',
     description: 'Professional website development to establish your digital presence and grow your business online.',
     features: [
-      'Business & Corporate Websites',
-      'E-commerce Development',
-      'Custom Web Applications',
       'Mobile Responsive Design',
       'SEO Optimized',
-      'Admin Panel Integration',
-      'Payment Gateway Setup',
-      'Free 3 Months Support'
+      'Fast Loading Speed',
+      'Professional Design',
+      'Free Support'
+    ],
+    packages: [
+      {
+        name: 'Basic Website',
+        price: '9999',
+        timeline: '5-7 Days',
+        features: [
+          'Up to 5 Pages',
+          'Mobile Responsive',
+          'Contact Form',
+          'Basic SEO',
+          'Social Media Links',
+          '1 Month Free Support'
+        ]
+      },
+      {
+        name: 'Business Website',
+        price: '14999',
+        timeline: '7-10 Days',
+        features: [
+          'Up to 10 Pages',
+          'Mobile Responsive',
+          'Contact & Inquiry Forms',
+          'Advanced SEO',
+          'Blog Section',
+          'Google Maps Integration',
+          'WhatsApp Integration',
+          '3 Months Free Support'
+        ]
+      },
+      {
+        name: 'E-commerce Website',
+        price: '24999',
+        timeline: '15-20 Days',
+        features: [
+          'Unlimited Products',
+          'Shopping Cart',
+          'Payment Gateway Integration',
+          'Order Management',
+          'Customer Accounts',
+          'Product Search & Filter',
+          'Admin Dashboard',
+          'Mobile Responsive',
+          '6 Months Free Support'
+        ]
+      },
+      {
+        name: 'Custom Web Application',
+        price: '39999',
+        timeline: '20-30 Days',
+        features: [
+          'Custom Features',
+          'Database Integration',
+          'User Authentication',
+          'Admin Panel',
+          'API Integration',
+          'Advanced Functionality',
+          'Mobile Responsive',
+          '1 Year Free Support'
+        ]
+      }
     ],
     active: true
   },
@@ -40,6 +98,7 @@ const digitalServices = [
       'Data Visualization',
       'Monthly Reports Setup'
     ],
+    packages: [],
     active: true
   }
 ];
