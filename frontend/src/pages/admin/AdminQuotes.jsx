@@ -144,78 +144,92 @@ const AdminQuotes = () => {
         </div>
       </div>
 
-      {/* Quotes List */}
-      <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-4">
-        {filteredQuotes.map((quote) => (
-          <div
-            key={quote._id}
-            className="bg-white rounded-xl shadow-sm border border-gray-100 p-5 hover:shadow-md transition-shadow"
-          >
-            <div className="flex justify-between items-start mb-3">
-              <div>
-                <h3 className="font-semibold text-[#0B1530] text-lg">{quote.name}</h3>
-                <p className="text-sm text-gray-500">{quote.company || 'No company'}</p>
-              </div>
-              <span className={`px-2 py-1 rounded-full text-xs font-medium flex items-center gap-1 ${getStatusColor(quote.status)}`}>
-                {getStatusIcon(quote.status)}
-                {quote.status}
-              </span>
-            </div>
-
-            <div className="space-y-2 mb-4">
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaEnvelope className="text-[#C9A227]" />
-                <span className="truncate">{quote.email}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaPhone className="text-[#C9A227]" />
-                <span>{quote.phone}</span>
-              </div>
-              <div className="flex items-center gap-2 text-sm text-gray-600">
-                <FaBriefcase className="text-[#C9A227]" />
-                <span className="capitalize">{quote.service}</span>
-              </div>
-              {quote.budget && (
-                <div className="flex items-center gap-2 text-sm text-gray-600">
-                  <FaFileAlt className="text-[#C9A227]" />
-                  <span className="capitalize">{quote.budget.replace('-', ' - ')}</span>
-                </div>
+      {/* Quotes Table */}
+      <div className="bg-white rounded-xl shadow-sm border overflow-hidden">
+        <div className="overflow-x-auto">
+          <table className="w-full">
+            <thead className="bg-gray-50 border-b">
+              <tr>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Customer</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Service</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Budget</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Status</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Date</th>
+                <th className="text-left p-4 text-xs font-semibold text-gray-600">Actions</th>
+              </tr>
+            </thead>
+            <tbody className="divide-y">
+              {filteredQuotes.length > 0 ? (
+                filteredQuotes.map((quote) => (
+                  <tr key={quote._id} className="hover:bg-gray-50">
+                    <td className="p-4">
+                      <p className="font-semibold text-sm text-[#0B1530]">{quote.name}</p>
+                      <p className="text-xs text-gray-500">{quote.email}</p>
+                      <p className="text-xs text-gray-500">{quote.phone}</p>
+                      {quote.company && <p className="text-xs text-gray-400">{quote.company}</p>}
+                    </td>
+                    <td className="p-4">
+                      <span className="text-sm font-medium capitalize">{quote.service}</span>
+                    </td>
+                    <td className="p-4">
+                      <span className="text-sm text-gray-600 capitalize">
+                        {quote.budget ? quote.budget.replace('-', ' - ') : 'Not specified'}
+                      </span>
+                    </td>
+                    <td className="p-4">
+                      <select
+                        value={quote.status}
+                        onChange={(e) => handleUpdateStatus(quote._id, e.target.value)}
+                        className={`text-xs px-2 py-1 rounded-full font-semibold ${getStatusColor(quote.status)}`}
+                      >
+                        <option value="pending">Pending</option>
+                        <option value="contacted">Contacted</option>
+                        <option value="quoted">Quoted</option>
+                        <option value="converted">Converted</option>
+                        <option value="rejected">Rejected</option>
+                      </select>
+                    </td>
+                    <td className="p-4 text-xs text-gray-500">
+                      {new Date(quote.createdAt).toLocaleDateString('en-IN')}
+                    </td>
+                    <td className="p-4">
+                      <div className="flex items-center gap-2">
+                        <button
+                          onClick={() => setSelectedQuote(quote)}
+                          className="p-2 text-blue-600 hover:bg-blue-50 rounded-lg"
+                          title="View Details"
+                        >
+                          <FaEye size={14} />
+                        </button>
+                        <button
+                          onClick={() => openEmailReply(quote)}
+                          className="p-2 text-green-600 hover:bg-green-50 rounded-lg"
+                          title="Reply via Email"
+                        >
+                          <FaReply size={14} />
+                        </button>
+                        <button
+                          onClick={() => handleDelete(quote._id)}
+                          className="p-2 text-red-600 hover:bg-red-50 rounded-lg"
+                          title="Delete"
+                        >
+                          <FaTrash size={14} />
+                        </button>
+                      </div>
+                    </td>
+                  </tr>
+                ))
+              ) : (
+                <tr>
+                  <td colSpan="6" className="p-8 text-center text-gray-500">
+                    No quote requests found
+                  </td>
+                </tr>
               )}
-            </div>
-
-            <p className="text-sm text-gray-700 mb-4 line-clamp-2">{quote.message}</p>
-
-            <div className="flex gap-2 pt-3 border-t border-gray-100">
-              <button
-                onClick={() => setSelectedQuote(quote)}
-                className="flex-1 bg-blue-50 text-blue-600 px-3 py-2 rounded-lg hover:bg-blue-100 transition-colors text-sm font-medium flex items-center justify-center gap-1"
-              >
-                <FaEye /> View
-              </button>
-              <button
-                onClick={() => openEmailReply(quote)}
-                className="bg-green-50 text-green-600 px-3 py-2 rounded-lg hover:bg-green-100 transition-colors"
-                title="Reply via Email"
-              >
-                <FaReply />
-              </button>
-              <button
-                onClick={() => handleDelete(quote._id)}
-                className="bg-red-50 text-red-600 px-3 py-2 rounded-lg hover:bg-red-100 transition-colors"
-              >
-                <FaTrash />
-              </button>
-            </div>
-          </div>
-        ))}
-      </div>
-
-      {filteredQuotes.length === 0 && (
-        <div className="text-center py-20 text-gray-500">
-          <p className="text-xl mb-2">No quote requests found</p>
-          <p className="text-sm">Try adjusting your search or filter criteria</p>
+            </tbody>
+          </table>
         </div>
-      )}
+      </div>
 
       {/* Quote Detail Modal */}
       {selectedQuote && (
