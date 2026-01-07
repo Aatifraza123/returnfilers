@@ -81,34 +81,26 @@ const DigitalServices = () => {
 
   return (
     <main className="font-sans bg-gray-50">
-      {/* Hero Section - Cinematic Style */}
-      <section className="relative py-24 lg:py-32 bg-[#0B1530] text-white overflow-hidden">
+      {/* Hero Section - Compact */}
+      <section className="relative py-16 bg-[#0B1530] text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        {/* Animated Gradient Orb */}
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#C9A227] rounded-full blur-[128px] opacity-10 pointer-events-none" />
         
-        <div className="container mx-auto px-4 text-center relative z-10 max-w-4xl">
-          <motion.span
-            initial={{ opacity: 0, y: 10 }}
-            animate={{ opacity: 1, y: 0 }}
-            className="inline-block py-1 px-3 rounded-full bg-[#C9A227]/10 border border-[#C9A227]/20 text-[#C9A227] font-semibold tracking-widest uppercase text-xs mb-6"
-          >
-            Premium Digital Solutions
-          </motion.span>
+        <div className="container mx-auto px-4 text-center relative z-10 max-w-3xl">
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-5xl md:text-7xl font-serif font-bold mb-6 leading-tight"
+            className="text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
           >
-            Crafting Digital <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-[#F0E68C]">Excellence</span>
+            Web <span className="text-[#C9A227]">Development</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.1 }}
-            className="text-gray-400 text-lg md:text-xl max-w-2xl mx-auto leading-relaxed"
+            className="text-gray-400 text-base md:text-lg max-w-xl mx-auto"
           >
-            Transform your vision into a powerful digital reality with our expert web development services.
+            Professional websites tailored to your business needs
           </motion.p>
         </div>
       </section>
