@@ -143,7 +143,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <p className="text-gray-600 text-sm">+91 98765 43210</p>
+                      <a href="tel:+918447127264" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        +91 84471 27264
+                      </a>
                       <p className="text-gray-500 text-xs">Mon-Fri, 9am - 6pm</p>
                     </div>
                   </div>
@@ -154,7 +156,9 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
-                      <p className="text-gray-600 text-sm">info@caassociates.com</p>
+                      <a href="mailto:info@returnfilers.in" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        info@returnfilers.in
+                      </a>
                     </div>
                   </div>
                 </div>
