@@ -11,6 +11,11 @@ const testimonialSchema = new mongoose.Schema({
     required: [true, 'Title/Designation is required'],
     trim: true
   },
+  service: {
+    type: String,
+    trim: true,
+    default: 'General'
+  },
   quote: {
     type: String,
     required: [true, 'Quote/Review is required'],

@@ -11,6 +11,7 @@ const AdminTestimonials = () => {
   const [formData, setFormData] = useState({
     name: '',
     title: '',
+    service: '',
     quote: '',
     rating: 5,
     image: '',
@@ -61,6 +62,7 @@ const AdminTestimonials = () => {
     setFormData({
       name: testimonial.name,
       title: testimonial.title,
+      service: testimonial.service || '',
       quote: testimonial.quote,
       rating: testimonial.rating,
       image: testimonial.image || '',
@@ -120,6 +122,7 @@ const AdminTestimonials = () => {
     setFormData({
       name: '',
       title: '',
+      service: '',
       quote: '',
       rating: 5,
       image: '',
@@ -188,6 +191,25 @@ const AdminTestimonials = () => {
                   className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
                 />
               </div>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">Service</label>
+              <select
+                value={formData.service}
+                onChange={(e) => setFormData({ ...formData, service: e.target.value })}
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm bg-white"
+              >
+                <option value="">General</option>
+                <option value="Tax Consulting">Tax Consulting</option>
+                <option value="Audit Services">Audit Services</option>
+                <option value="Business Registration">Business Registration</option>
+                <option value="Financial Advisory">Financial Advisory</option>
+                <option value="Web Development">Web Development</option>
+                <option value="E-commerce Website">E-commerce Website</option>
+                <option value="Business Website">Business Website</option>
+                <option value="Custom Web Application">Custom Web Application</option>
+              </select>
             </div>
 
             <div>
