@@ -1,12 +1,13 @@
 const axios = require('axios');
 const Service = require('../models/serviceModel');
+const DigitalService = require('../models/DigitalService');
 const Testimonial = require('../models/testimonialModel');
 const Blog = require('../models/blogModel');
 const Portfolio = require('../models/portfolioModel');
 
 // Cache (refresh every 5 minutes for website data, 30 min for news)
-let dataCache = { services: null, testimonials: null, blogs: null, portfolio: null, news: null };
-let cacheTime = { services: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
+let dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, portfolio: null, news: null };
+let cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
 const CACHE_DURATION = 5 * 60 * 1000;
 const NEWS_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes for news
 
@@ -19,6 +20,17 @@ const getServices = async () => {
     cacheTime.services = now;
   } catch (e) { console.log('Services fetch error'); }
   return dataCache.services || [];
+};
+
+// Fetch digital services
+const getDigitalServices = async () => {
+  const now = Date.now();
+  if (dataCache.digitalServices && (now - cacheTime.digitalServices) < CACHE_DURATION) return dataCache.digitalServices;
+  try {
+    dataCache.digitalServices = await DigitalService.find({ active: true }).select('title packages');
+    cacheTime.digitalServices = now;
+  } catch (e) { console.log('Digital services fetch error'); }
+  return dataCache.digitalServices || [];
 };
 
 // Fetch testimonials
@@ -98,6 +110,20 @@ const formatServices = (services) => {
   return services.map(s => `- ${s.title}: ₹${s.price} (${s.timeline || '3-7 Days'})`).join('\n');
 };
 
+const formatDigitalServices = (digitalServices) => {
+  if (!digitalServices?.length) return '(No digital services yet)';
+  let result = [];
+  digitalServices.forEach(service => {
+    result.push(`\n${service.title}:`);
+    if (service.packages && service.packages.length > 0) {
+      service.packages.forEach(pkg => {
+        result.push(`  - ${pkg.name}: ₹${pkg.price} (${pkg.timeline})`);
+      });
+    }
+  });
+  return result.join('\n');
+};
+
 const formatTestimonials = (testimonials) => {
   if (!testimonials?.length) return '(No reviews yet)';
   return testimonials.map(t => `- "${t.quote?.substring(0, 80)}..." - ${t.name}, ${t.title} (${t.rating}★)`).join('\n');
@@ -127,8 +153,8 @@ const getCurrentDate = () => {
 
 // Build system prompt with all data
 const getSystemPrompt = async () => {
-  const [services, testimonials, blogs, portfolio, news] = await Promise.all([
-    getServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, portfolio, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
   ]);
   
   return `You are "Tax Filer AI", the official AI assistant for Tax Filer - a professional CA firm in India.
@@ -154,6 +180,17 @@ const getSystemPrompt = async () => {
 ## OUR SERVICES (USE EXACT PRICES):
 ${formatServices(services)}
 
+## DIGITAL SERVICES (WEB DEVELOPMENT):
+${formatDigitalServices(digitalServices)}
+
+We offer professional web development services with 4 packages:
+- Basic Website (₹9,999): Perfect for small businesses, 5-7 days delivery
+- Business Website (₹14,999): Most popular, includes blog & advanced SEO, 7-10 days
+- E-commerce Website (₹24,999): Full online store with payment gateway, 15-20 days
+- Custom Web Application (₹39,999): Tailored solutions for unique needs, 20-30 days
+
+All packages include mobile responsive design, free support, and professional quality.
+
 ## CLIENT REVIEWS:
 ${formatTestimonials(testimonials)}
 
@@ -175,13 +212,14 @@ ${formatNews(news)}
 ## IMPORTANT - YOU ARE ON THE WEBSITE:
 You are embedded IN the taxfiler.in website. Users are ALREADY on the website.
 - NEVER write "taxfiler.in" or "our website" - user is already here!
-- For links, use SHORT paths like: /booking, /quote, /services, /contact
+- For links, use SHORT paths like: /booking, /quote, /services, /contact, /digital-services
 - Example: "Book your service here: /booking" (NOT "taxfiler.in/booking")
 
 ## PAGE LINKS (SHORT PATHS ONLY):
 - /booking → for service booking (with or without documents)
 - /quote → for getting price quote
-- /services → for all services list
+- /services → for all CA services list
+- /digital-services → for web development packages
 - /contact → for contact page
 
 ## WHEN TO GIVE LINKS:
@@ -353,13 +391,14 @@ const chatWithAIStream = async (req, res) => {
 
 // Test endpoint
 const testAI = async (req, res) => {
-  const [services, testimonials, blogs, portfolio, news] = await Promise.all([
-    getServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, portfolio, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
   ]);
   res.json({ 
     success: true, 
     data: {
       services: services.length,
+      digitalServices: digitalServices.length,
       testimonials: testimonials.length,
       blogs: blogs.length,
       portfolio: portfolio.length,
