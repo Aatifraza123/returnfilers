@@ -18,6 +18,8 @@ const defaultServices = [
   'Import Export Code',
   'Tax Audit',
   'Bookkeeping',
+  'Web Development',
+  'Data Analysis',
   'Other'
 ];
 

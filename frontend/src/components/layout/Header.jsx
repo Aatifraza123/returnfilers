@@ -76,9 +76,9 @@ const Header = () => {
               </NavLink>
               
               {/* Simple Services Dropdown */}
-              {link.hasDropdown && servicesOpen && services.length > 0 && (
+              {link.hasDropdown && servicesOpen && (
                 <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
-                  {services.map((service) => (
+                  {services.length > 0 && services.map((service) => (
                     <Link
                       key={service._id}
                       to={`/services/${service.slug || service._id}`}
@@ -88,6 +88,12 @@ const Header = () => {
                     </Link>
                   ))}
                   <div className="border-t border-gray-100 mt-2 pt-2">
+                    <Link
+                      to="/digital-services"
+                      className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
+                    >
+                      🌐 Digital Services
+                    </Link>
                     <Link
                       to="/services"
                       className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"

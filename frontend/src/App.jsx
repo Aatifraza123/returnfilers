@@ -44,6 +44,7 @@ import AdminSettings from './pages/admin/AdminSettings'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminBookings from './pages/admin/AdminBookings'
 import Booking from './pages/Booking'
+import DigitalServices from './pages/DigitalServices'
 
 // Wrapper component to conditionally show chatbot
 const ChatbotWrapper = () => {
@@ -84,6 +85,7 @@ function App() {
           <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="refund-policy" element={<RefundPolicy />} />
           <Route path="booking" element={<Booking />} />
+          <Route path="digital-services" element={<DigitalServices />} />
           <Route path="upload-documents" element={<Booking />} />
         </Route>
 
