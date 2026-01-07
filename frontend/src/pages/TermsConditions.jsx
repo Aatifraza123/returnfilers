@@ -27,6 +27,27 @@ const TermsConditions = () => {
     }
   };
 
+  // Function to make emails clickable
+  const makeEmailsClickable = (text) => {
+    const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
+    const parts = text.split(emailRegex);
+    
+    return parts.map((part, index) => {
+      if (emailRegex.test(part)) {
+        return (
+          <a 
+            key={index} 
+            href={`mailto:${part}`} 
+            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors"
+          >
+            {part}
+          </a>
+        );
+      }
+      return part;
+    });
+  };
+
   return (
     <div className="font-sans text-gray-800 bg-white min-h-screen">
       
@@ -82,7 +103,7 @@ const TermsConditions = () => {
             >
               <div className="prose prose-gray max-w-none">
                 <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                  {content}
+                  {makeEmailsClickable(content)}
                 </div>
               </div>
             </motion.div>
