@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import api from '../api/axios';
@@ -19,7 +19,20 @@ import {
 const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
+  const [settings, setSettings] = useState(null);
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await api.get(`${import.meta.env.VITE_API_URL}/api/settings`);
+        setSettings(response.data);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+    fetchSettings();
+  }, []);
   
   const toggleFaq = (index) => {
     setOpenFaqIndex(openFaqIndex === index ? null : index);
@@ -130,9 +143,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Office Address</h3>
-                      <p className="text-gray-600 text-sm leading-relaxed">
-                        123 Business Park, Financial District,<br />
-                        Mumbai, Maharashtra 400001
+                      <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
+                        {settings?.companyInfo?.address || '123 Business Park, Financial District,\nMumbai, Maharashtra 400001'}
                       </p>
                     </div>
                   </div>
@@ -143,10 +155,12 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <a href="tel:+918447127264" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        +91 84471 27264
+                      <a href={`tel:${settings?.companyInfo?.phone || '+918447127264'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        {settings?.companyInfo?.phone || '+91 84471 27264'}
                       </a>
-                      <p className="text-gray-500 text-xs">Mon-Fri, 9am - 6pm</p>
+                      <p className="text-gray-500 text-xs">
+                        {settings?.businessHours?.weekdays || 'Mon-Fri, 9am - 6pm'}
+                      </p>
                     </div>
                   </div>
 
@@ -156,8 +170,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
-                      <a href="mailto:info@returnfilers.in" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        info@returnfilers.in
+                      <a href={`mailto:${settings?.companyInfo?.email || 'info@returnfilers.in'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        {settings?.companyInfo?.email || 'info@returnfilers.in'}
                       </a>
                     </div>
                   </div>
@@ -178,9 +192,18 @@ const Contact = () => {
                        <h3 className="font-bold text-base">Office Hours</h3>
                     </div>
                     <ul className="space-y-2 text-sm text-gray-300">
-                       <li className="flex justify-between"><span>Mon - Fri</span> <span>9am - 6pm</span></li>
-                       <li className="flex justify-between"><span>Saturday</span> <span>10am - 2pm</span></li>
-                       <li className="flex justify-between"><span>Sunday</span> <span className="text-red-300">Closed</span></li>
+                       <li className="flex justify-between">
+                         <span>Mon - Fri</span> 
+                         <span>{settings?.businessHours?.weekdays || '9am - 6pm'}</span>
+                       </li>
+                       <li className="flex justify-between">
+                         <span>Saturday</span> 
+                         <span>{settings?.businessHours?.saturday || '10am - 2pm'}</span>
+                       </li>
+                       <li className="flex justify-between">
+                         <span>Sunday</span> 
+                         <span className="text-red-300">{settings?.businessHours?.sunday || 'Closed'}</span>
+                       </li>
                     </ul>
                  </div>
 
@@ -191,7 +214,7 @@ const Contact = () => {
                     </div>
                     <p className="text-sm text-gray-600 mb-4">Chat with us directly on WhatsApp.</p>
                     <a 
-                       href="https://wa.me/918447127264?text=Hi%2C%20I%20need%20help%20with%20tax%20services"
+                       href={`https://wa.me/${(settings?.socialMedia?.whatsapp || '918447127264').replace(/[^0-9]/g, '')}?text=Hi%2C%20I%20need%20help%20with%20tax%20services`}
                        target="_blank"
                        rel="noopener noreferrer"
                        className="w-full py-2 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#128C7E] transition-colors text-sm text-center flex items-center justify-center gap-2"

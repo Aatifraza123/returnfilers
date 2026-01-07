@@ -1,11 +1,24 @@
 import { Link } from 'react-router-dom';
-import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaPaperPlane } from 'react-icons/fa';
-import { useState } from 'react';
+import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaYoutube, FaWhatsapp, FaPaperPlane } from 'react-icons/fa';
+import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
+  const [settings, setSettings] = useState(null);
+
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const response = await api.get('/settings');
+        setSettings(response.data);
+      } catch (error) {
+        console.error('Error fetching settings:', error);
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const handleSubscribe = async (e) => {
     e.preventDefault();
@@ -32,12 +45,29 @@ const Footer = () => {
     { to: '/refund-policy', label: 'Refund Policy' }
   ];
 
-  const socialLinks = [
-    { href: 'https://facebook.com', icon: FaFacebook },
-    { href: 'https://twitter.com', icon: FaTwitter },
-    { href: 'https://linkedin.com', icon: FaLinkedin },
-    { href: 'https://instagram.com', icon: FaInstagram }
-  ];
+  const getSocialLinks = () => {
+    if (!settings?.socialMedia) return [];
+    
+    const links = [];
+    const iconMap = {
+      facebook: FaFacebook,
+      twitter: FaTwitter,
+      linkedin: FaLinkedin,
+      instagram: FaInstagram,
+      youtube: FaYoutube,
+      whatsapp: FaWhatsapp
+    };
+
+    Object.entries(settings.socialMedia).forEach(([platform, url]) => {
+      if (url && iconMap[platform]) {
+        links.push({ href: url, icon: iconMap[platform], platform });
+      }
+    });
+
+    return links;
+  };
+
+  const socialLinks = getSocialLinks();
 
   return (
     <footer className="bg-black text-white font-sans" id="footer">
@@ -45,19 +75,23 @@ const Footer = () => {
         <div className="grid md:grid-cols-4 gap-8 md:gap-10">
           {/* ReturnFilers Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">ReturnFilers</h3>
+            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
+              {settings?.companyInfo?.name || 'ReturnFilers'}
+            </h3>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              Professional chartered accountancy services with 3+ years of experience in taxation, auditing, and financial consulting.
+              Professional chartered accountancy services with {settings?.aboutCompany?.yearsExperience || 3}+ years of experience in taxation, auditing, and financial consulting.
             </p>
-            <div className="flex space-x-4 pt-2">
-              {socialLinks.map(({ href, icon: Icon }, idx) => (
-                <a key={idx} href={href} target="_blank" rel="noopener noreferrer" className="text-[#C9A227] hover:text-white transition-colors transform hover:scale-110">
-                  <Icon size={20} />
-                </a>
-              ))}
-            </div>
+            {socialLinks.length > 0 && (
+              <div className="flex space-x-4 pt-2">
+                {socialLinks.map(({ href, icon: Icon, platform }) => (
+                  <a key={platform} href={href} target="_blank" rel="noopener noreferrer" className="text-[#C9A227] hover:text-white transition-colors transform hover:scale-110">
+                    <Icon size={20} />
+                  </a>
+                ))}
+              </div>
+            )}
             <div className="text-gray-500 text-xs md:text-sm pt-2">
-              © {new Date().getFullYear()} ReturnFilers. All rights reserved.
+              © {new Date().getFullYear()} {settings?.companyInfo?.name || 'ReturnFilers'}. All rights reserved.
             </div>
           </div>
 
