@@ -388,7 +388,14 @@ const AIChatbot = () => {
       >
         {/* Tooltip Message */}
         <div className="absolute bottom-full right-0 mb-3 animate-bounce-slow">
-          <div className="bg-white px-4 py-2.5 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap">
+          <div className="bg-white px-4 py-2.5 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap relative">
+            <button
+              onClick={() => setIsVisible(false)}
+              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-md"
+              aria-label="Close tooltip"
+            >
+              <FaTimes size={12} />
+            </button>
             <p className="text-sm font-medium text-[#0B1530]">👋 Need help with taxes?</p>
             <p className="text-xs text-gray-500">Chat with our AI assistant</p>
             {/* Arrow */}
