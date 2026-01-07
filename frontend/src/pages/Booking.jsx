@@ -23,6 +23,9 @@ const defaultServices = [
   'Other'
 ];
 
+// Services that don't require document upload
+const noDocumentServices = ['Web Development', 'Data Analysis'];
+
 const Booking = () => {
   const [searchParams] = useSearchParams();
   const preSelectedService = searchParams.get('service') || '';
@@ -39,6 +42,9 @@ const Booking = () => {
     service: preSelectedService,
     message: ''
   });
+  
+  // Check if current service requires documents
+  const requiresDocuments = !noDocumentServices.includes(formData.service);
   
   // Update service when URL param changes
   useEffect(() => {
@@ -278,7 +284,8 @@ const Booking = () => {
               />
             </div>
 
-            {/* File Upload - Optional */}
+            {/* File Upload - Optional (Hidden for digital services) */}
+            {requiresDocuments && (
             <div className="mb-4">
               <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
                 Upload Documents <span className="text-gray-400">(Optional)</span>
@@ -319,9 +326,10 @@ const Booking = () => {
                 </div>
               )}
             </div>
+            )}
 
             {/* Consent - Only show if files uploaded */}
-            {files.length > 0 && (
+            {files.length > 0 && requiresDocuments && (
               <div className="mb-5 p-4 bg-blue-50 border border-blue-100 rounded-lg">
                 <label className="flex items-start gap-3 cursor-pointer">
                   <input
@@ -338,7 +346,7 @@ const Booking = () => {
             )}
 
             {/* Trust Badges - Only show if files uploaded */}
-            {files.length > 0 && (
+            {files.length > 0 && requiresDocuments && (
               <div className="flex flex-wrap items-center justify-center gap-4 mb-5 py-3 border-y border-gray-100">
                 <div className="flex items-center gap-2 text-xs text-gray-600">
                   <FaShieldAlt className="text-green-500" />

@@ -65,6 +65,7 @@ const Home = () => {
     { icon: <FaBalanceScale />, title: 'Auditing', desc: 'Comprehensive audit services ensuring accuracy, transparency, and regulatory compliance.', slug: 'auditing' },
     { icon: <FaChartLine />, title: 'Financial Advisory', desc: 'Strategic financial guidance to maximize profits and minimize risks.', slug: 'financial-advisory' },
     { icon: <FaUsers />, title: 'Business Setup', desc: 'End-to-end assistance in company formation, registration, and legal structuring.', slug: 'business-setup' },
+    { icon: <FaBriefcase />, title: 'Web Development', desc: 'Professional website development to establish your digital presence and grow online.', slug: 'web-development', isDigital: true },
   ];
 
   const features = [
@@ -332,7 +333,7 @@ const Home = () => {
             whileInView="visible"
             viewport={{ once: true }}
             variants={containerVariants}
-            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6"
+            className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-5 gap-6"
           >
             {services.map((service, idx) => (
               <motion.div
@@ -348,7 +349,10 @@ const Home = () => {
                 <p className="text-gray-600 text-base leading-relaxed mb-6">
                    {service.desc}
                 </p>
-                <Link to={`/expertise/${service.slug}`} className="text-base font-bold text-[#0B1530] hover:text-[#C9A227] flex items-center gap-2 transition-colors">
+                <Link 
+                  to={service.isDigital ? '/digital-services' : `/expertise/${service.slug}`} 
+                  className="text-base font-bold text-[#0B1530] hover:text-[#C9A227] flex items-center gap-2 transition-colors"
+                >
                   Read More <FaArrowRight size={12} />
                 </Link>
               </motion.div>
