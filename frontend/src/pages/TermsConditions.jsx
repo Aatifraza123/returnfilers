@@ -95,38 +95,5 @@ const TermsConditions = () => {
 };
 
 export default TermsConditions;
-                    {section.content}
-                  </p>
-                  
-                  {/* Divider */}
-                  {index !== sections.length - 1 && (
-                    <div className="w-full h-px bg-gray-200 mt-6"></div>
-                  )}
-                </div>
-              ))}
-
-              {/* Contact Section */}
-              <div className="bg-[#0B1530]/5 p-6 rounded-lg border border-[#C9A227]/20 mt-8">
-                <h2 className="text-lg font-bold text-[#0B1530] mb-2">8. Contact Us</h2>
-                <p className="text-gray-600 mb-3 text-sm md:text-base">
-                  If you have any questions about these Terms & Conditions, please contact us at:
-                </p>
-                <a 
-                  href="mailto:info@caassociates.com" 
-                  className="text-[#C9A227] font-semibold hover:text-[#0B1530] transition-colors text-sm md:text-base underline decoration-[#C9A227]/30 underline-offset-2"
-                >
-                  info@caassociates.com
-                </a>
-              </div>
-            </div>
-          </motion.div>
-        </div>
-      </section>
-
-    </div>
-  );
-};
-
-export default TermsConditions;
 
 
