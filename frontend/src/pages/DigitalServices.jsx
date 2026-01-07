@@ -1,46 +1,34 @@
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { Link } from 'react-router-dom';
-import { FaCode, FaChartBar, FaCheckCircle, FaArrowRight, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import { FaCode, FaChartBar, FaCheckCircle, FaPhone, FaWhatsapp } from 'react-icons/fa';
+import api from '../api/axios';
 
 const DigitalServices = () => {
-  const services = [
-    {
-      id: 'web-development',
-      icon: <FaCode />,
-      title: 'Web Development',
-      price: '14999',
-      timeline: '7-15 Days',
-      description: 'Professional website development to establish your digital presence and grow your business online.',
-      features: [
-        'Business & Corporate Websites',
-        'E-commerce Development',
-        'Custom Web Applications',
-        'Mobile Responsive Design',
-        'SEO Optimized',
-        'Admin Panel Integration',
-        'Payment Gateway Setup',
-        'Free 3 Months Support'
-      ]
-    },
-    {
-      id: 'data-analysis',
-      icon: <FaChartBar />,
-      title: 'Data Analysis',
-      price: '9999',
-      timeline: '5-10 Days',
-      description: 'Transform your business data into actionable insights with our professional data analysis services.',
-      features: [
-        'Business Data Analysis',
-        'Financial Reports & Dashboards',
-        'Sales & Revenue Analytics',
-        'Customer Behavior Analysis',
-        'Market Research Reports',
-        'Excel & Power BI Dashboards',
-        'Data Visualization',
-        'Monthly Reports Setup'
-      ]
-    }
-  ];
+  const [services, setServices] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      try {
+        const { data } = await api.get('/digital-services');
+        setServices(data.services.filter(s => s.active) || []);
+      } catch (error) {
+        console.log('Failed to fetch digital services');
+      } finally {
+        setLoading(false);
+      }
+    };
+    fetchServices();
+  }, []);
+
+  const getIcon = (iconName) => {
+    return iconName === 'FaCode' ? <FaCode /> : <FaChartBar />;
+  };
+
+  if (loading) {
+    return <div className="min-h-screen flex items-center justify-center">Loading...</div>;
+  }
 
   return (
     <main className="font-sans bg-gray-50">
@@ -76,68 +64,74 @@ const DigitalServices = () => {
       {/* Services Section */}
       <section className="py-16">
         <div className="container mx-auto px-4 max-w-6xl">
-          <div className="grid md:grid-cols-2 gap-8">
-            {services.map((service, idx) => (
-              <motion.div
-                key={service.id}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: idx * 0.1 }}
-                className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow"
-              >
-                {/* Header */}
-                <div className="bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] p-6 text-white">
-                  <div className="flex items-center gap-4 mb-4">
-                    <div className="w-14 h-14 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl">
-                      {service.icon}
+          {services.length === 0 ? (
+            <div className="text-center py-12 text-gray-500">
+              No digital services available at the moment.
+            </div>
+          ) : (
+            <div className="grid md:grid-cols-2 gap-8">
+              {services.map((service, idx) => (
+                <motion.div
+                  key={service._id}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-2xl shadow-lg overflow-hidden border border-gray-100 hover:shadow-xl transition-shadow"
+                >
+                  {/* Header */}
+                  <div className="bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] p-6 text-white">
+                    <div className="flex items-center gap-4 mb-4">
+                      <div className="w-14 h-14 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl">
+                        {getIcon(service.icon)}
+                      </div>
+                      <div>
+                        <h2 className="text-2xl font-bold">{service.title}</h2>
+                        <p className="text-gray-300 text-sm">{service.timeline}</p>
+                      </div>
                     </div>
-                    <div>
-                      <h2 className="text-2xl font-bold">{service.title}</h2>
-                      <p className="text-gray-300 text-sm">{service.timeline}</p>
+                    <div className="flex items-baseline gap-1">
+                      <span className="text-3xl font-bold text-[#C9A227]">₹{service.price}</span>
+                      <span className="text-gray-400 text-sm">onwards</span>
                     </div>
                   </div>
-                  <div className="flex items-baseline gap-1">
-                    <span className="text-3xl font-bold text-[#C9A227]">₹{service.price}</span>
-                    <span className="text-gray-400 text-sm">onwards</span>
-                  </div>
-                </div>
 
-                {/* Content */}
-                <div className="p-6">
-                  <p className="text-gray-600 mb-6">{service.description}</p>
-                  
-                  <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">What's Included</h3>
-                  <ul className="space-y-3 mb-6">
-                    {service.features.map((feature, fIdx) => (
-                      <li key={fIdx} className="flex items-start gap-3">
-                        <FaCheckCircle className="text-[#C9A227] mt-0.5 flex-shrink-0" />
-                        <span className="text-gray-700 text-sm">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
+                  {/* Content */}
+                  <div className="p-6">
+                    <p className="text-gray-600 mb-6">{service.description}</p>
+                    
+                    <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">What's Included</h3>
+                    <ul className="space-y-3 mb-6">
+                      {service.features.map((feature, fIdx) => (
+                        <li key={fIdx} className="flex items-start gap-3">
+                          <FaCheckCircle className="text-[#C9A227] mt-0.5 flex-shrink-0" />
+                          <span className="text-gray-700 text-sm">{feature}</span>
+                        </li>
+                      ))}
+                    </ul>
 
-                  {/* CTA */}
-                  <div className="flex gap-3">
-                    <Link
-                      to={`/booking?service=${encodeURIComponent(service.title)}`}
-                      className="flex-1 bg-[#0B1530] text-white py-3 rounded-lg font-semibold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
-                    >
-                      Book Now
-                    </Link>
-                    <a
-                      href="https://wa.me/918447127264"
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-12 h-12 bg-[#25D366] text-white rounded-lg flex items-center justify-center hover:bg-[#128C7E] transition-colors"
-                    >
-                      <FaWhatsapp size={20} />
-                    </a>
+                    {/* CTA */}
+                    <div className="flex gap-3">
+                      <Link
+                        to={`/booking?service=${encodeURIComponent(service.title)}`}
+                        className="flex-1 bg-[#0B1530] text-white py-3 rounded-lg font-semibold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                      >
+                        Book Now
+                      </Link>
+                      <a
+                        href="https://wa.me/918447127264"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="w-12 h-12 bg-[#25D366] text-white rounded-lg flex items-center justify-center hover:bg-[#128C7E] transition-colors"
+                      >
+                        <FaWhatsapp size={20} />
+                      </a>
+                    </div>
                   </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+                </motion.div>
+              ))}
+            </div>
+          )}
         </div>
       </section>
 

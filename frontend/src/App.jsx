@@ -43,6 +43,7 @@ import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminBookings from './pages/admin/AdminBookings'
+import AdminDigitalServices from './pages/admin/AdminDigitalServices'
 import Booking from './pages/Booking'
 import DigitalServices from './pages/DigitalServices'
 
@@ -115,6 +116,7 @@ function App() {
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="digital-services" element={<AdminDigitalServices />} />
         </Route>
 
         {/* 404 Page */}

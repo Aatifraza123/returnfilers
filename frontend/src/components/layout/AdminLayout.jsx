@@ -146,6 +146,7 @@ const AdminLayout = () => {
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts', badge: null },
     { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes', badge: null },
     { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
+    { path: '/admin/digital-services', icon: <FaFolderOpen />, label: 'Digital Services', badge: null },
     { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
     { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
