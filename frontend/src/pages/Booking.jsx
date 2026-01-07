@@ -19,12 +19,11 @@ const defaultServices = [
   'Tax Audit',
   'Bookkeeping',
   'Web Development',
-  'Data Analysis',
   'Other'
 ];
 
 // Services that don't require document upload
-const noDocumentServices = ['Web Development', 'Data Analysis'];
+const noDocumentServices = ['Web Development'];
 
 const Booking = () => {
   const [searchParams] = useSearchParams();

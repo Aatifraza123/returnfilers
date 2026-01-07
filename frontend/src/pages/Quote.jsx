@@ -158,7 +158,6 @@ const Quote = () => {
                     <option value="web-ecommerce">E-commerce Website (₹24,999)</option>
                     <option value="web-custom">Custom Web Application (₹39,999)</option>
                   </optgroup>
-                  <option value="data-analysis">Data Analysis (₹9,999)</option>
                   <option value="other">Other</option>
                 </select>
               </div>

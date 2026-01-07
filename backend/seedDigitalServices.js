@@ -80,26 +80,6 @@ const digitalServices = [
       }
     ],
     active: true
-  },
-  {
-    title: 'Data Analysis',
-    slug: 'data-analysis',
-    icon: 'FaChartBar',
-    price: '9999',
-    timeline: '5-10 Days',
-    description: 'Transform your business data into actionable insights with our professional data analysis services.',
-    features: [
-      'Business Data Analysis',
-      'Financial Reports & Dashboards',
-      'Sales & Revenue Analytics',
-      'Customer Behavior Analysis',
-      'Market Research Reports',
-      'Excel & Power BI Dashboards',
-      'Data Visualization',
-      'Monthly Reports Setup'
-    ],
-    packages: [],
-    active: true
   }
 ];
 

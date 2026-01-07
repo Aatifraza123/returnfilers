@@ -173,7 +173,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all appearance-none text-sm text-gray-700"
                     >
                       <option value="">Select Service *</option>
-                      {preSelectedService && !['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Web Development - Basic Website', 'Web Development - Business Website', 'Web Development - E-commerce Website', 'Web Development - Custom Web Application', 'Data Analysis', 'Other'].includes(preSelectedService) && (
+                      {preSelectedService && !['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Web Development - Basic Website', 'Web Development - Business Website', 'Web Development - E-commerce Website', 'Web Development - Custom Web Application', 'Other'].includes(preSelectedService) && (
                         <option value={preSelectedService}>{preSelectedService}</option>
                       )}
                       <option value="Tax Consulting">Tax Consulting</option>
@@ -186,7 +186,6 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                         <option value="Web Development - E-commerce Website">E-commerce Website (₹24,999)</option>
                         <option value="Web Development - Custom Web Application">Custom Web Application (₹39,999)</option>
                       </optgroup>
-                      <option value="Data Analysis">Data Analysis (₹9,999)</option>
                       <option value="Other">Other</option>
                     </select>
                   </div>
