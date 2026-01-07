@@ -5,40 +5,21 @@ import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShiel
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 
-const defaultServices = [
-  'GST Registration',
-  'GST Return Filing',
-  'Income Tax Return',
-  'TDS Return Filing',
-  'Company Registration',
-  'LLP Registration',
-  'Partnership Firm',
-  'Trademark Registration',
-  'MSME Registration',
-  'Import Export Code',
-  'Tax Audit',
-  'Bookkeeping',
-  'Web Development',
-  'Other'
-];
-
 // Services that don't require document upload
 const noDocumentServices = [
   'Web Development',
-  'Web Development - Basic Website',
-  'Web Development - Business Website', 
-  'Web Development - E-commerce Website',
-  'Web Development - Custom Web Application'
+  'Basic Website',
+  'Business Website', 
+  'E-commerce Website',
+  'Custom Web Application'
 ];
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
   const preSelectedService = searchParams.get('service') || '';
   
-  // Add preSelectedService to list if not already present
-  const services = preSelectedService && !defaultServices.includes(preSelectedService)
-    ? [preSelectedService, ...defaultServices]
-    : defaultServices;
+  const [services, setServices] = useState([]);
+  const [loadingServices, setLoadingServices] = useState(true);
   
   const [formData, setFormData] = useState({
     name: '',
@@ -48,8 +29,70 @@ const Booking = () => {
     message: ''
   });
   
+  // Fetch services from database
+  useEffect(() => {
+    fetchServices();
+  }, []);
+
+  const fetchServices = async () => {
+    try {
+      // Fetch regular services
+      const { data: servicesData } = await api.get('/services');
+      const regularServices = Array.isArray(servicesData) 
+        ? servicesData 
+        : (servicesData.services || []);
+      
+      // Fetch digital services (web development packages)
+      const { data: digitalData } = await api.get('/digital-services');
+      const digitalServices = Array.isArray(digitalData)
+        ? digitalData
+        : (digitalData.data || []);
+      
+      // Build service list
+      let serviceList = [];
+      
+      // Add regular services
+      regularServices
+        .filter(s => s.active)
+        .forEach(s => serviceList.push(s.title));
+      
+      // Add web development packages
+      digitalServices
+        .filter(d => d.active)
+        .forEach(service => {
+          if (service.packages && service.packages.length > 0) {
+            service.packages.forEach(pkg => {
+              serviceList.push(pkg.name);
+            });
+          }
+        });
+      
+      // Add "Other" option at the end
+      serviceList.push('Other');
+      
+      setServices(serviceList);
+    } catch (error) {
+      console.error('Error fetching services:', error);
+      // Fallback to basic list
+      setServices([
+        'GST Registration',
+        'Income Tax Return',
+        'Company Registration',
+        'Basic Website',
+        'Business Website',
+        'E-commerce Website',
+        'Custom Web Application',
+        'Other'
+      ]);
+    } finally {
+      setLoadingServices(false);
+    }
+  };
+  
   // Check if current service requires documents
-  const requiresDocuments = !noDocumentServices.includes(formData.service);
+  const requiresDocuments = !noDocumentServices.some(s => 
+    formData.service.toLowerCase().includes(s.toLowerCase())
+  );
   
   // Update service when URL param changes
   useEffect(() => {
