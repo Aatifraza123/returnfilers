@@ -76,13 +76,15 @@ const ServiceDetail = () => {
   const getServiceImage = () => {
     if (service.image) return service.image;
     
-    // Business Setup specific image
+    // Business Setup / Company Formation specific image - professional business meeting
     if (service.title?.toLowerCase().includes('business setup') || 
-        service.title?.toLowerCase().includes('company formation')) {
-      return "https://images.unsplash.com/photo-1507679799987-c73779587ccf?auto=format&fit=crop&q=80";
+        service.title?.toLowerCase().includes('company formation') ||
+        service.title?.toLowerCase().includes('company registration') ||
+        service.title?.toLowerCase().includes('llp registration')) {
+      return "https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80";
     }
     
-    // Default fallback
+    // Default fallback - business documents
     return "https://images.unsplash.com/photo-1454165804606-c3d57bc86b40?auto=format&fit=crop&q=80";
   };
 
