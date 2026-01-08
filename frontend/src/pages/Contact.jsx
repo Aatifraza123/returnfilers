@@ -195,7 +195,7 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <a href={`tel:${settings?.phone || '+918447127264'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                      <a href={`tel:${(settings?.phone || '+918447127264').replace(/\s/g, '')}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block">
                         {settings?.phone || '+91 84471 27264'}
                       </a>
                       <p className="text-gray-500 text-xs">
