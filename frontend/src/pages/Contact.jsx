@@ -128,7 +128,7 @@ const Contact = () => {
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.2 }}
-            className="text-sm md:text-base text-gray-600 max-w-3xl mx-auto"
+            className="text-sm md:text-base text-white max-w-3xl mx-auto"
           >
             Have questions about your taxes or business finances? Send us a message and our team will respond promptly.
           </motion.p>

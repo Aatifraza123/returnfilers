@@ -207,7 +207,7 @@ const deleteDocument = async (req, res) => {
 
 // Helper function to send emails
 const sendDocumentEmails = async (doc) => {
-  const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
+  const adminEmailAddress = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
 
   const adminHtml = `
     <!DOCTYPE html>

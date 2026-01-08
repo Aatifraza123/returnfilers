@@ -331,7 +331,7 @@ const sendContactEmails = async (contact) => {
   
   const { sendEmail } = require('../utils/emailService');
 
-  const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
+  const adminEmailAddress = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
 
   // Admin notification email HTML
   const adminHtml = `
@@ -427,18 +427,25 @@ const sendContactEmails = async (contact) => {
   `;
 
   try {
-    // Send admin notification
-    console.log('Sending admin notification email...');
+    // Send admin notification to primary email
+    console.log('Sending admin notification email to razaahmadwork@gmail.com...');
     await sendEmail({
       to: adminEmailAddress,
       subject: `New Contact Message from ${contact.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin email sent');
+    console.log('✅ Admin email sent to razaahmadwork@gmail.com');
 
-    // Customer confirmation - only works after domain verification in Resend
-    // Uncomment below after verifying domain
-    /*
+    // Send admin notification to info@returnfilers.in as well
+    console.log('Sending admin notification email to info@returnfilers.in...');
+    await sendEmail({
+      to: 'info@returnfilers.in',
+      subject: `New Contact Message from ${contact.name}`,
+      html: adminHtml
+    });
+    console.log('✅ Admin email sent to info@returnfilers.in');
+
+    // Customer confirmation
     console.log('Sending customer confirmation email...');
     await sendEmail({
       to: contact.email,
@@ -446,7 +453,6 @@ const sendContactEmails = async (contact) => {
       html: customerHtml
     });
     console.log('✅ Customer email sent');
-    */
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

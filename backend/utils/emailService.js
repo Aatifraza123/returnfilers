@@ -4,24 +4,69 @@ const { Resend } = require('resend');
 // Initialize Resend (fallback)
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
-// Initialize Nodemailer with Zoho SMTP
+// Initialize Nodemailer with SMTP (supports Zoho, Gmail, etc.)
 const createTransporter = () => {
-  if (process.env.SMTP_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
-    return nodemailer.createTransport({
-      host: process.env.SMTP_HOST,
-      port: 465,
-      secure: true, // use SSL
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS
-      }
-    });
+  if (!process.env.SMTP_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+    return null;
   }
-  return null;
+
+  console.log('🔧 Creating SMTP transporter:', {
+    host: process.env.SMTP_HOST,
+    user: process.env.EMAIL_USER,
+    pass: '***' + (process.env.EMAIL_PASS?.slice(-4) || '')
+  });
+
+  // Detect provider and use appropriate settings
+  const isZoho = process.env.SMTP_HOST.includes('zoho');
+  const isGmail = process.env.SMTP_HOST.includes('gmail');
+
+  let config = {
+    host: process.env.SMTP_HOST,
+    auth: {
+      user: process.env.EMAIL_USER,
+      pass: process.env.EMAIL_PASS
+    }
+  };
+
+  if (isZoho) {
+    // Zoho specific configuration - try port 465 with SSL
+    config = {
+      ...config,
+      port: 465,
+      secure: true,
+      tls: {
+        rejectUnauthorized: false,
+        minVersion: 'TLSv1.2'
+      }
+    };
+  } else if (isGmail) {
+    // Gmail specific configuration
+    config = {
+      ...config,
+      port: 587,
+      secure: false,
+      requireTLS: true,
+      tls: {
+        rejectUnauthorized: false
+      }
+    };
+  } else {
+    // Generic SMTP configuration
+    config = {
+      ...config,
+      port: 587,
+      secure: false,
+      tls: {
+        rejectUnauthorized: false
+      }
+    };
+  }
+
+  return nodemailer.createTransport(config);
 };
 
 /**
- * Send email via Zoho SMTP (primary) or Resend (fallback)
+ * Send email via SMTP (primary) or Resend (fallback)
  */
 const sendEmail = async ({ to, subject, html, from }) => {
   console.log('📧 Attempting to send email to:', to);
@@ -29,7 +74,7 @@ const sendEmail = async ({ to, subject, html, from }) => {
   
   const transporter = createTransporter();
   
-  // Try Zoho SMTP first
+  // Try SMTP first (Zoho/Gmail/etc)
   if (transporter) {
     try {
       const info = await transporter.sendMail({
@@ -39,10 +84,10 @@ const sendEmail = async ({ to, subject, html, from }) => {
         html: html
       });
       
-      console.log('✅ Email sent via Zoho SMTP:', info.messageId);
-      return { success: true, provider: 'zoho', id: info.messageId };
+      console.log('✅ Email sent via SMTP:', info.messageId);
+      return { success: true, provider: 'smtp', id: info.messageId };
     } catch (error) {
-      console.log('❌ Zoho SMTP failed:', error.message);
+      console.log('❌ SMTP failed:', error.message);
       console.log('Trying Resend as fallback...');
     }
   }

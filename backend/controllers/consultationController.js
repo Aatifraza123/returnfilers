@@ -204,7 +204,7 @@ const sendConsultationEmails = async (consultation) => {
   console.log('sendConsultationEmails called for:', consultation._id);
   
   const { sendEmail } = require('../utils/emailService');
-  const adminEmailAddress = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
+  const adminEmailAddress = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
 
   // Admin notification email HTML
   const adminHtml = `
@@ -312,9 +312,7 @@ const sendConsultationEmails = async (consultation) => {
     });
     console.log('✅ Admin email sent');
 
-    // Customer confirmation - only works after domain verification in Resend
-    // Uncomment below after verifying domain
-    /*
+    // Customer confirmation
     console.log('Sending customer confirmation email...');
     await sendEmail({
       to: consultation.email,
@@ -322,7 +320,6 @@ const sendConsultationEmails = async (consultation) => {
       html: customerHtml
     });
     console.log('✅ Customer email sent');
-    */
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

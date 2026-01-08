@@ -179,10 +179,11 @@ const replyToBooking = async (req, res) => {
 
 // Helper: Send email
 const sendBookingEmail = async (booking) => {
-  const adminEmail = process.env.EMAIL_USER || 'razaaatif658@gmail.com';
+  const adminEmail = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
   const hasDocuments = booking.documents?.length > 0;
 
-  const html = `
+  // Admin notification email
+  const adminHtml = `
     <!DOCTYPE html>
     <html>
     <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
@@ -213,12 +214,62 @@ const sendBookingEmail = async (booking) => {
     </html>
   `;
 
-  await sendEmail({
-    to: adminEmail,
-    subject: `New Booking: ${booking.service} - ${booking.name}`,
-    html
-  });
-  console.log('Booking email sent');
+  // Customer confirmation email
+  const customerHtml = `
+    <!DOCTYPE html>
+    <html>
+    <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px;">
+        <tr><td align="center">
+          <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
+            <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
+              <h1 style="color:#D4AF37;margin:0;font-size:24px;font-weight:bold;">Thank You!</h1>
+            </td></tr>
+            <tr><td style="padding:30px;">
+              <p style="color:#333;font-size:16px;">Dear ${booking.name},</p>
+              <p style="color:#666;font-size:14px;line-height:1.6;">Thank you for booking <strong>${booking.service}</strong> with ReturnFilers. We have received your request and our team will contact you within 24 hours.</p>
+              <p style="color:#666;font-size:14px;line-height:1.6;">For urgent queries, call us at <strong>+91 84471 27264</strong></p>
+            </td></tr>
+            <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
+              <p style="color:#D4AF37;margin:0;font-size:14px;font-weight:bold;">ReturnFilers</p>
+              <p style="color:#fff;margin:5px 0 0;font-size:12px;">Professional Tax & Financial Services</p>
+              <p style="margin:10px 0 0;"><a href="https://returnfilers.in" style="color:#D4AF37;text-decoration:none;font-size:12px;">www.returnfilers.in</a></p>
+            </td></tr>
+          </table>
+        </td></tr>
+      </table>
+    </body>
+    </html>
+  `;
+
+  try {
+    // Send admin notification to primary email
+    await sendEmail({
+      to: adminEmail,
+      subject: `New Booking: ${booking.service} - ${booking.name}`,
+      html: adminHtml
+    });
+    console.log('✅ Admin email sent to', adminEmail);
+
+    // Send admin notification to info@returnfilers.in
+    await sendEmail({
+      to: 'info@returnfilers.in',
+      subject: `New Booking: ${booking.service} - ${booking.name}`,
+      html: adminHtml
+    });
+    console.log('✅ Admin email sent to info@returnfilers.in');
+
+    // Send customer confirmation
+    await sendEmail({
+      to: booking.email,
+      subject: `Booking Confirmed - ${booking.service}`,
+      html: customerHtml
+    });
+    console.log('✅ Customer email sent');
+
+  } catch (error) {
+    console.error('❌ Email sending failed:', error.message);
+  }
 };
 
 module.exports = { createBooking, getBookings, getBookingById, updateBooking, deleteBooking, replyToBooking };

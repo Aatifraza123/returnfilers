@@ -159,16 +159,13 @@ const sendQuoteEmails = async (quote) => {
     });
     console.log('✅ Admin email sent');
 
-    // Customer confirmation - only works after domain verification in Resend
-    // Uncomment below after verifying domain
-    /*
+    // Customer confirmation
     await sendEmail({
       to: quote.email,
       subject: `Quote Request Received - ${quote.service}`,
       html: customerHtml
     });
     console.log('✅ Customer email sent');
-    */
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);
