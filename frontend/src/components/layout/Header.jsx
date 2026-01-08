@@ -36,7 +36,7 @@ const Header = () => {
     { to: '/about', label: 'About' },
     { to: '/services', label: 'Services', hasDropdown: true },
     { to: '/blog', label: 'Blog' },
-    { to: '/portfolio', label: 'Portfolio' },
+    // { to: '/portfolio', label: 'Portfolio' },
     { to: '/contact', label: 'Contact' },
   ];
 

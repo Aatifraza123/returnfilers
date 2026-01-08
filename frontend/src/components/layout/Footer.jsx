@@ -39,7 +39,7 @@ const Footer = () => {
   const quickLinks = [
     { to: '/about', label: 'About Us' },
     { to: '/services', label: 'Services' },
-    { to: '/portfolio', label: 'Portfolio' },
+    // { to: '/portfolio', label: 'Portfolio' },
     { to: '/contact', label: 'Contact' },
     { to: '/blog', label: 'Blog' }
   ];
