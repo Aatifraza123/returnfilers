@@ -152,30 +152,6 @@ const Contact = () => {
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C9A227]"></div>
                 <h2 className="text-2xl font-serif font-bold mb-8 text-[#0B1530]">Contact Information</h2>
                 
-                {/* Debug info - remove after testing */}
-                {import.meta.env.DEV && (
-                  <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                    <div className="flex justify-between items-center mb-2">
-                      <strong>Debug Info:</strong>
-                      <button 
-                        onClick={fetchSettings}
-                        className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
-                      >
-                        Refresh Settings
-                      </button>
-                    </div>
-                    <div>Settings loaded: {settingsLoading ? 'Loading...' : settings ? 'Yes ✅' : 'No ❌'}</div>
-                    {settings && (
-                      <div className="mt-2 space-y-1">
-                        <div><strong>Email:</strong> {settings.email || 'Not set'}</div>
-                        <div><strong>Phone:</strong> {settings.phone || 'Not set'}</div>
-                        <div><strong>Address:</strong> {settings.address ? settings.address.substring(0, 50) + '...' : 'Not set'}</div>
-                        <div><strong>Company:</strong> {settings.companyName || 'Not set'}</div>
-                      </div>
-                    )}
-                  </div>
-                )}
-                
                 <div className="space-y-6">
                   <div className="flex items-start group">
                     <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
@@ -197,11 +173,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <a href="tel:+919773574380" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block">
-                        +91 9773574380
-                      </a>
-                      <a href="tel:+919315837112" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block mt-1">
-                        +91 9315837112
+                      <a href="tel:+918447127264" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block">
+                        +91 84471 27264
                       </a>
                       <p className="text-gray-500 text-xs mt-2">Mon-Fri, 9am - 6pm</p>
                     </div>
@@ -257,7 +230,7 @@ const Contact = () => {
                     </div>
                     <p className="text-sm text-gray-600 mb-4">Chat with us directly on WhatsApp.</p>
                     <a 
-                       href="https://wa.me/919773574380?text=Hi%2C%20I%20need%20help%20with%20tax%20services"
+                       href="https://wa.me/918447127264?text=Hi%2C%20I%20need%20help%20with%20tax%20services"
                        target="_blank"
                        rel="noopener noreferrer"
                        className="w-full py-2 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#128C7E] transition-colors text-sm text-center flex items-center justify-center gap-2"
