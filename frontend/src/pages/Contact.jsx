@@ -26,7 +26,12 @@ const Contact = () => {
     const fetchSettings = async () => {
       try {
         const response = await api.get(`${import.meta.env.VITE_API_URL}/api/settings`);
-        setSettings(response.data);
+        console.log('Settings response:', response.data); // Debug log
+        if (response.data.success) {
+          setSettings(response.data.data);
+        } else {
+          setSettings(response.data);
+        }
       } catch (error) {
         console.error('Error fetching settings:', error);
       }

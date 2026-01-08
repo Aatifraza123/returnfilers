@@ -12,7 +12,12 @@ const Footer = () => {
     const fetchSettings = async () => {
       try {
         const response = await api.get('/settings');
-        setSettings(response.data);
+        console.log('Footer settings response:', response.data); // Debug log
+        if (response.data.success) {
+          setSettings(response.data.data);
+        } else {
+          setSettings(response.data);
+        }
       } catch (error) {
         console.error('Error fetching settings:', error);
       }
