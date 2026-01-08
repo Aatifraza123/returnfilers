@@ -20,28 +20,33 @@ const Contact = () => {
   const [loading, setLoading] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [settings, setSettings] = useState(null);
+  const [settingsLoading, setSettingsLoading] = useState(true);
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
   
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        console.log('🔄 Fetching settings from API...');
-        const response = await api.get('/settings');
-        console.log('✅ Settings API Response:', response);
-        console.log('📦 Response data:', response.data);
-        
-        if (response.data.success) {
-          console.log('✅ Settings data found:', response.data.data);
-          setSettings(response.data.data);
-        } else {
-          console.log('⚠️ No success flag, using direct data:', response.data);
-          setSettings(response.data);
-        }
-      } catch (error) {
-        console.error('❌ Error fetching settings:', error);
-        console.error('Error details:', error.response?.data);
+  const fetchSettings = async () => {
+    setSettingsLoading(true);
+    try {
+      console.log('🔄 Fetching settings from API...');
+      const response = await api.get('/settings');
+      console.log('✅ Settings API Response:', response);
+      console.log('📦 Response data:', response.data);
+      
+      if (response.data.success) {
+        console.log('✅ Settings data found:', response.data.data);
+        setSettings(response.data.data);
+      } else {
+        console.log('⚠️ No success flag, using direct data:', response.data);
+        setSettings(response.data);
       }
-    };
+    } catch (error) {
+      console.error('❌ Error fetching settings:', error);
+      console.error('Error details:', error.response?.data);
+    } finally {
+      setSettingsLoading(false);
+    }
+  };
+  
+  useEffect(() => {
     fetchSettings();
   }, []);
   
@@ -150,12 +155,22 @@ const Contact = () => {
                 {/* Debug info - remove after testing */}
                 {import.meta.env.DEV && (
                   <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
-                    <strong>Debug:</strong> Settings loaded: {settings ? 'Yes' : 'No'}
+                    <div className="flex justify-between items-center mb-2">
+                      <strong>Debug Info:</strong>
+                      <button 
+                        onClick={fetchSettings}
+                        className="px-2 py-1 bg-blue-500 text-white rounded text-xs"
+                      >
+                        Refresh Settings
+                      </button>
+                    </div>
+                    <div>Settings loaded: {settingsLoading ? 'Loading...' : settings ? 'Yes ✅' : 'No ❌'}</div>
                     {settings && (
-                      <div className="mt-2">
-                        <div>Email: {settings.email || 'Not set'}</div>
-                        <div>Phone: {settings.phone || 'Not set'}</div>
-                        <div>Address: {settings.address ? 'Set' : 'Not set'}</div>
+                      <div className="mt-2 space-y-1">
+                        <div><strong>Email:</strong> {settings.email || 'Not set'}</div>
+                        <div><strong>Phone:</strong> {settings.phone || 'Not set'}</div>
+                        <div><strong>Address:</strong> {settings.address ? settings.address.substring(0, 50) + '...' : 'Not set'}</div>
+                        <div><strong>Company:</strong> {settings.companyName || 'Not set'}</div>
                       </div>
                     )}
                   </div>
