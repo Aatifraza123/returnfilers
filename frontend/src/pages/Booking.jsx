@@ -62,12 +62,14 @@ const Booking = () => {
         .forEach(service => {
           if (service.packages && service.packages.length > 0) {
             service.packages.forEach(pkg => {
-              // Add both formats: "Service - Package" and "Package"
+              // Add full format: "Service - Package"
               serviceList.push(`${service.title} - ${pkg.name}`);
-              serviceList.push(pkg.name);
             });
           }
         });
+      
+      // Remove duplicates
+      serviceList = [...new Set(serviceList)];
       
       // Add "Other" option at the end
       serviceList.push('Other');
@@ -96,12 +98,14 @@ const Booking = () => {
     formData.service.toLowerCase().includes(s.toLowerCase())
   );
   
-  // Update service when URL param changes
+  // Update service when URL param changes AND services are loaded
   useEffect(() => {
-    if (preSelectedService) {
+    if (preSelectedService && services.length > 0) {
+      console.log('Setting preselected service:', preSelectedService);
+      console.log('Available services:', services);
       setFormData(prev => ({ ...prev, service: preSelectedService }));
     }
-  }, [preSelectedService]);
+  }, [preSelectedService, services]);
   const [files, setFiles] = useState([]);
   const [loading, setLoading] = useState(false);
   const [submitted, setSubmitted] = useState(false);
