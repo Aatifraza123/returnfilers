@@ -46,8 +46,9 @@ const Booking = () => {
       const { data: digitalData } = await api.get('/digital-services');
       const digitalServices = Array.isArray(digitalData)
         ? digitalData
-        : (digitalData.data || []);
+        : (digitalData.services || digitalData.data || []);
       
+      console.log('Digital services fetched:', digitalServices);
       // Build service list
       let serviceList = [];
       
@@ -70,6 +71,8 @@ const Booking = () => {
       
       // Remove duplicates
       serviceList = [...new Set(serviceList)];
+      
+      console.log('Final service list:', serviceList);
       
       // Add "Other" option at the end
       serviceList.push('Other');
