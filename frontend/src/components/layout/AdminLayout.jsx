@@ -166,7 +166,6 @@ const AdminLayout = () => {
       items: [
         { path: '/admin/services', icon: <FaServicestack />, label: 'Services', badge: null },
         { path: '/admin/digital-services', icon: <FaFolderOpen />, label: 'Digital Services', badge: null },
-        { path: '/admin/portfolio', icon: <FaBriefcase />, label: 'Portfolio', badge: null },
         { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs', badge: null },
         { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials', badge: null },
       ]
