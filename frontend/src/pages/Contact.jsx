@@ -25,8 +25,8 @@ const Contact = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await api.get(`${import.meta.env.VITE_API_URL}/api/settings`);
-        console.log('Settings response:', response.data); // Debug log
+        const response = await api.get('/settings');
+        console.log('Contact Settings response:', response.data); // Debug log
         if (response.data.success) {
           setSettings(response.data.data);
         } else {

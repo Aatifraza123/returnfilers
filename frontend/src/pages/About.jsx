@@ -13,7 +13,7 @@ import {
   FaBalanceScale,
   FaHistory,
 } from 'react-icons/fa';
-import axios from 'axios';
+import api from '../api/axios';
 
 const About = () => {
   const [settings, setSettings] = useState(null);
@@ -22,7 +22,7 @@ const About = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
-        const response = await axios.get(`${import.meta.env.VITE_API_URL}/api/settings`);
+        const response = await api.get('/settings');
         console.log('About settings response:', response.data); // Debug log
         if (response.data.success) {
           setSettings(response.data.data);
