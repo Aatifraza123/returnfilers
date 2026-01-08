@@ -25,15 +25,21 @@ const Contact = () => {
   useEffect(() => {
     const fetchSettings = async () => {
       try {
+        console.log('🔄 Fetching settings from API...');
         const response = await api.get('/settings');
-        console.log('Contact Settings response:', response.data); // Debug log
+        console.log('✅ Settings API Response:', response);
+        console.log('📦 Response data:', response.data);
+        
         if (response.data.success) {
+          console.log('✅ Settings data found:', response.data.data);
           setSettings(response.data.data);
         } else {
+          console.log('⚠️ No success flag, using direct data:', response.data);
           setSettings(response.data);
         }
       } catch (error) {
-        console.error('Error fetching settings:', error);
+        console.error('❌ Error fetching settings:', error);
+        console.error('Error details:', error.response?.data);
       }
     };
     fetchSettings();
@@ -140,6 +146,20 @@ const Contact = () => {
               >
                 <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C9A227]"></div>
                 <h2 className="text-2xl font-serif font-bold mb-8 text-[#0B1530]">Contact Information</h2>
+                
+                {/* Debug info - remove after testing */}
+                {import.meta.env.DEV && (
+                  <div className="mb-4 p-3 bg-yellow-50 border border-yellow-200 rounded text-xs">
+                    <strong>Debug:</strong> Settings loaded: {settings ? 'Yes' : 'No'}
+                    {settings && (
+                      <div className="mt-2">
+                        <div>Email: {settings.email || 'Not set'}</div>
+                        <div>Phone: {settings.phone || 'Not set'}</div>
+                        <div>Address: {settings.address ? 'Set' : 'Not set'}</div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 
                 <div className="space-y-6">
                   <div className="flex items-start group">
