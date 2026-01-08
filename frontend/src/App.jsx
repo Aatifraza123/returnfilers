@@ -60,7 +60,7 @@ const ChatbotWrapper = () => {
 };
 
 function App() {
-  console.log('App component rendering...');
+  console.log('App component rendering... v2.0');
   
   // Simple test to see if React is working
   try {
