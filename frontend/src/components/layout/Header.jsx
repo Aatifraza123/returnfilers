@@ -48,7 +48,7 @@ const Header = () => {
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
           <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md">
-            TF
+            RF
           </div>
           <span className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-[#0B1530] tracking-tight">
             ReturnFilers
