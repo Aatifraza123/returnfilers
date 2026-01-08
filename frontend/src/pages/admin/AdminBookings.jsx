@@ -42,17 +42,16 @@ const AdminBookings = () => {
   };
 
   const deleteBooking = async (id) => {
-    if (!window.confirm('Delete this booking?')) return;
     try {
       const token = localStorage.getItem('token');
       await api.delete(`/bookings/${id}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
-      toast.success('Deleted');
+      toast.success('Booking deleted successfully');
       fetchBookings();
       setSelectedBooking(null);
     } catch (error) {
-      toast.error('Failed to delete');
+      toast.error('Failed to delete booking');
     }
   };
 
