@@ -210,15 +210,15 @@ const Contact = () => {
                     <ul className="space-y-2 text-sm text-gray-300">
                        <li className="flex justify-between">
                          <span>Mon - Fri</span> 
-                         <span>{settings?.businessHours?.weekdays || '9am - 6pm'}</span>
+                         <span>{settings?.businessHours?.weekdays?.split(':').pop()?.trim() || '9am - 6pm'}</span>
                        </li>
                        <li className="flex justify-between">
                          <span>Saturday</span> 
-                         <span>{settings?.businessHours?.saturday || '10am - 2pm'}</span>
+                         <span>{settings?.businessHours?.saturday?.split(':').pop()?.trim() || '10am - 2pm'}</span>
                        </li>
                        <li className="flex justify-between">
                          <span>Sunday</span> 
-                         <span className="text-red-300">{settings?.businessHours?.sunday || 'Closed'}</span>
+                         <span className="text-red-300">{settings?.businessHours?.sunday?.split(':').pop()?.trim() || 'Closed'}</span>
                        </li>
                     </ul>
                  </div>
