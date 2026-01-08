@@ -210,15 +210,15 @@ const Contact = () => {
                     <ul className="space-y-2 text-sm text-gray-300">
                        <li className="flex justify-between">
                          <span>Mon - Fri</span> 
-                         <span>{settings?.businessHours?.weekdays?.split(':').pop()?.trim() || '9am - 6pm'}</span>
+                         <span>{settings?.businessHours?.weekdays?.includes(':') ? settings.businessHours.weekdays.substring(settings.businessHours.weekdays.indexOf(':') + 1).trim() : (settings?.businessHours?.weekdays || '9am - 6pm')}</span>
                        </li>
                        <li className="flex justify-between">
                          <span>Saturday</span> 
-                         <span>{settings?.businessHours?.saturday?.split(':').pop()?.trim() || '10am - 2pm'}</span>
+                         <span>{settings?.businessHours?.saturday?.includes(':') ? settings.businessHours.saturday.substring(settings.businessHours.saturday.indexOf(':') + 1).trim() : (settings?.businessHours?.saturday || '10am - 2pm')}</span>
                        </li>
                        <li className="flex justify-between">
                          <span>Sunday</span> 
-                         <span className="text-red-300">{settings?.businessHours?.sunday?.split(':').pop()?.trim() || 'Closed'}</span>
+                         <span className="text-red-300">{settings?.businessHours?.sunday?.includes(':') ? settings.businessHours.sunday.substring(settings.businessHours.sunday.indexOf(':') + 1).trim() : (settings?.businessHours?.sunday || 'Closed')}</span>
                        </li>
                     </ul>
                  </div>
