@@ -12,7 +12,7 @@ const PageLoader = () => {
           className="mb-6"
         >
           <div className="w-16 h-16 mx-auto bg-[#C9A227] rounded-xl flex items-center justify-center">
-            <span className="text-2xl font-bold text-[#0B1530]">TF</span>
+            <span className="text-2xl font-bold text-[#0B1530]">RF</span>
           </div>
         </motion.div>
 
