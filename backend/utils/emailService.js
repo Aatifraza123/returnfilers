@@ -1,18 +1,55 @@
+const nodemailer = require('nodemailer');
 const { Resend } = require('resend');
 
-// Initialize Resend
+// Initialize Resend (fallback)
 const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KEY) : null;
 
+// Initialize Nodemailer with Zoho SMTP
+const createTransporter = () => {
+  if (process.env.SMTP_HOST && process.env.EMAIL_USER && process.env.EMAIL_PASS) {
+    return nodemailer.createTransport({
+      host: process.env.SMTP_HOST,
+      port: 465,
+      secure: true, // use SSL
+      auth: {
+        user: process.env.EMAIL_USER,
+        pass: process.env.EMAIL_PASS
+      }
+    });
+  }
+  return null;
+};
+
 /**
- * Send email via Resend
- * Note: Free tier only sends to verified emails. Verify domain for sending to any email.
+ * Send email via Zoho SMTP (primary) or Resend (fallback)
  */
 const sendEmail = async ({ to, subject, html, from }) => {
   console.log('📧 Attempting to send email to:', to);
   console.log('📧 Subject:', subject);
   
+  const transporter = createTransporter();
+  
+  // Try Zoho SMTP first
+  if (transporter) {
+    try {
+      const info = await transporter.sendMail({
+        from: from || `"ReturnFilers" <${process.env.EMAIL_USER}>`,
+        to: to,
+        subject: subject,
+        html: html
+      });
+      
+      console.log('✅ Email sent via Zoho SMTP:', info.messageId);
+      return { success: true, provider: 'zoho', id: info.messageId };
+    } catch (error) {
+      console.log('❌ Zoho SMTP failed:', error.message);
+      console.log('Trying Resend as fallback...');
+    }
+  }
+  
+  // Fallback to Resend
   if (!resend) {
-    console.log('❌ Resend not configured');
+    console.log('❌ No email service configured');
     throw new Error('Email service not configured');
   }
   
