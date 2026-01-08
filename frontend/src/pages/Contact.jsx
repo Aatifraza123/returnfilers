@@ -149,7 +149,7 @@ const Contact = () => {
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Office Address</h3>
                       <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-                        {settings?.companyInfo?.address || '123 Business Park, Financial District,\nMumbai, Maharashtra 400001'}
+                        {settings?.address || 'SA-28 First Floor, Jaipuria Sunrise Plaza\n12A Ahinsa Khand-I, Indrapuram\nGhaziabad, Uttar Pradesh 201014'}
                       </p>
                     </div>
                   </div>
@@ -160,8 +160,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <a href={`tel:${settings?.companyInfo?.phone || '+918447127264'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        {settings?.companyInfo?.phone || '+91 84471 27264'}
+                      <a href={`tel:${settings?.phone || '+918447127264'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        {settings?.phone || '+91 84471 27264'}
                       </a>
                       <p className="text-gray-500 text-xs">
                         {settings?.businessHours?.weekdays || 'Mon-Fri, 9am - 6pm'}
@@ -175,8 +175,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
-                      <a href={`mailto:${settings?.companyInfo?.email || 'info@returnfilers.in'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        {settings?.companyInfo?.email || 'info@returnfilers.in'}
+                      <a href={`mailto:${settings?.email || 'info@returnfilers.in'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        {settings?.email || 'info@returnfilers.in'}
                       </a>
                     </div>
                   </div>

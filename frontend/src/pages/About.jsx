@@ -39,8 +39,8 @@ const About = () => {
   }, []);
 
   const stats = [
-    { icon: <FaUsers />, value: `${settings?.aboutCompany?.clientsServed || 100}+`, label: 'Happy Clients' },
-    { icon: <FaAward />, value: `${settings?.aboutCompany?.yearsExperience || 3}+`, label: 'Years Experience' },
+    { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 100}+`, label: 'Happy Clients' },
+    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 3}+`, label: 'Years Experience' },
     { icon: <FaHandshake />, value: '200+', label: 'Projects Completed' },
     { icon: <FaChartLine />, value: '98%', label: 'Success Rate' },
   ];
@@ -120,7 +120,7 @@ const About = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Your trusted partner in financial excellence. We combine {settings?.aboutCompany?.yearsExperience || 3}+ years of expertise with modern strategies to drive your business growth.
+            Your trusted partner in financial excellence. We combine {settings?.about?.yearsOfExperience || 3}+ years of expertise with modern strategies to drive your business growth.
           </motion.p>
         </div>
       </section>
@@ -178,7 +178,7 @@ const About = () => {
               variants={fadeInUp}
               className="text-3xl md:text-4xl font-serif font-bold mb-4"
             >
-              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-amber-200">{settings?.aboutCompany?.yearEstablished || 2022}</span>
+              Building Trust Since <span className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-amber-200">{settings?.about?.yearEstablished || 2022}</span>
             </motion.h2>
 
             <div className="max-w-4xl mx-auto">
@@ -189,7 +189,7 @@ const About = () => {
                 variants={fadeInUp}
                 className="text-base md:text-lg text-gray-200 font-light leading-relaxed mb-4 italic"
               >
-                "{settings?.aboutCompany?.mission || 'Founded with a singular vision: to provide comprehensive, transparent, and strategic financial solutions to businesses of all sizes.'}"
+                "{settings?.about?.mission || 'Founded with a singular vision: to provide comprehensive, transparent, and strategic financial solutions to businesses of all sizes.'}"
               </motion.p>
               
               <motion.p
@@ -199,7 +199,7 @@ const About = () => {
                 variants={fadeInUp}
                 className="text-sm md:text-base text-gray-400 leading-relaxed max-w-3xl mx-auto"
               >
-                {settings?.aboutCompany?.vision || 'From a small practice to a full-service chartered accountancy firm serving over 100 clients across India, our journey has been driven by integrity, expertise, and long-term relationships. We don\'t just balance books; we build futures.'}
+                {settings?.about?.vision || 'From a small practice to a full-service chartered accountancy firm serving over 100 clients across India, our journey has been driven by integrity, expertise, and long-term relationships. We don\'t just balance books; we build futures.'}
               </motion.p>
             </div>
 
@@ -211,12 +211,12 @@ const About = () => {
               className="mt-8 flex gap-6 md:gap-8 justify-center"
             >
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.aboutCompany?.clientsServed || 100}+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.clientsServed || 100}+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Clients</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.aboutCompany?.yearsExperience || 3}+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.yearsExperience || 3}+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Years</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>

@@ -16,7 +16,7 @@ const defaultSettings = {
   companyName: 'ReturnFilers',
   email: 'info@returnfilers.in',
   phone: '+91 84471 27264',
-  address: '',
+  address: 'SA-28 First Floor, Jaipuria Sunrise Plaza\n12A Ahinsa Khand-I, Indrapuram\nGhaziabad, Uttar Pradesh 201014',
   privacyPolicy: `1. Information We Collect
 We collect information that you provide directly to us, including your name, email address, phone number, billing address, and payment details when you engage with our services or fill out a form on our website.
 
