@@ -370,7 +370,7 @@ const AdminSettings = () => {
                 type="text"
                 value={settings.businessHours?.weekdays || ''}
                 onChange={(e) => handleChange('businessHours.weekdays', e.target.value)}
-                placeholder="Monday - Friday: 9:00 AM - 6:00 PM"
+                placeholder="Weekdays: 9:00 AM - 6:00 PM"
                 className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
               />
             </div>
