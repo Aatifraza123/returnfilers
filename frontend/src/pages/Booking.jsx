@@ -62,6 +62,8 @@ const Booking = () => {
         .forEach(service => {
           if (service.packages && service.packages.length > 0) {
             service.packages.forEach(pkg => {
+              // Add both formats: "Service - Package" and "Package"
+              serviceList.push(`${service.title} - ${pkg.name}`);
               serviceList.push(pkg.name);
             });
           }
