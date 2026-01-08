@@ -255,7 +255,7 @@ const sendConsultationEmails = async (consultation) => {
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
                   <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
-                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p><p style="margin: 10px 0 0 0;"><a href="https://returnfilers.in" style="color: #D4AF37; text-decoration: none; font-size: 12px;">www.returnfilers.in</a></p>
                 </td>
               </tr>
             </table>
@@ -291,7 +291,7 @@ const sendConsultationEmails = async (consultation) => {
               <tr>
                 <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
                   <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
-                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p>
+                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p><p style="margin: 10px 0 0 0;"><a href="https://returnfilers.in" style="color: #D4AF37; text-decoration: none; font-size: 12px;">www.returnfilers.in</a></p>
                 </td>
               </tr>
             </table>
