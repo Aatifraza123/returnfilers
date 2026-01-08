@@ -184,7 +184,9 @@ const Contact = () => {
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Office Address</h3>
                       <p className="text-gray-600 text-sm leading-relaxed whitespace-pre-line">
-                        {settings?.address || 'SA-28 First Floor, Jaipuria Sunrise Plaza\n12A Ahinsa Khand-I, Indrapuram\nGhaziabad, Uttar Pradesh 201014'}
+                        SA-28 First Floor, Jaipuria Sunrise Plaza
+                        12A Ahinsa Khand-I, Indrapuram
+                        Ghaziabad, Uttar Pradesh 201014
                       </p>
                     </div>
                   </div>
@@ -195,12 +197,13 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
-                      <a href={`tel:${(settings?.phone || '+918447127264').replace(/\s/g, '')}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block">
-                        {settings?.phone || '+91 84471 27264'}
+                      <a href="tel:+919773574380" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block">
+                        +91 9773574380
                       </a>
-                      <p className="text-gray-500 text-xs">
-                        {settings?.businessHours?.weekdays || 'Mon-Fri, 9am - 6pm'}
-                      </p>
+                      <a href="tel:+919315837112" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm block mt-1">
+                        +91 9315837112
+                      </a>
+                      <p className="text-gray-500 text-xs mt-2">Mon-Fri, 9am - 6pm</p>
                     </div>
                   </div>
 
@@ -210,8 +213,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
-                      <a href={`mailto:${settings?.email || 'info@returnfilers.in'}`} className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        {settings?.email || 'info@returnfilers.in'}
+                      <a href="mailto:info@goldeninternational.com" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        info@goldeninternational.com
                       </a>
                     </div>
                   </div>
@@ -254,7 +257,7 @@ const Contact = () => {
                     </div>
                     <p className="text-sm text-gray-600 mb-4">Chat with us directly on WhatsApp.</p>
                     <a 
-                       href={`https://wa.me/${(settings?.socialMedia?.whatsapp || '918447127264').replace(/[^0-9]/g, '')}?text=Hi%2C%20I%20need%20help%20with%20tax%20services`}
+                       href="https://wa.me/919773574380?text=Hi%2C%20I%20need%20help%20with%20tax%20services"
                        target="_blank"
                        rel="noopener noreferrer"
                        className="w-full py-2 bg-[#25D366] text-white font-semibold rounded-lg hover:bg-[#128C7E] transition-colors text-sm text-center flex items-center justify-center gap-2"
