@@ -39,11 +39,9 @@ const AdminQuotes = () => {
   };
 
   const handleDelete = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this quote request?')) return;
-
     try {
       await api.delete(`/quotes/${id}`, getConfig());
-      toast.success('Quote request deleted');
+      toast.success('Quote request deleted successfully');
       fetchQuotes();
     } catch (error) {
       toast.error('Failed to delete quote request');
