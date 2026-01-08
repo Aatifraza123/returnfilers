@@ -186,8 +186,8 @@ const Contact = () => {
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>
-                      <a href="mailto:info@goldeninternational.com" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
-                        info@goldeninternational.com
+                      <a href="mailto:info@returnfilers.in" className="text-gray-600 hover:text-[#C9A227] transition-colors text-sm">
+                        info@returnfilers.in
                       </a>
                     </div>
                   </div>
