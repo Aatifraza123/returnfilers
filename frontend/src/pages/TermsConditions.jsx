@@ -27,26 +27,45 @@ const TermsConditions = () => {
     }
   };
 
-  // Function to make emails clickable
-  const makeEmailsClickable = (text) => {
+  // Function to make emails clickable and bold important terms
+  const formatContent = (text) => {
     const emailRegex = /([a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+)/gi;
     const parts = text.split(emailRegex);
     
     return parts.map((part, index) => {
-      // Reset regex lastIndex for each test
       const testRegex = /^[a-zA-Z0-9._-]+@[a-zA-Z0-9._-]+\.[a-zA-Z0-9_-]+$/i;
       if (testRegex.test(part)) {
         return (
           <a 
             key={index} 
             href={`mailto:${part}`} 
-            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors font-medium"
+            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors font-bold"
           >
             {part}
           </a>
         );
       }
-      return <span key={index}>{part}</span>;
+      
+      // Bold important section headings and key terms
+      const boldTerms = [
+        'Acceptance of Terms',
+        'Services Provided',
+        'User Responsibilities',
+        'Payment Terms',
+        'Limitation of Liability',
+        'Termination',
+        'Contact Us',
+        'Governing Law',
+        'Dispute Resolution'
+      ];
+      
+      let formattedPart = part;
+      boldTerms.forEach(term => {
+        const regex = new RegExp(`(${term})`, 'gi');
+        formattedPart = formattedPart.replace(regex, '<strong class="text-[#0B1530] font-bold">$1</strong>');
+      });
+      
+      return <span key={index} dangerouslySetInnerHTML={{ __html: formattedPart }} />;
     });
   };
 
@@ -105,7 +124,7 @@ const TermsConditions = () => {
             >
               <div className="prose prose-gray max-w-none">
                 <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
-                  {makeEmailsClickable(content)}
+                  {formatContent(content)}
                 </div>
               </div>
             </motion.div>
