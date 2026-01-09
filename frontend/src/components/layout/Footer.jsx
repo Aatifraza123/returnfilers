@@ -89,7 +89,13 @@ const Footer = () => {
             {socialLinks.length > 0 && (
               <div className="flex space-x-4 pt-2">
                 {socialLinks.map(({ href, icon: Icon, platform }) => (
-                  <a key={platform} href={href} target="_blank" rel="noopener noreferrer" className="text-[#C9A227] hover:text-white transition-colors transform hover:scale-110">
+                  <a 
+                    key={platform} 
+                    href={href} 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="text-[#C9A227] hover:text-white transition-all duration-300 transform hover:scale-125 hover:-translate-y-1"
+                  >
                     <Icon size={20} />
                   </a>
                 ))}
@@ -105,7 +111,11 @@ const Footer = () => {
             <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Quick Links</h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {quickLinks.map(({ to, label }) => (
-                <li key={to}><Link to={to} className="text-[#C9A227] hover:text-white transition-colors">{label}</Link></li>
+                <li key={to}>
+                  <Link to={to} className="text-[#C9A227] hover:text-white transition-colors hover:underline inline-block">
+                    {label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
@@ -115,7 +125,11 @@ const Footer = () => {
             <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Legal</h4>
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {legalLinks.map(({ to, label }) => (
-                <li key={to}><Link to={to} className="text-[#C9A227] hover:text-white transition-colors">{label}</Link></li>
+                <li key={to}>
+                  <Link to={to} className="text-[#C9A227] hover:text-white transition-colors hover:underline inline-block">
+                    {label}
+                  </Link>
+                </li>
               ))}
             </ul>
           </div>
