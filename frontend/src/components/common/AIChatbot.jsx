@@ -210,6 +210,11 @@ const AIChatbot = () => {
     fetchSettings();
   }, []);
 
+  // Don't render if chatbot is disabled
+  if (settings && settings.features?.enableChatbot === false) {
+    return null;
+  }
+
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
   };

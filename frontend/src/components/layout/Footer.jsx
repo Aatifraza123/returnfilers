@@ -84,7 +84,7 @@ const Footer = () => {
               {settings?.companyName || 'ReturnFilers'}
             </h3>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              Professional chartered accountancy services with {settings?.about?.yearsOfExperience || 3}+ years of experience in taxation, auditing, and financial consulting.
+              {settings?.footer?.description || `Professional chartered accountancy services with ${settings?.about?.yearsOfExperience || 3}+ years of experience in taxation, auditing, and financial consulting.`}
             </p>
             {socialLinks.length > 0 && (
               <div className="flex space-x-4 pt-2">
@@ -96,7 +96,7 @@ const Footer = () => {
               </div>
             )}
             <div className="text-gray-500 text-xs md:text-sm pt-2">
-              © {new Date().getFullYear()} {settings?.companyName || 'ReturnFilers'}. All rights reserved.
+              {settings?.footer?.copyrightText || `© ${new Date().getFullYear()} ${settings?.companyName || 'ReturnFilers'}. All rights reserved.`}
             </div>
           </div>
 

@@ -105,7 +105,7 @@ const Home = () => {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img 
-            src="https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop" 
+            src={settings?.hero?.backgroundImage || "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop"} 
             alt="Office Background" 
             className="w-full h-full object-cover"
           />
@@ -133,8 +133,7 @@ const Home = () => {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-6"
               >
-                Financial Clarity for <br />
-                <span className="text-[#C9A227]">Modern Business</span>
+                {settings?.hero?.title || 'Financial Clarity for Modern Business'}
               </motion.h1>
 
               <motion.p
@@ -143,7 +142,7 @@ const Home = () => {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="text-lg lg:text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light"
               >
-                We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business.
+                {settings?.hero?.subtitle || 'We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business.'}
               </motion.p>
 
               <motion.div
