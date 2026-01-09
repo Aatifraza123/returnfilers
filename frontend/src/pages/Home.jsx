@@ -176,10 +176,10 @@ const Home = () => {
                 className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6 border-t border-white/10"
               >
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#C9A227]" /> 3+ Years Exp.
+                  <FaCheckCircle className="text-[#C9A227]" /> {settings?.about?.yearsOfExperience || 3}+ Years Exp.
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#C9A227]" /> 100+ Clients
+                  <FaCheckCircle className="text-[#C9A227]" /> {settings?.about?.clientsServed || 100}+ Clients
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
                   <FaCheckCircle className="text-[#C9A227]" /> Certified Experts
@@ -273,7 +273,7 @@ const Home = () => {
                     <FaUsers className="text-[#C9A227]" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#0B1530]">100+ Clients</h4>
+                    <h4 className="font-bold text-[#0B1530]">{settings?.about?.clientsServed || 100}+ Clients</h4>
                     <p className="text-sm text-gray-500">Trusted by businesses</p>
                   </div>
                 </div>
