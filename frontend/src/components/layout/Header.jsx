@@ -8,21 +8,30 @@ const Header = () => {
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
+  const [blogsOpen, setBlogsOpen] = useState(false);
   const [mobileServicesOpen, setMobileServicesOpen] = useState(false);
+  const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [services, setServices] = useState([]);
+  const [blogs, setBlogs] = useState([]);
 
-  // Fetch services
+  // Fetch services and blogs
   useEffect(() => {
-    const fetchServices = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await api.get('/services');
-        const serviceList = data.services || data.data || data || [];
+        // Fetch services
+        const { data: servicesData } = await api.get('/services');
+        const serviceList = servicesData.services || servicesData.data || servicesData || [];
         setServices(serviceList.filter(s => s.active !== false));
+        
+        // Fetch blogs
+        const { data: blogsData } = await api.get('/blogs');
+        const blogList = blogsData.blogs || blogsData.data || blogsData || [];
+        setBlogs(blogList.filter(b => b.published).slice(0, 5)); // Latest 5 published blogs
       } catch (error) {
-        console.log('Services fetch error');
+        console.log('Data fetch error');
       }
     };
-    fetchServices();
+    fetchData();
   }, []);
 
   useEffect(() => {
@@ -34,9 +43,8 @@ const Header = () => {
   const navLinks = [
     { to: '/', label: 'Home' },
     { to: '/about', label: 'About' },
-    { to: '/services', label: 'Services', hasDropdown: true },
-    { to: '/blog', label: 'Blog' },
-    // { to: '/portfolio', label: 'Portfolio' },
+    { to: '/services', label: 'Services', hasDropdown: true, type: 'services' },
+    { to: '/blog', label: 'Blog', hasDropdown: true, type: 'blogs' },
     { to: '/contact', label: 'Contact' },
   ];
 
@@ -57,55 +65,97 @@ const Header = () => {
 
         {/* Desktop Menu */}
         <ul className="hidden lg:flex items-center space-x-8">
-          {navLinks.map((link) => (
-            <li 
-              key={link.to} 
-              className="relative"
-              onMouseEnter={() => link.hasDropdown && setServicesOpen(true)}
-              onMouseLeave={() => link.hasDropdown && setServicesOpen(false)}
-            >
-              <NavLink
-                to={link.to}
-                className={({ isActive }) =>
-                  `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
-                    isActive ? 'text-[#C9A227] font-semibold' : 'text-gray-800 hover:text-[#0B1530]'
-                  }`
-                }
+          {navLinks.map((link) => {
+            const isServicesDropdown = link.type === 'services';
+            const isBlogsDropdown = link.type === 'blogs';
+            const dropdownOpen = isServicesDropdown ? servicesOpen : isBlogsDropdown ? blogsOpen : false;
+            
+            return (
+              <li 
+                key={link.to} 
+                className="relative"
+                onMouseEnter={() => {
+                  if (isServicesDropdown) setServicesOpen(true);
+                  if (isBlogsDropdown) setBlogsOpen(true);
+                }}
+                onMouseLeave={() => {
+                  if (isServicesDropdown) setServicesOpen(false);
+                  if (isBlogsDropdown) setBlogsOpen(false);
+                }}
               >
-                {link.label}
-                {link.hasDropdown && <FaChevronDown className={`text-xs transition-transform ${servicesOpen ? 'rotate-180' : ''}`} />}
-              </NavLink>
-              
-              {/* Simple Services Dropdown */}
-              {link.hasDropdown && servicesOpen && (
-                <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
-                  {services.length > 0 && services.map((service) => (
-                    <Link
-                      key={service._id}
-                      to={`/services/${service.slug || service._id}`}
-                      className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-colors"
-                    >
-                      {service.title}
-                    </Link>
-                  ))}
-                  <div className="border-t border-gray-100 mt-2 pt-2">
-                    <Link
-                      to="/digital-services"
-                      className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
-                    >
-                      🌐 Digital Services
-                    </Link>
-                    <Link
-                      to="/services"
-                      className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
-                    >
-                      View All →
-                    </Link>
+                <NavLink
+                  to={link.to}
+                  className={({ isActive }) =>
+                    `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
+                      isActive ? 'text-[#C9A227] font-semibold' : 'text-gray-800 hover:text-[#0B1530]'
+                    }`
+                  }
+                >
+                  {link.label}
+                  {link.hasDropdown && <FaChevronDown className={`text-xs transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />}
+                </NavLink>
+                
+                {/* Services Dropdown */}
+                {isServicesDropdown && servicesOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
+                    {services.length > 0 && services.map((service) => (
+                      <Link
+                        key={service._id}
+                        to={`/services/${service.slug || service._id}`}
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-colors"
+                      >
+                        {service.title}
+                      </Link>
+                    ))}
+                    <div className="border-t border-gray-100 mt-2 pt-2">
+                      <Link
+                        to="/digital-services"
+                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
+                      >
+                        🌐 Digital Services
+                      </Link>
+                      <Link
+                        to="/services"
+                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                      >
+                        View All →
+                      </Link>
+                    </div>
                   </div>
-                </div>
-              )}
-            </li>
-          ))}
+                )}
+                
+                {/* Blogs Dropdown */}
+                {isBlogsDropdown && blogsOpen && (
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
+                    {blogs.length > 0 ? (
+                      <>
+                        {blogs.map((blog) => (
+                          <Link
+                            key={blog._id}
+                            to={`/blog/${blog.slug || blog._id}`}
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-colors"
+                          >
+                            <div className="font-medium">{blog.title}</div>
+                            <div className="text-xs text-gray-500 mt-0.5">{new Date(blog.createdAt).toLocaleDateString()}</div>
+                          </Link>
+                        ))}
+                        <div className="border-t border-gray-100 mt-2 pt-2">
+                          <Link
+                            to="/blog"
+                            className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                          >
+                            View All Blogs →
+                          </Link>
+                        </div>
+                      </>
+                    ) : (
+                      <div className="px-4 py-2 text-sm text-gray-500">No blogs available</div>
+                    )}
+                  </div>
+                )}
+              </li>
+            );
+          })}
         </ul>
 
         {/* CTA Button */}
