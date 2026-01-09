@@ -3,6 +3,8 @@ import { AuthProvider } from './context/AuthContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
 import AIChatbot from './components/common/AIChatbot'
+import PromoBanner from './components/common/PromoBanner'
+import ThemeProvider from './components/common/ThemeProvider'
 import AdminLayout from './components/layout/AdminLayout' 
 
 // Public Pages
@@ -59,6 +61,17 @@ const ChatbotWrapper = () => {
   return <AIChatbot />;
 };
 
+// Wrapper component to conditionally show promo banner
+const PromoBannerWrapper = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+  
+  // Don't show banner on admin pages
+  if (isAdminRoute) return null;
+  
+  return <PromoBanner />;
+};
+
 function App() {
   console.log('App component rendering... v2.0');
   
@@ -66,7 +79,9 @@ function App() {
   try {
     return (
       <AuthProvider>
-        <ChatbotWrapper />
+        <ThemeProvider>
+          <PromoBannerWrapper />
+          <ChatbotWrapper />
 
           <Routes>
         {/* Public Routes */}
@@ -134,7 +149,8 @@ function App() {
           </div>
         } />
       </Routes>
-    </AuthProvider>
+        </ThemeProvider>
+      </AuthProvider>
     );
   } catch (error) {
     console.error('Error in App component:', error);

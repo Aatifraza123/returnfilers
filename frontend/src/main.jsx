@@ -7,6 +7,7 @@ import App from './App'
 import ErrorBoundary from './components/common/ErrorBoundary'
 import PageLoader from './components/common/PageLoader'
 import './index.css'
+import './theme.css'
 
 const queryClient = new QueryClient({
   defaultOptions: {

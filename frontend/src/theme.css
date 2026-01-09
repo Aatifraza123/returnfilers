@@ -1,0 +1,74 @@
+/* Dynamic Theme Variables */
+:root {
+  --color-primary: #0B1530;
+  --color-secondary: #C9A227;
+  --color-accent: #1a2b5c;
+}
+
+/* Apply theme colors to common elements */
+.bg-primary {
+  background-color: var(--color-primary) !important;
+}
+
+.bg-secondary {
+  background-color: var(--color-secondary) !important;
+}
+
+.bg-accent {
+  background-color: var(--color-accent) !important;
+}
+
+.text-primary {
+  color: var(--color-primary) !important;
+}
+
+.text-secondary {
+  color: var(--color-secondary) !important;
+}
+
+.text-accent {
+  color: var(--color-accent) !important;
+}
+
+.border-primary {
+  border-color: var(--color-primary) !important;
+}
+
+.border-secondary {
+  border-color: var(--color-secondary) !important;
+}
+
+.border-accent {
+  border-color: var(--color-accent) !important;
+}
+
+/* Hover states */
+.hover\:bg-primary:hover {
+  background-color: var(--color-primary) !important;
+}
+
+.hover\:bg-secondary:hover {
+  background-color: var(--color-secondary) !important;
+}
+
+.hover\:text-primary:hover {
+  color: var(--color-primary) !important;
+}
+
+.hover\:text-secondary:hover {
+  color: var(--color-secondary) !important;
+}
+
+/* Focus states */
+.focus\:border-secondary:focus {
+  border-color: var(--color-secondary) !important;
+}
+
+/* Gradient backgrounds */
+.bg-gradient-primary {
+  background: linear-gradient(to right, var(--color-primary), var(--color-accent)) !important;
+}
+
+.bg-gradient-secondary {
+  background: linear-gradient(to right, var(--color-secondary), #d4af37) !important;
+}

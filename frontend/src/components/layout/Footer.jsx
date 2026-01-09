@@ -77,7 +77,7 @@ const Footer = () => {
   return (
     <footer className="bg-black text-white font-sans" id="footer">
       <div className="container mx-auto px-6 py-6 md:py-8">
-        <div className="grid md:grid-cols-4 gap-8 md:gap-10">
+        <div className={`grid ${settings?.features?.enableNewsletter ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-8 md:gap-10`}>
           {/* ReturnFilers Section */}
           <div className="space-y-4">
             <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
@@ -120,28 +120,30 @@ const Footer = () => {
             </ul>
           </div>
 
-          {/* Newsletter */}
-          <div>
-            <h4 className="font-serif font-bold mb-3 md:mb-4 text-white text-lg md:text-xl">Newsletter</h4>
-            <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">Get the latest financial updates directly to your inbox.</p>
-            <form onSubmit={handleSubscribe} className="relative">
-              <input
-                type="email"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
-                placeholder="Your email address"
-                className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-[#C9A227] transition-all placeholder-gray-500 text-sm"
-                required
-              />
-              <button
-                type="submit"
-                className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-[#C9A227] text-black rounded-full hover:bg-white transition-colors shadow-lg"
-                aria-label="Subscribe"
-              >
-                <FaPaperPlane size={14} className="-ml-0.5" />
-              </button>
-            </form>
-          </div>
+          {/* Newsletter - Only show if enabled in settings */}
+          {settings?.features?.enableNewsletter && (
+            <div>
+              <h4 className="font-serif font-bold mb-3 md:mb-4 text-white text-lg md:text-xl">Newsletter</h4>
+              <p className="text-gray-300 text-xs md:text-sm mb-3 md:mb-4">Get the latest financial updates directly to your inbox.</p>
+              <form onSubmit={handleSubscribe} className="relative">
+                <input
+                  type="email"
+                  value={email}
+                  onChange={(e) => setEmail(e.target.value)}
+                  placeholder="Your email address"
+                  className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-[#C9A227] transition-all placeholder-gray-500 text-sm"
+                  required
+                />
+                <button
+                  type="submit"
+                  className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-[#C9A227] text-black rounded-full hover:bg-white transition-colors shadow-lg"
+                  aria-label="Subscribe"
+                >
+                  <FaPaperPlane size={14} className="-ml-0.5" />
+                </button>
+              </form>
+            </div>
+          )}
         </div>
       </div>
     </footer>

@@ -297,7 +297,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          🎨 Brand
+          Brand
         </button>
         <button
           onClick={() => setActiveTab('hero')}
@@ -307,7 +307,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          🏠 Hero
+          Hero
         </button>
         <button
           onClick={() => setActiveTab('footer')}
@@ -317,7 +317,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          📄 Footer
+          Footer
         </button>
         <button
           onClick={() => setActiveTab('features')}
@@ -327,7 +327,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          ⚙️ Features
+          Features
         </button>
         <button
           onClick={() => setActiveTab('booking')}
@@ -337,7 +337,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          📅 Booking
+          Booking
         </button>
         <button
           onClick={() => setActiveTab('promotional')}
@@ -347,7 +347,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          🎁 Promo
+          Promo
         </button>
       </div>
 
