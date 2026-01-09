@@ -90,7 +90,7 @@ const ServiceDetail = () => {
 
   return (
     <main className="font-sans text-gray-800 bg-gray-50">
-
+      {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
       <section className="relative min-h-[30vh] flex items-end">
         <div className="absolute inset-0">
