@@ -182,16 +182,16 @@ const ExpertiseDetail = () => {
 
   return (
     <main className="font-sans bg-gray-50">
-      {/* Hero Section */}
-      <section className="relative min-h-[50vh] flex items-center">
+      {/* Hero Section - Compact */}
+      <section className="relative min-h-[35vh] flex items-center">
         <div className="absolute inset-0">
           <img src={expertise.heroImage} alt={expertise.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B1530] via-[#0B1530]/90 to-[#0B1530]/70" />
         </div>
         
-        <div className="container mx-auto px-6 relative z-10 py-20">
-          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#C9A227] hover:text-white mb-6 transition-colors">
-            <FaArrowLeft size={14} /> Back to All Services
+        <div className="container mx-auto px-6 relative z-10 py-12">
+          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#C9A227] hover:text-white mb-4 transition-colors text-sm">
+            Back to All Services
           </Link>
           
           <motion.div
@@ -199,14 +199,14 @@ const ExpertiseDetail = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="w-16 h-16 bg-[#C9A227]/20 rounded-2xl flex items-center justify-center text-[#C9A227] text-3xl mb-6">
+            <div className="w-12 h-12 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl mb-4">
               {expertise.icon}
             </div>
-            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-sm">{expertise.tagline}</span>
-            <h1 className="text-4xl md:text-5xl lg:text-6xl font-serif font-bold text-white mt-2 mb-4">
+            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-xs">{expertise.tagline}</span>
+            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mt-2 mb-3">
               {expertise.title}
             </h1>
-            <p className="text-xl text-gray-300 leading-relaxed">
+            <p className="text-lg text-gray-300 leading-relaxed">
               {expertise.description}
             </p>
           </motion.div>
