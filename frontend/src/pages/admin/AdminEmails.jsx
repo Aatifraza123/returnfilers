@@ -110,20 +110,26 @@ const AdminEmails = () => {
       const token = localStorage.getItem('token');
       const config = { headers: { Authorization: `Bearer ${token}` } };
       
-      // Fetch consultations, contacts, and newsletter subscribers
-      const [consultationsRes, contactsRes, newsletterRes] = await Promise.all([
+      // Fetch all email sources: consultations, contacts, quotes, bookings, and newsletter
+      const [consultationsRes, contactsRes, quotesRes, bookingsRes, newsletterRes] = await Promise.all([
         api.get('/consultations', config).catch(() => ({ data: { consultations: [] } })),
         api.get('/contacts', config).catch(() => ({ data: { contacts: [] } })),
+        api.get('/quotes', config).catch(() => ({ data: { quotes: [] } })),
+        api.get('/bookings', config).catch(() => ({ data: { bookings: [] } })),
         api.get('/newsletter', config).catch(() => ({ data: { subscribers: [] } }))
       ]);
       
       const consultations = consultationsRes.data.consultations || [];
       const contacts = contactsRes.data.contacts || [];
+      const quotes = quotesRes.data.quotes || [];
+      const bookings = bookingsRes.data.bookings || [];
       const newsletters = newsletterRes.data.subscribers || [];
       
-      console.log('📧 Fetched data:', {
+      console.log('Fetched data:', {
         consultations: consultations.length,
         contacts: contacts.length,
+        quotes: quotes.length,
+        bookings: bookings.length,
         newsletters: newsletters.length
       });
       
@@ -133,15 +139,29 @@ const AdminEmails = () => {
           ...c, 
           emailType: 'consultation', 
           name: c.name || 'N/A',
-          topic: c.service || '-', // Map service to topic for display
+          topic: c.service || '-',
           message: c.message || '-'
         })),
         ...contacts.map(c => ({ 
           ...c, 
           emailType: 'contact', 
           name: c.name || 'N/A',
-          topic: '-', // Contacts don't have topic/service
+          topic: '-',
           message: c.message || '-'
+        })),
+        ...quotes.map(q => ({ 
+          ...q, 
+          emailType: 'quote', 
+          name: q.name || 'N/A',
+          topic: q.service || '-',
+          message: q.message || '-'
+        })),
+        ...bookings.map(b => ({ 
+          ...b, 
+          emailType: 'booking', 
+          name: b.name || 'N/A',
+          topic: b.service || '-',
+          message: b.message || '-'
         })),
         ...newsletters.map(n => ({ 
           ...n, 
@@ -190,6 +210,10 @@ const AdminEmails = () => {
         endpoint = `/contacts/${id}`;
       } else if (emailType === 'consultation') {
         endpoint = `/consultations/${id}`;
+      } else if (emailType === 'quote') {
+        endpoint = `/quotes/${id}`;
+      } else if (emailType === 'booking') {
+        endpoint = `/bookings/${id}`;
       } else if (emailType === 'newsletter') {
         endpoint = `/newsletter/${id}`;
       } else {
@@ -226,6 +250,10 @@ const AdminEmails = () => {
         endpoint = `/contacts/${id}`;
       } else if (emailType === 'consultation') {
         endpoint = `/consultations/${id}`;
+      } else if (emailType === 'quote') {
+        endpoint = `/quotes/${id}`;
+      } else if (emailType === 'booking') {
+        endpoint = `/bookings/${id}`;
       } else {
         toast.error('Status update not available for this type');
         return;
@@ -417,10 +445,14 @@ const AdminEmails = () => {
                         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
                           email.emailType === 'newsletter' ? 'bg-purple-100 text-purple-700' :
                           email.emailType === 'consultation' ? 'bg-blue-100 text-blue-700' :
+                          email.emailType === 'quote' ? 'bg-orange-100 text-orange-700' :
+                          email.emailType === 'booking' ? 'bg-indigo-100 text-indigo-700' :
                           'bg-green-100 text-green-700'
                         }`}>
                           {email.emailType === 'newsletter' ? 'Newsletter' :
                            email.emailType === 'consultation' ? 'Consultation' :
+                           email.emailType === 'quote' ? 'Quote' :
+                           email.emailType === 'booking' ? 'Booking' :
                            'Contact'}
                         </span>
                       </div>
@@ -612,17 +644,27 @@ const AdminEmails = () => {
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent bg-white"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent bg-white text-base font-medium"
                   disabled={sendingBulkEmail}
                 >
-                  <option value="all">All Recipients ({emails?.length || 0})</option>
+                  <option value="all">All Recipients ({emails?.length || 0} total)</option>
                   <option value="contact">Contacts Only ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
                   <option value="consultation">Consultations Only ({emails?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
+                  <option value="quote">Quotes Only ({emails?.filter(e => e.emailType === 'quote')?.length || 0})</option>
+                  <option value="booking">Bookings Only ({emails?.filter(e => e.emailType === 'booking')?.length || 0})</option>
                   <option value="newsletter">Newsletter Subscribers ({emails?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
                 </select>
-                <p className="text-xs text-gray-500 mt-1">
-                  Selected: <span className="font-semibold text-[#0B1530]">{filteredEmails.length} recipients</span>
-                </p>
+                <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
+                  <p className="text-sm text-blue-800">
+                    <strong>Selected:</strong> {filteredEmails.length} recipients will receive this email
+                  </p>
+                  {filteredEmails.length > 0 && (
+                    <p className="text-xs text-blue-600 mt-1">
+                      Preview: {filteredEmails.slice(0, 3).map(e => e.email).join(', ')}
+                      {filteredEmails.length > 3 && ` and ${filteredEmails.length - 3} more...`}
+                    </p>
+                  )}
+                </div>
               </div>
 
               {/* Template Selector */}
@@ -665,26 +707,45 @@ const AdminEmails = () => {
                 <label className="text-sm font-semibold text-gray-700 mb-2 block">
                   Message
                 </label>
-                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                <div className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white">
                   <ReactQuill
                     theme="snow"
                     value={bulkEmailData.message}
                     onChange={(value) => setBulkEmailData({ ...bulkEmailData, message: value })}
-                    placeholder="Write your email message here..."
+                    placeholder="Write your email message here... You can add text, images, links, and more!"
                     modules={{
                       toolbar: [
-                        [{ 'header': [1, 2, 3, false] }],
+                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                        [{ 'font': [] }],
+                        [{ 'size': ['small', false, 'large', 'huge'] }],
                         ['bold', 'italic', 'underline', 'strike'],
                         [{ 'color': [] }, { 'background': [] }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }],
-                        [{ 'align': [] }],
-                        ['link', 'image'],
+                        [{ 'script': 'sub'}, { 'script': 'super' }],
+                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                        [{ 'direction': 'rtl' }, { 'align': [] }],
+                        ['blockquote', 'code-block'],
+                        ['link', 'image', 'video'],
                         ['clean']
                       ]
                     }}
-                    style={{ minHeight: '250px' }}
+                    formats={[
+                      'header', 'font', 'size',
+                      'bold', 'italic', 'underline', 'strike',
+                      'color', 'background',
+                      'script',
+                      'list', 'bullet', 'indent',
+                      'direction', 'align',
+                      'blockquote', 'code-block',
+                      'link', 'image', 'video'
+                    ]}
+                    style={{ minHeight: '300px' }}
                     readOnly={sendingBulkEmail}
                   />
+                </div>
+                <div className="mt-2 flex flex-wrap gap-2 text-xs text-gray-600">
+                  <span className="px-2 py-1 bg-gray-100 rounded">💡 Tip: Click image icon to add images</span>
+                  <span className="px-2 py-1 bg-gray-100 rounded">🔗 Click link icon to add hyperlinks</span>
+                  <span className="px-2 py-1 bg-gray-100 rounded">🎨 Use color picker for text colors</span>
                 </div>
               </div>
 

@@ -122,11 +122,11 @@ const ServiceDetail = () => {
               </p>
             </div>
 
-            {/* Price Card */}
+            {/* Price Card - Price Always Black */}
             <div className="bg-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3">
               <div>
                 <p className="text-xs text-gray-500 uppercase">Starting From</p>
-                <div className="flex items-center gap-0.5 text-[#0B1530]">
+                <div className="flex items-center gap-0.5 text-black">
                   <FaRupeeSign size={12} />
                   <span className="text-lg font-bold">
                     {service.price && !isNaN(Number(service.price)) 
@@ -239,7 +239,7 @@ const ServiceDetail = () => {
                 <p className="text-sm text-[#0B1530]/70 mb-3">Book your service now</p>
                 <button
                   onClick={handleBookNow}
-                  className="w-full bg-[#0B1530] text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-white hover:text-[#0B1530] transition-colors"
+                  className="w-full bg-[#0B1530] text-white py-2.5 rounded-lg font-semibold text-sm hover:bg-white hover:text-[#C9A227] transition-all duration-300 hover:shadow-lg"
                 >
                   Book Now
                 </button>
@@ -251,7 +251,7 @@ const ServiceDetail = () => {
                 <p className="text-xs text-gray-600 mb-3">Call us for immediate assistance</p>
                 <a
                   href="tel:+918447127264"
-                  className="w-full border border-[#0B1530] text-[#0B1530] py-2.5 rounded-lg font-semibold text-sm hover:bg-[#0B1530] hover:text-white transition-colors flex items-center justify-center gap-2"
+                  className="w-full border-2 border-[#0B1530] text-[#0B1530] py-2.5 rounded-lg font-semibold text-sm hover:bg-[#0B1530] hover:text-[#C9A227] transition-all duration-300 flex items-center justify-center gap-2 hover:shadow-lg"
                 >
                   <FaPhoneAlt size={10} />
                   +91 84471 27264
@@ -284,7 +284,7 @@ const ServiceDetail = () => {
                     <h3 className="absolute bottom-2 left-3 right-3 text-white font-semibold text-sm line-clamp-1">{s.title}</h3>
                   </div>
                   <div className="p-3 flex items-center justify-between">
-                    <span className="text-[#C9A227] font-semibold text-sm">
+                    <span className="text-black font-semibold text-sm">
                       ₹{s.price && !isNaN(Number(s.price)) ? Number(s.price).toLocaleString() : 'Quote'}
                     </span>
                     <span className="text-xs text-gray-500 group-hover:text-[#C9A227]">View →</span>

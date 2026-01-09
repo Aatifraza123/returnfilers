@@ -124,9 +124,9 @@ const Services = () => {
 
                   {/* Content */}
                   <div className="p-5 flex flex-col flex-grow">
-                    {/* Price & Timeline Row */}
+                    {/* Price & Timeline Row - Price Always Black */}
                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
-                      <div className="flex items-center gap-1 text-[#C9A227]">
+                      <div className="flex items-center gap-1 text-black">
                         <FaRupeeSign size={14} />
                         <span className="text-xl font-bold">
                           {service.price && !isNaN(Number(service.price)) 

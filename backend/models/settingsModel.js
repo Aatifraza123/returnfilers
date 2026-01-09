@@ -48,7 +48,9 @@ const settingsSchema = new mongoose.Schema({
   brandColors: {
     primary: { type: String, default: '#0B1530' },
     secondary: { type: String, default: '#C9A227' },
-    accent: { type: String, default: '#1a2b5c' }
+    accent: { type: String, default: '#1a2b5c' },
+    footerBg: { type: String, default: '#0B1530' },
+    footerText: { type: String, default: '#ffffff' }
   },
   
   // Hero Section
@@ -80,10 +82,32 @@ const settingsSchema = new mongoose.Schema({
     whatsapp: { type: String, default: '' }
   },
   
-  // Social Media Colors
+  // Social Media Colors (Individual colors for each platform)
   socialMediaColors: {
-    iconColor: { type: String, default: '#C9A227' }, // Default gold
-    iconHoverColor: { type: String, default: '#FFFFFF' } // Default white
+    facebook: { 
+      color: { type: String, default: '#1877F2' }, // Facebook Blue
+      hoverColor: { type: String, default: '#FFFFFF' }
+    },
+    instagram: { 
+      color: { type: String, default: '#E4405F' }, // Instagram Pink
+      hoverColor: { type: String, default: '#FFFFFF' }
+    },
+    linkedin: { 
+      color: { type: String, default: '#0A66C2' }, // LinkedIn Blue
+      hoverColor: { type: String, default: '#FFFFFF' }
+    },
+    twitter: { 
+      color: { type: String, default: '#1DA1F2' }, // Twitter Blue
+      hoverColor: { type: String, default: '#FFFFFF' }
+    },
+    youtube: { 
+      color: { type: String, default: '#FF0000' }, // YouTube Red
+      hoverColor: { type: String, default: '#FFFFFF' }
+    },
+    whatsapp: { 
+      color: { type: String, default: '#25D366' }, // WhatsApp Green
+      hoverColor: { type: String, default: '#FFFFFF' }
+    }
   },
   
   // Business Hours

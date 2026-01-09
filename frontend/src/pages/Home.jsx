@@ -541,13 +541,13 @@ const Home = () => {
                       <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
                       <div className="text-xs text-gray-500">{testimonials[currentTestimonial]?.title}</div>
                     </div>
-                    {/* Stars */}
+                    {/* Stars - Always Gold Color */}
                     <div className="flex gap-0.5 mt-2">
                       {[...Array(5)].map((_, i) => (
                         <FaStar 
                           key={i} 
                           size={14} 
-                          className={i < testimonials[currentTestimonial]?.rating ? 'text-[#C9A227]' : 'text-gray-200'} 
+                          style={{ color: i < (testimonials[currentTestimonial]?.rating || 5) ? '#C9A227' : '#e5e7eb' }}
                         />
                       ))}
                     </div>

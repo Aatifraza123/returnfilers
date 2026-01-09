@@ -2,8 +2,9 @@ import { useState, useEffect } from 'react';
 import { useSettings } from '../../context/SettingsContext';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
+import Loader from '../../components/common/Loader';
 // Updated icons for admin settings tabs
-import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle, FaPaintBrush, FaStar, FaAlignLeft, FaCog, FaCalendarAlt, FaBullhorn } from 'react-icons/fa';
+import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle, FaPaintBrush, FaStar, FaAlignLeft, FaCog, FaCalendarAlt, FaBullhorn, FaFacebook, FaInstagram, FaLinkedin, FaTwitter, FaYoutube, FaWhatsapp, FaTimes } from 'react-icons/fa';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
@@ -30,7 +31,9 @@ const AdminSettings = () => {
     brandColors: {
       primary: '#0B1530',
       secondary: '#C9A227',
-      accent: '#1a2b5c'
+      accent: '#1a2b5c',
+      footerBg: '#0B1530',
+      footerText: '#ffffff'
     },
     hero: {
       title: 'Professional Tax & Financial Services',
@@ -53,8 +56,12 @@ const AdminSettings = () => {
       whatsapp: ''
     },
     socialMediaColors: {
-      iconColor: '#C9A227',
-      iconHoverColor: '#FFFFFF'
+      facebook: { color: '#1877F2', hoverColor: '#FFFFFF' },
+      instagram: { color: '#E4405F', hoverColor: '#FFFFFF' },
+      linkedin: { color: '#0A66C2', hoverColor: '#FFFFFF' },
+      twitter: { color: '#1DA1F2', hoverColor: '#FFFFFF' },
+      youtube: { color: '#FF0000', hoverColor: '#FFFFFF' },
+      whatsapp: { color: '#25D366', hoverColor: '#FFFFFF' }
     },
     businessHours: {
       weekdays: '',
@@ -135,42 +142,64 @@ const AdminSettings = () => {
     try {
       console.log('💾 Saving settings:', settings);
       console.log('📸 Logo URL:', settings.logo);
-      console.log('📝 Logo Text:', settings.logoText);
+      console.log('🎨 Social Colors:', settings.socialMediaColors);
       
       const { data } = await api.put('/settings', settings);
       console.log('✅ Save response:', data);
       
       if (data.success) {
-        toast.success('Settings updated successfully!');
+        // Show success message
+        toast.success('Settings saved! Refreshing in 2 seconds...', {
+          duration: 2000
+        });
+        
         setSettings(data.data);
         console.log('✅ Updated settings state:', data.data);
-        console.log('📸 Logo after save:', data.data.logo);
         
-        // Refresh global settings context
+        // Force refresh global settings immediately
+        refreshSettings();
+        
+        // Reload page after 2 seconds to show changes
         setTimeout(() => {
-          refreshSettings();
-          console.log('🔄 Global settings refreshed');
-        }, 500);
+          window.location.reload();
+        }, 2000);
       }
     } catch (error) {
       console.error('❌ Error saving settings:', error);
       console.error('Error response:', error.response?.data);
       toast.error('Failed to save settings');
-    } finally {
       setSaving(false);
     }
   };
 
   const handleChange = (field, value) => {
     if (field.includes('.')) {
-      const [parent, child] = field.split('.');
-      setSettings(prev => ({
-        ...prev,
-        [parent]: {
-          ...prev[parent],
-          [child]: value
-        }
-      }));
+      const parts = field.split('.');
+      
+      if (parts.length === 2) {
+        // Two levels: parent.child
+        const [parent, child] = parts;
+        setSettings(prev => ({
+          ...prev,
+          [parent]: {
+            ...prev[parent],
+            [child]: value
+          }
+        }));
+      } else if (parts.length === 3) {
+        // Three levels: parent.child.grandchild
+        const [parent, child, grandchild] = parts;
+        setSettings(prev => ({
+          ...prev,
+          [parent]: {
+            ...prev[parent],
+            [child]: {
+              ...(prev[parent]?.[child] || {}),
+              [grandchild]: value
+            }
+          }
+        }));
+      }
     } else {
       setSettings(prev => ({ ...prev, [field]: value }));
     }
@@ -179,7 +208,7 @@ const AdminSettings = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin w-12 h-12 border-4 border-[#C9A227] border-t-transparent rounded-full"></div>
+        <Loader size="lg" />
       </div>
     );
   }
@@ -199,187 +228,226 @@ const AdminSettings = () => {
             )}
           </p>
         </div>
-        <button
-          onClick={handleSave}
-          disabled={saving}
-          className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] text-white rounded-xl font-semibold text-sm hover:shadow-lg transition-all disabled:opacity-50"
-        >
-          <FaSave size={12} />
-          {saving ? 'Saving...' : 'Save Changes'}
-        </button>
+        <div className="flex gap-3">
+          <a
+            href="/"
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center gap-2 px-5 py-2.5 bg-white border-2 border-[#0B1530] text-[#0B1530] rounded-xl font-semibold text-sm hover:bg-gray-50 transition-all"
+          >
+            <FaInfoCircle size={12} />
+            Preview Site
+          </a>
+          <button
+            onClick={handleSave}
+            disabled={saving}
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] text-white rounded-xl font-semibold text-sm hover:shadow-lg transition-all disabled:opacity-50"
+          >
+            <FaSave size={12} />
+            {saving ? 'Saving...' : 'Save Changes'}
+          </button>
+        </div>
       </div>
 
-      {/* Tabs */}
-      <div className="flex gap-2 border-b mb-6 overflow-x-auto">
-        <button
-          onClick={() => setActiveTab('company')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'company'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaBuilding className="inline mr-2" size={14} />
-          Company
-        </button>
-        <button
-          onClick={() => setActiveTab('social')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'social'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaShareAlt className="inline mr-2" size={14} />
-          Social Media
-        </button>
-        <button
-          onClick={() => setActiveTab('hours')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'hours'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaClock className="inline mr-2" size={14} />
-          Business Hours
-        </button>
-        <button
-          onClick={() => setActiveTab('seo')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'seo'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaSearch className="inline mr-2" size={14} />
-          SEO
-        </button>
-        <button
-          onClick={() => setActiveTab('about')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'about'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaInfoCircle className="inline mr-2" size={14} />
-          About
-        </button>
-        <button
-          onClick={() => setActiveTab('privacy')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'privacy'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaFileAlt className="inline mr-2" size={14} />
-          Privacy
-        </button>
-        <button
-          onClick={() => setActiveTab('terms')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'terms'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaFileAlt className="inline mr-2" size={14} />
-          Terms
-        </button>
-        <button
-          onClick={() => setActiveTab('refund')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'refund'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaFileAlt className="inline mr-2" size={14} />
-          Refund
-        </button>
-        <button
-          onClick={() => setActiveTab('contact')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'contact'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaPhone className="inline mr-2" size={14} />
-          Contact
-        </button>
-        <button
-          onClick={() => setActiveTab('brand')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'brand'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaPaintBrush className="inline mr-2" size={14} />
-          Brand
-        </button>
-        <button
-          onClick={() => setActiveTab('hero')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'hero'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaStar className="inline mr-2" size={14} />
-          Hero
-        </button>
-        <button
-          onClick={() => setActiveTab('footer')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'footer'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaAlignLeft className="inline mr-2" size={14} />
-          Footer
-        </button>
-        <button
-          onClick={() => setActiveTab('features')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'features'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaCog className="inline mr-2" size={14} />
-          Features
-        </button>
-        <button
-          onClick={() => setActiveTab('booking')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'booking'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaCalendarAlt className="inline mr-2" size={14} />
-          Booking
-        </button>
-        <button
-          onClick={() => setActiveTab('promotional')}
-          className={`px-4 py-3 font-semibold text-sm transition-colors whitespace-nowrap ${
-            activeTab === 'promotional'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
-              : 'text-gray-500 hover:text-gray-700'
-          }`}
-        >
-          <FaBullhorn className="inline mr-2" size={14} />
-          Promo
-        </button>
-      </div>
+      {/* Sidebar + Content Layout */}
+      <div className="flex gap-6">
+        {/* Sidebar Navigation */}
+        <div className="w-64 flex-shrink-0">
+          <div className="bg-white rounded-2xl shadow-lg p-4 sticky top-24 max-h-[calc(100vh-7rem)] overflow-y-auto">
+            {/* Basic Info Section */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">Basic Info</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('company')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'company'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaBuilding size={14} />
+                  Company
+                </button>
+                <button
+                  onClick={() => setActiveTab('contact')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'contact'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaPhone size={14} />
+                  Contact
+                </button>
+                <button
+                  onClick={() => setActiveTab('hours')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'hours'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaClock size={14} />
+                  Business Hours
+                </button>
+                <button
+                  onClick={() => setActiveTab('about')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'about'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaInfoCircle size={14} />
+                  About
+                </button>
+              </div>
+            </div>
 
-      {/* Content */}
-      <div className="bg-white rounded-2xl shadow-lg p-6">
+            {/* Appearance Section */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">Appearance</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('brand')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'brand'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaPaintBrush size={14} />
+                  Brand Colors
+                </button>
+                <button
+                  onClick={() => setActiveTab('hero')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'hero'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaStar size={14} />
+                  Hero Section
+                </button>
+                <button
+                  onClick={() => setActiveTab('footer')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'footer'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaAlignLeft size={14} />
+                  Footer
+                </button>
+              </div>
+            </div>
+
+            {/* Social & SEO Section */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">Social & SEO</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('social')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'social'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaShareAlt size={14} />
+                  Social Media
+                </button>
+                <button
+                  onClick={() => setActiveTab('seo')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'seo'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaSearch size={14} />
+                  SEO Settings
+                </button>
+              </div>
+            </div>
+
+            {/* Features Section */}
+            <div className="mb-6">
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">Features</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('features')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'features'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaCog size={14} />
+                  Site Features
+                </button>
+                <button
+                  onClick={() => setActiveTab('booking')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'booking'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaCalendarAlt size={14} />
+                  Booking Settings
+                </button>
+              </div>
+            </div>
+
+            {/* Policies Section */}
+            <div>
+              <h3 className="text-xs font-semibold text-gray-400 uppercase tracking-wide mb-2 px-2">Legal</h3>
+              <div className="space-y-1">
+                <button
+                  onClick={() => setActiveTab('privacy')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'privacy'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaFileAlt size={14} />
+                  Privacy Policy
+                </button>
+                <button
+                  onClick={() => setActiveTab('terms')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'terms'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaFileAlt size={14} />
+                  Terms & Conditions
+                </button>
+                <button
+                  onClick={() => setActiveTab('refund')}
+                  className={`w-full text-left px-3 py-2 rounded-lg text-sm font-medium transition-colors flex items-center gap-2 ${
+                    activeTab === 'refund'
+                      ? 'bg-[#C9A227] text-white'
+                      : 'text-gray-700 hover:bg-gray-100'
+                  }`}
+                >
+                  <FaFileAlt size={14} />
+                  Refund Policy
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Content Area */}
+        <div className="flex-1">
+          <div className="bg-white rounded-2xl shadow-lg p-6">
         {activeTab === 'company' && (
           <div className="space-y-4">
             <h2 className="text-xl font-bold text-[#0B1530] mb-4">Company Information</h2>
@@ -550,68 +618,253 @@ const AdminSettings = () => {
             {/* Social Media Icon Colors */}
             <div className="border-t pt-6">
               <h3 className="text-lg font-bold text-[#0B1530] mb-4">Social Media Icon Colors</h3>
-              <div className="grid md:grid-cols-2 gap-6">
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Icon Color (Default)</label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="color"
-                      value={settings.socialMediaColors?.iconColor || '#C9A227'}
-                      onChange={(e) => handleChange('socialMediaColors.iconColor', e.target.value)}
-                      className="w-16 h-12 rounded-lg border border-gray-200 cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={settings.socialMediaColors?.iconColor || '#C9A227'}
-                      onChange={(e) => handleChange('socialMediaColors.iconColor', e.target.value)}
-                      placeholder="#C9A227"
-                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
-                    />
+              <p className="text-sm text-gray-600 mb-4">Customize colors for each social media platform</p>
+              
+              <div className="space-y-4">
+                {/* Facebook */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaFacebook className="inline mr-2" />
+                      Facebook Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.facebook?.color || '#1877F2'}
+                        onChange={(e) => handleChange('socialMediaColors.facebook.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.facebook?.color || '#1877F2'}
+                        onChange={(e) => handleChange('socialMediaColors.facebook.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Default color for social media icons</p>
-                </div>
-                
-                <div>
-                  <label className="block text-sm font-medium text-gray-700 mb-2">Icon Hover Color</label>
-                  <div className="flex items-center gap-3">
-                    <input
-                      type="color"
-                      value={settings.socialMediaColors?.iconHoverColor || '#FFFFFF'}
-                      onChange={(e) => handleChange('socialMediaColors.iconHoverColor', e.target.value)}
-                      className="w-16 h-12 rounded-lg border border-gray-200 cursor-pointer"
-                    />
-                    <input
-                      type="text"
-                      value={settings.socialMediaColors?.iconHoverColor || '#FFFFFF'}
-                      onChange={(e) => handleChange('socialMediaColors.iconHoverColor', e.target.value)}
-                      placeholder="#FFFFFF"
-                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
-                    />
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.facebook?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.facebook.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.facebook?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.facebook.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
                   </div>
-                  <p className="text-xs text-gray-500 mt-1">Color when hovering over icons</p>
                 </div>
-              </div>
 
-              {/* Preview */}
-              <div className="mt-6 p-4 bg-gray-50 rounded-xl">
-                <p className="text-sm font-medium text-gray-700 mb-3">Preview:</p>
-                <div className="flex gap-4">
-                  <div 
-                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer"
-                    style={{ 
-                      backgroundColor: '#000',
-                      color: settings.socialMediaColors?.iconColor || '#C9A227'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = settings.socialMediaColors?.iconHoverColor || '#FFFFFF';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = settings.socialMediaColors?.iconColor || '#C9A227';
-                    }}
-                  >
-                    <FaShareAlt size={18} />
+                {/* Instagram */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaInstagram className="inline mr-2" />
+                      Instagram Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.instagram?.color || '#E4405F'}
+                        onChange={(e) => handleChange('socialMediaColors.instagram.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.instagram?.color || '#E4405F'}
+                        onChange={(e) => handleChange('socialMediaColors.instagram.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
                   </div>
-                  <p className="text-sm text-gray-600 flex items-center">Hover to see color change</p>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.instagram?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.instagram.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.instagram?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.instagram.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* LinkedIn */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaLinkedin className="inline mr-2" />
+                      LinkedIn Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.linkedin?.color || '#0A66C2'}
+                        onChange={(e) => handleChange('socialMediaColors.linkedin.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.linkedin?.color || '#0A66C2'}
+                        onChange={(e) => handleChange('socialMediaColors.linkedin.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.linkedin?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.linkedin.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.linkedin?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.linkedin.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* Twitter */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaTwitter className="inline mr-2" />
+                      Twitter Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.twitter?.color || '#1DA1F2'}
+                        onChange={(e) => handleChange('socialMediaColors.twitter.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.twitter?.color || '#1DA1F2'}
+                        onChange={(e) => handleChange('socialMediaColors.twitter.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.twitter?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.twitter.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.twitter?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.twitter.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* YouTube */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaYoutube className="inline mr-2" />
+                      YouTube Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.youtube?.color || '#FF0000'}
+                        onChange={(e) => handleChange('socialMediaColors.youtube.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.youtube?.color || '#FF0000'}
+                        onChange={(e) => handleChange('socialMediaColors.youtube.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.youtube?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.youtube.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.youtube?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.youtube.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                </div>
+
+                {/* WhatsApp */}
+                <div className="grid md:grid-cols-2 gap-4 p-4 bg-gray-50 rounded-lg">
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">
+                      <FaWhatsapp className="inline mr-2" />
+                      WhatsApp Color
+                    </label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.whatsapp?.color || '#25D366'}
+                        onChange={(e) => handleChange('socialMediaColors.whatsapp.color', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.whatsapp?.color || '#25D366'}
+                        onChange={(e) => handleChange('socialMediaColors.whatsapp.color', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
+                  <div>
+                    <label className="block text-sm font-medium text-gray-700 mb-2">Hover Color</label>
+                    <div className="flex items-center gap-2">
+                      <input
+                        type="color"
+                        value={settings.socialMediaColors?.whatsapp?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.whatsapp.hoverColor', e.target.value)}
+                        className="w-12 h-10 rounded border cursor-pointer"
+                      />
+                      <input
+                        type="text"
+                        value={settings.socialMediaColors?.whatsapp?.hoverColor || '#FFFFFF'}
+                        onChange={(e) => handleChange('socialMediaColors.whatsapp.hoverColor', e.target.value)}
+                        className="flex-1 border p-2 rounded text-sm font-mono"
+                      />
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
@@ -1041,6 +1294,52 @@ const AdminSettings = () => {
                 <p className="text-xs text-gray-500 mt-2">Used for gradients and secondary elements</p>
               </div>
             </div>
+
+            {/* Footer Colors Section */}
+            <div className="border-t pt-6 mt-6">
+              <h3 className="text-lg font-semibold text-[#0B1530] mb-4">Footer Colors</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Footer Background</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerBg || '#0B1530'}
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)}
+                      className="w-16 h-16 rounded-lg border-2 border-gray-200 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerBg || '#0B1530'}
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)}
+                      placeholder="#0B1530"
+                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">Background color for footer section</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Footer Text Color</label>
+                  <div className="flex gap-3 items-center">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerText || '#ffffff'}
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)}
+                      className="w-16 h-16 rounded-lg border-2 border-gray-200 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerText || '#ffffff'}
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)}
+                      placeholder="#ffffff"
+                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-2">Text color for footer content</p>
+                </div>
+              </div>
+            </div>
             
             <div className="bg-blue-50 border border-blue-200 rounded-xl p-4 mt-6">
               <p className="text-sm text-blue-800">
@@ -1310,59 +1609,8 @@ const AdminSettings = () => {
             </div>
           </div>
         )}
-
-        {/* Promotional Tab */}
-        {activeTab === 'promotional' && (
-          <div className="space-y-6">
-            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Promotional Settings</h2>
-            
-            <label className="flex items-center p-4 border border-gray-200 rounded-xl hover:bg-gray-50 cursor-pointer">
-              <input
-                type="checkbox"
-                checked={settings.promotional?.bannerEnabled || false}
-                onChange={(e) => handleChange('promotional.bannerEnabled', e.target.checked)}
-                className="w-5 h-5 text-[#C9A227] rounded focus:ring-[#C9A227] mr-3"
-              />
-              <div>
-                <div className="font-medium text-gray-900">Enable Promotional Banner</div>
-                <div className="text-sm text-gray-500">Show banner at top of website</div>
-              </div>
-            </label>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Banner Text</label>
-              <input
-                type="text"
-                value={settings.promotional?.bannerText || ''}
-                onChange={(e) => handleChange('promotional.bannerText', e.target.value)}
-                placeholder="🎉 Special Offer: Get 20% off on all services!"
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Banner Link (Optional)</label>
-              <input
-                type="text"
-                value={settings.promotional?.bannerLink || ''}
-                onChange={(e) => handleChange('promotional.bannerLink', e.target.value)}
-                placeholder="/quote"
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-              />
-            </div>
-            
-            <div>
-              <label className="block text-sm font-medium text-gray-700 mb-1.5">Discount Text</label>
-              <input
-                type="text"
-                value={settings.promotional?.discountText || ''}
-                onChange={(e) => handleChange('promotional.discountText', e.target.value)}
-                placeholder="Limited Time Offer - 20% OFF"
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-              />
-            </div>
           </div>
-        )}
+        </div>
       </div>
     </div>
   );

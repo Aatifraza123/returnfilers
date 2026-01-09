@@ -46,7 +46,7 @@ const PrivacyPolicy = () => {
         );
       }
       
-      // Bold important section headings and key terms
+      // Bold important section headings and key terms with black color
       const boldTerms = [
         'Information We Collect',
         'How We Use Your Information',
@@ -62,7 +62,7 @@ const PrivacyPolicy = () => {
       let formattedPart = part;
       boldTerms.forEach(term => {
         const regex = new RegExp(`(${term})`, 'gi');
-        formattedPart = formattedPart.replace(regex, '<strong class="text-[#C9A227] font-bold">$1</strong>');
+        formattedPart = formattedPart.replace(regex, '<strong class="text-black font-bold">$1</strong>');
       });
       
       return <span key={index} dangerouslySetInnerHTML={{ __html: formattedPart }} />;
@@ -122,8 +122,8 @@ const PrivacyPolicy = () => {
               transition={{ delay: 0.3 }}
               className="bg-white rounded-xl shadow-lg p-6 md:p-8 border border-gray-200/60"
             >
-              <div className="prose prose-gray max-w-none">
-                <div className="whitespace-pre-wrap text-gray-700 leading-relaxed">
+              <div className="prose prose-lg max-w-none">
+                <div className="whitespace-pre-wrap text-gray-800 leading-loose text-base">
                   {formatContent(content)}
                 </div>
               </div>

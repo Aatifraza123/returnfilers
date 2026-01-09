@@ -6,6 +6,7 @@ import {
   FaChevronLeft, FaChevronRight, FaPlus, FaMinus 
 } from 'react-icons/fa';
 import api from '../api/axios';
+import Loader from '../components/common/Loader';
 
 const DigitalServices = () => {
   const [services, setServices] = useState([]);
@@ -102,10 +103,7 @@ const DigitalServices = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <div className="text-center">
-          <div className="w-16 h-16 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin mx-auto mb-4"></div>
-          <p className="text-gray-600">Loading...</p>
-        </div>
+        <Loader size="lg" text="Loading..." />
       </div>
     );
   }
@@ -180,7 +178,7 @@ const DigitalServices = () => {
                               {pkg.name}
                             </h3>
                             <div className="flex items-baseline gap-1 mb-6">
-                              <span className={`text-3xl font-bold ${pkg.name === 'Business Website' ? 'text-[#C9A227]' : 'text-[#0B1530]'}`}>
+                              <span className={`text-3xl font-bold ${pkg.name === 'Business Website' ? 'text-white' : 'text-black'}`}>
                                 ₹{pkg.price}
                               </span>
                             </div>
@@ -401,13 +399,13 @@ const DigitalServices = () => {
                         <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
                         <div className="text-xs text-gray-500">{testimonials[currentTestimonial]?.title}</div>
                       </div>
-                      {/* Stars */}
+                      {/* Stars - Always Gold Color */}
                       <div className="flex gap-0.5 mt-2">
                         {[...Array(5)].map((_, i) => (
                           <FaStar 
                             key={i} 
                             size={14} 
-                            className={i < testimonials[currentTestimonial]?.rating ? 'text-[#C9A227]' : 'text-gray-200'} 
+                            style={{ color: i < (testimonials[currentTestimonial]?.rating || 5) ? '#C9A227' : '#e5e7eb' }}
                           />
                         ))}
                       </div>

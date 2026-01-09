@@ -61,9 +61,11 @@ const sendBulkEmail = async (req, res) => {
   }
 };
 
-// Helper function to send bulk emails in background using emailService
+// Helper function to send bulk emails in background using professional template
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   console.log('Starting background bulk email sending...');
+  
+  const { getEmailTemplate } = require('../utils/emailTemplates');
   
   let sentCount = 0;
   let failedCount = 0;
@@ -71,38 +73,18 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   // Process emails one by one with delay
   for (const recipient of recipients) {
     try {
-      const html = `
-        <!DOCTYPE html>
-        <html>
-        <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-          <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-            <tr>
-              <td align="center">
-                <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                      <h1 style="color: #D4AF37; margin: 0; font-size: 24px;">ReturnFilers</h1>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="padding: 30px;">
-                      <p style="color: #0B1530; margin-top: 0; font-size: 16px;">Dear ${recipient.name || 'Valued Client'},</p>
-                      <div style="color: #333; font-size: 15px; line-height: 1.6;">${message}</div>
-                    </td>
-                  </tr>
-                  <tr>
-                    <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                      <p style="color: #D4AF37; margin: 0; font-weight: bold;">ReturnFilers</p>
-                      <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p><p style="margin: 10px 0 0 0;"><a href="https://returnfilers.in" style="color: #D4AF37; text-decoration: none; font-size: 12px;">www.returnfilers.in</a></p>
-                    </td>
-                  </tr>
-                </table>
-              </td>
-            </tr>
-          </table>
-        </body>
-        </html>
-      `;
+      // Use professional email template
+      const html = getEmailTemplate({
+        title: subject,
+        content: `
+          <p>Dear <strong>${recipient.name || 'Valued Client'}</strong>,</p>
+          <div style="margin: 20px 0;">
+            ${message}
+          </div>
+          <p style="margin-top: 25px;">Best regards,<br><strong>Team ReturnFilers</strong></p>
+        `,
+        footerText: 'Thank you for being a valued member of the ReturnFilers community.'
+      });
 
       await sendEmail({
         to: recipient.email,
@@ -325,118 +307,34 @@ const deleteContact = async (req, res) => {
   }
 };
 
-// Helper function to send emails using Resend (primary) or Gmail (fallback)
+// Helper function to send emails using professional templates
 const sendContactEmails = async (contact) => {
   console.log('sendContactEmails called for:', contact._id);
   
   const { sendEmail } = require('../utils/emailService');
+  const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  const adminEmailAddress = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
+  // Use new professional templates
+  const adminHtml = getAdminNotificationTemplate({
+    type: 'contact',
+    data: {
+      name: contact.name,
+      email: contact.email,
+      phone: contact.phone,
+      message: contact.message
+    }
+  });
 
-  // Admin notification email HTML
-  const adminHtml = `
-    <!DOCTYPE html>
-    <html>
-    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-        <tr>
-          <td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <tr>
-                <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">New Contact Message</h1>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 30px;">
-                  <table width="100%" cellpadding="8" cellspacing="0">
-                    <tr>
-                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Name:</strong></td>
-                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.name}</td>
-                    </tr>
-                    <tr>
-                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Email:</strong></td>
-                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;"><a href="mailto:${contact.email}" style="color: #0B1530;">${contact.email}</a></td>
-                    </tr>
-                    <tr>
-                      <td style="color: #666; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb;"><strong>Phone:</strong></td>
-                      <td style="color: #0B1530; font-size: 14px; padding: 8px 0; border-bottom: 1px solid #e5e7eb; text-align: right;">${contact.phone}</td>
-                    </tr>
-                    <tr>
-                      <td style="color: #666; font-size: 14px; padding: 8px 0; vertical-align: top;"><strong>Message:</strong></td>
-                      <td style="color: #333; font-size: 14px; padding: 8px 0; text-align: right; line-height: 1.5;">${contact.message.replace(/\n/g, '<br>')}</td>
-                    </tr>
-                  </table>
-                  <div style="margin-top: 20px; padding: 15px; background-color: #f8f9fa; border-left: 3px solid #0B1530; border-radius: 4px;">
-                    <p style="margin: 0; color: #666; font-size: 12px;"><strong>Reference ID:</strong> ${contact._id}</p>
-                    <p style="margin: 5px 0 0 0; color: #666; font-size: 12px;"><strong>Time:</strong> ${new Date().toLocaleString('en-IN', { timeZone: 'Asia/Kolkata' })}</p>
-                  </div>
-                </td>
-              </tr>
-              <tr>
-                <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
-                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p><p style="margin: 10px 0 0 0;"><a href="https://returnfilers.in" style="color: #D4AF37; text-decoration: none; font-size: 12px;">www.returnfilers.in</a></p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
-  `;
-
-  // Customer confirmation email HTML
-  const customerHtml = `
-    <!DOCTYPE html>
-    <html>
-    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-        <tr>
-          <td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">
-              <tr>
-                <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h1 style="color: #D4AF37; margin: 0; font-size: 24px; font-weight: bold;">Thank You!</h1>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 30px;">
-                  <p style="color: #333; font-size: 16px; line-height: 1.6;">Dear ${contact.name},</p>
-                  <p style="color: #666; font-size: 14px; line-height: 1.6;">Thank you for reaching out to ReturnFilers. We have received your message and our team will get back to you within 24 hours.</p>
-                  <div style="margin: 20px 0; padding: 15px; background-color: #f8f9fa; border-radius: 8px;">
-                    <p style="margin: 0; color: #666; font-size: 14px;"><strong>Your Message:</strong></p>
-                    <p style="margin: 10px 0 0 0; color: #333; font-size: 14px; line-height: 1.5;">${contact.message}</p>
-                  </div>
-                  <p style="color: #666; font-size: 14px; line-height: 1.6;">For urgent queries, call us at <strong>+91 84471 27264</strong></p>
-                </td>
-              </tr>
-              <tr>
-                <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-size: 14px; font-weight: bold;">ReturnFilers</p>
-                  <p style="color: #ffffff; margin: 5px 0 0 0; font-size: 12px;">Professional Tax & Financial Services</p><p style="margin: 10px 0 0 0;"><a href="https://returnfilers.in" style="color: #D4AF37; text-decoration: none; font-size: 12px;">www.returnfilers.in</a></p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
-  `;
+  const customerHtml = getCustomerConfirmationTemplate({
+    type: 'contact',
+    data: {
+      name: contact.name,
+      message: contact.message
+    }
+  });
 
   try {
-    // Send admin notification to primary email
-    console.log('Sending admin notification email to razaahmadwork@gmail.com...');
-    await sendEmail({
-      to: adminEmailAddress,
-      subject: `New Contact Message from ${contact.name}`,
-      html: adminHtml
-    });
-    console.log('✅ Admin email sent to razaahmadwork@gmail.com');
-
-    // Send admin notification to info@returnfilers.in as well
+    // Send admin notification to info@returnfilers.in only
     console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',

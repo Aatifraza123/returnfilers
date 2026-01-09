@@ -177,81 +177,38 @@ const replyToBooking = async (req, res) => {
   }
 };
 
-// Helper: Send email
+// Helper function to send booking emails using professional templates
 const sendBookingEmail = async (booking) => {
-  const adminEmail = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
-  const hasDocuments = booking.documents?.length > 0;
+  console.log('sendBookingEmail called for:', booking._id);
+  
+  const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  // Admin notification email
-  const adminHtml = `
-    <!DOCTYPE html>
-    <html>
-    <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px;">
-        <tr><td align="center">
-          <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
-            <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
-              <h1 style="color:#D4AF37;margin:0;">New Service Booking</h1>
-            </td></tr>
-            <tr><td style="padding:30px;">
-              <table width="100%" cellpadding="8">
-                <tr><td style="color:#666;"><strong>Name:</strong></td><td>${booking.name}</td></tr>
-                <tr><td style="color:#666;"><strong>Email:</strong></td><td>${booking.email}</td></tr>
-                <tr><td style="color:#666;"><strong>Phone:</strong></td><td>${booking.phone}</td></tr>
-                <tr><td style="color:#666;"><strong>Service:</strong></td><td>${booking.service}</td></tr>
-                <tr><td style="color:#666;"><strong>Documents:</strong></td><td>${hasDocuments ? booking.documents.length + ' file(s)' : 'None'}</td></tr>
-                ${booking.message ? `<tr><td style="color:#666;"><strong>Message:</strong></td><td>${booking.message}</td></tr>` : ''}
-              </table>
-              <p style="margin-top:20px;color:#666;font-size:12px;">ID: ${booking._id}</p>
-            </td></tr>
-            <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-              <p style="color:#D4AF37;margin:0;font-weight:bold;">ReturnFilers</p>
-            </td></tr>
-          </table>
-        </td></tr>
-      </table>
-    </body>
-    </html>
-  `;
+  // Use new professional templates
+  const adminHtml = getAdminNotificationTemplate({
+    type: 'booking',
+    data: {
+      name: booking.name,
+      email: booking.email,
+      phone: booking.phone,
+      service: booking.service,
+      preferredDate: booking.preferredDate,
+      preferredTime: booking.preferredTime
+    }
+  });
 
-  // Customer confirmation email
-  const customerHtml = `
-    <!DOCTYPE html>
-    <html>
-    <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px;">
-        <tr><td align="center">
-          <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
-            <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
-              <h1 style="color:#D4AF37;margin:0;font-size:24px;font-weight:bold;">Thank You!</h1>
-            </td></tr>
-            <tr><td style="padding:30px;">
-              <p style="color:#333;font-size:16px;">Dear ${booking.name},</p>
-              <p style="color:#666;font-size:14px;line-height:1.6;">Thank you for booking <strong>${booking.service}</strong> with ReturnFilers. We have received your request and our team will contact you within 24 hours.</p>
-              <p style="color:#666;font-size:14px;line-height:1.6;">For urgent queries, call us at <strong>+91 84471 27264</strong></p>
-            </td></tr>
-            <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-              <p style="color:#D4AF37;margin:0;font-size:14px;font-weight:bold;">ReturnFilers</p>
-              <p style="color:#fff;margin:5px 0 0;font-size:12px;">Professional Tax & Financial Services</p>
-              <p style="margin:10px 0 0;"><a href="https://returnfilers.in" style="color:#D4AF37;text-decoration:none;font-size:12px;">www.returnfilers.in</a></p>
-            </td></tr>
-          </table>
-        </td></tr>
-      </table>
-    </body>
-    </html>
-  `;
+  const customerHtml = getCustomerConfirmationTemplate({
+    type: 'booking',
+    data: {
+      name: booking.name,
+      service: booking.service,
+      preferredDate: booking.preferredDate,
+      preferredTime: booking.preferredTime
+    }
+  });
 
   try {
-    // Send admin notification to primary email
-    await sendEmail({
-      to: adminEmail,
-      subject: `New Booking: ${booking.service} - ${booking.name}`,
-      html: adminHtml
-    });
-    console.log('✅ Admin email sent to', adminEmail);
-
-    // Send admin notification to info@returnfilers.in
+    // Send admin notification to info@returnfilers.in only
+    console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
       subject: `New Booking: ${booking.service} - ${booking.name}`,
@@ -260,6 +217,7 @@ const sendBookingEmail = async (booking) => {
     console.log('✅ Admin email sent to info@returnfilers.in');
 
     // Send customer confirmation
+    console.log('Sending customer confirmation email...');
     await sendEmail({
       to: booking.email,
       subject: `Booking Confirmed - ${booking.service}`,

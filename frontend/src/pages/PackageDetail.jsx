@@ -3,6 +3,7 @@ import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaArrowLeft, FaPhone, FaEnvelope, FaClock, FaRupeeSign } from 'react-icons/fa';
 import api from '../api/axios';
+import Loader from '../components/common/Loader';
 
 const PackageDetail = () => {
   const { slug, packageSlug } = useParams();
@@ -43,8 +44,8 @@ const PackageDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen bg-[#0B1530] flex items-center justify-center">
-        <div className="w-16 h-16 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin"></div>
+      <div className="min-h-screen bg-gray-50 flex items-center justify-center">
+        <Loader size="lg" text="Loading package details..." />
       </div>
     );
   }

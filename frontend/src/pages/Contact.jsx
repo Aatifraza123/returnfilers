@@ -153,9 +153,9 @@ const Contact = () => {
                 <h2 className="text-2xl font-serif font-bold mb-8 text-[#0B1530]">Contact Information</h2>
                 
                 <div className="space-y-6">
-                  <div className="flex items-start group">
-                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaMapMarkerAlt className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
+                  <div className="flex items-start">
+                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4">
+                      <FaMapMarkerAlt className="text-[#0B1530] text-xl" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Office Address</h3>
@@ -167,9 +167,9 @@ const Contact = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start group">
-                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaPhone className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
+                  <div className="flex items-start">
+                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4">
+                      <FaPhone className="text-[#0B1530] text-xl" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Call Us</h3>
@@ -180,9 +180,9 @@ const Contact = () => {
                     </div>
                   </div>
 
-                  <div className="flex items-start group">
-                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4 group-hover:bg-[#0B1530] transition-colors duration-300">
-                      <FaEnvelope className="text-[#0B1530] text-xl group-hover:text-[#C9A227] transition-colors" />
+                  <div className="flex items-start">
+                    <div className="bg-[#0B1530]/5 p-3 rounded-lg mr-4">
+                      <FaEnvelope className="text-[#0B1530] text-xl" />
                     </div>
                     <div>
                       <h3 className="font-bold text-[#0B1530] text-base mb-1">Email Us</h3>

@@ -4,7 +4,6 @@ import { SettingsProvider } from './context/SettingsContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
 import AIChatbot from './components/common/AIChatbot'
-import PromoBanner from './components/common/PromoBanner'
 import ThemeProvider from './components/common/ThemeProvider'
 import AdminLayout from './components/layout/AdminLayout' 
 
@@ -50,6 +49,7 @@ import AdminDigitalServices from './pages/admin/AdminDigitalServices'
 import Booking from './pages/Booking'
 import DigitalServices from './pages/DigitalServices'
 import PackageDetail from './pages/PackageDetail'
+import TestSettings from './pages/TestSettings'
 
 // Wrapper component to conditionally show chatbot
 const ChatbotWrapper = () => {
@@ -62,17 +62,6 @@ const ChatbotWrapper = () => {
   return <AIChatbot />;
 };
 
-// Wrapper component to conditionally show promo banner
-const PromoBannerWrapper = () => {
-  const location = useLocation();
-  const isAdminRoute = location.pathname.startsWith('/admin');
-  
-  // Don't show banner on admin pages
-  if (isAdminRoute) return null;
-  
-  return <PromoBanner />;
-};
-
 function App() {
   console.log('App component rendering... v2.0');
   
@@ -82,7 +71,6 @@ function App() {
       <AuthProvider>
         <SettingsProvider>
           <ThemeProvider>
-            <PromoBannerWrapper />
             <ChatbotWrapper />
 
             <Routes>
@@ -107,6 +95,7 @@ function App() {
           <Route path="digital-services" element={<DigitalServices />} />
           <Route path="digital-services/:slug/:packageSlug" element={<PackageDetail />} />
           <Route path="upload-documents" element={<Booking />} />
+          <Route path="test-settings" element={<TestSettings />} />
         </Route>
 
         {/* Admin Routes */}

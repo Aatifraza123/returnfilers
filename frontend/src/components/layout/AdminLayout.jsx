@@ -1,5 +1,6 @@
 import { Link, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
+import { useSettings } from '../../context/SettingsContext';
 import { 
   FaChartPie, 
   FaServicestack, 
@@ -31,6 +32,7 @@ const AdminLayout = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { user, logout } = useAuth();
+  const { settings } = useSettings();
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [sidebarCollapsed, setSidebarCollapsed] = useState(() => {
     const saved = localStorage.getItem('sidebarCollapsed');
@@ -211,13 +213,27 @@ const AdminLayout = () => {
         <div className={`${sidebarCollapsed ? 'p-2' : 'p-4'} border-b border-white/10 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] flex-shrink-0`}>
           <div className="flex items-center justify-between">
             <div className={`flex items-center ${sidebarCollapsed ? 'justify-center w-full' : 'gap-2'}`}>
-              <div className={`${sidebarCollapsed ? 'w-10 h-10' : 'w-10 h-10'} rounded-lg bg-[#C9A227] flex items-center justify-center`}>
-                <span className="text-[#0B1530] font-black text-lg">TF</span>
+              {settings?.logo ? (
+                <img 
+                  src={settings.logo} 
+                  alt="Logo" 
+                  className={`${sidebarCollapsed ? 'w-10 h-10' : 'w-10 h-10'} object-contain`}
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className={`${sidebarCollapsed ? 'w-10 h-10' : 'w-10 h-10'} rounded-lg bg-[#C9A227] flex items-center justify-center`}
+                style={{ display: settings?.logo ? 'none' : 'flex' }}
+              >
+                <span className="text-[#0B1530] font-black text-lg">{settings?.logoText || 'RF'}</span>
               </div>
               {!sidebarCollapsed && (
                 <div>
                   <h2 className="text-base font-bold text-[#C9A227]">Admin Panel</h2>
-                  <p className="text-xs text-gray-400">ReturnFilers</p>
+                  <p className="text-xs text-gray-400">{settings?.companyName || 'ReturnFilers'}</p>
                 </div>
               )}
             </div>

@@ -60,8 +60,19 @@ const Footer = () => {
 
   const socialLinks = getSocialLinks();
 
+  // Get footer colors from settings
+  const footerBg = settings?.brandColors?.footerBg || '#000000';
+  const footerText = settings?.brandColors?.footerText || '#ffffff';
+
   return (
-    <footer className="bg-black text-white font-sans" id="footer">
+    <footer 
+      className="text-white font-sans" 
+      id="footer"
+      style={{ 
+        backgroundColor: footerBg,
+        color: footerText
+      }}
+    >
       <div className="container mx-auto px-6 py-6 md:py-8">
         <div className={`grid ${settings?.features?.enableNewsletter ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-8 md:gap-10`}>
           {/* ReturnFilers Section */}
@@ -101,26 +112,32 @@ const Footer = () => {
             </p>
             {socialLinks.length > 0 && (
               <div className="flex space-x-4 pt-2">
-                {socialLinks.map(({ href, icon: Icon, platform }) => (
-                  <a 
-                    key={platform} 
-                    href={href} 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
-                    className="transition-all duration-300 transform hover:scale-125 hover:-translate-y-1"
-                    style={{
-                      color: settings?.socialMediaColors?.iconColor || '#C9A227'
-                    }}
-                    onMouseEnter={(e) => {
-                      e.currentTarget.style.color = settings?.socialMediaColors?.iconHoverColor || '#FFFFFF';
-                    }}
-                    onMouseLeave={(e) => {
-                      e.currentTarget.style.color = settings?.socialMediaColors?.iconColor || '#C9A227';
-                    }}
-                  >
-                    <Icon size={20} />
-                  </a>
-                ))}
+                {socialLinks.map(({ href, icon: Icon, platform }) => {
+                  const platformColors = settings?.socialMediaColors?.[platform];
+                  const iconColor = platformColors?.color || '#C9A227';
+                  const hoverColor = platformColors?.hoverColor || '#FFFFFF';
+                  
+                  return (
+                    <a 
+                      key={platform} 
+                      href={href} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="transition-all duration-300 transform hover:scale-125 hover:-translate-y-1"
+                      style={{
+                        color: iconColor
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.color = hoverColor;
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.color = iconColor;
+                      }}
+                    >
+                      <Icon size={20} />
+                    </a>
+                  );
+                })}
               </div>
             )}
             <div className="text-gray-500 text-xs md:text-sm pt-2">

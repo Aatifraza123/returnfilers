@@ -44,8 +44,8 @@ const Blog = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-gray-50 to-gray-100">
-        <Loader size="xl" color="#C9A227" />
+      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+        <Loader size="lg" text="Loading blogs..." />
       </div>
     );
   }

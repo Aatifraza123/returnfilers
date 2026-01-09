@@ -26,13 +26,13 @@ if (!rootElement) {
   console.log('React app starting...');
   
   const RootApp = () => {
-    const [loading, setLoading] = useState(true);
+    const [loading, setLoading] = useState(true); // Enabled fast loader
 
     useEffect(() => {
-      // Quick loader - just 500ms
+      // Fast loader - just 200ms
       const timer = setTimeout(() => {
         setLoading(false);
-      }, 500);
+      }, 200);
 
       return () => clearTimeout(timer);
     }, []);
