@@ -80,6 +80,12 @@ const settingsSchema = new mongoose.Schema({
     whatsapp: { type: String, default: '' }
   },
   
+  // Social Media Colors
+  socialMediaColors: {
+    iconColor: { type: String, default: '#C9A227' }, // Default gold
+    iconHoverColor: { type: String, default: '#FFFFFF' } // Default white
+  },
+  
   // Business Hours
   businessHours: {
     weekdays: { type: String, default: 'Monday - Friday: 9:00 AM - 6:00 PM' },

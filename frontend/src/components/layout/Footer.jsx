@@ -99,7 +99,16 @@ const Footer = () => {
                     href={href} 
                     target="_blank" 
                     rel="noopener noreferrer" 
-                    className="text-[#C9A227] hover:text-white transition-all duration-300 transform hover:scale-125 hover:-translate-y-1"
+                    className="transition-all duration-300 transform hover:scale-125 hover:-translate-y-1"
+                    style={{
+                      color: settings?.socialMediaColors?.iconColor || '#C9A227'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = settings?.socialMediaColors?.iconHoverColor || '#FFFFFF';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = settings?.socialMediaColors?.iconColor || '#C9A227';
+                    }}
                   >
                     <Icon size={20} />
                   </a>

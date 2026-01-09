@@ -52,6 +52,10 @@ const AdminSettings = () => {
       youtube: '',
       whatsapp: ''
     },
+    socialMediaColors: {
+      iconColor: '#C9A227',
+      iconHoverColor: '#FFFFFF'
+    },
     businessHours: {
       weekdays: '',
       saturday: '',
@@ -465,74 +469,145 @@ const AdminSettings = () => {
         )}
 
         {activeTab === 'social' && (
-          <div className="space-y-4">
-            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Social Media Links</h2>
-            
-            <div className="grid md:grid-cols-2 gap-4">
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.facebook || ''}
-                  onChange={(e) => handleChange('socialMedia.facebook', e.target.value)}
-                  placeholder="https://facebook.com/yourpage"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
-              </div>
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-xl font-bold text-[#0B1530] mb-4">Social Media Links</h2>
               
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.instagram || ''}
-                  onChange={(e) => handleChange('socialMedia.instagram', e.target.value)}
-                  placeholder="https://instagram.com/yourprofile"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
+              <div className="grid md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Facebook</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.facebook || ''}
+                    onChange={(e) => handleChange('socialMedia.facebook', e.target.value)}
+                    placeholder="https://facebook.com/yourpage"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Instagram</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.instagram || ''}
+                    onChange={(e) => handleChange('socialMedia.instagram', e.target.value)}
+                    placeholder="https://instagram.com/yourprofile"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.linkedin || ''}
+                    onChange={(e) => handleChange('socialMedia.linkedin', e.target.value)}
+                    placeholder="https://linkedin.com/company/yourcompany"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter/X</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.twitter || ''}
+                    onChange={(e) => handleChange('socialMedia.twitter', e.target.value)}
+                    placeholder="https://twitter.com/yourhandle"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">YouTube</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.youtube || ''}
+                    onChange={(e) => handleChange('socialMedia.youtube', e.target.value)}
+                    placeholder="https://youtube.com/@yourchannel"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Business</label>
+                  <input
+                    type="url"
+                    value={settings.socialMedia?.whatsapp || ''}
+                    onChange={(e) => handleChange('socialMedia.whatsapp', e.target.value)}
+                    placeholder="https://wa.me/918447127264"
+                    className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  />
+                </div>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">LinkedIn</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.linkedin || ''}
-                  onChange={(e) => handleChange('socialMedia.linkedin', e.target.value)}
-                  placeholder="https://linkedin.com/company/yourcompany"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
+            </div>
+
+            {/* Social Media Icon Colors */}
+            <div className="border-t pt-6">
+              <h3 className="text-lg font-bold text-[#0B1530] mb-4">Social Media Icon Colors</h3>
+              <div className="grid md:grid-cols-2 gap-6">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Icon Color (Default)</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.socialMediaColors?.iconColor || '#C9A227'}
+                      onChange={(e) => handleChange('socialMediaColors.iconColor', e.target.value)}
+                      className="w-16 h-12 rounded-lg border border-gray-200 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.socialMediaColors?.iconColor || '#C9A227'}
+                      onChange={(e) => handleChange('socialMediaColors.iconColor', e.target.value)}
+                      placeholder="#C9A227"
+                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Default color for social media icons</p>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Icon Hover Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.socialMediaColors?.iconHoverColor || '#FFFFFF'}
+                      onChange={(e) => handleChange('socialMediaColors.iconHoverColor', e.target.value)}
+                      className="w-16 h-12 rounded-lg border border-gray-200 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.socialMediaColors?.iconHoverColor || '#FFFFFF'}
+                      onChange={(e) => handleChange('socialMediaColors.iconHoverColor', e.target.value)}
+                      placeholder="#FFFFFF"
+                      className="flex-1 border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                  <p className="text-xs text-gray-500 mt-1">Color when hovering over icons</p>
+                </div>
               </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">Twitter/X</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.twitter || ''}
-                  onChange={(e) => handleChange('socialMedia.twitter', e.target.value)}
-                  placeholder="https://twitter.com/yourhandle"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">YouTube</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.youtube || ''}
-                  onChange={(e) => handleChange('socialMedia.youtube', e.target.value)}
-                  placeholder="https://youtube.com/@yourchannel"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
-              </div>
-              
-              <div>
-                <label className="block text-sm font-medium text-gray-700 mb-1.5">WhatsApp Business</label>
-                <input
-                  type="url"
-                  value={settings.socialMedia?.whatsapp || ''}
-                  onChange={(e) => handleChange('socialMedia.whatsapp', e.target.value)}
-                  placeholder="https://wa.me/918447127264"
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
-                />
+
+              {/* Preview */}
+              <div className="mt-6 p-4 bg-gray-50 rounded-xl">
+                <p className="text-sm font-medium text-gray-700 mb-3">Preview:</p>
+                <div className="flex gap-4">
+                  <div 
+                    className="w-10 h-10 rounded-full flex items-center justify-center transition-all cursor-pointer"
+                    style={{ 
+                      backgroundColor: '#000',
+                      color: settings.socialMediaColors?.iconColor || '#C9A227'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = settings.socialMediaColors?.iconHoverColor || '#FFFFFF';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = settings.socialMediaColors?.iconColor || '#C9A227';
+                    }}
+                  >
+                    <FaShareAlt size={18} />
+                  </div>
+                  <p className="text-sm text-gray-600 flex items-center">Hover to see color change</p>
+                </div>
               </div>
             </div>
           </div>
