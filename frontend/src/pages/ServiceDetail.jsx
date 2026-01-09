@@ -92,7 +92,7 @@ const ServiceDetail = () => {
     <main className="font-sans text-gray-800 bg-gray-50">
 
       {/* Hero Section */}
-      <section className="relative min-h-[40vh] flex items-end">
+      <section className="relative min-h-[30vh] flex items-end">
         <div className="absolute inset-0">
           <img
             src={getServiceImage()}
@@ -103,29 +103,32 @@ const ServiceDetail = () => {
           <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530] via-[#0B1530]/80 to-[#0B1530]/40" />
         </div>
 
-        <div className="container mx-auto px-6 max-w-5xl relative z-10 pb-10">
+        <div className="container mx-auto px-6 max-w-5xl relative z-10 pb-8">
           {/* Breadcrumb */}
-          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-4">
-            <FaArrowLeft size={10} /> Back to Services
+          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-3 transition-colors">
+            Back to All Services
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-5">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
             <div>
-              <span className="inline-block px-3 py-1 bg-[#C9A227] text-[#0B1530] text-[10px] font-bold uppercase rounded mb-3">
+              <span className="inline-block px-3 py-1 bg-[#C9A227] text-[#0B1530] text-xs font-bold uppercase rounded mb-2">
                 {service.category}
               </span>
-              <h1 className="text-2xl md:text-3xl font-bold text-white">
+              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
                 {service.title}
               </h1>
+              <p className="text-gray-300 text-sm">
+                {service.description?.substring(0, 100)}...
+              </p>
             </div>
 
             {/* Price Card */}
-            <div className="bg-white px-5 py-4 rounded-xl shadow-lg flex items-center gap-4">
+            <div className="bg-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3">
               <div>
-                <p className="text-[10px] text-gray-500 uppercase">Starting From</p>
+                <p className="text-xs text-gray-500 uppercase">Starting From</p>
                 <div className="flex items-center gap-0.5 text-[#0B1530]">
-                  <FaRupeeSign size={14} />
-                  <span className="text-xl font-bold">
+                  <FaRupeeSign size={12} />
+                  <span className="text-lg font-bold">
                     {service.price && !isNaN(Number(service.price)) 
                       ? Number(service.price).toLocaleString() 
                       : 'Quote'}
@@ -134,7 +137,7 @@ const ServiceDetail = () => {
               </div>
               <button
                 onClick={handleBookNow}
-                className="px-5 py-2.5 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                className="px-4 py-2 bg-[#0B1530] text-white rounded-lg font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
               >
                 Book Now
               </button>
