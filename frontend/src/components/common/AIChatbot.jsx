@@ -175,6 +175,7 @@ const formatText = (text) => {
 const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
+  const [settings, setSettings] = useState(null);
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
@@ -186,6 +187,28 @@ const AIChatbot = () => {
   const [isStreaming, setIsStreaming] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);
+
+  // Fetch settings
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data } = await api.get('/settings');
+        if (data.success) {
+          setSettings(data.data);
+          // Update initial message with company name
+          setMessages([
+            { 
+              role: 'assistant', 
+              content: `Hello! 👋 Welcome to ${data.data.companyName || 'ReturnFilers'}.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?` 
+            }
+          ]);
+        }
+      } catch (error) {
+        console.log('Settings fetch error');
+      }
+    };
+    fetchSettings();
+  }, []);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
@@ -230,7 +253,7 @@ const AIChatbot = () => {
     setMessages([
       { 
         role: 'assistant', 
-        content: 'Hello! 👋 Welcome to ReturnFilers.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
+        content: `Hello! 👋 Welcome to ${settings?.companyName || 'ReturnFilers'}.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?` 
       }
     ]);
   };
@@ -315,7 +338,7 @@ const AIChatbot = () => {
           const newMessages = [...prev];
           newMessages[newMessages.length - 1] = {
             role: 'assistant',
-            content: 'Sorry, I couldn\'t process that. Please try again or call us at +91 84471 27264'
+            content: `Sorry, I couldn't process that. Please try again or call us at ${settings?.phone || '+91 84471 27264'}`
           };
           return newMessages;
         });
@@ -347,12 +370,12 @@ const AIChatbot = () => {
           if (lastMsg?.role === 'assistant' && !lastMsg?.content) {
             newMessages[newMessages.length - 1] = {
               role: 'assistant',
-              content: 'Connection issue. Please try again or call us at +91 84471 27264'
+              content: `Connection issue. Please try again or call us at ${settings?.phone || '+91 84471 27264'}`
             };
           } else {
             newMessages.push({
               role: 'assistant',
-              content: 'Connection issue. Please try again or call us at +91 84471 27264'
+              content: `Connection issue. Please try again or call us at ${settings?.phone || '+91 84471 27264'}`
             });
           }
           return newMessages;
@@ -427,7 +450,7 @@ const AIChatbot = () => {
               <FaRobot size={18} className="text-[#C9A227]" />
             </div>
             <div>
-              <h3 className="font-bold text-sm">ReturnFilers AI</h3>
+              <h3 className="font-bold text-sm">{settings?.companyName || 'ReturnFilers'} AI</h3>
               <div className="flex items-center gap-1.5 text-xs text-gray-400">
                 <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
                 Online
@@ -533,8 +556,8 @@ const AIChatbot = () => {
           </form>
           
           <div className="mt-1.5 text-center">
-            <a href="tel:+918447127264" className="text-[10px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
-              <FaPhoneAlt size={8} /> +91 84471 27264
+            <a href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`} className="text-[10px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
+              <FaPhoneAlt size={8} /> {settings?.phone || '+91 84471 27264'}
             </a>
           </div>
         </div>
