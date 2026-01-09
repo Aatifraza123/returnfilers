@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
+// Updated icons for admin settings tabs
 import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle, FaPaintBrush, FaStar, FaAlignLeft, FaCog, FaCalendarAlt, FaBullhorn } from 'react-icons/fa';
 
 const AdminSettings = () => {
