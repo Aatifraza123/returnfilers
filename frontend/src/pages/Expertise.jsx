@@ -13,6 +13,7 @@ import {
 } from 'react-icons/fa';
 
 const Expertise = () => {
+  // v2.1 - Fixed icon hover colors
   const services = [
     {
       icon: <FaFileInvoiceDollar />,
