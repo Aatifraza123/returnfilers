@@ -114,7 +114,10 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="text-[#C9A227] hover:text-white transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    className="text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    style={{ color: '#C9A227' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#C9A227'}
                   >
                     {label}
                   </Link>
@@ -131,7 +134,10 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="text-[#C9A227] hover:text-white transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    className="text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    style={{ color: '#C9A227' }}
+                    onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
+                    onMouseLeave={(e) => e.currentTarget.style.color = '#C9A227'}
                   >
                     {label}
                   </Link>
