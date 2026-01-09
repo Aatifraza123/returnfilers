@@ -134,8 +134,6 @@ const Login = () => {
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] transition-all text-sm"
                     />
                   </div>
-                    />
-                  </div>
                 </motion.div>
               )}
             </AnimatePresence>
