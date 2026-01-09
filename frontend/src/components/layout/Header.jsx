@@ -1,10 +1,12 @@
 import { useState, useEffect } from 'react';
-import { Link, NavLink } from 'react-router-dom';
+import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import api from '../../api/axios';
 
 const Header = () => {
+  const location = useLocation();
+  const isHomePage = location.pathname === '/';
   const [mobileMenu, setMobileMenu] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [servicesOpen, setServicesOpen] = useState(false);
@@ -55,7 +57,11 @@ const Header = () => {
 
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
-      scrolled ? 'bg-white/95 backdrop-blur-lg shadow-md py-2' : 'bg-white/80 backdrop-blur-sm py-3'
+      scrolled 
+        ? 'bg-white/95 backdrop-blur-lg shadow-md py-2' 
+        : isHomePage 
+          ? 'bg-transparent py-3' 
+          : 'bg-white/80 backdrop-blur-sm py-3'
     }`}>
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
         {/* Logo */}
@@ -63,7 +69,9 @@ const Header = () => {
           <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md">
             RF
           </div>
-          <span className="text-lg sm:text-xl md:text-2xl font-serif font-bold text-[#0B1530] tracking-tight">
+          <span className={`text-lg sm:text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
+            isHomePage && !scrolled ? 'text-white' : 'text-[#0B1530]'
+          }`}>
             ReturnFilers
           </span>
         </Link>
@@ -92,7 +100,11 @@ const Header = () => {
                   to={link.to}
                   className={({ isActive }) =>
                     `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
-                      isActive ? 'text-[#C9A227] font-semibold' : 'text-gray-800 hover:text-[#0B1530]'
+                      isActive 
+                        ? 'text-[#C9A227] font-semibold' 
+                        : isHomePage && !scrolled
+                          ? 'text-white hover:text-[#C9A227]'
+                          : 'text-gray-800 hover:text-[#0B1530]'
                     }`
                   }
                 >
@@ -167,7 +179,11 @@ const Header = () => {
         <div className="hidden lg:block">
           <Link
             to="/quote"
-            className="bg-[#0B1530] text-white px-6 py-2.5 rounded-full text-base font-medium hover:bg-[#C9A227] hover:text-[#0B1530] transition-all duration-300 shadow-lg hover:shadow-xl"
+            className={`px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl ${
+              isHomePage && !scrolled
+                ? 'bg-[#C9A227] text-[#0B1530] hover:bg-white'
+                : 'bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]'
+            }`}
           >
             Get Quote
           </Link>
@@ -175,7 +191,9 @@ const Header = () => {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="lg:hidden text-2xl text-[#0B1530] focus:outline-none"
+          className={`lg:hidden text-2xl focus:outline-none transition-colors ${
+            isHomePage && !scrolled ? 'text-white' : 'text-[#0B1530]'
+          }`}
           onClick={() => setMobileMenu(!mobileMenu)}
         >
           {mobileMenu ? <FaTimes /> : <FaBars />}
