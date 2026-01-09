@@ -114,7 +114,7 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="text-gray-300 hover:text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    className="text-[#C9A227] hover:text-white transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
                   >
                     {label}
                   </Link>
@@ -131,7 +131,7 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="text-gray-300 hover:text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                    className="text-[#C9A227] hover:text-white transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
                   >
                     {label}
                   </Link>
