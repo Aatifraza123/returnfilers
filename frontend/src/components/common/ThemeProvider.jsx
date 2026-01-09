@@ -25,6 +25,8 @@ const ThemeProvider = ({ children }) => {
       root.style.setProperty('--color-primary', settings.brandColors.primary || '#0B1530');
       root.style.setProperty('--color-secondary', settings.brandColors.secondary || '#C9A227');
       root.style.setProperty('--color-accent', settings.brandColors.accent || '#1a2b5c');
+      
+      console.log('🎨 Brand colors applied:', settings.brandColors);
     }
   }, [settings]);
 

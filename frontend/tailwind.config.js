@@ -8,14 +8,20 @@ export default {
     extend: {
       colors: {
         primary: {
+          DEFAULT: 'var(--color-primary, #0B1530)',
           50: '#E3F2FD',
           100: '#BBDEFB',
-          500: '#0B66C3',
+          500: 'var(--color-primary, #0B1530)',
           600: '#0A56A8',
           700: '#08478D',
         },
+        secondary: {
+          DEFAULT: 'var(--color-secondary, #C9A227)',
+          500: 'var(--color-secondary, #C9A227)',
+        },
         accent: {
-          500: '#00BFA6',
+          DEFAULT: 'var(--color-accent, #1a2b5c)',
+          500: 'var(--color-accent, #1a2b5c)',
           600: '#00A693',
         },
         neutral: {
