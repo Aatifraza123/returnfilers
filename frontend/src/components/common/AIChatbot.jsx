@@ -232,6 +232,16 @@ const AIChatbot = () => {
 
   useEffect(() => {
     const handleScroll = () => {
+      // Check if screen is mobile (less than 768px)
+      const isMobile = window.innerWidth < 768;
+      
+      if (isMobile) {
+        // On mobile, hide chatbot completely
+        setIsVisible(false);
+        return;
+      }
+      
+      // On desktop, show/hide based on footer position
       const footer = document.querySelector('footer');
       if (footer) {
         const footerRect = footer.getBoundingClientRect();
@@ -245,8 +255,12 @@ const AIChatbot = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
+    window.addEventListener('resize', handleScroll);
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   const clearChat = () => {
