@@ -124,7 +124,7 @@ const Home = () => {
                 transition={{ delay: 0.2 }}
                 className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#C9A227] font-medium text-sm mb-6 backdrop-blur-sm"
               >
-                <FaBriefcase className="text-xs" /> Since 2022
+                <FaBriefcase className="text-xs" /> Since {settings?.about?.yearEstablished || 2022}
               </motion.div>
 
               <motion.h1
@@ -260,7 +260,7 @@ const Home = () => {
                 Your Trusted Partner in Financial Success
               </h2>
               <p className="text-gray-600 text-base leading-relaxed mb-6">
-                ReturnFilers is a professional Chartered Accountancy firm dedicated to providing comprehensive financial solutions. Since 2022, we have been helping businesses and individuals navigate the complex world of taxation, compliance, and financial planning.
+                ReturnFilers is a professional Chartered Accountancy firm dedicated to providing comprehensive financial solutions. Since {settings?.about?.yearEstablished || 2022}, we have been helping businesses and individuals navigate the complex world of taxation, compliance, and financial planning.
               </p>
               <p className="text-gray-600 text-base leading-relaxed mb-8">
                 Our team of certified professionals brings expertise in Income Tax, GST, Company Registration, Auditing, and Business Advisory services. We believe in building long-term relationships based on trust, transparency, and excellence.
@@ -300,8 +300,8 @@ const Home = () => {
                     <FaChartLine className="text-[#C9A227]" />
                   </div>
                   <div>
-                    <h4 className="font-bold text-[#0B1530]">3+ Years Experience</h4>
-                    <p className="text-sm text-gray-500">Since 2022</p>
+                    <h4 className="font-bold text-[#0B1530]">{settings?.about?.yearsOfExperience || 3}+ Years Experience</h4>
+                    <p className="text-sm text-gray-500">Since {settings?.about?.yearEstablished || 2022}</p>
                   </div>
                 </div>
               </div>
