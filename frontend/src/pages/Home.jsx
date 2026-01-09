@@ -349,7 +349,22 @@ const Home = () => {
                 whileHover={{ y: -5 }}
                 className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-[#C9A227]/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
               >
-                <div className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-[#0B1530] text-2xl mb-6 group-hover:bg-[#0B1530] group-hover:text-[#C9A227] transition-all duration-300">
+                <div 
+                  className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-2xl mb-6 transition-all duration-300"
+                  style={{
+                    backgroundColor: '#F4F6F9',
+                    color: '#0B1530',
+                    transition: 'all 0.3s ease'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F4F6F9';
+                    e.currentTarget.style.color = '#C9A227';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = '#F4F6F9';
+                    e.currentTarget.style.color = '#0B1530';
+                  }}
+                >
                   {service.icon}
                 </div>
                 <h3 className="text-xl font-bold text-[#0B1530] mb-3">{service.title}</h3>

@@ -163,23 +163,6 @@ const Footer = () => {
               ))}
             </ul>
           </div>
-            <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Legal</h4>
-            <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
-              {legalLinks.map(({ to, label }) => (
-                <li key={to}>
-                  <Link 
-                    to={to} 
-                    className="text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
-                    style={{ color: '#C9A227' }}
-                    onMouseEnter={(e) => e.currentTarget.style.color = '#FFFFFF'}
-                    onMouseLeave={(e) => e.currentTarget.style.color = '#C9A227'}
-                  >
-                    {label}
-                  </Link>
-                </li>
-              ))}
-            </ul>
-          </div>
 
           {/* Newsletter - Only show if enabled in settings */}
           {settings?.features?.enableNewsletter && (
