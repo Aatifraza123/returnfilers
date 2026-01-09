@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { SettingsProvider } from './context/SettingsContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
 import AIChatbot from './components/common/AIChatbot'
@@ -79,11 +80,12 @@ function App() {
   try {
     return (
       <AuthProvider>
-        <ThemeProvider>
-          <PromoBannerWrapper />
-          <ChatbotWrapper />
+        <SettingsProvider>
+          <ThemeProvider>
+            <PromoBannerWrapper />
+            <ChatbotWrapper />
 
-          <Routes>
+            <Routes>
         {/* Public Routes */}
         <Route path="/" element={<Layout />}>
           <Route index element={<Home />} />
@@ -149,7 +151,8 @@ function App() {
           </div>
         } />
       </Routes>
-        </ThemeProvider>
+          </ThemeProvider>
+        </SettingsProvider>
       </AuthProvider>
     );
   } catch (error) {

@@ -1,29 +1,15 @@
 import { Link } from 'react-router-dom';
 import { FaFacebook, FaTwitter, FaLinkedin, FaInstagram, FaYoutube, FaWhatsapp, FaPaperPlane } from 'react-icons/fa';
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 
 const Footer = () => {
   const [email, setEmail] = useState('');
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const response = await api.get('/settings');
-        console.log('Footer settings response:', response.data); // Debug log
-        if (response.data.success) {
-          setSettings(response.data.data);
-        } else {
-          setSettings(response.data);
-        }
-      } catch (error) {
-        console.error('Error fetching settings:', error);
-      }
-    };
-    fetchSettings();
-  }, []);
+  
+  // Use global settings context
+  const { settings } = useSettings();
 
   const handleSubscribe = async (e) => {
     e.preventDefault();

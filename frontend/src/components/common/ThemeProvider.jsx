@@ -1,22 +1,8 @@
-import { useEffect, useState } from 'react';
-import api from '../../api/axios';
+import { useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 
 const ThemeProvider = ({ children }) => {
-  const [settings, setSettings] = useState(null);
-
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const { data } = await api.get('/settings');
-        if (data.success) {
-          setSettings(data.data);
-        }
-      } catch (error) {
-        console.log('Theme settings fetch error');
-      }
-    };
-    fetchSettings();
-  }, []);
+  const { settings } = useSettings();
 
   useEffect(() => {
     if (settings?.brandColors) {

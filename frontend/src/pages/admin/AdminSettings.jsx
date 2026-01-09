@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useSettings } from '../../context/SettingsContext';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 // Updated icons for admin settings tabs
@@ -8,6 +9,10 @@ const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('company'); // tabs: company, contact, brand, hero, footer, social, hours, seo, about, features, booking, promotional, policies
+  
+  // Use global settings context
+  const { refreshSettings } = useSettings();
+  
   const [settings, setSettings] = useState({
     companyName: '',
     email: '',
@@ -131,6 +136,12 @@ const AdminSettings = () => {
         toast.success('Settings updated successfully!');
         setSettings(data.data);
         console.log('✅ Updated settings state:', data.data);
+        
+        // Refresh global settings context
+        setTimeout(() => {
+          refreshSettings();
+          console.log('🔄 Global settings refreshed');
+        }, 500);
       }
     } catch (error) {
       console.error('❌ Error saving settings:', error);

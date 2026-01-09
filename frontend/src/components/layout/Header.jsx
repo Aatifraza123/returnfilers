@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaChevronRight, FaChevronDown } from 'react-icons/fa';
+import { useSettings } from '../../context/SettingsContext';
 import api from '../../api/axios';
 
 const Header = () => {
@@ -15,22 +16,9 @@ const Header = () => {
   const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [blogs, setBlogs] = useState([]);
-  const [settings, setSettings] = useState(null);
-
-  // Fetch settings for logo
-  useEffect(() => {
-    const fetchSettings = async () => {
-      try {
-        const { data } = await api.get('/settings');
-        if (data.success) {
-          setSettings(data.data);
-        }
-      } catch (error) {
-        console.log('Settings fetch error');
-      }
-    };
-    fetchSettings();
-  }, []);
+  
+  // Use global settings context
+  const { settings } = useSettings();
 
   // Fetch services and blogs
   useEffect(() => {

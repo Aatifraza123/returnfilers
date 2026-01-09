@@ -358,7 +358,7 @@ const Home = () => {
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = '#F4F6F9';
-                    e.currentTarget.style.color = '#C9A227';
+                    e.currentTarget.style.color = 'var(--color-secondary, #C9A227)';
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = '#F4F6F9';
