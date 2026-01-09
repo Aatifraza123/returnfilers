@@ -232,16 +232,8 @@ const AIChatbot = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Check if screen is mobile (less than 768px)
-      const isMobile = window.innerWidth < 768;
-      
-      if (isMobile) {
-        // On mobile, hide chatbot completely
-        setIsVisible(false);
-      } else {
-        // On desktop, always show chatbot (even in footer)
-        setIsVisible(true);
-      }
+      // Always show chatbot on all screen sizes (desktop and mobile)
+      setIsVisible(true);
     };
 
     window.addEventListener('scroll', handleScroll);
