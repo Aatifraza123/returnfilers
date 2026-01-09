@@ -171,12 +171,12 @@ const Expertise = () => {
               <motion.div
                 key={idx}
                 variants={cardVariants}
-                className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow"
+                className="bg-white rounded-xl shadow-sm overflow-hidden border border-gray-100 hover:shadow-md transition-shadow group"
               >
                 <div className="p-6 md:p-8">
                   {/* Header */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0">
+                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0 group-hover:bg-[#C9A227] group-hover:text-[#0B1530] transition-all duration-300">
                       {service.icon}
                     </div>
                     <div>
