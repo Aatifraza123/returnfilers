@@ -17,10 +17,13 @@ export const SettingsProvider = ({ children }) => {
 
   const fetchSettings = async () => {
     try {
-      const { data } = await api.get('/settings');
+      // Add timestamp to prevent caching
+      const { data } = await api.get(`/settings?t=${Date.now()}`);
       if (data.success) {
         setSettings(data.data);
         console.log('✅ Settings loaded globally:', data.data);
+        console.log('📸 Logo:', data.data.logo);
+        console.log('🎨 Social Colors:', data.data.socialMediaColors);
       }
     } catch (error) {
       console.log('Settings fetch error');

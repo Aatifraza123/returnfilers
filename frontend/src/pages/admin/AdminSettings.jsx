@@ -134,12 +134,17 @@ const AdminSettings = () => {
     setSaving(true);
     try {
       console.log('💾 Saving settings:', settings);
+      console.log('📸 Logo URL:', settings.logo);
+      console.log('📝 Logo Text:', settings.logoText);
+      
       const { data } = await api.put('/settings', settings);
       console.log('✅ Save response:', data);
+      
       if (data.success) {
         toast.success('Settings updated successfully!');
         setSettings(data.data);
         console.log('✅ Updated settings state:', data.data);
+        console.log('📸 Logo after save:', data.data.logo);
         
         // Refresh global settings context
         setTimeout(() => {

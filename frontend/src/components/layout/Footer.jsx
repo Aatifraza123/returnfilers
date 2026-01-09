@@ -68,22 +68,30 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center gap-3">
               {settings?.logo ? (
-                <img 
-                  src={settings.logo} 
-                  alt={settings.companyName || 'Logo'} 
-                  className="h-10 md:h-12 object-contain"
-                  onError={(e) => {
-                    e.target.style.display = 'none';
-                    e.target.nextElementSibling.style.display = 'flex';
-                  }}
-                />
-              ) : null}
-              <div 
-                className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
-                style={{ display: settings?.logo ? 'none' : 'flex' }}
-              >
-                {settings?.logoText || 'RF'}
-              </div>
+                <>
+                  <img 
+                    src={settings.logo} 
+                    alt={settings.companyName || 'Logo'} 
+                    className="h-10 md:h-12 object-contain"
+                    onError={(e) => {
+                      e.target.style.display = 'none';
+                      e.target.nextElementSibling.style.display = 'flex';
+                    }}
+                  />
+                  <div 
+                    className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
+                    style={{ display: 'none' }}
+                  >
+                    {settings?.logoText || 'RF'}
+                  </div>
+                </>
+              ) : (
+                <div 
+                  className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
+                >
+                  {settings?.logoText || 'RF'}
+                </div>
+              )}
               <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
                 {settings?.companyName || 'ReturnFilers'}
               </h3>
