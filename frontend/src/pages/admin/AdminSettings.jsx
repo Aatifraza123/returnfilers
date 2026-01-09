@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
-import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle, FaPalette, FaImage, FaFootballBall, FaToggleOn, FaCalendarCheck, FaBullhorn } from 'react-icons/fa';
+import { FaSave, FaBuilding, FaEnvelope, FaPhone, FaMapMarkerAlt, FaFileAlt, FaShareAlt, FaClock, FaSearch, FaInfoCircle, FaPaintBrush, FaStar, FaAlignLeft, FaCog, FaCalendarAlt, FaBullhorn } from 'react-icons/fa';
 
 const AdminSettings = () => {
   const [loading, setLoading] = useState(true);
@@ -297,7 +297,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <FaPalette className="inline mr-2" size={14} />
+          <FaPaintBrush className="inline mr-2" size={14} />
           Brand
         </button>
         <button
@@ -308,7 +308,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <FaImage className="inline mr-2" size={14} />
+          <FaStar className="inline mr-2" size={14} />
           Hero
         </button>
         <button
@@ -319,7 +319,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <FaFootballBall className="inline mr-2" size={14} />
+          <FaAlignLeft className="inline mr-2" size={14} />
           Footer
         </button>
         <button
@@ -330,7 +330,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <FaToggleOn className="inline mr-2" size={14} />
+          <FaCog className="inline mr-2" size={14} />
           Features
         </button>
         <button
@@ -341,7 +341,7 @@ const AdminSettings = () => {
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
-          <FaCalendarCheck className="inline mr-2" size={14} />
+          <FaCalendarAlt className="inline mr-2" size={14} />
           Booking
         </button>
         <button
