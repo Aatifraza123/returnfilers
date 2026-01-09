@@ -24,6 +24,7 @@ const Home = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [testimonials, setTestimonials] = useState([]);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
+  const [settings, setSettings] = useState(null);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -45,19 +46,26 @@ const Home = () => {
     }
   }, [testimonials.length, nextTestimonial]);
 
-  // Fetch testimonials
+  // Fetch testimonials and settings
   useEffect(() => {
-    const fetchTestimonials = async () => {
+    const fetchData = async () => {
       try {
-        const { data } = await api.get('/testimonials');
-        if (data.success && data.data.length > 0) {
-          setTestimonials(data.data);
+        // Fetch testimonials
+        const { data: testimonialsData } = await api.get('/testimonials');
+        if (testimonialsData.success && testimonialsData.data.length > 0) {
+          setTestimonials(testimonialsData.data);
+        }
+        
+        // Fetch settings
+        const { data: settingsData } = await api.get('/settings');
+        if (settingsData.success) {
+          setSettings(settingsData.data);
         }
       } catch (error) {
-        console.log('No testimonials found');
+        console.log('Error fetching data');
       }
     };
-    fetchTestimonials();
+    fetchData();
   }, []);
 
   const services = [
@@ -425,12 +433,12 @@ const Home = () => {
         <div className="container mx-auto max-w-6xl px-6">
           <div className="flex flex-wrap justify-around items-center gap-8 text-[#0B1530]">
              <div className="text-center">
-                <div className="text-4xl font-serif font-bold">3+</div>
+                <div className="text-4xl font-serif font-bold">{settings?.about?.yearsOfExperience || 3}+</div>
                 <div className="text-sm font-bold uppercase tracking-wider opacity-80">Years Experience</div>
              </div>
              <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>
              <div className="text-center">
-                <div className="text-4xl font-serif font-bold">100+</div>
+                <div className="text-4xl font-serif font-bold">{settings?.about?.clientsServed || 100}+</div>
                 <div className="text-sm font-bold uppercase tracking-wider opacity-80">Happy Clients</div>
              </div>
              <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>

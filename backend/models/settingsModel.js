@@ -52,6 +52,8 @@ const settingsSchema = new mongoose.Schema({
     yearEstablished: { type: Number, default: 2022 },
     yearsOfExperience: { type: Number, default: 3 },
     clientsServed: { type: Number, default: 100 },
+    projectsCompleted: { type: Number, default: 200 },
+    successRate: { type: Number, default: 98 },
     teamSize: { type: Number, default: 5 },
     missionStatement: { type: String, default: '' },
     visionStatement: { type: String, default: '' }

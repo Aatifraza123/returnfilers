@@ -41,8 +41,8 @@ const About = () => {
   const stats = [
     { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 100}+`, label: 'Happy Clients' },
     { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 3}+`, label: 'Years Experience' },
-    { icon: <FaHandshake />, value: '200+', label: 'Projects Completed' },
-    { icon: <FaChartLine />, value: '98%', label: 'Success Rate' },
+    { icon: <FaHandshake />, value: `${settings?.about?.projectsCompleted || 200}+`, label: 'Projects Completed' },
+    { icon: <FaChartLine />, value: `${settings?.about?.successRate || 98}%`, label: 'Success Rate' },
   ];
 
   const team = [

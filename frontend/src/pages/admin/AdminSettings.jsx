@@ -38,6 +38,8 @@ const AdminSettings = () => {
       yearEstablished: 2022,
       yearsOfExperience: 3,
       clientsServed: 100,
+      projectsCompleted: 200,
+      successRate: 98,
       teamSize: 5,
       missionStatement: '',
       visionStatement: ''
@@ -518,6 +520,28 @@ const AdminSettings = () => {
                   type="number"
                   value={settings.about?.clientsServed || 100}
                   onChange={(e) => handleChange('about.clientsServed', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Projects Completed</label>
+                <input
+                  type="number"
+                  value={settings.about?.projectsCompleted || 200}
+                  onChange={(e) => handleChange('about.projectsCompleted', parseInt(e.target.value))}
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                />
+              </div>
+              
+              <div>
+                <label className="block text-sm font-medium text-gray-700 mb-1.5">Success Rate (%)</label>
+                <input
+                  type="number"
+                  min="0"
+                  max="100"
+                  value={settings.about?.successRate || 98}
+                  onChange={(e) => handleChange('about.successRate', parseInt(e.target.value))}
                   className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
                 />
               </div>
