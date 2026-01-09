@@ -31,7 +31,7 @@ const BlogPost = () => {
   }, [id]);
 
   const fetchBlog = async () => {
-    if (!id || id.length !== 24) {
+    if (!id) {
       toast.error('Invalid blog ID');
       navigate('/blog');
       return;
