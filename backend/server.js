@@ -6,6 +6,7 @@ const connectDB = require('./config/db');
 
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
+const userAuthRoutes = require('./routes/userAuthRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
@@ -106,6 +107,8 @@ app.use((req, res, next) => {
 // ROUTES
 // ==========================================
 app.use('/api/auth', authRoutes);
+app.use('/api/user/auth', userAuthRoutes);
+console.log('✓ User auth routes registered at /api/user/auth');
 app.use('/api/admin', adminRoutes);
 
 // Quote routes - use controller which sends emails

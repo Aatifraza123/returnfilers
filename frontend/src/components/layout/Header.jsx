@@ -1,8 +1,9 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, NavLink, useLocation } from 'react-router-dom';
 import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import { useSettings } from '../../context/SettingsContext';
+import UserAuthContext from '../../context/UserAuthContext';
 import api from '../../api/axios';
 
 const Header = () => {
@@ -16,6 +17,7 @@ const Header = () => {
   const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const { user } = useContext(UserAuthContext);
   
   // Use global settings context
   const { settings } = useSettings();
@@ -211,14 +213,31 @@ const Header = () => {
           })}
         </ul>
 
-        {/* CTA Button */}
-        <div className="hidden lg:block">
-          <Link
-            to="/quote"
-            className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
-          >
-            Get Quote
-          </Link>
+        {/* CTA Button / User Menu */}
+        <div className="hidden lg:flex items-center gap-3">
+          {user ? (
+            <Link
+              to="/dashboard"
+              className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
+            >
+              Dashboard
+            </Link>
+          ) : (
+            <>
+              <Link
+                to="/login"
+                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 text-[#0B1530] hover:text-[#C9A227]"
+              >
+                Login
+              </Link>
+              <Link
+                to="/quote"
+                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
+              >
+                Get Quote
+              </Link>
+            </>
+          )}
         </div>
 
         {/* Mobile Menu Toggle */}

@@ -1,10 +1,14 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 
 const Quote = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserAuthContext);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -31,6 +35,12 @@ const Quote = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if user is logged in
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
     
     // Validate phone is exactly 10 digits
     if (formData.phone.length !== 10) {
@@ -64,6 +74,22 @@ const Quote = () => {
   };
 
   return (
+    <>
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={(userData) => {
+          setFormData({
+            ...formData,
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone || formData.phone
+          });
+        }}
+        message="Please login to request a quote"
+      />
+      
     <div className="min-h-screen bg-gray-50 py-8 md:py-12">
       <div className="container mx-auto px-4 max-w-2xl">
         {/* Header */}

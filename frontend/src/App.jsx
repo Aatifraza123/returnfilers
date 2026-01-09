@@ -1,5 +1,6 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
+import { UserAuthProvider } from './context/UserAuthContext'
 import { SettingsProvider } from './context/SettingsContext'
 import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
@@ -24,6 +25,10 @@ import TermsConditions from './pages/TermsConditions'
 import RefundPolicy from './pages/RefundPolicy'
 import Auth from "./pages/Auth"
 
+// User Pages
+import UserDashboard from './pages/user/UserDashboard'
+import UserProfile from './pages/user/UserProfile'
+
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
@@ -33,7 +38,6 @@ import AdminContacts from './pages/admin/AdminContacts'
 // Admin - Services
 import AdminServices from './pages/admin/AdminServices'
 import AdminServicesForm from './pages/admin/AdminServicesAdd'
- // Ensure this file exists
 
 // Admin - Other Sections
 import AdminBlogs from './pages/admin/AdminBlogs'
@@ -69,15 +73,17 @@ function App() {
   try {
     return (
       <AuthProvider>
-        <SettingsProvider>
-          <ThemeProvider>
-            <ChatbotWrapper />
+        <UserAuthProvider>
+          <SettingsProvider>
+            <ThemeProvider>
+              <ChatbotWrapper />
 
-            <Routes>
-        {/* Public Routes */}
-        <Route path="/" element={<Layout />}>
-          <Route index element={<Home />} />
-          <Route path="auth" element={<Auth />} />
+              <Routes>
+          {/* Public Routes */}
+          <Route path="/" element={<Layout />}>
+            <Route index element={<Home />} />
+            <Route path="login" element={<Auth />} />
+            <Route path="auth" element={<Auth />} />
           <Route path="about" element={<About />} />
           <Route path="services" element={<Services />} />
           <Route path="services/:id" element={<ServiceDetail />} />
@@ -96,6 +102,13 @@ function App() {
           <Route path="digital-services/:slug/:packageSlug" element={<PackageDetail />} />
           <Route path="upload-documents" element={<Booking />} />
           <Route path="test-settings" element={<TestSettings />} />
+          
+          {/* User Dashboard Routes */}
+          <Route path="dashboard" element={<UserDashboard />} />
+          <Route path="dashboard/profile" element={<UserProfile />} />
+          <Route path="dashboard/bookings" element={<UserDashboard />} />
+          <Route path="dashboard/quotes" element={<UserDashboard />} />
+          <Route path="dashboard/consultations" element={<UserDashboard />} />
         </Route>
 
         {/* Admin Routes */}
@@ -142,6 +155,7 @@ function App() {
       </Routes>
           </ThemeProvider>
         </SettingsProvider>
+      </UserAuthProvider>
       </AuthProvider>
     );
   } catch (error) {

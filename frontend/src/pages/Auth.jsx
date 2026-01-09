@@ -1,12 +1,15 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FaEnvelope, FaLock, FaUser, FaGoogle, FaEye, FaEyeSlash, FaArrowRight } from 'react-icons/fa';
+import { FaEnvelope, FaLock, FaUser, FaEye, FaEyeSlash, FaArrowRight, FaPhone } from 'react-icons/fa';
+import api from '../api/axios';
+import UserAuthContext from '../context/UserAuthContext';
 
 const Login = () => {
   const navigate = useNavigate();
-  const [isLogin, setIsLogin] = useState(true); // Toggle between Login and Signup
+  const { login } = useContext(UserAuthContext);
+  const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
@@ -14,35 +17,51 @@ const Login = () => {
     name: '',
     email: '',
     password: '',
+    phone: ''
   });
 
-  // Handle Input Change
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  // Handle Form Submit
   const handleSubmit = async (e) => {
     e.preventDefault();
     setLoading(true);
 
-    // Simulate API Call
     try {
-      // Replace this with your actual axios.post('/api/auth/login' or '/register')
-      await new Promise((resolve) => setTimeout(resolve, 1500)); 
-      
-      toast.success(isLogin ? 'Welcome back!' : 'Account created successfully!');
-      navigate('/dashboard'); // Redirect after success
+      if (isLogin) {
+        // Login
+        const { data } = await api.post('/user/auth/login', {
+          email: formData.email,
+          password: formData.password
+        });
+        
+        if (data.success) {
+          login(data.user, data.token);
+          toast.success(`Welcome back, ${data.user.name}!`);
+          navigate('/dashboard');
+        }
+      } else {
+        // Register
+        const { data } = await api.post('/user/auth/register', {
+          name: formData.name,
+          email: formData.email,
+          password: formData.password,
+          phone: formData.phone
+        });
+        
+        if (data.success) {
+          login(data.user, data.token);
+          toast.success('Account created successfully!');
+          navigate('/dashboard');
+        }
+      }
     } catch (error) {
-      toast.error('Something went wrong. Please try again.');
+      console.error('Auth error:', error);
+      toast.error(error.response?.data?.message || 'Something went wrong');
     } finally {
       setLoading(false);
     }
-  };
-
-  const handleGoogleLogin = () => {
-    toast.loading('Redirecting to Google...');
-    // Add your Google Auth logic here
   };
 
   return (
@@ -85,7 +104,7 @@ const Login = () => {
                   initial={{ opacity: 0, height: 0 }}
                   animate={{ opacity: 1, height: 'auto' }}
                   exit={{ opacity: 0, height: 0 }}
-                  className="overflow-hidden"
+                  className="overflow-hidden space-y-5"
                 >
                   <div className="relative">
                     <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
@@ -99,6 +118,22 @@ const Login = () => {
                       value={formData.name}
                       onChange={handleChange}
                       className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] transition-all text-sm"
+                    />
+                  </div>
+                  
+                  <div className="relative">
+                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                      <FaPhone className="text-gray-400" />
+                    </div>
+                    <input
+                      type="tel"
+                      name="phone"
+                      placeholder="Phone Number (Optional)"
+                      value={formData.phone}
+                      onChange={handleChange}
+                      className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] transition-all text-sm"
+                    />
+                  </div>
                     />
                   </div>
                 </motion.div>

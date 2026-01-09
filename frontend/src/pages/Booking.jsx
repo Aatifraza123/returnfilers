@@ -1,9 +1,11 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useSearchParams } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock, FaCalendarCheck } from 'react-icons/fa';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 
 // Services that don't require document upload
 const noDocumentServices = [
@@ -17,6 +19,8 @@ const noDocumentServices = [
 const Booking = () => {
   const [searchParams] = useSearchParams();
   const preSelectedService = searchParams.get('service') || '';
+  const { user } = useContext(UserAuthContext);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   
   const [services, setServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(true);
@@ -168,6 +172,12 @@ const Booking = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if user is logged in
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    
     if (!formData.name || !formData.email || !formData.phone || !formData.service) {
       toast.error('Please fill all required fields');
       return;
@@ -251,6 +261,21 @@ const Booking = () => {
 
   return (
     <div className="min-h-screen bg-gray-50">
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={(userData) => {
+          setFormData({
+            ...formData,
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone || formData.phone
+          });
+        }}
+        message="Please login to book a service"
+      />
+      
       {/* Header */}
       <div className="bg-[#0B1530] pt-28 pb-16">
         <div className="container mx-auto px-4 text-center">

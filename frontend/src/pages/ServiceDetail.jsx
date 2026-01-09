@@ -119,6 +119,7 @@ const ServiceDetail = () => {
         <div className="container mx-auto px-6 max-w-5xl relative z-10 pb-8">
           {/* Breadcrumb */}
           <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-3 transition-colors">
+            <FaArrowLeft size={12} />
             Back to All Services
           </Link>
 
