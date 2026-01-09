@@ -15,6 +15,22 @@ const Header = () => {
   const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [blogs, setBlogs] = useState([]);
+  const [settings, setSettings] = useState(null);
+
+  // Fetch settings for logo
+  useEffect(() => {
+    const fetchSettings = async () => {
+      try {
+        const { data } = await api.get('/settings');
+        if (data.success) {
+          setSettings(data.data);
+        }
+      } catch (error) {
+        console.log('Settings fetch error');
+      }
+    };
+    fetchSettings();
+  }, []);
 
   // Fetch services and blogs
   useEffect(() => {
@@ -68,13 +84,27 @@ const Header = () => {
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
-          <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md">
-            RF
+          {settings?.logo ? (
+            <img 
+              src={settings.logo} 
+              alt={settings.companyName || 'Logo'} 
+              className="h-10 sm:h-11 md:h-12 object-contain"
+              onError={(e) => {
+                e.target.style.display = 'none';
+                e.target.nextElementSibling.style.display = 'flex';
+              }}
+            />
+          ) : null}
+          <div 
+            className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+            style={{ display: settings?.logo ? 'none' : 'flex' }}
+          >
+            {settings?.logoText || 'RF'}
           </div>
           <span className={`text-lg sm:text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
             isHomePage && !scrolled ? 'text-[#0B1530]' : 'text-[#0B1530]'
           }`}>
-            ReturnFilers
+            {settings?.companyName || 'ReturnFilers'}
           </span>
         </Link>
 

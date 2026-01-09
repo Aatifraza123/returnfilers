@@ -6,6 +6,14 @@ const settingsSchema = new mongoose.Schema({
     type: String,
     default: 'ReturnFilers'
   },
+  logo: {
+    type: String,
+    default: '' // URL to logo image
+  },
+  logoText: {
+    type: String,
+    default: 'RF' // Fallback text if no logo image
+  },
   email: {
     type: String,
     default: 'info@returnfilers.in'

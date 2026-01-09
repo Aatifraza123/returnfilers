@@ -379,6 +379,41 @@ const AdminSettings = () => {
 
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Logo Image URL
+              </label>
+              <input
+                type="url"
+                value={settings.logo || ''}
+                onChange={(e) => handleChange('logo', e.target.value)}
+                placeholder="https://example.com/logo.png"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Enter logo image URL (PNG, SVG, or JPG)</p>
+              {settings.logo && (
+                <div className="mt-2 p-3 bg-gray-50 rounded-lg">
+                  <p className="text-xs text-gray-600 mb-2">Preview:</p>
+                  <img src={settings.logo} alt="Logo Preview" className="h-12 object-contain" onError={(e) => e.target.style.display = 'none'} />
+                </div>
+              )}
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
+                Logo Text (Fallback)
+              </label>
+              <input
+                type="text"
+                value={settings.logoText || 'RF'}
+                onChange={(e) => handleChange('logoText', e.target.value)}
+                placeholder="RF"
+                maxLength="3"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+              />
+              <p className="text-xs text-gray-500 mt-1">Text to show if logo image is not available (max 3 characters)</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium text-gray-700 mb-1.5">
                 <FaEnvelope className="inline mr-2" size={12} />
                 Email
               </label>

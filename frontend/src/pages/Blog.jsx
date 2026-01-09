@@ -56,7 +56,7 @@ const Blog = () => {
     <main className="font-sans text-gray-800 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       
       {/* ==================== MODERN HERO SECTION ==================== */}
-      <section className="relative py-10 md:py-14 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden">
+      <section className="relative py-8 md:py-10 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <motion.div
@@ -70,7 +70,7 @@ const Blog = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-0 right-0 w-72 h-72 bg-[#C9A227]/8 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
+            className="absolute top-0 right-0 w-96 h-96 bg-[#C9A227]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
           ></motion.div>
           <motion.div
             animate={{
@@ -84,53 +84,78 @@ const Blog = () => {
               ease: "easeInOut",
               delay: 0.5,
             }}
-            className="absolute bottom-0 left-0 w-72 h-72 bg-[#C9A227]/8 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
+            className="absolute bottom-0 left-0 w-96 h-96 bg-[#C9A227]/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
           ></motion.div>
+          
+          {/* Grid Pattern */}
+          <div className="absolute inset-0 opacity-5 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
         </div>
         
-        <div className="absolute inset-0 opacity-8 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
-        
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 max-w-6xl">
+          {/* Badge */}
           <motion.div
             initial={{ opacity: 0, scale: 0.8, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", type: "spring", stiffness: 100 }}
-            className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-[#C9A227]/20 backdrop-blur-sm border border-[#C9A227]/30 mb-4"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C9A227]/20 backdrop-blur-sm border border-[#C9A227]/30 mb-3"
           >
             <motion.div
               initial={{ rotate: -180, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <FaBookOpen className="text-[#C9A227]" size={12} />
+              <FaBookOpen className="text-[#C9A227]" size={14} />
             </motion.div>
-            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-[10px] sm:text-xs">
-              Insights & News
+            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-xs">
+              Insights & Articles
             </span>
           </motion.div>
           
+          {/* Main Heading */}
           <motion.h1
-            initial={{ opacity: 0, x: -50, scale: 0.95 }}
-            animate={{ opacity: 1, x: 0, scale: 1 }}
-            transition={{ delay: 0.2, duration: 0.7, ease: "easeOut", type: "spring", stiffness: 80 }}
-            className="text-4xl sm:text-5xl md:text-6xl font-serif font-bold mb-4 leading-tight"
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.2, duration: 0.7, ease: "easeOut" }}
+            className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-3 leading-tight"
           >
-            Our <motion.span 
-              initial={{ opacity: 0, x: 50 }}
-              animate={{ opacity: 1, x: 0 }}
+            Our{' '}
+            <motion.span 
+              initial={{ opacity: 0, scale: 0.8 }}
+              animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] to-[#F5D76E]"
-            >Blog</motion.span>
+              className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] via-[#F5D76E] to-[#C9A227] animate-gradient"
+            >
+              Blog
+            </motion.span>
           </motion.h1>
           
+          {/* Subtitle */}
           <motion.p
             initial={{ opacity: 0, y: 30 }}
             animate={{ opacity: 1, y: 0 }}
             transition={{ delay: 0.5, duration: 0.6, ease: "easeOut" }}
-            className="text-sm sm:text-base md:text-lg text-gray-300 max-w-4xl mx-auto font-normal leading-relaxed"
+            className="text-sm sm:text-base md:text-lg text-gray-300 max-w-3xl mx-auto font-light leading-relaxed mb-4"
           >
-            Latest insights on taxation, compliance, and financial management to help your business grow.
+            Latest insights on taxation, compliance, and financial management to help your business thrive.
           </motion.p>
+          
+          {/* Stats */}
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.7, duration: 0.6 }}
+            className="flex flex-wrap items-center justify-center gap-6 text-sm"
+          >
+            <div className="flex items-center gap-2">
+              <FaBookOpen className="text-[#C9A227]" size={16} />
+              <span className="text-gray-300">{blogs.length} Articles</span>
+            </div>
+            <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
+            <div className="flex items-center gap-2">
+              <FaClock className="text-[#C9A227]" size={16} />
+              <span className="text-gray-300">Updated Weekly</span>
+            </div>
+          </motion.div>
         </div>
       </section>
 

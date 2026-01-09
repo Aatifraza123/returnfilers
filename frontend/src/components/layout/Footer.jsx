@@ -80,9 +80,28 @@ const Footer = () => {
         <div className={`grid ${settings?.features?.enableNewsletter ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-8 md:gap-10`}>
           {/* ReturnFilers Section */}
           <div className="space-y-4">
-            <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
-              {settings?.companyName || 'ReturnFilers'}
-            </h3>
+            <div className="flex items-center gap-3">
+              {settings?.logo ? (
+                <img 
+                  src={settings.logo} 
+                  alt={settings.companyName || 'Logo'} 
+                  className="h-10 md:h-12 object-contain"
+                  onError={(e) => {
+                    e.target.style.display = 'none';
+                    e.target.nextElementSibling.style.display = 'flex';
+                  }}
+                />
+              ) : null}
+              <div 
+                className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
+                style={{ display: settings?.logo ? 'none' : 'flex' }}
+              >
+                {settings?.logoText || 'RF'}
+              </div>
+              <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
+                {settings?.companyName || 'ReturnFilers'}
+              </h3>
+            </div>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
               {settings?.footer?.description || `Professional chartered accountancy services with ${settings?.about?.yearsOfExperience || 3}+ years of experience in taxation, auditing, and financial consulting.`}
             </p>
@@ -116,7 +135,7 @@ const Footer = () => {
                     to={to} 
                     className="inline-block hover:translate-x-1"
                     style={{ 
-                      color: '#C9A227',
+                      color: 'var(--color-secondary, #C9A227)',
                       transition: 'all 0.3s ease-in-out'
                     }}
                     onMouseEnter={(e) => {
@@ -124,7 +143,7 @@ const Footer = () => {
                       e.currentTarget.style.transform = 'translateX(4px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = '#C9A227';
+                      e.currentTarget.style.color = 'var(--color-secondary, #C9A227)';
                       e.currentTarget.style.transform = 'translateX(0)';
                     }}
                   >
@@ -145,7 +164,7 @@ const Footer = () => {
                     to={to} 
                     className="inline-block hover:translate-x-1"
                     style={{ 
-                      color: '#C9A227',
+                      color: 'var(--color-secondary, #C9A227)',
                       transition: 'all 0.3s ease-in-out'
                     }}
                     onMouseEnter={(e) => {
@@ -153,7 +172,7 @@ const Footer = () => {
                       e.currentTarget.style.transform = 'translateX(4px)';
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = '#C9A227';
+                      e.currentTarget.style.color = 'var(--color-secondary, #C9A227)';
                       e.currentTarget.style.transform = 'translateX(0)';
                     }}
                   >
