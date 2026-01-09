@@ -50,6 +50,7 @@ const PrivacyPolicy = () => {
       const boldTerms = [
         'Information We Collect',
         'How We Use Your Information',
+        'Information Sharing',
         'Data Security',
         'Third-Party Sharing',
         'Your Rights',
@@ -61,7 +62,7 @@ const PrivacyPolicy = () => {
       let formattedPart = part;
       boldTerms.forEach(term => {
         const regex = new RegExp(`(${term})`, 'gi');
-        formattedPart = formattedPart.replace(regex, '<strong class="text-[#0B1530] font-bold">$1</strong>');
+        formattedPart = formattedPart.replace(regex, '<strong class="text-[#C9A227] font-bold">$1</strong>');
       });
       
       return <span key={index} dangerouslySetInnerHTML={{ __html: formattedPart }} />;
