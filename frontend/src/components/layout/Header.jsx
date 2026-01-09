@@ -25,10 +25,15 @@ const Header = () => {
         
         // Fetch blogs
         const { data: blogsData } = await api.get('/blogs');
-        const blogList = blogsData.blogs || blogsData.data || blogsData || [];
-        setBlogs(blogList.filter(b => b.published).slice(0, 5)); // Latest 5 published blogs
+        const blogList = Array.isArray(blogsData) 
+          ? blogsData 
+          : (blogsData.blogs || blogsData.data || []);
+        
+        console.log('Blogs fetched for header:', blogList.length);
+        // Get latest 5 blogs (no published filter since model doesn't have that field)
+        setBlogs(blogList.slice(0, 5));
       } catch (error) {
-        console.log('Data fetch error');
+        console.log('Data fetch error:', error);
       }
     };
     fetchData();
@@ -187,79 +192,135 @@ const Header = () => {
             className="lg:hidden bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden border-t border-gray-100"
           >
             <ul className="flex flex-col p-6 space-y-4">
-              {navLinks.map((link) => (
-                <li key={link.to}>
-                  {link.hasDropdown ? (
-                    <div>
-                      <button
-                        onClick={() => setMobileServicesOpen(!mobileServicesOpen)}
-                        className="flex items-center justify-between w-full text-lg font-medium text-[#0B1530]"
+              {navLinks.map((link) => {
+                const isServicesDropdown = link.type === 'services';
+                const isBlogsDropdown = link.type === 'blogs';
+                const dropdownOpen = isServicesDropdown ? mobileServicesOpen : isBlogsDropdown ? mobileBlogsOpen : false;
+                
+                return (
+                  <li key={link.to}>
+                    {link.hasDropdown ? (
+                      <div>
+                        <button
+                          onClick={() => {
+                            if (isServicesDropdown) setMobileServicesOpen(!mobileServicesOpen);
+                            if (isBlogsDropdown) setMobileBlogsOpen(!mobileBlogsOpen);
+                          }}
+                          className="flex items-center justify-between w-full text-lg font-medium text-[#0B1530]"
+                        >
+                          {link.label}
+                          <FaChevronDown className={`text-xs text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
+                        </button>
+                        
+                        {/* Mobile Services Dropdown */}
+                        {isServicesDropdown && (
+                          <AnimatePresence>
+                            {mobileServicesOpen && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="mt-2 ml-4 space-y-2 overflow-hidden"
+                              >
+                                {services.length > 0 && services.map((service) => (
+                                  <Link
+                                    key={service._id}
+                                    to={`/services/${service.slug || service._id}`}
+                                    onClick={() => {
+                                      setMobileMenu(false);
+                                      setMobileServicesOpen(false);
+                                    }}
+                                    className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
+                                  >
+                                    {service.title}
+                                  </Link>
+                                ))}
+                                <Link
+                                  to="/digital-services"
+                                  onClick={() => {
+                                    setMobileMenu(false);
+                                    setMobileServicesOpen(false);
+                                  }}
+                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                >
+                                  🌐 Digital Services
+                                </Link>
+                                <Link
+                                  to="/services"
+                                  onClick={() => {
+                                    setMobileMenu(false);
+                                    setMobileServicesOpen(false);
+                                  }}
+                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                >
+                                  View All →
+                                </Link>
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        )}
+                        
+                        {/* Mobile Blogs Dropdown */}
+                        {isBlogsDropdown && (
+                          <AnimatePresence>
+                            {mobileBlogsOpen && (
+                              <motion.div
+                                initial={{ height: 0, opacity: 0 }}
+                                animate={{ height: 'auto', opacity: 1 }}
+                                exit={{ height: 0, opacity: 0 }}
+                                className="mt-2 ml-4 space-y-2 overflow-hidden"
+                              >
+                                {blogs.length > 0 ? (
+                                  <>
+                                    {blogs.map((blog) => (
+                                      <Link
+                                        key={blog._id}
+                                        to={`/blog/${blog.slug || blog._id}`}
+                                        onClick={() => {
+                                          setMobileMenu(false);
+                                          setMobileBlogsOpen(false);
+                                        }}
+                                        className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
+                                      >
+                                        <div className="font-medium">{blog.title}</div>
+                                        <div className="text-xs text-gray-500 mt-0.5">{new Date(blog.createdAt).toLocaleDateString()}</div>
+                                      </Link>
+                                    ))}
+                                    <Link
+                                      to="/blog"
+                                      onClick={() => {
+                                        setMobileMenu(false);
+                                        setMobileBlogsOpen(false);
+                                      }}
+                                      className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                    >
+                                      View All Blogs →
+                                    </Link>
+                                  </>
+                                ) : (
+                                  <div className="py-2 text-sm text-gray-500">No blogs available</div>
+                                )}
+                              </motion.div>
+                            )}
+                          </AnimatePresence>
+                        )}
+                      </div>
+                    ) : (
+                      <NavLink
+                        to={link.to}
+                        onClick={() => setMobileMenu(false)}
+                        className={({ isActive }) =>
+                          `flex items-center justify-between text-lg font-medium ${
+                            isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
+                          }`
+                        }
                       >
                         {link.label}
-                        <FaChevronDown className={`text-xs text-gray-400 transition-transform ${mobileServicesOpen ? 'rotate-180' : ''}`} />
-                      </button>
-                      
-                      {/* Mobile Services Dropdown */}
-                      <AnimatePresence>
-                        {mobileServicesOpen && (
-                          <motion.div
-                            initial={{ height: 0, opacity: 0 }}
-                            animate={{ height: 'auto', opacity: 1 }}
-                            exit={{ height: 0, opacity: 0 }}
-                            className="mt-2 ml-4 space-y-2 overflow-hidden"
-                          >
-                            {services.length > 0 && services.map((service) => (
-                              <Link
-                                key={service._id}
-                                to={`/services/${service.slug || service._id}`}
-                                onClick={() => {
-                                  setMobileMenu(false);
-                                  setMobileServicesOpen(false);
-                                }}
-                                className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
-                              >
-                                {service.title}
-                              </Link>
-                            ))}
-                            <Link
-                              to="/digital-services"
-                              onClick={() => {
-                                setMobileMenu(false);
-                                setMobileServicesOpen(false);
-                              }}
-                              className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
-                            >
-                              🌐 Digital Services
-                            </Link>
-                            <Link
-                              to="/services"
-                              onClick={() => {
-                                setMobileMenu(false);
-                                setMobileServicesOpen(false);
-                              }}
-                              className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
-                            >
-                              View All →
-                            </Link>
-                          </motion.div>
-                        )}
-                      </AnimatePresence>
-                    </div>
-                  ) : (
-                    <NavLink
-                      to={link.to}
-                      onClick={() => setMobileMenu(false)}
-                      className={({ isActive }) =>
-                        `flex items-center justify-between text-lg font-medium ${
-                          isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
-                        }`
-                      }
-                    >
-                      {link.label}
-                    </NavLink>
-                  )}
-                </li>
-              ))}
+                      </NavLink>
+                    )}
+                  </li>
+                );
+              })}
               <li className="pt-4 mt-2 border-t border-gray-100">
                 <Link
                   to="/quote"

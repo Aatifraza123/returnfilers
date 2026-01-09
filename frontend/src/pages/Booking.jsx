@@ -40,7 +40,9 @@ const Booking = () => {
       const { data: servicesData } = await api.get('/services');
       const regularServices = Array.isArray(servicesData) 
         ? servicesData 
-        : (servicesData.services || []);
+        : (servicesData.services || servicesData.data || []);
+      
+      console.log('Regular services fetched:', regularServices);
       
       // Fetch digital services (web development packages)
       const { data: digitalData } = await api.get('/digital-services');
@@ -49,30 +51,36 @@ const Booking = () => {
         : (digitalData.services || digitalData.data || []);
       
       console.log('Digital services fetched:', digitalServices);
+      
       // Build service list
       let serviceList = [];
       
       // Add regular services
-      regularServices
-        .filter(s => s.active)
-        .forEach(s => serviceList.push(s.title));
+      if (Array.isArray(regularServices)) {
+        regularServices
+          .filter(s => s.active !== false)
+          .forEach(s => serviceList.push(s.title));
+      }
       
       // Add web development packages
-      digitalServices
-        .filter(d => d.active)
-        .forEach(service => {
-          if (service.packages && service.packages.length > 0) {
-            service.packages.forEach(pkg => {
-              // Add full format: "Service - Package"
-              serviceList.push(`${service.title} - ${pkg.name}`);
-            });
-          }
-        });
+      if (Array.isArray(digitalServices)) {
+        digitalServices
+          .filter(d => d.active !== false)
+          .forEach(service => {
+            if (service.packages && Array.isArray(service.packages) && service.packages.length > 0) {
+              service.packages.forEach(pkg => {
+                // Add full format: "Service - Package"
+                serviceList.push(`${service.title} - ${pkg.name}`);
+              });
+            }
+          });
+      }
       
       // Remove duplicates
       serviceList = [...new Set(serviceList)];
       
       console.log('Final service list:', serviceList);
+      console.log('Service list length:', serviceList.length);
       
       // Add "Other" option at the end
       serviceList.push('Other');
@@ -80,15 +88,16 @@ const Booking = () => {
       setServices(serviceList);
     } catch (error) {
       console.error('Error fetching services:', error);
+      console.error('Error details:', error.response?.data || error.message);
       // Fallback to basic list
       setServices([
         'GST Registration',
         'Income Tax Return',
         'Company Registration',
-        'Basic Website',
-        'Business Website',
-        'E-commerce Website',
-        'Custom Web Application',
+        'Web Development - Basic Website',
+        'Web Development - Business Website',
+        'Web Development - E-commerce Website',
+        'Web Development - Custom Web Application',
         'Other'
       ]);
     } finally {
@@ -317,12 +326,18 @@ const Booking = () => {
                   onChange={handleChange}
                   className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors bg-white"
                   required
+                  disabled={loadingServices}
                 >
-                  <option value="">Select a service</option>
+                  <option value="">
+                    {loadingServices ? 'Loading services...' : 'Select a service'}
+                  </option>
                   {services.map((service) => (
                     <option key={service} value={service}>{service}</option>
                   ))}
                 </select>
+                {loadingServices && (
+                  <p className="text-xs text-gray-500 mt-1">Loading available services...</p>
+                )}
               </div>
             </div>
 
