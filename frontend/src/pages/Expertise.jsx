@@ -176,7 +176,7 @@ const Expertise = () => {
                 <div className="p-6 md:p-8">
                   {/* Header */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0 group-hover:bg-[#C9A227] group-hover:text-[#0B1530] transition-all duration-300">
+                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0 group-hover:scale-110 transition-all duration-300">
                       {service.icon}
                     </div>
                     <div>
