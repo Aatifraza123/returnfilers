@@ -112,7 +112,10 @@ const Footer = () => {
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {quickLinks.map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="text-[#C9A227] hover:text-white transition-all duration-300 inline-block">
+                  <Link 
+                    to={to} 
+                    className="text-gray-300 hover:text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                  >
                     {label}
                   </Link>
                 </li>
@@ -126,7 +129,10 @@ const Footer = () => {
             <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
               {legalLinks.map(({ to, label }) => (
                 <li key={to}>
-                  <Link to={to} className="text-[#C9A227] hover:text-white transition-all duration-300 inline-block">
+                  <Link 
+                    to={to} 
+                    className="text-gray-300 hover:text-[#C9A227] transition-all duration-300 ease-in-out inline-block hover:translate-x-1"
+                  >
                     {label}
                   </Link>
                 </li>
