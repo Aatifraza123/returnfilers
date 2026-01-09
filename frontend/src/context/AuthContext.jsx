@@ -25,7 +25,8 @@ export const AuthProvider = ({ children }) => {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 3000);
             
-            const { data } = await api.get('/auth/me', {
+            // Try admin endpoint first
+            const { data } = await api.get('/admin/auth/me', {
               signal: controller.signal,
               timeout: 3000
             });

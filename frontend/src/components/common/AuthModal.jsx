@@ -1,11 +1,13 @@
-import { useState, useContext } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
-import { FaTimes, FaEnvelope, FaLock, FaUser, FaPhone, FaEye, FaEyeSlash } from 'react-icons/fa';
-import UserAuthContext from '../../context/UserAuthContext';
-import api from '../../api/axios';
+import { useState, useContext, Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
+import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
+import { FaTimes, FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
+import api from '../../api/axios';
+import UserAuthContext from '../../context/UserAuthContext';
 
 const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to continue' }) => {
+  const navigate = useNavigate();
   const { login } = useContext(UserAuthContext);
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
@@ -28,6 +30,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
 
     try {
       if (isLogin) {
+        // Login
         const { data } = await api.post('/user/auth/login', {
           email: formData.email,
           password: formData.password
@@ -40,6 +43,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
           onClose();
         }
       } else {
+        // Register
         const { data } = await api.post('/user/auth/register', {
           name: formData.name,
           email: formData.email,
@@ -62,153 +66,196 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
     }
   };
 
-  if (!isOpen) return null;
+  const handleGoogleLogin = () => {
+    toast('Google login coming soon!', {
+      icon: 'ℹ️',
+      duration: 3000
+    });
+    // TODO: Implement Google OAuth
+  };
 
   return (
-    <AnimatePresence>
-      <div className="fixed inset-0 z-50 flex items-center justify-center p-4">
-        {/* Backdrop */}
-        <motion.div
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-          onClick={onClose}
-          className="absolute inset-0 bg-black/50 backdrop-blur-sm"
-        />
-
-        {/* Modal */}
-        <motion.div
-          initial={{ opacity: 0, scale: 0.95, y: 20 }}
-          animate={{ opacity: 1, scale: 1, y: 0 }}
-          exit={{ opacity: 0, scale: 0.95, y: 20 }}
-          className="relative w-full max-w-md bg-white rounded-2xl shadow-2xl overflow-hidden"
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="relative z-50" onClose={onClose}>
+        <Transition.Child
+          as={Fragment}
+          enter="ease-out duration-300"
+          enterFrom="opacity-0"
+          enterTo="opacity-100"
+          leave="ease-in duration-200"
+          leaveFrom="opacity-100"
+          leaveTo="opacity-0"
         >
-          {/* Close Button */}
-          <button
-            onClick={onClose}
-            className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 transition-colors"
-          >
-            <FaTimes size={20} />
-          </button>
+          <div className="fixed inset-0 bg-black/50 backdrop-blur-sm" />
+        </Transition.Child>
 
-          {/* Header */}
-          <div className="px-8 pt-10 pb-6 text-center bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] text-white">
-            <motion.h2
-              key={isLogin ? "login" : "signup"}
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              className="text-2xl font-bold mb-2"
+        <div className="fixed inset-0 overflow-y-auto">
+          <div className="flex min-h-full items-center justify-center p-4">
+            <Transition.Child
+              as={Fragment}
+              enter="ease-out duration-300"
+              enterFrom="opacity-0 scale-95"
+              enterTo="opacity-100 scale-100"
+              leave="ease-in duration-200"
+              leaveFrom="opacity-100 scale-100"
+              leaveTo="opacity-0 scale-95"
             >
-              {isLogin ? 'Welcome Back' : 'Create Account'}
-            </motion.h2>
-            <p className="text-gray-300 text-sm">{message}</p>
-          </div>
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+                {/* Close Button */}
+                <button
+                  onClick={onClose}
+                  className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 transition-colors"
+                >
+                  <FaTimes size={20} />
+                </button>
 
-          {/* Form */}
-          <div className="px-8 py-6">
-            <form onSubmit={handleSubmit} className="space-y-4">
-              <AnimatePresence mode='wait'>
-                {!isLogin && (
-                  <motion.div
-                    initial={{ opacity: 0, height: 0 }}
-                    animate={{ opacity: 1, height: 'auto' }}
-                    exit={{ opacity: 0, height: 0 }}
-                    className="space-y-4"
-                  >
-                    <div className="relative">
-                      <FaUser className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                      <input
-                        type="text"
-                        name="name"
-                        required={!isLogin}
-                        placeholder="Full Name"
-                        value={formData.name}
-                        onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] text-sm"
-                      />
-                    </div>
+                <div className="p-8">
+                  {/* Header */}
+                  <div className="text-center mb-6">
+                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                      {isLogin ? 'Login' : 'Sign Up'}
+                    </h2>
+                    <p className="text-gray-600 text-sm">
+                      {message}
+                    </p>
+                  </div>
+
+                  {/* Form */}
+                  <form onSubmit={handleSubmit} className="space-y-4">
                     
-                    <div className="relative">
-                      <FaPhone className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
+                    {/* Signup Fields */}
+                    {!isLogin && (
+                      <>
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                          <input
+                            type="text"
+                            name="name"
+                            required={!isLogin}
+                            placeholder="Enter your name"
+                            value={formData.name}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                          />
+                        </div>
+                        
+                        <div>
+                          <label className="block text-sm font-medium text-gray-700 mb-1">Phone (Optional)</label>
+                          <input
+                            type="tel"
+                            name="phone"
+                            placeholder="Enter phone number"
+                            value={formData.phone}
+                            onChange={handleChange}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                          />
+                        </div>
+                      </>
+                    )}
+
+                    {/* Email */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
                       <input
-                        type="tel"
-                        name="phone"
-                        placeholder="Phone (Optional)"
-                        value={formData.phone}
+                        type="email"
+                        name="email"
+                        required
+                        placeholder="Enter your email"
+                        value={formData.email}
                         onChange={handleChange}
-                        className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
                       />
                     </div>
-                  </motion.div>
-                )}
-              </AnimatePresence>
 
-              <div className="relative">
-                <FaEnvelope className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type="email"
-                  name="email"
-                  required
-                  placeholder="Email Address"
-                  value={formData.email}
-                  onChange={handleChange}
-                  className="w-full pl-10 pr-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] text-sm"
-                />
-              </div>
+                    {/* Password */}
+                    <div>
+                      <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                      <div className="relative">
+                        <input
+                          type={showPassword ? "text" : "password"}
+                          name="password"
+                          required
+                          placeholder="Enter your password"
+                          value={formData.password}
+                          onChange={handleChange}
+                          className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                        />
+                        <button
+                          type="button"
+                          onClick={() => setShowPassword(!showPassword)}
+                          className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
+                        >
+                          {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                        </button>
+                      </div>
+                    </div>
 
-              <div className="relative">
-                <FaLock className="absolute left-3 top-1/2 -translate-y-1/2 text-gray-400" />
-                <input
-                  type={showPassword ? 'text' : 'password'}
-                  name="password"
-                  required
-                  placeholder="Password"
-                  value={formData.password}
-                  onChange={handleChange}
-                  className="w-full pl-10 pr-12 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530] text-sm"
-                />
-                <button
-                  type="button"
-                  onClick={() => setShowPassword(!showPassword)}
-                  className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
-                >
-                  {showPassword ? <FaEyeSlash /> : <FaEye />}
-                </button>
-              </div>
+                    {/* Forgot Password */}
+                    {isLogin && (
+                      <div className="flex justify-end">
+                        <button
+                          type="button"
+                          onClick={() => {
+                            onClose();
+                            navigate('/forgot-password');
+                          }}
+                          className="text-xs text-gray-600 hover:text-gray-900"
+                        >
+                          Forgot Password?
+                        </button>
+                      </div>
+                    )}
 
-              <button
-                type="submit"
-                disabled={loading}
-                className="w-full bg-[#0B1530] text-white py-3 rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
-              >
-                {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Create Account')}
-              </button>
-            </form>
+                    {/* Submit Button */}
+                    <button
+                      type="submit"
+                      disabled={loading}
+                      className="w-full bg-gray-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                    >
+                      {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Sign Up')}
+                    </button>
+                  </form>
 
-            <div className="mt-6 text-center">
-              <p className="text-sm text-gray-600">
-                {isLogin ? "Don't have an account?" : "Already have an account?"}
-                <button
-                  onClick={() => setIsLogin(!isLogin)}
-                  className="ml-2 font-bold text-[#0B1530] hover:text-[#C9A227] transition-colors"
-                >
-                  {isLogin ? 'Sign Up' : 'Login'}
-                </button>
-              </p>
-            </div>
+                  {/* Divider */}
+                  <div className="relative my-6">
+                    <div className="absolute inset-0 flex items-center">
+                      <div className="w-full border-t border-gray-200"></div>
+                    </div>
+                    <div className="relative flex justify-center text-xs">
+                      <span className="px-2 bg-white text-gray-500">Or</span>
+                    </div>
+                  </div>
 
-            <div className="mt-4 text-center">
-              <button
-                onClick={onClose}
-                className="text-sm text-gray-500 hover:text-gray-700"
-              >
-                Continue without login
-              </button>
-            </div>
+                  {/* Google Login */}
+                  <button
+                    type="button"
+                    onClick={handleGoogleLogin}
+                    className="w-full border border-gray-300 bg-white text-gray-700 py-2.5 rounded-md font-medium text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
+                  >
+                    <FaGoogle className="text-red-500" />
+                    Continue with Google
+                  </button>
+
+                  {/* Toggle */}
+                  <div className="mt-6 text-center">
+                    <p className="text-sm text-gray-600">
+                      {isLogin ? "Don't have an account?" : "Already have an account?"}
+                      <button
+                        type="button"
+                        onClick={() => setIsLogin(!isLogin)}
+                        className="ml-1 font-medium text-gray-900 hover:underline"
+                      >
+                        {isLogin ? 'Sign Up' : 'Login'}
+                      </button>
+                    </p>
+                  </div>
+                </div>
+              </Dialog.Panel>
+            </Transition.Child>
           </div>
-        </motion.div>
-      </div>
-    </AnimatePresence>
+        </div>
+      </Dialog>
+    </Transition>
   );
 };
 

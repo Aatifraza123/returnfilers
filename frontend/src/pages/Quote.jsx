@@ -7,7 +7,7 @@ import AuthModal from '../components/common/AuthModal';
 
 const Quote = () => {
   const navigate = useNavigate();
-  const { user } = useContext(UserAuthContext);
+  const { user, token } = useContext(UserAuthContext);
   const [showAuthModal, setShowAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
@@ -51,7 +51,9 @@ const Quote = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/quotes', formData);
+      const response = await api.post('/quotes', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       toast.success('Quote request submitted successfully! We will contact you soon.');
       setFormData({
         name: '',
@@ -86,6 +88,7 @@ const Quote = () => {
             email: userData.email,
             phone: userData.phone || formData.phone
           });
+          setShowAuthModal(false);
         }}
         message="Please login to request a quote"
       />
@@ -233,6 +236,7 @@ const Quote = () => {
         </div>
       </div>
     </div>
+    </>
   );
 };
 

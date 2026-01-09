@@ -1,10 +1,14 @@
-import { useState, useEffect, Fragment } from 'react';
+import { useState, useEffect, Fragment, useContext } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaComment } from 'react-icons/fa';
+import UserAuthContext from '../../context/UserAuthContext';
+import AuthModal from './AuthModal';
 
 const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
+  const { user, token } = useContext(UserAuthContext);
+  const [showAuthModal, setShowAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -20,6 +24,18 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
       setFormData(prev => ({ ...prev, service: preSelectedService }));
     }
   }, [preSelectedService]);
+  
+  // Pre-fill user data when user logs in
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || prev.name,
+        email: user.email || prev.email,
+        phone: user.phone || prev.phone
+      }));
+    }
+  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -37,6 +53,13 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
+    // Check if user is logged in
+    if (!user) {
+      closeModal();
+      setShowAuthModal(true);
+      return;
+    }
+    
     // Validate phone is exactly 10 digits
     if (formData.phone.length !== 10) {
       toast.error('Please enter a valid 10-digit phone number');
@@ -46,7 +69,9 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
     setLoading(true);
 
     try {
-      const response = await api.post('/consultations', formData);
+      const response = await api.post('/consultations', formData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
       
       if (response.data.success) {
         toast.success(response.data.message);
@@ -62,6 +87,25 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
   };
 
   return (
+    <>
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={(userData) => {
+          setFormData({
+            ...formData,
+            name: userData.name,
+            email: userData.email,
+            phone: userData.phone || formData.phone
+          });
+          setShowAuthModal(false);
+          // Reopen consultation modal after login
+          setTimeout(() => closeModal.call(null, true), 100);
+        }}
+        message="Please login to book a consultation"
+      />
+      
     <Transition appear show={isOpen} as={Fragment}>
       <Dialog as="div" className="relative z-[100]" onClose={closeModal}>
         <Transition.Child
@@ -221,6 +265,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
         </div>
       </Dialog>
     </Transition>
+    </>
   );
 };
 

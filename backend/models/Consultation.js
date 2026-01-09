@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const consultationSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false // Optional because some consultations might be from non-logged-in users
+  },
   name: {
     type: String,
     required: [true, 'Name is required'],

@@ -1,18 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
-import Loader from '../components/common/Loader'; 
+import Loader from '../components/common/Loader';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 import { FaCheck, FaSearch, FaArrowRight, FaRupeeSign, FaClock } from 'react-icons/fa';
 
 const Services = () => {
   const navigate = useNavigate();
+  const { user } = useContext(UserAuthContext);
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
   const [settings, setSettings] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedService, setSelectedService] = useState(null);
 
   const handleBookNow = (service) => {
+    if (!user) {
+      setSelectedService(service);
+      setShowAuthModal(true);
+      return;
+    }
     navigate(`/booking?service=${encodeURIComponent(service.title)}`);
   };
 
@@ -62,6 +72,18 @@ const Services = () => {
 
   return (
     <main className="font-sans text-gray-800 bg-white">
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          if (selectedService) {
+            navigate(`/booking?service=${encodeURIComponent(selectedService.title)}`);
+          }
+        }}
+        message="Please login to book this service"
+      />
       
       {/* Hero Section */}
       <section className="bg-[#0B1530] py-16 md:py-20">

@@ -1,31 +1,30 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const { 
   createService, 
   deleteService, 
   getServices, 
   createBlog, 
-  deleteBlog, // <--- Import this
+  deleteBlog,
   getBlogs 
 } = require('../controllers/adminController');
 
 // Service Routes
 router.route('/services')
-  .get(protect, getServices)
-  .post(protect, createService);
+  .get(protectAdmin, getServices)
+  .post(protectAdmin, createService);
 
 router.route('/services/:id')
-  .delete(protect, deleteService);
+  .delete(protectAdmin, deleteService);
 
 // Blog Routes
 router.route('/blogs')
-  .get(protect, getBlogs)
-  .post(protect, createBlog);
+  .get(protectAdmin, getBlogs)
+  .post(protectAdmin, createBlog);
 
-// <--- ADD THIS SECTION FOR DELETE TO WORK
 router.route('/blogs/:id')
-  .delete(protect, deleteBlog); 
+  .delete(protectAdmin, deleteBlog); 
 
 module.exports = router;
 

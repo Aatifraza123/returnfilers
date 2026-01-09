@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock, FaCalendarCheck } from 'react-icons/fa';
 import api from '../api/axios';
@@ -18,8 +18,9 @@ const noDocumentServices = [
 
 const Booking = () => {
   const [searchParams] = useSearchParams();
+  const navigate = useNavigate();
   const preSelectedService = searchParams.get('service') || '';
-  const { user } = useContext(UserAuthContext);
+  const { user, token } = useContext(UserAuthContext);
   const [showAuthModal, setShowAuthModal] = useState(false);
   
   const [services, setServices] = useState([]);
@@ -213,8 +214,10 @@ const Booking = () => {
         bookingData.documents = documentsData;
       }
 
-      // Always use bookings API
-      await api.post('/bookings', bookingData);
+      // Always use bookings API with auth token
+      await api.post('/bookings', bookingData, {
+        headers: { Authorization: `Bearer ${token}` }
+      });
 
       setSubmitted(true);
       toast.success('Booking submitted successfully!');
@@ -272,6 +275,7 @@ const Booking = () => {
             email: userData.email,
             phone: userData.phone || formData.phone
           });
+          setShowAuthModal(false);
         }}
         message="Please login to book a service"
       />

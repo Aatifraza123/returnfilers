@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const {
   getTestimonials,
   getAllTestimonials,
@@ -16,10 +16,10 @@ router.get('/', getTestimonials);
 router.get('/:id', getTestimonialById);
 
 // Admin routes
-router.get('/admin/all', protect, getAllTestimonials);
-router.post('/admin', protect, createTestimonial);
-router.put('/admin/:id', protect, updateTestimonial);
-router.delete('/admin/:id', protect, deleteTestimonial);
-router.patch('/admin/:id/toggle', protect, toggleTestimonial);
+router.get('/admin/all', protectAdmin, getAllTestimonials);
+router.post('/admin', protectAdmin, createTestimonial);
+router.put('/admin/:id', protectAdmin, updateTestimonial);
+router.delete('/admin/:id', protectAdmin, deleteTestimonial);
+router.patch('/admin/:id/toggle', protectAdmin, toggleTestimonial);
 
 module.exports = router;

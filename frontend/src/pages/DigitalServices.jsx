@@ -1,20 +1,35 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { 
   FaCode, FaCheckCircle, FaStar, 
   FaChevronLeft, FaChevronRight, FaPlus, FaMinus 
 } from 'react-icons/fa';
 import api from '../api/axios';
 import Loader from '../components/common/Loader';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 
 const DigitalServices = () => {
+  const navigate = useNavigate();
+  const { user } = useContext(UserAuthContext);
   const [services, setServices] = useState([]);
   const [testimonials, setTestimonials] = useState([]);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState(null);
   const [settings, setSettings] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+  const [selectedPackage, setSelectedPackage] = useState(null);
+
+  const handleGetStarted = (service, pkg) => {
+    if (!user) {
+      setSelectedPackage({ service, pkg });
+      setShowAuthModal(true);
+      return;
+    }
+    navigate(`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`);
+  };
 
   const faqs = [
     {
@@ -121,6 +136,19 @@ const DigitalServices = () => {
 
   return (
     <main className="font-sans bg-gray-50">
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          if (selectedPackage) {
+            navigate(`/booking?service=${encodeURIComponent(selectedPackage.service.title + ' - ' + selectedPackage.pkg.name)}`);
+          }
+        }}
+        message="Please login to book this package"
+      />
+      
       {/* Hero Section - Compact */}
       <section className="relative py-16 bg-[#0B1530] text-white overflow-hidden">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
@@ -224,8 +252,8 @@ const DigitalServices = () => {
                               >
                                 Details
                               </Link>
-                              <Link
-                                to={`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`}
+                              <button
+                                onClick={() => handleGetStarted(service, pkg)}
                                 className={`
                                   flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm
                                   ${pkg.name === 'Business Website' 
@@ -234,7 +262,7 @@ const DigitalServices = () => {
                                 `}
                               >
                                 Get Started
-                              </Link>
+                              </button>
                             </div>
                           </div>
                         </motion.div>

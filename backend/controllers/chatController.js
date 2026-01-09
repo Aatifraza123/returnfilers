@@ -3,11 +3,10 @@ const Service = require('../models/serviceModel');
 const DigitalService = require('../models/DigitalService');
 const Testimonial = require('../models/testimonialModel');
 const Blog = require('../models/blogModel');
-const Portfolio = require('../models/portfolioModel');
 
 // Cache (refresh every 5 minutes for website data, 30 min for news)
-let dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, portfolio: null, news: null };
-let cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
+let dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, news: null };
+let cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, news: 0 };
 const CACHE_DURATION = 5 * 60 * 1000;
 const NEWS_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes for news
 
@@ -53,17 +52,6 @@ const getBlogs = async () => {
     cacheTime.blogs = now;
   } catch (e) { console.log('Blogs fetch error'); }
   return dataCache.blogs || [];
-};
-
-// Fetch portfolio
-const getPortfolio = async () => {
-  const now = Date.now();
-  if (dataCache.portfolio && (now - cacheTime.portfolio) < CACHE_DURATION) return dataCache.portfolio;
-  try {
-    dataCache.portfolio = await Portfolio.find({ isActive: true }).select('title category client').limit(5);
-    cacheTime.portfolio = now;
-  } catch (e) { console.log('Portfolio fetch error'); }
-  return dataCache.portfolio || [];
 };
 
 // Fetch tax/finance news from GNews API (free)
@@ -147,11 +135,6 @@ const formatBlogs = (blogs) => {
   return blogs.map(b => `- ${b.title} [${b.category}]`).join('\n');
 };
 
-const formatPortfolio = (portfolio) => {
-  if (!portfolio?.length) return '(No portfolio yet)';
-  return portfolio.map(p => `- ${p.title} (${p.category}) - Client: ${p.client || 'Confidential'}`).join('\n');
-};
-
 const formatNews = (news) => {
   if (!news?.length) return '(No recent news)';
   return news.map(n => `- ${n.title} [${n.source}] - ${n.date}`).join('\n');
@@ -166,8 +149,8 @@ const getCurrentDate = () => {
 
 // Build system prompt with all data
 const getSystemPrompt = async () => {
-  const [services, digitalServices, testimonials, blogs, portfolio, news] = await Promise.all([
-    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getTaxNews()
   ]);
   
   return `You are "ReturnFilers AI", the official AI assistant for ReturnFilers - a professional CA firm in India.
@@ -203,9 +186,6 @@ ${formatTestimonials(testimonials)}
 
 ## RECENT BLOGS:
 ${formatBlogs(blogs)}
-
-## OUR WORK/PORTFOLIO:
-${formatPortfolio(portfolio)}
 
 ## LATEST TAX NEWS & UPDATES:
 ${formatNews(news)}
@@ -400,12 +380,12 @@ const chatWithAIStream = async (req, res) => {
 const testAI = async (req, res) => {
   // Force refresh cache if ?refresh=true
   if (req.query.refresh === 'true') {
-    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, portfolio: null, news: null };
-    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, portfolio: 0, news: 0 };
+    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, news: null };
+    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, news: 0 };
   }
   
-  const [services, digitalServices, testimonials, blogs, portfolio, news] = await Promise.all([
-    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPortfolio(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getTaxNews()
   ]);
   res.json({ 
     success: true, 
@@ -414,7 +394,6 @@ const testAI = async (req, res) => {
       digitalServices: digitalServices.length,
       testimonials: testimonials.length,
       blogs: blogs.length,
-      portfolio: portfolio.length,
       news: news.length
     },
     details: {

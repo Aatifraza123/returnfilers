@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/authMiddleware');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const {
   subscribe,
   getSubscribers,
@@ -11,8 +11,8 @@ const {
 router.post('/subscribe', subscribe);
 
 // Admin routes - protected
-router.get('/', protect, getSubscribers);
-router.delete('/:id', protect, deleteSubscriber);
+router.get('/', protectAdmin, getSubscribers);
+router.delete('/:id', protectAdmin, deleteSubscriber);
 
 module.exports = router;
 

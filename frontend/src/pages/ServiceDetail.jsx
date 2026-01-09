@@ -1,8 +1,10 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 import { 
   FaCheck, 
   FaRupeeSign, 
@@ -19,12 +21,18 @@ import {
 const ServiceDetail = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(UserAuthContext);
   const [service, setService] = useState(null);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState(null);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   const handleBookNow = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
     navigate(`/booking?service=${encodeURIComponent(service.title)}`);
   };
 
@@ -103,6 +111,17 @@ const ServiceDetail = () => {
 
   return (
     <main className="font-sans text-gray-800 bg-gray-50">
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          navigate(`/booking?service=${encodeURIComponent(service.title)}`);
+        }}
+        message="Please login to book this service"
+      />
+      
       {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
       <section className="relative min-h-[30vh] flex items-end">

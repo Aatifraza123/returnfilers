@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const {
   createContact,
   getContacts,
@@ -52,13 +52,13 @@ router.get('/test-email', async (req, res) => {
 });
 
 // Admin routes - protected
-router.get('/', protect, getContacts);
-router.get('/:id', protect, getContactById);
-router.patch('/:id', protect, updateContact);
-router.delete('/:id', protect, deleteContact);
+router.get('/', protectAdmin, getContacts);
+router.get('/:id', protectAdmin, getContactById);
+router.patch('/:id', protectAdmin, updateContact);
+router.delete('/:id', protectAdmin, deleteContact);
 
 // Bulk email route - admin only
-router.post('/bulk-email', protect, sendBulkEmail);
+router.post('/bulk-email', protectAdmin, sendBulkEmail);
 
 module.exports = router;
 

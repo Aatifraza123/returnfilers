@@ -1,16 +1,28 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import { FaCheckCircle, FaArrowLeft, FaPhone, FaEnvelope, FaClock, FaRupeeSign } from 'react-icons/fa';
 import api from '../api/axios';
 import Loader from '../components/common/Loader';
+import UserAuthContext from '../context/UserAuthContext';
+import AuthModal from '../components/common/AuthModal';
 
 const PackageDetail = () => {
   const { slug, packageSlug } = useParams();
   const navigate = useNavigate();
+  const { user } = useContext(UserAuthContext);
   const [service, setService] = useState(null);
   const [packageData, setPackageData] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
+
+  const handleBookNow = () => {
+    if (!user) {
+      setShowAuthModal(true);
+      return;
+    }
+    navigate(`/booking?service=${encodeURIComponent(service.title + ' - ' + packageData.name)}`);
+  };
 
   useEffect(() => {
     const fetchData = async () => {
@@ -56,6 +68,17 @@ const PackageDetail = () => {
 
   return (
     <main className="font-sans bg-gray-50 min-h-screen">
+      {/* Auth Modal */}
+      <AuthModal 
+        isOpen={showAuthModal}
+        onClose={() => setShowAuthModal(false)}
+        onSuccess={() => {
+          setShowAuthModal(false);
+          navigate(`/booking?service=${encodeURIComponent(service.title + ' - ' + packageData.name)}`);
+        }}
+        message="Please login to book this package"
+      />
+      
       {/* Header */}
       <section className="bg-[#0B1530] text-white py-12">
         <div className="container mx-auto px-4 max-w-6xl">
@@ -167,12 +190,12 @@ const PackageDetail = () => {
                   Book this package now and let's bring your project to life.
                 </p>
 
-                <Link
-                  to={`/booking?service=${encodeURIComponent(service.title + ' - ' + packageData.name)}`}
+                <button
+                  onClick={handleBookNow}
                   className="block w-full py-4 bg-[#0B1530] text-white rounded-xl font-bold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg hover:shadow-xl mb-4"
                 >
                   Book Now
-                </Link>
+                </button>
 
                 <div className="border-t pt-6 space-y-4">
                   <h4 className="font-semibold text-[#0B1530] text-sm">Need More Information?</h4>

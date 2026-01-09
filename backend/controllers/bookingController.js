@@ -1,15 +1,19 @@
 const Booking = require('../models/Booking');
+const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const { sendEmail } = require('../utils/emailService');
+const { createBookingNotification } = require('../utils/notificationHelper');
 
 // @desc    Create booking
 // @route   POST /api/bookings
-// @access  Public
+// @access  Private (User must be logged in)
 const createBooking = async (req, res) => {
   try {
     const { name, email, phone, service, message, documents } = req.body;
+    const userId = req.user.id; // Get user ID from auth middleware
 
     console.log('NEW BOOKING');
+    console.log('User ID:', userId);
     console.log('Data:', { name, email, phone, service, hasDocuments: documents?.length > 0 });
 
     if (!name || !email || !phone || !service) {
@@ -20,6 +24,7 @@ const createBooking = async (req, res) => {
     }
 
     const booking = await Booking.create({
+      user: userId,
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.replace(/\D/g, ''),
@@ -28,7 +33,12 @@ const createBooking = async (req, res) => {
       documents: documents || []
     });
 
-    console.log('Booking saved:', booking._id);
+    // Add booking to user's bookings array
+    await User.findByIdAndUpdate(userId, {
+      $push: { bookings: booking._id }
+    });
+
+    console.log('Booking saved and linked to user:', booking._id);
 
     res.status(201).json({
       success: true,
@@ -39,6 +49,9 @@ const createBooking = async (req, res) => {
     // Send email notification
     setImmediate(() => {
       sendBookingEmail(booking).catch(err => console.error('Email failed:', err));
+      // Pass the userId explicitly to ensure user notification is created
+      createBookingNotification({ ...booking.toObject(), user: userId })
+        .catch(err => console.error('Notification failed:', err));
     });
 
   } catch (error) {
@@ -165,9 +178,15 @@ const replyToBooking = async (req, res) => {
 
     await sendEmail({ to, subject, html });
 
-    // Update booking status to contacted
+    // Update booking status to contacted and create user notification
     if (bookingId) {
-      await Booking.findByIdAndUpdate(bookingId, { status: 'contacted' });
+      const booking = await Booking.findByIdAndUpdate(bookingId, { status: 'contacted' }, { new: true });
+      
+      // Create notification for the user
+      if (booking && booking.user) {
+        const { createBookingReplyNotification } = require('../utils/notificationHelper');
+        await createBookingReplyNotification(bookingId, booking.user);
+      }
     }
 
     res.json({ success: true, message: 'Email sent successfully' });
@@ -230,4 +249,24 @@ const sendBookingEmail = async (booking) => {
   }
 };
 
-module.exports = { createBooking, getBookings, getBookingById, updateBooking, deleteBooking, replyToBooking };
+// @desc    Get user's bookings
+// @route   GET /api/bookings/my-bookings
+// @access  Private (User)
+const getUserBookings = async (req, res) => {
+  try {
+    const bookings = await Booking.find({ user: req.user.id })
+      .sort({ createdAt: -1 });
+      // Include document data for user to download their files
+
+    res.json({ 
+      success: true, 
+      count: bookings.length, 
+      bookings 
+    });
+  } catch (error) {
+    console.error('Get user bookings error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
+module.exports = { createBooking, getBookings, getBookingById, updateBooking, deleteBooking, replyToBooking, getUserBookings };

@@ -1,6 +1,11 @@
 const mongoose = require('mongoose');
 
 const quoteSchema = mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false // Optional because some quotes might be from non-logged-in users
+  },
   name: { type: String, required: true },
   email: { type: String, required: true },
   phone: { type: String, required: true },

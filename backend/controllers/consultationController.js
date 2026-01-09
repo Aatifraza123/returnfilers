@@ -1,15 +1,18 @@
 const Consultation = require('../models/Consultation');
 const mongoose = require('mongoose');
 const nodemailer = require('nodemailer');
+const { createConsultationNotification } = require('../utils/notificationHelper');
 
 // @desc    Submit consultation request
 // @route   POST /api/consultations
-// @access  Public
+// @access  Private (User must be logged in)
 const createConsultation = async (req, res) => {
   try {
     const { name, email, phone, service, message } = req.body;
+    const userId = req.user?.id; // Get user ID from auth middleware (optional)
 
     console.log('NEW CONSULTATION REQUEST');
+    console.log('User ID:', userId || 'Not logged in');
     console.log('Data:', { name, email, phone, service });
 
     // Validation
@@ -25,12 +28,22 @@ const createConsultation = async (req, res) => {
 
     // Create consultation
     const consultation = await Consultation.create({
+      user: userId || undefined,
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: cleanPhone,
       service: service.trim(),
       message: message ? message.trim() : ''
     });
+
+    // Add consultation to user's consultations array if user is logged in
+    if (userId) {
+      const User = require('../models/userModel');
+      await User.findByIdAndUpdate(userId, {
+        $push: { consultations: consultation._id }
+      });
+      console.log('Consultation linked to user:', userId);
+    }
 
     console.log('Consultation saved:', consultation._id);
 
@@ -55,6 +68,9 @@ const createConsultation = async (req, res) => {
         .catch(err => {
           console.error('Email sending failed (non-blocking):', err);
         });
+      // Pass userId explicitly to ensure user notification is created
+      createConsultationNotification({ ...consultation.toObject(), user: userId })
+        .catch(err => console.error('Consultation notification failed:', err));
     });
   } catch (error) {
     console.error('Consultation error:', error);
@@ -251,12 +267,32 @@ const sendConsultationEmails = async (consultation) => {
   }
 };
 
+// @desc    Get user's consultations
+// @route   GET /api/consultations/my-consultations
+// @access  Private (User)
+const getUserConsultations = async (req, res) => {
+  try {
+    const consultations = await Consultation.find({ user: req.user.id })
+      .sort({ createdAt: -1 });
+
+    res.json({ 
+      success: true, 
+      count: consultations.length, 
+      consultations 
+    });
+  } catch (error) {
+    console.error('Get user consultations error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   createConsultation,
   getConsultations,
   getConsultationById,
   updateConsultation,
-  deleteConsultation
+  deleteConsultation,
+  getUserConsultations
 };
 
 

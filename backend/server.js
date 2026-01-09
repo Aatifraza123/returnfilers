@@ -7,13 +7,13 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const userAuthRoutes = require('./routes/userAuthRoutes');
+const adminAuthRoutes = require('./routes/adminAuthRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
 const consultationRoutes = require('./routes/consultationRoutes');
 const contactRoutes = require('./routes/contactRoutes');
 const serviceRoutes = require('./routes/serviceRoutes');
 const blogRoutes = require('./routes/blogRoutes');
-const portfolioRoutes = require('./routes/portfolioRoutes');
 const quoteRoutes = require('./routes/quoteRoutes');
 const newsletterRoutes = require('./routes/newsletterRoutes');
 const testimonialRoutes = require('./routes/testimonialRoutes');
@@ -22,6 +22,7 @@ const documentRoutes = require('./routes/documentRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
 const digitalServiceRoutes = require('./routes/digitalServiceRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
+const notificationRoutes = require('./routes/notificationRoutes');
 
 const app = express();
 
@@ -109,6 +110,8 @@ app.use((req, res, next) => {
 app.use('/api/auth', authRoutes);
 app.use('/api/user/auth', userAuthRoutes);
 console.log('✓ User auth routes registered at /api/user/auth');
+app.use('/api/admin/auth', adminAuthRoutes);
+console.log('✓ Admin auth routes registered at /api/admin/auth');
 app.use('/api/admin', adminRoutes);
 
 // Quote routes - use controller which sends emails
@@ -133,7 +136,6 @@ app.get('/api/blogs/test-direct', (req, res) => {
   res.json({ message: 'Direct route test - routing is working!' });
 });
 
-app.use('/api/portfolio', portfolioRoutes);
 app.use('/api/testimonials', testimonialRoutes);
 console.log('✓ Testimonial routes registered at /api/testimonials');
 
@@ -151,6 +153,9 @@ console.log('✓ Digital Service routes registered at /api/digital-services');
 
 app.use('/api/settings', settingsRoutes);
 console.log('✓ Settings routes registered at /api/settings');
+
+app.use('/api/notifications', notificationRoutes);
+console.log('✓ Notification routes registered at /api/notifications');
 
 // Public routes last - /api/blogs in publicRoutes won't be reached (blogRoutes handles it first)
 app.use('/api', publicRoutes); 

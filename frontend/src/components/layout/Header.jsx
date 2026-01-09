@@ -4,6 +4,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { FaBars, FaTimes, FaChevronRight, FaChevronDown } from 'react-icons/fa';
 import { useSettings } from '../../context/SettingsContext';
 import UserAuthContext from '../../context/UserAuthContext';
+import AuthContext from '../../context/AuthContext';
 import api from '../../api/axios';
 
 const Header = () => {
@@ -17,7 +18,13 @@ const Header = () => {
   const [mobileBlogsOpen, setMobileBlogsOpen] = useState(false);
   const [services, setServices] = useState([]);
   const [blogs, setBlogs] = useState([]);
-  const { user } = useContext(UserAuthContext);
+  const { user: regularUser } = useContext(UserAuthContext);
+  const { user: adminUser } = useContext(AuthContext);
+  
+  // Determine which user is logged in
+  const user = regularUser || adminUser;
+  const isAdmin = adminUser && !regularUser;
+  const dashboardLink = isAdmin ? '/admin/dashboard' : '/dashboard';
   
   // Use global settings context
   const { settings } = useSettings();
@@ -217,7 +224,7 @@ const Header = () => {
         <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <Link
-              to="/dashboard"
+              to={dashboardLink}
               className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
             >
               Dashboard
@@ -389,13 +396,32 @@ const Header = () => {
                 );
               })}
               <li className="pt-4 mt-2 border-t border-gray-100">
-                <Link
-                  to="/quote"
-                  className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
-                  onClick={() => setMobileMenu(false)}
-                >
-                  Get Quote
-                </Link>
+                {user ? (
+                  <Link
+                    to={dashboardLink}
+                    className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
+                    onClick={() => setMobileMenu(false)}
+                  >
+                    Dashboard
+                  </Link>
+                ) : (
+                  <>
+                    <Link
+                      to="/login"
+                      className="block bg-white text-[#0B1530] border-2 border-[#0B1530] px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#0B1530] hover:text-white transition-all shadow-md mb-3"
+                      onClick={() => setMobileMenu(false)}
+                    >
+                      Login
+                    </Link>
+                    <Link
+                      to="/quote"
+                      className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
+                      onClick={() => setMobileMenu(false)}
+                    >
+                      Get Quote
+                    </Link>
+                  </>
+                )}
               </li>
             </ul>
           </motion.div>

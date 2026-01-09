@@ -15,7 +15,7 @@ try {
   console.error('✗ Error loading blog controller:', error);
 }
 
-const { protect, admin } = require('../middleware/authMiddleware'); 
+const { protectAdmin } = require('../middleware/adminAuthMiddleware'); 
 
 // Public Routes (GET requests - no auth needed)
 // IMPORTANT: Order matters - specific routes before parameterized routes
@@ -44,8 +44,8 @@ router.get('/:id', (req, res, next) => {
 
 // Admin Routes (Protected - require authentication)
 // Note: These routes must be defined after the GET routes to avoid conflicts
-router.post('/', protect, admin, createBlog);
-router.put('/:id', protect, admin, updateBlog);
-router.delete('/:id', protect, admin, deleteBlog);
+router.post('/', protectAdmin, createBlog);
+router.put('/:id', protectAdmin, updateBlog);
+router.delete('/:id', protectAdmin, deleteBlog);
 
 module.exports = router;

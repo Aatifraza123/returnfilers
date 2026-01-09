@@ -8,6 +8,11 @@ const documentSchema = new mongoose.Schema({
 }, { _id: false });
 
 const bookingSchema = new mongoose.Schema({
+  user: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'User',
+    required: false // Optional because some bookings might be from non-logged-in users
+  },
   name: {
     type: String,
     required: [true, 'Name is required'],

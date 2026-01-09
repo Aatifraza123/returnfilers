@@ -17,17 +17,20 @@ import Expertise from './pages/Expertise'
 import ExpertiseDetail from './pages/ExpertiseDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
-import Portfolio from './pages/Portfolio'
 import Contact from './pages/Contact'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
 import RefundPolicy from './pages/RefundPolicy'
-import Auth from "./pages/Auth"
+import Auth from './pages/Auth'
 
 // User Pages
 import UserDashboard from './pages/user/UserDashboard'
 import UserProfile from './pages/user/UserProfile'
+import MyBookings from './pages/user/MyBookings'
+import MyQuotes from './pages/user/MyQuotes'
+import MyConsultations from './pages/user/MyConsultations'
+import UserNotifications from './pages/user/UserNotifications'
 
 // Admin Pages
 import AdminLogin from './pages/admin/AdminLogin'
@@ -41,7 +44,6 @@ import AdminServicesForm from './pages/admin/AdminServicesAdd'
 
 // Admin - Other Sections
 import AdminBlogs from './pages/admin/AdminBlogs'
-import AdminPortfolio from './pages/admin/AdminPortfolio'
 import AdminReviews from './pages/admin/AdminReviews'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminEmails from './pages/admin/AdminEmails'
@@ -106,9 +108,10 @@ function App() {
           {/* User Dashboard Routes */}
           <Route path="dashboard" element={<UserDashboard />} />
           <Route path="dashboard/profile" element={<UserProfile />} />
-          <Route path="dashboard/bookings" element={<UserDashboard />} />
-          <Route path="dashboard/quotes" element={<UserDashboard />} />
-          <Route path="dashboard/consultations" element={<UserDashboard />} />
+          <Route path="dashboard/bookings" element={<MyBookings />} />
+          <Route path="dashboard/quotes" element={<MyQuotes />} />
+          <Route path="dashboard/consultations" element={<MyConsultations />} />
+          <Route path="dashboard/notifications" element={<UserNotifications />} />
         </Route>
 
         {/* Admin Routes */}
@@ -128,7 +131,6 @@ function App() {
           <Route path="services/view/:id" element={<AdminServicesForm />} />
           
           <Route path="blogs" element={<AdminBlogs />} />
-          <Route path="portfolio" element={<AdminPortfolio />} />
           <Route path="reviews" element={<AdminReviews />} />
           <Route path="testimonials" element={<AdminTestimonials />} />
           <Route path="users" element={<AdminUsers />} />

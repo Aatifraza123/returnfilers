@@ -2,6 +2,7 @@ const Contact = require('../models/Contact');
 const mongoose = require('mongoose');
 const { sendEmail, sendBulkEmails } = require('../utils/emailService');
 const nodemailer = require('nodemailer');
+const { createContactNotification } = require('../utils/notificationHelper');
 
 // @desc    Send bulk email
 // @route   POST /api/contacts/bulk-email
@@ -158,6 +159,8 @@ const createContact = async (req, res) => {
         .catch(err => {
           console.error('Email sending failed (non-blocking):', err);
         });
+      createContactNotification(contact)
+        .catch(err => console.error('Contact notification failed:', err));
     });
   } catch (error) {
     console.error('Contact error:', error);

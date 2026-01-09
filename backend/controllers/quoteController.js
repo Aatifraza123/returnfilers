@@ -1,11 +1,16 @@
 const Quote = require('../models/quoteModel');
+const { createQuoteNotification } = require('../utils/notificationHelper');
 
 // @desc    Create new quote request
 // @route   POST /api/quotes
+// @access  Private (User must be logged in)
 const createQuote = async (req, res) => {
   try {
     console.log('Quote creation request received:', req.body);
     const { name, email, phone, company, service, budget, message } = req.body;
+    const userId = req.user?.id; // Get user ID from auth middleware (optional)
+
+    console.log('User ID:', userId || 'Not logged in');
 
     // Validation
     if (!name || !email || !phone || !service || !message) {
@@ -24,6 +29,7 @@ const createQuote = async (req, res) => {
 
     // Save to Database
     const quote = await Quote.create({
+      user: userId || undefined,
       name,
       email,
       phone,
@@ -32,6 +38,15 @@ const createQuote = async (req, res) => {
       budget: budget || '',
       message
     });
+
+    // Add quote to user's quotes array if user is logged in
+    if (userId) {
+      const User = require('../models/userModel');
+      await User.findByIdAndUpdate(userId, {
+        $push: { quotes: quote._id }
+      });
+      console.log('Quote linked to user:', userId);
+    }
 
     console.log('Quote created successfully:', quote._id);
 
@@ -43,6 +58,9 @@ const createQuote = async (req, res) => {
       sendQuoteEmails(quote)
         .then(() => console.log('Quote emails sent successfully'))
         .catch(err => console.error('Quote email sending failed:', err.message));
+      // Pass userId explicitly to ensure user notification is created
+      createQuoteNotification({ ...quote.toObject(), user: userId })
+        .catch(err => console.error('Quote notification failed:', err));
     });
   } catch (error) {
     console.error('Quote creation error:', error);
@@ -150,10 +168,30 @@ const deleteQuote = async (req, res) => {
   }
 };
 
+// @desc    Get user's quotes
+// @route   GET /api/quotes/my-quotes
+// @access  Private (User)
+const getUserQuotes = async (req, res) => {
+  try {
+    const quotes = await Quote.find({ user: req.user.id })
+      .sort({ createdAt: -1 });
+
+    res.json({ 
+      success: true, 
+      count: quotes.length, 
+      quotes 
+    });
+  } catch (error) {
+    console.error('Get user quotes error:', error);
+    res.status(500).json({ success: false, message: error.message });
+  }
+};
+
 module.exports = {
   createQuote,
   getQuotes,
   updateQuote,
-  deleteQuote
+  deleteQuote,
+  getUserQuotes
 };
 

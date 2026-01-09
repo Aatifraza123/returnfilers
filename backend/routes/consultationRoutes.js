@@ -1,22 +1,27 @@
 const express = require('express');
 const router = express.Router();
-const { protect, admin } = require('../middleware/authMiddleware');
+const { protectAdmin } = require('../middleware/adminAuthMiddleware');
+const { protectUser } = require('../middleware/userAuth');
 const {
   createConsultation,
   getConsultations,
   getConsultationById,
   updateConsultation,
-  deleteConsultation
+  deleteConsultation,
+  getUserConsultations
 } = require('../controllers/consultationController');
 
-// Public route - anyone can submit
-router.post('/', createConsultation);
+// User route - get user's own consultations
+router.get('/my-consultations', protectUser, getUserConsultations);
+
+// Public route - anyone can submit (but will link to user if logged in)
+router.post('/', protectUser, createConsultation);
 
 // Admin routes - protected
-router.get('/', protect, getConsultations);
-router.get('/:id', protect, getConsultationById);
-router.patch('/:id', protect, updateConsultation);
-router.delete('/:id', protect, deleteConsultation);
+router.get('/', protectAdmin, getConsultations);
+router.get('/:id', protectAdmin, getConsultationById);
+router.patch('/:id', protectAdmin, updateConsultation);
+router.delete('/:id', protectAdmin, deleteConsultation);
 
 module.exports = router;
 
