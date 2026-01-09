@@ -238,19 +238,9 @@ const AIChatbot = () => {
       if (isMobile) {
         // On mobile, hide chatbot completely
         setIsVisible(false);
-        return;
-      }
-      
-      // On desktop, show/hide based on footer position
-      const footer = document.querySelector('footer');
-      if (footer) {
-        const footerRect = footer.getBoundingClientRect();
-        const windowHeight = window.innerHeight;
-        if (footerRect.top < windowHeight + 100) {
-          setIsVisible(false);
-        } else {
-          setIsVisible(true);
-        }
+      } else {
+        // On desktop, always show chatbot (even in footer)
+        setIsVisible(true);
       }
     };
 
