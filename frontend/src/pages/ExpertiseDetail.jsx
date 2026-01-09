@@ -199,9 +199,6 @@ const ExpertiseDetail = () => {
             animate={{ opacity: 1, y: 0 }}
             className="max-w-3xl"
           >
-            <div className="w-12 h-12 bg-[#C9A227]/20 rounded-xl flex items-center justify-center text-[#C9A227] text-2xl mb-3">
-              {expertise.icon}
-            </div>
             <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-xs">{expertise.tagline}</span>
             <h1 className="text-2xl md:text-3xl font-serif font-bold text-white mt-2 mb-2">
               {expertise.title}
