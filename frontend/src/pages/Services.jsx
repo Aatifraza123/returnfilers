@@ -10,6 +10,7 @@ const Services = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState('all');
+  const [settings, setSettings] = useState(null);
 
   const handleBookNow = (service) => {
     navigate(`/booking?service=${encodeURIComponent(service.title)}`);
@@ -17,7 +18,19 @@ const Services = () => {
 
   useEffect(() => {
     fetchServices();
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get('/settings');
+      if (data.success) {
+        setSettings(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
 
   const fetchServices = async () => {
     try {
@@ -125,6 +138,7 @@ const Services = () => {
                   {/* Content */}
                   <div className="p-5 flex flex-col flex-grow">
                     {/* Price & Timeline Row - Price Always Black */}
+                    {settings?.features?.showPricing && (
                     <div className="flex items-center justify-between mb-4 pb-4 border-b border-gray-100">
                       <div className="flex items-center gap-1 text-black">
                         <FaRupeeSign size={14} />
@@ -139,6 +153,7 @@ const Services = () => {
                         <span>{service.timeline || '3-7 Days'}</span>
                       </div>
                     </div>
+                    )}
 
                     {/* Description */}
                     <p className="text-gray-500 text-sm leading-relaxed line-clamp-2 mb-4 flex-grow">

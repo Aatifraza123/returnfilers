@@ -93,15 +93,35 @@ const AdminPortfolio = () => {
   }
 
   const deleteItem = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this portfolio item?')) return
-
-    try {
-      await api.delete(`/portfolio/${id}`, getConfig())
-      toast.success('Portfolio item deleted successfully')
-      fetchPortfolio()
-    } catch (error) {
-      toast.error('Failed to delete portfolio item')
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Delete Portfolio Item?</p>
+        <p className="text-sm text-gray-600">This action cannot be undone.</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await api.delete(`/portfolio/${id}`, getConfig());
+                toast.success('Portfolio item deleted successfully');
+                fetchPortfolio();
+              } catch (error) {
+                toast.error('Failed to delete portfolio item');
+              }
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity });
   }
 
   if (loading) {

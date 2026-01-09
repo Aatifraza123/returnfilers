@@ -36,21 +36,23 @@ const Header = () => {
         const serviceList = servicesData.services || servicesData.data || servicesData || [];
         setServices(serviceList.filter(s => s.active !== false));
         
-        // Fetch blogs
-        const { data: blogsData } = await api.get('/blogs');
-        const blogList = Array.isArray(blogsData) 
-          ? blogsData 
-          : (blogsData.blogs || blogsData.data || []);
-        
-        console.log('Blogs fetched for header:', blogList.length);
-        // Get latest 5 blogs (no published filter since model doesn't have that field)
-        setBlogs(blogList.slice(0, 5));
+        // Fetch blogs only if enabled in settings
+        if (settings?.features?.enableBlog) {
+          const { data: blogsData } = await api.get('/blogs');
+          const blogList = Array.isArray(blogsData) 
+            ? blogsData 
+            : (blogsData.blogs || blogsData.data || []);
+          
+          console.log('Blogs fetched for header:', blogList.length);
+          // Get latest 5 blogs (no published filter since model doesn't have that field)
+          setBlogs(blogList.slice(0, 5));
+        }
       } catch (error) {
         console.log('Data fetch error:', error);
       }
     };
     fetchData();
-  }, []);
+  }, [settings]);
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 20);
@@ -62,7 +64,7 @@ const Header = () => {
     { to: '/', label: 'Home' },
     { to: '/about', label: 'About' },
     { to: '/services', label: 'Services', hasDropdown: true, type: 'services' },
-    { to: '/blog', label: 'Blog', hasDropdown: true, type: 'blogs' },
+    ...(settings?.features?.enableBlog ? [{ to: '/blog', label: 'Blog', hasDropdown: true, type: 'blogs' }] : []),
     { to: '/contact', label: 'Contact' },
   ];
 
@@ -71,27 +73,28 @@ const Header = () => {
       scrolled 
         ? 'bg-white/95 backdrop-blur-lg shadow-md py-2' 
         : isHomePage 
-          ? 'bg-white/90 backdrop-blur-sm py-3' 
-          : 'bg-white/80 backdrop-blur-sm py-3'
+          ? 'bg-white/90 backdrop-blur-sm py-2.5' 
+          : 'bg-white/80 backdrop-blur-sm py-2.5'
     }`}>
       {/* Remove gradient overlay for home page */}
       
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
         {/* Logo */}
-        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
+        <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group -my-1">
           {settings?.logo ? (
             <>
               <img 
                 src={settings.logo} 
                 alt={settings.companyName || 'Logo'} 
-                className="h-10 sm:h-11 md:h-12 object-contain"
+                className="h-11 sm:h-12 md:h-14 object-contain"
+                style={{ mixBlendMode: 'multiply' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
                   e.target.nextElementSibling.style.display = 'flex';
                 }}
               />
               <div 
-                className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+                className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-base sm:text-lg md:text-xl font-bold shadow-md"
                 style={{ display: 'none' }}
               >
                 {settings?.logoText || 'RF'}
@@ -99,7 +102,7 @@ const Header = () => {
             </>
           ) : (
             <div 
-              className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+              className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-base sm:text-lg md:text-xl font-bold shadow-md"
             >
               {settings?.logoText || 'RF'}
             </div>

@@ -26,15 +26,35 @@ const AdminReviews = () => {
   }
 
   const deleteReview = async (id) => {
-    if (!window.confirm('Are you sure you want to delete this review?')) return
-
-    try {
-      await axios.delete(`/api/reviews/${id}`)
-      toast.success('Review deleted successfully')
-      fetchReviews()
-    } catch (error) {
-      toast.error('Failed to delete review')
-    }
+    toast((t) => (
+      <div className="flex flex-col gap-3">
+        <p className="font-semibold">Delete Review?</p>
+        <p className="text-sm text-gray-600">This action cannot be undone.</p>
+        <div className="flex gap-2">
+          <button
+            onClick={async () => {
+              toast.dismiss(t.id);
+              try {
+                await api.delete(`/reviews/${id}`);
+                toast.success('Review deleted successfully');
+                fetchReviews();
+              } catch (error) {
+                toast.error('Failed to delete review');
+              }
+            }}
+            className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600 text-sm"
+          >
+            Delete
+          </button>
+          <button
+            onClick={() => toast.dismiss(t.id)}
+            className="px-4 py-2 bg-gray-300 text-gray-700 rounded hover:bg-gray-400 text-sm"
+          >
+            Cancel
+          </button>
+        </div>
+      </div>
+    ), { duration: Infinity });
   }
 
   if (loading) {

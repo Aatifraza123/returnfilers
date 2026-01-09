@@ -50,16 +50,18 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch testimonials
-        const { data: testimonialsData } = await api.get('/testimonials');
-        if (testimonialsData.success && testimonialsData.data.length > 0) {
-          setTestimonials(testimonialsData.data);
-        }
-        
-        // Fetch settings
+        // Fetch settings first
         const { data: settingsData } = await api.get('/settings');
         if (settingsData.success) {
           setSettings(settingsData.data);
+        }
+        
+        // Fetch testimonials only if enabled in settings
+        if (settingsData.success && settingsData.data?.features?.enableTestimonials) {
+          const { data: testimonialsData } = await api.get('/testimonials');
+          if (testimonialsData.success && testimonialsData.data.length > 0) {
+            setTestimonials(testimonialsData.data);
+          }
         }
       } catch (error) {
         console.log('Error fetching data');
@@ -465,7 +467,7 @@ const Home = () => {
       </section>
 
       {/* ==================== TESTIMONIALS ==================== */}
-      {testimonials.length > 0 && (
+      {settings?.features?.enableTestimonials && testimonials.length > 0 && (
       <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
         <div className="container mx-auto max-w-7xl px-6">
           {/* Section Header */}

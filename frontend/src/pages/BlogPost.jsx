@@ -14,6 +14,7 @@ const BlogPost = () => {
   const navigate = useNavigate();
   const [blog, setBlog] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(null);
 
   // Reading Progress Logic
   const { scrollYProgress } = useScroll();
@@ -27,8 +28,28 @@ const BlogPost = () => {
   const y = useTransform(scrollYProgress, [0, 1], ['0%', '50%']);
 
   useEffect(() => {
-    if (id) fetchBlog();
+    fetchSettings();
   }, [id]);
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get('/settings');
+      if (data.success) {
+        setSettings(data.data);
+        // If blog is disabled, redirect to home
+        if (!data.data?.features?.enableBlog) {
+          toast.error('Blog is currently unavailable');
+          navigate('/');
+          return;
+        }
+        // If blog is enabled, fetch blog post
+        if (id) fetchBlog();
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      setLoading(false);
+    }
+  };
 
   const fetchBlog = async () => {
     if (!id) {

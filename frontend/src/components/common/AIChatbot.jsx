@@ -277,6 +277,7 @@ const AIChatbot = () => {
           'Content-Type': 'application/json',
         },
         body: JSON.stringify({ message: userMessage, history }),
+        signal: AbortSignal.timeout(30000), // 30 second timeout
       });
 
       if (!response.ok) throw new Error('Stream failed');
@@ -344,7 +345,7 @@ const AIChatbot = () => {
       // Fallback to non-streaming API
       try {
         const history = messages.slice(-8).map(m => ({ role: m.role, content: m.content }));
-        const { data } = await api.post('/chat', { message: userMessage, history });
+        const { data } = await api.post('/chat', { message: userMessage, history }, { timeout: 15000 });
         
         if (data.success) {
           setMessages(prev => {
@@ -360,18 +361,30 @@ const AIChatbot = () => {
           throw new Error('API failed');
         }
       } catch (fallbackError) {
+        console.error('Fallback error:', fallbackError);
         setMessages(prev => {
           const newMessages = [...prev];
           const lastMsg = newMessages[newMessages.length - 1];
+          
+          // Better error message based on error type
+          let errorMessage = '';
+          if (fallbackError.code === 'ECONNABORTED' || fallbackError.message.includes('timeout')) {
+            errorMessage = `⏱️ Request timeout. Our AI is taking longer than usual.\n\nPlease try again or contact us:\n📞 ${settings?.phone || '+91 84471 27264'}\n📧 ${settings?.email || 'info@returnfilers.in'}`;
+          } else if (fallbackError.code === 'ERR_NETWORK' || fallbackError.message.includes('Network Error')) {
+            errorMessage = `🔌 Network connection issue. Please check your internet connection.\n\nFor immediate assistance:\n📞 ${settings?.phone || '+91 84471 27264'}\n📧 ${settings?.email || 'info@returnfilers.in'}`;
+          } else {
+            errorMessage = `⚠️ Our AI assistant is temporarily unavailable.\n\nPlease contact us directly:\n📞 ${settings?.phone || '+91 84471 27264'}\n📧 ${settings?.email || 'info@returnfilers.in'}\n\nWe're here to help! 😊`;
+          }
+          
           if (lastMsg?.role === 'assistant' && !lastMsg?.content) {
             newMessages[newMessages.length - 1] = {
               role: 'assistant',
-              content: `Connection issue. Please try again or call us at ${settings?.phone || '+91 84471 27264'}`
+              content: errorMessage
             };
           } else {
             newMessages.push({
               role: 'assistant',
-              content: `Connection issue. Please try again or call us at ${settings?.phone || '+91 84471 27264'}`
+              content: errorMessage
             });
           }
           return newMessages;

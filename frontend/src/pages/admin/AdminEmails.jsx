@@ -294,7 +294,9 @@ const AdminEmails = () => {
       return;
     }
 
-    if (!window.confirm(`Send email to ${filteredEmailsList.length} recipients?`)) return;
+    // Show confirmation toast
+    const confirmSend = window.confirm(`Send email to ${filteredEmailsList.length} recipients?`);
+    if (!confirmSend) return;
 
     setSendingBulkEmail(true);
     try {

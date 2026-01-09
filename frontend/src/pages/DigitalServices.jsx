@@ -14,6 +14,7 @@ const DigitalServices = () => {
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [loading, setLoading] = useState(true);
   const [openFaq, setOpenFaq] = useState(null);
+  const [settings, setSettings] = useState(null);
 
   const faqs = [
     {
@@ -53,31 +54,41 @@ const DigitalServices = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const [servicesRes, testimonialsRes] = await Promise.all([
+        const [servicesRes, settingsRes] = await Promise.all([
           api.get('/digital-services'),
-          api.get('/testimonials')
+          api.get('/settings')
         ]);
         
         setServices(servicesRes.data.services.filter(s => s.active) || []);
         
-        // Filter only Web Development testimonials
-        const allTestimonials = testimonialsRes.data.data || [];
-        console.log('All testimonials:', allTestimonials.map(t => ({ name: t.name, service: t.service, active: t.isActive })));
+        // Set settings
+        if (settingsRes.data.success) {
+          setSettings(settingsRes.data.data);
+        }
         
-        const webTestimonials = allTestimonials.filter(t => {
-          if (!t.isActive || !t.service) return false;
-          const service = t.service.toLowerCase();
-          const isWebDev = service.includes('web') || 
-                          service.includes('website') || 
-                          service.includes('development') ||
-                          service.includes('e-commerce') ||
-                          service.includes('ecommerce');
-          console.log(`${t.name} (${t.service}): ${isWebDev ? 'INCLUDED' : 'EXCLUDED'}`);
-          return isWebDev;
-        });
-        
-        console.log('Filtered web testimonials:', webTestimonials.map(t => ({ name: t.name, service: t.service })));
-        setTestimonials(webTestimonials);
+        // Fetch testimonials only if enabled in settings
+        if (settingsRes.data.success && settingsRes.data.data?.features?.enableTestimonials) {
+          const testimonialsRes = await api.get('/testimonials');
+          
+          // Filter only Web Development testimonials
+          const allTestimonials = testimonialsRes.data.data || [];
+          console.log('All testimonials:', allTestimonials.map(t => ({ name: t.name, service: t.service, active: t.isActive })));
+          
+          const webTestimonials = allTestimonials.filter(t => {
+            if (!t.isActive || !t.service) return false;
+            const service = t.service.toLowerCase();
+            const isWebDev = service.includes('web') || 
+                            service.includes('website') || 
+                            service.includes('development') ||
+                            service.includes('e-commerce') ||
+                            service.includes('ecommerce');
+            console.log(`${t.name} (${t.service}): ${isWebDev ? 'INCLUDED' : 'EXCLUDED'}`);
+            return isWebDev;
+          });
+          
+          console.log('Filtered web testimonials:', webTestimonials.map(t => ({ name: t.name, service: t.service })));
+          setTestimonials(webTestimonials);
+        }
       } catch (error) {
         console.error('Failed to fetch data', error);
       } finally {
@@ -153,7 +164,7 @@ const DigitalServices = () => {
                   </div>
 
                   {/* 3. Modern Package Cards */}
-                  {service.packages?.length > 0 && (
+                  {settings?.features?.showPricing && service.packages?.length > 0 && (
                     <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                       {service.packages.map((pkg, pIdx) => (
                         <motion.div
@@ -323,7 +334,7 @@ const DigitalServices = () => {
       </section>
 
       {/* Testimonials Section */}
-      {testimonials.length > 0 && (
+      {settings?.features?.enableTestimonials && testimonials.length > 0 && (
         <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
           <div className="container mx-auto max-w-7xl px-6">
             {/* Section Header */}

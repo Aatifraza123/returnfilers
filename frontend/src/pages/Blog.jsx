@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { motion } from 'framer-motion';
 import api from '../api/axios';
 import { format } from 'date-fns';
@@ -16,13 +16,35 @@ const stripHtml = (html) => {
 };
 
 const Blog = () => {
+  const navigate = useNavigate();
   const [blogs, setBlogs] = useState([]);
   const [loading, setLoading] = useState(true);
   const [featuredBlog, setFeaturedBlog] = useState(null);
+  const [settings, setSettings] = useState(null);
 
   useEffect(() => {
-    fetchBlogs();
+    fetchSettings();
   }, []);
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get('/settings');
+      if (data.success) {
+        setSettings(data.data);
+        // If blog is disabled, redirect to home
+        if (!data.data?.features?.enableBlog) {
+          toast.error('Blog is currently unavailable');
+          navigate('/');
+          return;
+        }
+        // If blog is enabled, fetch blogs
+        fetchBlogs();
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+      setLoading(false);
+    }
+  };
 
   const fetchBlogs = async () => {
     try {

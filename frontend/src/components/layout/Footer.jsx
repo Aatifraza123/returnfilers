@@ -27,7 +27,7 @@ const Footer = () => {
     { to: '/services', label: 'Services' },
     // { to: '/portfolio', label: 'Portfolio' },
     { to: '/contact', label: 'Contact' },
-    { to: '/blog', label: 'Blog' }
+    ...(settings?.features?.enableBlog ? [{ to: '/blog', label: 'Blog' }] : [])
   ];
 
   const legalLinks = [
@@ -83,14 +83,14 @@ const Footer = () => {
                   <img 
                     src={settings.logo} 
                     alt={settings.companyName || 'Logo'} 
-                    className="h-10 md:h-12 object-contain"
+                    className="h-12 md:h-14 object-contain"
                     onError={(e) => {
                       e.target.style.display = 'none';
                       e.target.nextElementSibling.style.display = 'flex';
                     }}
                   />
                   <div 
-                    className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
+                    className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
                     style={{ display: 'none' }}
                   >
                     {settings?.logoText || 'RF'}
@@ -98,7 +98,7 @@ const Footer = () => {
                 </>
               ) : (
                 <div 
-                  className="w-10 h-10 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm md:text-lg font-bold shadow-md"
+                  className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
                 >
                   {settings?.logoText || 'RF'}
                 </div>

@@ -504,7 +504,8 @@ const AdminBlogsForm = () => {
                     type="button"
                     onClick={() => {
                       if (content && content.length > 50) {
-                        if (!window.confirm('This will replace your current content. Continue?')) return;
+                        const confirmReplace = window.confirm('This will replace your current content. Continue?');
+                        if (!confirmReplace) return;
                       }
                       setContent(BLOG_TEMPLATE);
                       toast.success('Template loaded! Customize it with your content.');

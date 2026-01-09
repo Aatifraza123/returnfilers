@@ -22,6 +22,7 @@ const ServiceDetail = () => {
   const [service, setService] = useState(null);
   const [relatedServices, setRelatedServices] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [settings, setSettings] = useState(null);
 
   const handleBookNow = () => {
     navigate(`/booking?service=${encodeURIComponent(service.title)}`);
@@ -29,8 +30,20 @@ const ServiceDetail = () => {
 
   useEffect(() => {
     fetchService();
+    fetchSettings();
     window.scrollTo(0, 0);
   }, [id]);
+
+  const fetchSettings = async () => {
+    try {
+      const { data } = await api.get('/settings');
+      if (data.success) {
+        setSettings(data.data);
+      }
+    } catch (error) {
+      console.error('Error fetching settings:', error);
+    }
+  };
 
   const fetchService = async () => {
     setLoading(true);
@@ -123,6 +136,7 @@ const ServiceDetail = () => {
             </div>
 
             {/* Price Card - Price Always Black */}
+            {settings?.features?.showPricing && (
             <div className="bg-white px-4 py-3 rounded-xl shadow-lg flex items-center gap-3">
               <div>
                 <p className="text-xs text-gray-500 uppercase">Starting From</p>
@@ -142,6 +156,7 @@ const ServiceDetail = () => {
                 Book Now
               </button>
             </div>
+            )}
           </div>
         </div>
       </section>
@@ -284,9 +299,11 @@ const ServiceDetail = () => {
                     <h3 className="absolute bottom-2 left-3 right-3 text-white font-semibold text-sm line-clamp-1">{s.title}</h3>
                   </div>
                   <div className="p-3 flex items-center justify-between">
+                    {settings?.features?.showPricing && (
                     <span className="text-black font-semibold text-sm">
                       ₹{s.price && !isNaN(Number(s.price)) ? Number(s.price).toLocaleString() : 'Quote'}
                     </span>
+                    )}
                     <span className="text-xs text-gray-500 group-hover:text-[#C9A227]">View →</span>
                   </div>
                 </Link>
