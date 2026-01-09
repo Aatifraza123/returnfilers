@@ -63,14 +63,19 @@ const Header = () => {
           ? 'bg-transparent py-3' 
           : 'bg-white/80 backdrop-blur-sm py-3'
     }`}>
-      <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center">
+      {/* Subtle gradient overlay for better visibility on home page */}
+      {isHomePage && !scrolled && (
+        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none"></div>
+      )}
+      
+      <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
         {/* Logo */}
         <Link to="/" className="flex items-center gap-2 hover:opacity-90 transition-opacity group">
           <div className="w-10 h-10 sm:w-11 sm:h-11 md:w-12 md:h-12 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md">
             RF
           </div>
           <span className={`text-lg sm:text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
-            isHomePage && !scrolled ? 'text-white' : 'text-[#0B1530]'
+            isHomePage && !scrolled ? 'text-white drop-shadow-lg' : 'text-[#0B1530]'
           }`}>
             ReturnFilers
           </span>
@@ -101,9 +106,9 @@ const Header = () => {
                   className={({ isActive }) =>
                     `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
                       isActive 
-                        ? 'text-[#C9A227] font-semibold' 
+                        ? 'text-[#C9A227] font-semibold drop-shadow-lg' 
                         : isHomePage && !scrolled
-                          ? 'text-white hover:text-[#C9A227]'
+                          ? 'text-white hover:text-[#C9A227] drop-shadow-lg'
                           : 'text-gray-800 hover:text-[#0B1530]'
                     }`
                   }
@@ -192,7 +197,7 @@ const Header = () => {
         {/* Mobile Menu Toggle */}
         <button
           className={`lg:hidden text-2xl focus:outline-none transition-colors ${
-            isHomePage && !scrolled ? 'text-white' : 'text-[#0B1530]'
+            isHomePage && !scrolled ? 'text-white drop-shadow-lg' : 'text-[#0B1530]'
           }`}
           onClick={() => setMobileMenu(!mobileMenu)}
         >
