@@ -60,13 +60,10 @@ const Header = () => {
       scrolled 
         ? 'bg-white/95 backdrop-blur-lg shadow-md py-2' 
         : isHomePage 
-          ? 'bg-transparent py-3' 
+          ? 'bg-white/90 backdrop-blur-sm py-3' 
           : 'bg-white/80 backdrop-blur-sm py-3'
     }`}>
-      {/* Subtle gradient overlay for better visibility on home page */}
-      {isHomePage && !scrolled && (
-        <div className="absolute inset-0 bg-gradient-to-b from-black/20 to-transparent pointer-events-none"></div>
-      )}
+      {/* Remove gradient overlay for home page */}
       
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
         {/* Logo */}
@@ -75,7 +72,7 @@ const Header = () => {
             RF
           </div>
           <span className={`text-lg sm:text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
-            isHomePage && !scrolled ? 'text-white drop-shadow-lg' : 'text-[#0B1530]'
+            isHomePage && !scrolled ? 'text-[#0B1530]' : 'text-[#0B1530]'
           }`}>
             ReturnFilers
           </span>
@@ -106,10 +103,8 @@ const Header = () => {
                   className={({ isActive }) =>
                     `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
                       isActive 
-                        ? 'text-[#C9A227] font-semibold drop-shadow-lg' 
-                        : isHomePage && !scrolled
-                          ? 'text-white hover:text-[#C9A227] drop-shadow-lg'
-                          : 'text-gray-800 hover:text-[#0B1530]'
+                        ? 'text-[#C9A227] font-semibold' 
+                        : 'text-gray-800 hover:text-[#0B1530]'
                     }`
                   }
                 >
@@ -184,11 +179,7 @@ const Header = () => {
         <div className="hidden lg:block">
           <Link
             to="/quote"
-            className={`px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl ${
-              isHomePage && !scrolled
-                ? 'bg-[#C9A227] text-[#0B1530] hover:bg-white'
-                : 'bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]'
-            }`}
+            className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
           >
             Get Quote
           </Link>
@@ -196,9 +187,7 @@ const Header = () => {
 
         {/* Mobile Menu Toggle */}
         <button
-          className={`lg:hidden text-2xl focus:outline-none transition-colors ${
-            isHomePage && !scrolled ? 'text-white drop-shadow-lg' : 'text-[#0B1530]'
-          }`}
+          className="lg:hidden text-2xl focus:outline-none transition-colors text-[#0B1530]"
           onClick={() => setMobileMenu(!mobileMenu)}
         >
           {mobileMenu ? <FaTimes /> : <FaBars />}
