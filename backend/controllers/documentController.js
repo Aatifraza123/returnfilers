@@ -209,54 +209,86 @@ const deleteDocument = async (req, res) => {
 const sendDocumentEmails = async (doc) => {
   const adminEmailAddress = process.env.ADMIN_EMAIL || 'razaahmadwork@gmail.com';
 
-  const adminHtml = `
-    <!DOCTYPE html>
-    <html>
-    <body style="margin: 0; padding: 0; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px;">
-        <tr>
-          <td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; border-radius: 8px;">
-              <tr>
-                <td style="background-color: #0B1530; padding: 30px; text-align: center; border-radius: 8px 8px 0 0;">
-                  <h1 style="color: #D4AF37; margin: 0;">New Document Submission</h1>
-                </td>
-              </tr>
-              <tr>
-                <td style="padding: 30px;">
-                  <table width="100%" cellpadding="8">
-                    <tr><td style="color: #666;"><strong>Name:</strong></td><td>${doc.name}</td></tr>
-                    <tr><td style="color: #666;"><strong>Email:</strong></td><td>${doc.email}</td></tr>
-                    <tr><td style="color: #666;"><strong>Phone:</strong></td><td>${doc.phone}</td></tr>
-                    <tr><td style="color: #666;"><strong>Service:</strong></td><td>${doc.service}</td></tr>
-                    <tr><td style="color: #666;"><strong>Documents:</strong></td><td>${doc.documents.length} file(s)</td></tr>
-                    ${doc.message ? `<tr><td style="color: #666;"><strong>Message:</strong></td><td>${doc.message}</td></tr>` : ''}
-                  </table>
-                  <p style="margin-top: 20px; color: #666; font-size: 12px;">Reference ID: ${doc._id}</p>
-                </td>
-              </tr>
-              <tr>
-                <td style="background-color: #0B1530; padding: 20px; text-align: center; border-radius: 0 0 8px 8px;">
-                  <p style="color: #D4AF37; margin: 0; font-weight: bold;">ReturnFilers</p>
-                </td>
-              </tr>
-            </table>
-          </td>
-        </tr>
-      </table>
-    </body>
-    </html>
-  `;
+  const { getEmailTemplate } = require('../utils/emailTemplates');
+  
+  const adminHtml = getEmailTemplate({
+    title: 'New Document Submission',
+    content: `
+      <p style="margin: 0 0 16px 0; color: #4b5563;">A new document submission has been received.</p>
+      <div style="background: #f9fafb; padding: 16px; margin: 20px 0; border: 1px solid #e5e7eb;">
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Name</p>
+        <p style="margin: 0 0 12px 0; color: #4b5563; font-size: 14px;">${doc.name}</p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Email</p>
+        <p style="margin: 0 0 12px 0;"><a href="mailto:${doc.email}" style="color: #2563eb; text-decoration: none; font-size: 14px;">${doc.email}</a></p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Phone</p>
+        <p style="margin: 0 0 12px 0;"><a href="tel:${doc.phone}" style="color: #2563eb; text-decoration: none; font-size: 14px;">${doc.phone || 'Not provided'}</a></p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Service</p>
+        <p style="margin: 0 0 12px 0; color: #111827; font-weight: 600; font-size: 14px;">${doc.service}</p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Documents</p>
+        <p style="margin: 0 0 12px 0; color: #4b5563; font-size: 14px;">${doc.documents.length} file(s) uploaded</p>
+        
+        ${doc.message ? `
+        <div style="padding-top: 12px; margin-top: 12px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #111827; font-weight: 600; margin: 0 0 6px 0; font-size: 13px;">Message</p>
+          <p style="color: #4b5563; margin: 0; line-height: 1.6; font-size: 14px;">${doc.message}</p>
+        </div>
+        ` : ''}
+        
+        <div style="padding-top: 12px; margin-top: 12px; border-top: 1px solid #e5e7eb;">
+          <p style="color: #111827; font-weight: 600; margin: 0 0 6px 0; font-size: 13px;">Reference ID</p>
+          <p style="color: #4b5563; margin: 0; font-size: 14px; font-family: monospace;">${doc._id}</p>
+        </div>
+      </div>
+      <p style="margin: 16px 0 0 0; color: #4b5563;">Please review and respond to the user within 24 hours.</p>
+    `
+  });
+
+  // Customer confirmation template
+  const customerHtml = getEmailTemplate({
+    title: 'Document Submission Confirmed',
+    content: `
+      <p style="margin: 0 0 16px 0; color: #4b5563;">Hi <strong>${doc.name}</strong>,</p>
+      <p style="margin: 0 0 16px 0; color: #4b5563;">Thank you for submitting your documents for <strong>${doc.service}</strong>.</p>
+      <div style="background: #f9fafb; padding: 16px; margin: 20px 0; border: 1px solid #e5e7eb;">
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Service</p>
+        <p style="margin: 0 0 12px 0; color: #111827; font-weight: 600; font-size: 14px;">${doc.service}</p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Documents Uploaded</p>
+        <p style="margin: 0 0 12px 0; color: #4b5563; font-size: 14px;">${doc.documents.length} file(s)</p>
+        
+        <p style="margin: 0 0 6px 0; color: #111827; font-weight: 600; font-size: 13px;">Reference ID</p>
+        <p style="margin: 0; color: #4b5563; font-size: 14px; font-family: monospace;">${doc._id}</p>
+      </div>
+      <p style="margin: 16px 0; color: #4b5563;">Our team will review your documents and contact you within 24-48 hours.</p>
+      <p style="margin: 20px 0 0 0; color: #4b5563;">Best regards,<br><strong style="color: #111827;">Team ReturnFilers</strong></p>
+    `
+  });
 
   try {
+    // Send admin notification
+    console.log('Sending admin notification email...');
     await sendEmail({
       to: adminEmailAddress,
       subject: `New Document Submission - ${doc.service} - ${doc.name}`,
       html: adminHtml
     });
-    console.log('Admin notification email sent');
+    console.log('✅ Admin notification email sent');
+
+    // Send customer confirmation
+    console.log('Sending customer confirmation email...');
+    await sendEmail({
+      to: doc.email,
+      subject: 'Document Submission Confirmed - ReturnFilers',
+      html: customerHtml
+    });
+    console.log('✅ Customer confirmation email sent');
+
   } catch (error) {
-    console.error('Email sending failed:', error.message);
+    console.error('❌ Email sending failed:', error.message);
   }
 };
 

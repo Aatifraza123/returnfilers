@@ -163,29 +163,15 @@ const replyToBooking = async (req, res) => {
       return res.status(400).json({ success: false, message: 'Please provide to, subject, and message' });
     }
 
-    const html = `
-      <!DOCTYPE html>
-      <html>
-      <body style="margin:0;padding:0;font-family:Arial,sans-serif;background:#f5f5f5;">
-        <table width="100%" cellpadding="0" cellspacing="0" style="background:#f5f5f5;padding:20px;">
-          <tr><td align="center">
-            <table width="600" cellpadding="0" cellspacing="0" style="background:#fff;border-radius:8px;">
-              <tr><td style="background:#0B1530;padding:30px;text-align:center;border-radius:8px 8px 0 0;">
-                <h1 style="color:#D4AF37;margin:0;">ReturnFilers</h1>
-              </td></tr>
-              <tr><td style="padding:30px;">
-                <div style="white-space:pre-line;color:#333;line-height:1.6;">${message}</div>
-              </td></tr>
-              <tr><td style="background:#0B1530;padding:20px;text-align:center;border-radius:0 0 8px 8px;">
-                <p style="color:#D4AF37;margin:0;font-weight:bold;">ReturnFilers</p>
-                <p style="color:#fff;margin:5px 0 0;font-size:12px;">+91 84471 27264 | info@returnfilers.in</p>
-              </td></tr>
-            </table>
-          </td></tr>
-        </table>
-      </body>
-      </html>
-    `;
+    const { getEmailTemplate } = require('../utils/emailTemplates');
+    
+    const html = getEmailTemplate({
+      title: subject,
+      content: `
+        <p style="margin: 0 0 16px 0; color: #4b5563;">${message}</p>
+        <p style="margin: 20px 0 0 0; color: #4b5563;">Best regards,<br><strong style="color: #111827;">Team ReturnFilers</strong></p>
+      `
+    });
 
     await sendEmail({ to, subject, html });
 
