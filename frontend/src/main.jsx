@@ -22,11 +22,9 @@ const queryClient = new QueryClient({
 
 const GOOGLE_CLIENT_ID = import.meta.env.VITE_GOOGLE_CLIENT_ID || '';
 
-// Log for debugging (remove in production)
-if (!GOOGLE_CLIENT_ID) {
+// Debug log only in development
+if (import.meta.env.DEV && !GOOGLE_CLIENT_ID) {
   console.warn('⚠️ VITE_GOOGLE_CLIENT_ID is not set. Google login will not work.');
-} else {
-  console.log('✅ Google OAuth configured');
 }
 
 // Check if root element exists
