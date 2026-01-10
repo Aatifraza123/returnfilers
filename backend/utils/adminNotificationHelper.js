@@ -3,7 +3,12 @@ const Notification = require('../models/notificationModel');
 // Notify user when booking status is updated
 exports.notifyBookingStatusUpdate = async (booking, status, adminNote = '') => {
   try {
-    if (!booking.user) return;
+    if (!booking.user) {
+      console.log('⚠️ No user ID in booking, skipping notification');
+      return;
+    }
+
+    console.log(`📢 Creating booking status update notification for user: ${booking.user}`);
 
     const statusMessages = {
       pending: 'Your booking is being reviewed',
@@ -13,7 +18,8 @@ exports.notifyBookingStatusUpdate = async (booking, status, adminNote = '') => {
       cancelled: 'Your booking has been cancelled'
     };
 
-    await Notification.create({
+    // For status updates, we add 'action' field to bypass unique index
+    const notification = await Notification.create({
       type: 'booking',
       title: 'Booking Status Updated',
       message: statusMessages[status] || `Your booking status: ${status}`,
@@ -23,12 +29,14 @@ exports.notifyBookingStatusUpdate = async (booking, status, adminNote = '') => {
       recipientId: booking.user,
       link: '/dashboard/bookings',
       metadata: {
+        action: 'status_update', // This allows multiple notifications for same booking
         status,
         service: booking.service,
-        adminNote
+        adminNote,
+        timestamp: new Date()
       }
     });
-    console.log('✅ Booking status notification sent to user');
+    console.log('✅ Booking status notification created:', notification._id);
   } catch (error) {
     console.error('❌ Error sending booking status notification:', error);
   }
@@ -37,9 +45,14 @@ exports.notifyBookingStatusUpdate = async (booking, status, adminNote = '') => {
 // Notify user when quote is responded
 exports.notifyQuoteResponse = async (quote, response) => {
   try {
-    if (!quote.user) return;
+    if (!quote.user) {
+      console.log('⚠️ No user ID in quote, skipping notification');
+      return;
+    }
 
-    await Notification.create({
+    console.log(`📢 Creating quote response notification for user: ${quote.user}`);
+
+    const notification = await Notification.create({
       type: 'quote',
       title: 'Quote Response Received',
       message: `We have sent you a quote for ${quote.service}. Check your email!`,
@@ -49,11 +62,13 @@ exports.notifyQuoteResponse = async (quote, response) => {
       recipientId: quote.user,
       link: '/dashboard/quotes',
       metadata: {
+        action: 'quote_response', // Allows multiple responses
         service: quote.service,
-        hasResponse: true
+        hasResponse: true,
+        timestamp: new Date()
       }
     });
-    console.log('✅ Quote response notification sent to user');
+    console.log('✅ Quote response notification created:', notification._id);
   } catch (error) {
     console.error('❌ Error sending quote response notification:', error);
   }
@@ -74,9 +89,11 @@ exports.notifyConsultationScheduled = async (consultation, scheduledDate, schedu
       recipientId: consultation.user,
       link: '/dashboard/consultations',
       metadata: {
+        action: 'consultation_scheduled', // Allows multiple schedules
         service: consultation.service,
         scheduledDate,
-        scheduledTime
+        scheduledTime,
+        timestamp: new Date()
       }
     });
     console.log('✅ Consultation scheduled notification sent to user');

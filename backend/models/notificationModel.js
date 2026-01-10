@@ -49,15 +49,7 @@ const notificationSchema = new mongoose.Schema({
 notificationSchema.index({ recipient: 1, isRead: 1, createdAt: -1 });
 notificationSchema.index({ recipientId: 1, isRead: 1, createdAt: -1 });
 
-// Compound index to prevent duplicate notifications for the same entity
-// This ensures one notification per (type, relatedId, recipient, recipientId) combination
-notificationSchema.index(
-  { type: 1, relatedId: 1, recipient: 1, recipientId: 1 },
-  { 
-    unique: true,
-    partialFilterExpression: { relatedId: { $exists: true } },
-    name: 'unique_notification_per_entity'
-  }
-);
+// Note: We removed the unique index to allow multiple notifications for status updates
+// Duplicate prevention is handled in code (notificationHelper.js) for initial notifications only
 
 module.exports = mongoose.model('Notification', notificationSchema);

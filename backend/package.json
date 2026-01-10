@@ -9,6 +9,7 @@
     "seed:admin": "node seedAdmin.js",
     "seed:digital": "node seedDigitalServices.js",
     "clean:notifications": "node scripts/cleanDuplicateNotifications.js",
+    "fix:notification-index": "node scripts/fixNotificationIndex.js",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "keywords": [],
