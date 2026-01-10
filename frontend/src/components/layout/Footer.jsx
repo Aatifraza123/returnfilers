@@ -220,6 +220,32 @@ const Footer = () => {
             </div>
           )}
         </div>
+        
+        {/* Business Details - Bottom Section */}
+        {(settings?.businessDetails?.gstNumber || settings?.businessDetails?.panNumber || settings?.businessDetails?.registrationNumber) && (
+          <div className="border-t border-gray-700 mt-6 pt-4">
+            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-400 text-xs">
+              {settings?.businessDetails?.gstNumber && (
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-300">GST:</span>
+                  <span>{settings.businessDetails.gstNumber}</span>
+                </div>
+              )}
+              {settings?.businessDetails?.panNumber && (
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-300">PAN:</span>
+                  <span>{settings.businessDetails.panNumber}</span>
+                </div>
+              )}
+              {settings?.businessDetails?.registrationNumber && (
+                <div className="flex items-center gap-1">
+                  <span className="font-semibold text-gray-300">Reg No:</span>
+                  <span>{settings.businessDetails.registrationNumber}</span>
+                </div>
+              )}
+            </div>
+          </div>
+        )}
       </div>
     </footer>
   );

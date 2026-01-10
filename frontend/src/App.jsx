@@ -6,6 +6,9 @@ import Layout from './components/layout/Layout'
 import PrivateRoute from './components/common/PrivateRoute'
 import AIChatbot from './components/common/AIChatbot'
 import ThemeProvider from './components/common/ThemeProvider'
+import GoogleAnalytics from './components/common/GoogleAnalytics'
+import GoogleTagManager from './components/common/GoogleTagManager'
+import FacebookPixel from './components/common/FacebookPixel'
 import AdminLayout from './components/layout/AdminLayout' 
 
 // Public Pages
@@ -81,6 +84,9 @@ function App() {
         <UserAuthProvider>
           <SettingsProvider>
             <ThemeProvider>
+              <GoogleAnalytics />
+              <GoogleTagManager />
+              <FacebookPixel />
               <ChatbotWrapper />
 
               <Routes>

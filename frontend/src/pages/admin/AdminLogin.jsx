@@ -1,9 +1,9 @@
 import { useState, useContext } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import AuthContext from '../../context/AuthContext';
 import { login as apiLogin } from '../../api/authApi'; 
 import toast from 'react-hot-toast';
-import { FaEye, FaEyeSlash } from 'react-icons/fa';
+import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 import { useSettings } from '../../context/SettingsContext';
 
 const AdminLogin = () => {
@@ -47,12 +47,20 @@ const AdminLogin = () => {
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 py-12 px-4">
-      <div className="w-full max-w-5xl">
+      <div className="w-full max-w-5xl mx-auto relative">
+        {/* Back to Home Button - Above Box */}
+        <Link 
+          to="/" 
+          className="absolute -top-16 left-0 flex items-center gap-2 text-gray-600 hover:text-gray-900 transition-colors group"
+        >
+          <FaArrowLeft className="group-hover:-translate-x-1 transition-transform" size={16} />
+          <span className="text-sm font-medium">Back to Home</span>
+        </Link>
         <div className="bg-white rounded-lg shadow-sm border border-gray-200 overflow-hidden">
           <div className="flex flex-col lg:flex-row">
             
             {/* Left Side - Dark Background */}
-            <div className="hidden lg:block lg:w-1/2 relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-16 overflow-hidden">
+            <div className="hidden lg:block lg:w-2/5 relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 overflow-hidden">
               {/* Geometric Shapes Background */}
               <div className="absolute top-10 right-10 w-64 h-64 border-2 border-white/10 rounded-lg transform rotate-12"></div>
               <div className="absolute top-20 right-20 w-48 h-48 border-2 border-white/10 rounded-lg transform -rotate-6"></div>
@@ -86,7 +94,7 @@ const AdminLogin = () => {
             </div>
 
             {/* Right Side - Form */}
-            <div className="w-full lg:w-1/2 p-8">
+            <div className="w-full lg:w-3/5 p-8">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Admin Login
