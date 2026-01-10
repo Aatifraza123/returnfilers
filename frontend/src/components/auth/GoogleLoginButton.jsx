@@ -8,6 +8,18 @@ import axios from 'axios';
 const GoogleLoginButton = ({ onSuccess }) => {
   const navigate = useNavigate();
   const { login } = useContext(UserAuthContext);
+  const clientId = import.meta.env.VITE_GOOGLE_CLIENT_ID;
+
+  // If no client ID, show message
+  if (!clientId) {
+    return (
+      <div className="w-full p-3 bg-yellow-50 border border-yellow-200 rounded-lg text-center">
+        <p className="text-sm text-yellow-800">
+          Google login is temporarily unavailable
+        </p>
+      </div>
+    );
+  }
 
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
