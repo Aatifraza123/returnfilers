@@ -65,7 +65,7 @@ const Services = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader size="lg" color="#C9A227" />
+        <Loader size="lg" text="Loading services..." />
       </div>
     );
   }

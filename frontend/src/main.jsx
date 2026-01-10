@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react'
+import React from 'react'
 import ReactDOM from 'react-dom/client'
 import { BrowserRouter } from 'react-router-dom'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
@@ -6,7 +6,6 @@ import { GoogleOAuthProvider } from '@react-oauth/google'
 import { Toaster } from 'react-hot-toast'
 import App from './App'
 import ErrorBoundary from './components/common/ErrorBoundary'
-import PageLoader from './components/common/PageLoader'
 import './index.css'
 import './theme.css'
 import './colors.css'
@@ -35,21 +34,7 @@ if (!rootElement) {
   console.log('React app starting...');
   
   const RootApp = () => {
-    const [loading, setLoading] = useState(true); // Enabled fast loader
-
-    useEffect(() => {
-      // Fast loader - just 200ms
-      const timer = setTimeout(() => {
-        setLoading(false);
-      }, 200);
-
-      return () => clearTimeout(timer);
-    }, []);
-
-    if (loading) {
-      return <PageLoader />;
-    }
-
+    // No initial loading delay - instant load
     return (
       <React.StrictMode>
         <ErrorBoundary>

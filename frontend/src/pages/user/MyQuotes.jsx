@@ -75,7 +75,7 @@ const MyQuotes = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader size="lg" />
+        <Loader size="lg" text="Loading quotes..." />
       </div>
     );
   }

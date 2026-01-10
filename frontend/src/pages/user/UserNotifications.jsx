@@ -125,7 +125,7 @@ const UserNotifications = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gradient-to-br from-slate-50 via-blue-50 to-indigo-50">
-        <Loader size="lg" />
+        <Loader size="lg" text="Loading notifications..." />
       </div>
     );
   }

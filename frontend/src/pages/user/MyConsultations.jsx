@@ -75,7 +75,7 @@ const MyConsultations = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center">
-        <Loader size="lg" />
+        <Loader size="lg" text="Loading consultations..." />
       </div>
     );
   }

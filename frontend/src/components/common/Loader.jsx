@@ -1,7 +1,15 @@
 import { useSettings } from '../../context/SettingsContext';
 
 const Loader = ({ size = 'md', text = '' }) => {
-  const { settings } = useSettings();
+  // Safely get settings - handle case when SettingsProvider is not available
+  let settings = null;
+  try {
+    const context = useSettings();
+    settings = context?.settings;
+  } catch (error) {
+    // SettingsProvider not available (e.g., in main.jsx before providers load)
+    settings = null;
+  }
   
   const sizeClasses = {
     sm: 'w-8 h-8',

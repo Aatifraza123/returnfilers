@@ -4,6 +4,8 @@ import { FaPlus, FaEdit, FaTrash, FaEye, FaTimes, FaCode, FaChartBar } from 'rea
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 
+import Loader from '../../components/common/Loader';
+
 const AdminDigitalServices = () => {
   const [services, setServices] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -193,7 +195,11 @@ const AdminDigitalServices = () => {
   };
 
   if (loading) {
-    return <div className="flex justify-center items-center h-64">Loading...</div>;
+    return (
+      <div className="flex justify-center items-center h-64">
+        <Loader size="lg" text="Loading digital services..." />
+      </div>
+    );
   }
 
   return (

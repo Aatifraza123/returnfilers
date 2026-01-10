@@ -129,7 +129,7 @@ const DigitalServices = () => {
   if (loading) {
     return (
       <div className="min-h-screen flex items-center justify-center bg-gray-50">
-        <Loader size="lg" text="Loading..." />
+        <Loader size="lg" text="Loading digital services..." />
       </div>
     );
   }
@@ -209,7 +209,7 @@ const DigitalServices = () => {
                           `}
                         >
                           {pkg.name === 'Business Website' && (
-                            <div className="absolute top-0 inset-x-0 h-1 bg-gradient-to-r from-[#C9A227] to-[#F0E68C]" />
+                            <div className="absolute top-0 inset-x-0 h-0" />
                           )}
 
                           <div className="p-8 pb-0">

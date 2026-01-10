@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { FaEye, FaTrash, FaDownload, FaFileAlt, FaReply } from 'react-icons/fa';
+import Loader from '../../components/common/Loader';
 
 const AdminBookings = () => {
   const [bookings, setBookings] = useState([]);
@@ -92,7 +93,11 @@ const AdminBookings = () => {
   };
 
   if (loading) {
-    return <div className="flex items-center justify-center h-64">Loading...</div>;
+    return (
+      <div className="flex items-center justify-center h-64">
+        <Loader size="lg" text="Loading bookings..." />
+      </div>
+    );
   }
 
   return (
