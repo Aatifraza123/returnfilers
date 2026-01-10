@@ -68,8 +68,10 @@ const createConsultation = async (req, res) => {
         .catch(err => {
           console.error('Email sending failed (non-blocking):', err);
         });
-      // Pass userId explicitly to ensure user notification is created
-      createConsultationNotification({ ...consultation.toObject(), user: userId })
+      // Create notifications - pass consultation with populated user field
+      const consultationData = consultation.toObject();
+      consultationData.user = userId; // Ensure user ID is set
+      createConsultationNotification(consultationData)
         .catch(err => console.error('Consultation notification failed:', err));
     });
   } catch (error) {

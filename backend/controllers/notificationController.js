@@ -220,3 +220,40 @@ exports.getUserUnreadCount = async (req, res) => {
     });
   }
 };
+
+
+// Admin sends custom notification to user
+exports.sendNotificationToUser = async (req, res) => {
+  try {
+    const { userId, title, message, type, link, metadata } = req.body;
+
+    if (!userId || !title || !message) {
+      return res.status(400).json({
+        success: false,
+        message: 'userId, title, and message are required'
+      });
+    }
+
+    const notification = await Notification.create({
+      type: type || 'system',
+      title,
+      message,
+      recipient: 'user',
+      recipientId: userId,
+      link: link || '/dashboard',
+      metadata: metadata || {}
+    });
+
+    res.json({
+      success: true,
+      message: 'Notification sent to user',
+      data: notification
+    });
+  } catch (error) {
+    console.error('Error sending notification:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Error sending notification'
+    });
+  }
+};

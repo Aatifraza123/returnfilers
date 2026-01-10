@@ -3,6 +3,7 @@ const User = require('../models/userModel');
 const mongoose = require('mongoose');
 const { sendEmail } = require('../utils/emailService');
 const { createBookingNotification } = require('../utils/notificationHelper');
+const { notifyBookingStatusUpdate } = require('../utils/adminNotificationHelper');
 
 // @desc    Create booking
 // @route   POST /api/bookings
@@ -46,11 +47,13 @@ const createBooking = async (req, res) => {
       data: { id: booking._id, name: booking.name }
     });
 
-    // Send email notification
+    // Send email notification and create notifications
     setImmediate(() => {
       sendBookingEmail(booking).catch(err => console.error('Email failed:', err));
-      // Pass the userId explicitly to ensure user notification is created
-      createBookingNotification({ ...booking.toObject(), user: userId })
+      // Create notifications - pass booking with populated user field
+      const bookingData = booking.toObject();
+      bookingData.user = userId; // Ensure user ID is set
+      createBookingNotification(bookingData)
         .catch(err => console.error('Notification failed:', err));
     });
 
@@ -113,6 +116,14 @@ const updateBooking = async (req, res) => {
 
     if (!booking) {
       return res.status(404).json({ success: false, message: 'Booking not found' });
+    }
+
+    // Send notification to user about status update
+    if (status && booking.user) {
+      setImmediate(() => {
+        notifyBookingStatusUpdate(booking, status, adminNotes)
+          .catch(err => console.error('Notification failed:', err));
+      });
     }
 
     res.json({ success: true, message: 'Booking updated', data: booking });

@@ -31,9 +31,11 @@ const AdminSettings = () => {
     brandColors: {
       primary: '#0B1530',
       secondary: '#C9A227',
-      accent: '#1a2b5c',
+      accent: '#1E3A8A',
       footerBg: '#0B1530',
-      footerText: '#ffffff'
+      footerText: '#ffffff',
+      footerLink: '#C9A227',
+      footerCompanyName: '#C9A227'
     },
     hero: {
       title: 'Professional Tax & Financial Services',
@@ -1418,8 +1420,105 @@ const AdminSettings = () => {
         {/* Footer Tab */}
         {activeTab === 'footer' && (
           <div className="space-y-6">
-            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Footer Content</h2>
+            <h2 className="text-xl font-bold text-[#0B1530] mb-4">Footer Settings</h2>
             
+            {/* Footer Colors */}
+            <div className="bg-gray-50 p-6 rounded-xl border border-gray-200">
+              <h3 className="text-lg font-semibold text-gray-900 mb-4 flex items-center gap-2">
+                <FaPaintBrush className="text-[#C9A227]" />
+                Footer Colors
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Background Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerBg || '#0B1530'}
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)}
+                      className="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerBg || '#0B1530'}
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)}
+                      placeholder="#0B1530"
+                      className="flex-1 border border-gray-200 p-2 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Text Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerText || '#ffffff'}
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)}
+                      className="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerText || '#ffffff'}
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)}
+                      placeholder="#ffffff"
+                      className="flex-1 border border-gray-200 p-2 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Link Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerLink || '#C9A227'}
+                      onChange={(e) => handleChange('brandColors.footerLink', e.target.value)}
+                      className="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerLink || '#C9A227'}
+                      onChange={(e) => handleChange('brandColors.footerLink', e.target.value)}
+                      placeholder="#C9A227"
+                      className="flex-1 border border-gray-200 p-2 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                </div>
+                
+                <div>
+                  <label className="block text-sm font-medium text-gray-700 mb-2">Company Name Color</label>
+                  <div className="flex items-center gap-3">
+                    <input
+                      type="color"
+                      value={settings.brandColors?.footerCompanyName || '#C9A227'}
+                      onChange={(e) => handleChange('brandColors.footerCompanyName', e.target.value)}
+                      className="w-16 h-10 rounded-lg border border-gray-300 cursor-pointer"
+                    />
+                    <input
+                      type="text"
+                      value={settings.brandColors?.footerCompanyName || '#C9A227'}
+                      onChange={(e) => handleChange('brandColors.footerCompanyName', e.target.value)}
+                      placeholder="#C9A227"
+                      className="flex-1 border border-gray-200 p-2 rounded-lg focus:outline-none focus:border-[#C9A227] text-sm font-mono"
+                    />
+                  </div>
+                </div>
+              </div>
+              
+              {/* Preview */}
+              <div className="mt-4 p-4 rounded-lg" style={{ backgroundColor: settings.brandColors?.footerBg || '#0B1530', color: settings.brandColors?.footerText || '#ffffff' }}>
+                <p className="text-sm font-bold mb-2" style={{ color: settings.brandColors?.footerCompanyName || '#C9A227' }}>
+                  {settings.companyName || 'Company Name'}
+                </p>
+                <p className="text-xs opacity-80 mb-2">This is regular footer text</p>
+                <a href="#" className="text-xs underline" style={{ color: settings.brandColors?.footerLink || '#C9A227' }}>
+                  Sample Link
+                </a>
+              </div>
+            </div>
+            
+            {/* Footer Content */}
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1.5">Footer Description</label>
               <textarea
@@ -1440,6 +1539,7 @@ const AdminSettings = () => {
                 placeholder="© 2024 ReturnFilers. All rights reserved."
                 className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
               />
+              <p className="text-xs text-gray-500 mt-1">Use {'{year}'} for dynamic year</p>
             </div>
           </div>
         )}

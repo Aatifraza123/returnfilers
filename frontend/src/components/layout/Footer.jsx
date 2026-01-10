@@ -63,6 +63,8 @@ const Footer = () => {
   // Get footer colors from settings
   const footerBg = settings?.brandColors?.footerBg || '#000000';
   const footerText = settings?.brandColors?.footerText || '#ffffff';
+  const footerLink = settings?.brandColors?.footerLink || '#C9A227';
+  const footerCompanyName = settings?.brandColors?.footerCompanyName || '#C9A227';
 
   return (
     <footer 
@@ -103,7 +105,7 @@ const Footer = () => {
                   {settings?.logoText || 'RF'}
                 </div>
               )}
-              <h3 className="text-2xl md:text-3xl font-serif font-bold text-[#C9A227]">
+              <h3 className="text-2xl md:text-3xl font-serif font-bold" style={{ color: footerCompanyName }}>
                 {settings?.companyName || 'ReturnFilers'}
               </h3>
             </div>
@@ -153,18 +155,13 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="inline-block hover:translate-x-1"
-                    style={{ 
-                      color: 'var(--color-secondary, #C9A227)',
-                      transition: 'all 0.3s ease-in-out'
-                    }}
+                    className="inline-block hover:translate-x-1 transition-all duration-300"
+                    style={{ color: footerLink }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#FFFFFF';
-                      e.currentTarget.style.transform = 'translateX(4px)';
+                      e.currentTarget.style.color = footerText;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'var(--color-secondary, #C9A227)';
-                      e.currentTarget.style.transform = 'translateX(0)';
+                      e.currentTarget.style.color = footerLink;
                     }}
                   >
                     {label}
@@ -182,18 +179,13 @@ const Footer = () => {
                 <li key={to}>
                   <Link 
                     to={to} 
-                    className="inline-block hover:translate-x-1"
-                    style={{ 
-                      color: 'var(--color-secondary, #C9A227)',
-                      transition: 'all 0.3s ease-in-out'
-                    }}
+                    className="inline-block hover:translate-x-1 transition-all duration-300"
+                    style={{ color: footerLink }}
                     onMouseEnter={(e) => {
-                      e.currentTarget.style.color = '#FFFFFF';
-                      e.currentTarget.style.transform = 'translateX(4px)';
+                      e.currentTarget.style.color = footerText;
                     }}
                     onMouseLeave={(e) => {
-                      e.currentTarget.style.color = 'var(--color-secondary, #C9A227)';
-                      e.currentTarget.style.transform = 'translateX(0)';
+                      e.currentTarget.style.color = footerLink;
                     }}
                   >
                     {label}

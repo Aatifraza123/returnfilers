@@ -3,39 +3,62 @@ const Notification = require('../models/notificationModel');
 // Create notification for new booking
 exports.createBookingNotification = async (booking) => {
   try {
-    // Admin notification
-    await Notification.create({
+    // Check if admin notification already exists for this booking
+    const existingAdminNotif = await Notification.findOne({
       type: 'booking',
-      title: 'New Booking Received',
-      message: `${booking.name} has booked ${booking.service}`,
       relatedId: booking._id,
-      relatedModel: 'Booking',
-      recipient: 'admin',
-      link: '/admin/bookings',
-      metadata: {
-        customerName: booking.name,
-        service: booking.service,
-        email: booking.email
-      }
+      recipient: 'admin'
     });
-    console.log('✅ Booking admin notification created');
+
+    if (!existingAdminNotif) {
+      // Admin notification
+      await Notification.create({
+        type: 'booking',
+        title: 'New Booking Received',
+        message: `${booking.name} has booked ${booking.service}`,
+        relatedId: booking._id,
+        relatedModel: 'Booking',
+        recipient: 'admin',
+        link: '/admin/bookings',
+        metadata: {
+          customerName: booking.name,
+          service: booking.service,
+          email: booking.email
+        }
+      });
+      console.log('✅ Booking admin notification created');
+    } else {
+      console.log('⚠️ Booking admin notification already exists, skipping');
+    }
 
     // User notification - notify user that their booking was received
     if (booking.user) {
-      await Notification.create({
+      // Check if user notification already exists for this booking
+      const existingUserNotif = await Notification.findOne({
         type: 'booking',
-        title: 'Booking Confirmation',
-        message: `Your booking for ${booking.service} has been received. We will contact you soon.`,
         relatedId: booking._id,
-        relatedModel: 'Booking',
         recipient: 'user',
-        recipientId: booking.user,
-        link: '/dashboard',
-        metadata: {
-          service: booking.service
-        }
+        recipientId: booking.user
       });
-      console.log('✅ Booking user notification created');
+
+      if (!existingUserNotif) {
+        await Notification.create({
+          type: 'booking',
+          title: 'Booking Received Successfully',
+          message: `Your booking for ${booking.service} has been confirmed. Our team will contact you within 24 hours.`,
+          relatedId: booking._id,
+          relatedModel: 'Booking',
+          recipient: 'user',
+          recipientId: booking.user,
+          link: '/dashboard/bookings',
+          metadata: {
+            service: booking.service
+          }
+        });
+        console.log('✅ Booking user notification created');
+      } else {
+        console.log('⚠️ Booking user notification already exists, skipping');
+      }
     }
   } catch (error) {
     console.error('❌ Error creating booking notification:', error);
@@ -45,39 +68,62 @@ exports.createBookingNotification = async (booking) => {
 // Create notification for new quote
 exports.createQuoteNotification = async (quote) => {
   try {
-    // Admin notification
-    await Notification.create({
+    // Check if admin notification already exists for this quote
+    const existingAdminNotif = await Notification.findOne({
       type: 'quote',
-      title: 'New Quote Request',
-      message: `${quote.name} requested a quote for ${quote.service}`,
       relatedId: quote._id,
-      relatedModel: 'Quote',
-      recipient: 'admin',
-      link: '/admin/quotes',
-      metadata: {
-        customerName: quote.name,
-        service: quote.service,
-        email: quote.email
-      }
+      recipient: 'admin'
     });
-    console.log('✅ Quote admin notification created');
+
+    if (!existingAdminNotif) {
+      // Admin notification
+      await Notification.create({
+        type: 'quote',
+        title: 'New Quote Request',
+        message: `${quote.name} requested a quote for ${quote.service}`,
+        relatedId: quote._id,
+        relatedModel: 'Quote',
+        recipient: 'admin',
+        link: '/admin/quotes',
+        metadata: {
+          customerName: quote.name,
+          service: quote.service,
+          email: quote.email
+        }
+      });
+      console.log('✅ Quote admin notification created');
+    } else {
+      console.log('⚠️ Quote admin notification already exists, skipping');
+    }
 
     // User notification
     if (quote.user) {
-      await Notification.create({
+      // Check if user notification already exists for this quote
+      const existingUserNotif = await Notification.findOne({
         type: 'quote',
-        title: 'Quote Request Received',
-        message: `Your quote request for ${quote.service} has been received. We will send you a quote soon.`,
         relatedId: quote._id,
-        relatedModel: 'Quote',
         recipient: 'user',
-        recipientId: quote.user,
-        link: '/dashboard',
-        metadata: {
-          service: quote.service
-        }
+        recipientId: quote.user
       });
-      console.log('✅ Quote user notification created');
+
+      if (!existingUserNotif) {
+        await Notification.create({
+          type: 'quote',
+          title: 'Quote Request Received',
+          message: `Your quote request for ${quote.service} has been received. We'll send you a detailed quote within 24 hours.`,
+          relatedId: quote._id,
+          relatedModel: 'Quote',
+          recipient: 'user',
+          recipientId: quote.user,
+          link: '/dashboard/quotes',
+          metadata: {
+            service: quote.service
+          }
+        });
+        console.log('✅ Quote user notification created');
+      } else {
+        console.log('⚠️ Quote user notification already exists, skipping');
+      }
     }
   } catch (error) {
     console.error('❌ Error creating quote notification:', error);
@@ -87,39 +133,62 @@ exports.createQuoteNotification = async (quote) => {
 // Create notification for new consultation
 exports.createConsultationNotification = async (consultation) => {
   try {
-    // Admin notification
-    await Notification.create({
+    // Check if admin notification already exists for this consultation
+    const existingAdminNotif = await Notification.findOne({
       type: 'consultation',
-      title: 'New Consultation Request',
-      message: `${consultation.name} requested consultation for ${consultation.service}`,
       relatedId: consultation._id,
-      relatedModel: 'Consultation',
-      recipient: 'admin',
-      link: '/admin/consultations',
-      metadata: {
-        customerName: consultation.name,
-        service: consultation.service,
-        email: consultation.email
-      }
+      recipient: 'admin'
     });
-    console.log('✅ Consultation admin notification created');
+
+    if (!existingAdminNotif) {
+      // Admin notification
+      await Notification.create({
+        type: 'consultation',
+        title: 'New Consultation Request',
+        message: `${consultation.name} requested consultation for ${consultation.service}`,
+        relatedId: consultation._id,
+        relatedModel: 'Consultation',
+        recipient: 'admin',
+        link: '/admin/consultations',
+        metadata: {
+          customerName: consultation.name,
+          service: consultation.service,
+          email: consultation.email
+        }
+      });
+      console.log('✅ Consultation admin notification created');
+    } else {
+      console.log('⚠️ Consultation admin notification already exists, skipping');
+    }
 
     // User notification
     if (consultation.user) {
-      await Notification.create({
+      // Check if user notification already exists for this consultation
+      const existingUserNotif = await Notification.findOne({
         type: 'consultation',
-        title: 'Consultation Request Received',
-        message: `Your consultation request for ${consultation.service} has been received. We will reach out to you shortly.`,
         relatedId: consultation._id,
-        relatedModel: 'Consultation',
         recipient: 'user',
-        recipientId: consultation.user,
-        link: '/dashboard',
-        metadata: {
-          service: consultation.service
-        }
+        recipientId: consultation.user
       });
-      console.log('✅ Consultation user notification created');
+
+      if (!existingUserNotif) {
+        await Notification.create({
+          type: 'consultation',
+          title: 'Consultation Request Received',
+          message: `Your consultation request for ${consultation.service} has been received. Our expert will reach out to you shortly.`,
+          relatedId: consultation._id,
+          relatedModel: 'Consultation',
+          recipient: 'user',
+          recipientId: consultation.user,
+          link: '/dashboard/consultations',
+          metadata: {
+            service: consultation.service
+          }
+        });
+        console.log('✅ Consultation user notification created');
+      } else {
+        console.log('⚠️ Consultation user notification already exists, skipping');
+      }
     }
   } catch (error) {
     console.error('❌ Error creating consultation notification:', error);

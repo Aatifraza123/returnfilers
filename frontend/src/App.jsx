@@ -23,6 +23,8 @@ import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
 import RefundPolicy from './pages/RefundPolicy'
 import Auth from './pages/Auth'
+import ForgotPassword from './pages/ForgotPassword'
+import ResetPassword from './pages/ResetPassword'
 
 // User Pages
 import UserDashboard from './pages/user/UserDashboard'
@@ -49,6 +51,7 @@ import AdminUsers from './pages/admin/AdminUsers'
 import AdminEmails from './pages/admin/AdminEmails'
 import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
+import AdminProfile from './pages/admin/AdminProfile'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminBookings from './pages/admin/AdminBookings'
 import AdminDigitalServices from './pages/admin/AdminDigitalServices'
@@ -86,6 +89,8 @@ function App() {
             <Route index element={<Home />} />
             <Route path="login" element={<Auth />} />
             <Route path="auth" element={<Auth />} />
+            <Route path="forgot-password" element={<ForgotPassword />} />
+            <Route path="reset-password/:token" element={<ResetPassword />} />
           <Route path="about" element={<About />} />
           <Route path="services" element={<Services />} />
           <Route path="services/:id" element={<ServiceDetail />} />
@@ -138,6 +143,7 @@ function App() {
           <Route path="contacts" element={<AdminContacts />} />
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="settings" element={<AdminSettings />} />
+          <Route path="profile" element={<AdminProfile />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="digital-services" element={<AdminDigitalServices />} />
         </Route>

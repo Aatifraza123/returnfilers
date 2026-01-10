@@ -74,8 +74,10 @@ export const AuthProvider = ({ children }) => {
 
   const login = (userData, token) => {
     localStorage.setItem('token', token);
-    localStorage.setItem('userInfo', JSON.stringify(userData));
-    setUser(userData);
+    // Handle both admin and user data structures
+    const userToStore = userData.admin || userData.user || userData;
+    localStorage.setItem('userInfo', JSON.stringify(userToStore));
+    setUser(userToStore);
     navigate('/admin/dashboard');
   };
 

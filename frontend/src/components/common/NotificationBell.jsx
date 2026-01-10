@@ -73,6 +73,9 @@ const NotificationBell = ({ type = 'admin' }) => {
       setUnreadCount(data.unreadCount || 0);
     } catch (error) {
       console.error('Error fetching notifications:', error);
+      // Don't show error toast, just log it
+      setNotifications([]);
+      setUnreadCount(0);
     } finally {
       setLoading(false);
     }
@@ -87,6 +90,8 @@ const NotificationBell = ({ type = 'admin' }) => {
       setUnreadCount(data.count || 0);
     } catch (error) {
       console.error('Error fetching unread count:', error);
+      // Silently fail - don't show error to user
+      setUnreadCount(0);
     }
   };
 
@@ -252,27 +257,34 @@ const NotificationBell = ({ type = 'admin' }) => {
                             {notification.link && (
                               <Link
                                 to={notification.link}
-                                onClick={() => {
+                                onClick={(e) => {
+                                  e.stopPropagation();
                                   handleMarkAsRead(notification._id);
                                   setIsOpen(false);
                                 }}
-                                className="text-xs text-blue-600 hover:text-blue-700 font-semibold"
+                                className="text-xs text-blue-600 hover:text-blue-700 font-semibold hover:underline cursor-pointer"
                               >
                                 View →
                               </Link>
                             )}
                             {!notification.isRead && (
                               <button
-                                onClick={() => handleMarkAsRead(notification._id)}
-                                className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1"
+                                onClick={(e) => {
+                                  e.stopPropagation();
+                                  handleMarkAsRead(notification._id);
+                                }}
+                                className="text-xs text-gray-500 hover:text-gray-700 flex items-center gap-1 cursor-pointer hover:underline"
                               >
                                 <FaCheck size={10} />
                                 Mark read
                               </button>
                             )}
                             <button
-                              onClick={() => handleDelete(notification._id)}
-                              className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDelete(notification._id);
+                              }}
+                              className="text-xs text-red-500 hover:text-red-700 flex items-center gap-1 cursor-pointer hover:underline"
                             >
                               <FaTrash size={10} />
                               Delete

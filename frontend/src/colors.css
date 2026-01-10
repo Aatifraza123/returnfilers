@@ -1,0 +1,99 @@
+/* Global Color System - Dynamic from Admin Settings */
+:root {
+  /* Brand Colors - Will be overridden by settings */
+  --color-primary: #0B1530;
+  --color-secondary: #C9A227;
+  --color-accent: #1E3A8A;
+  
+  /* Footer Colors */
+  --color-footer-bg: #0B1530;
+  --color-footer-text: #ffffff;
+  --color-footer-link: #C9A227;
+  --color-footer-company: #C9A227;
+  
+  /* Derived Colors */
+  --color-primary-light: #1a2b5c;
+  --color-primary-dark: #050a18;
+  --color-secondary-light: #d4b03a;
+  --color-secondary-dark: #a88920;
+  
+  /* Semantic Colors */
+  --color-success: #10b981;
+  --color-error: #ef4444;
+  --color-warning: #f59e0b;
+  --color-info: #3b82f6;
+  
+  /* Neutral Colors */
+  --color-gray-50: #f9fafb;
+  --color-gray-100: #f3f4f6;
+  --color-gray-200: #e5e7eb;
+  --color-gray-300: #d1d5db;
+  --color-gray-400: #9ca3af;
+  --color-gray-500: #6b7280;
+  --color-gray-600: #4b5563;
+  --color-gray-700: #374151;
+  --color-gray-800: #1f2937;
+  --color-gray-900: #111827;
+}
+
+/* Primary Color Usage */
+.bg-primary { background-color: var(--color-primary) !important; }
+.text-primary { color: var(--color-primary) !important; }
+.border-primary { border-color: var(--color-primary) !important; }
+
+/* Secondary Color Usage */
+.bg-secondary { background-color: var(--color-secondary) !important; }
+.text-secondary { color: var(--color-secondary) !important; }
+.border-secondary { border-color: var(--color-secondary) !important; }
+
+/* Accent Color Usage */
+.bg-accent { background-color: var(--color-accent) !important; }
+.text-accent { color: var(--color-accent) !important; }
+.border-accent { border-color: var(--color-accent) !important; }
+
+/* Hover States */
+.hover-primary:hover { background-color: var(--color-primary) !important; }
+.hover-secondary:hover { background-color: var(--color-secondary) !important; }
+.hover-accent:hover { background-color: var(--color-accent) !important; }
+
+/* Button Styles */
+.btn-primary {
+  background-color: var(--color-primary);
+  color: white;
+  transition: all 0.3s ease;
+}
+
+.btn-primary:hover {
+  background-color: var(--color-primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: var(--color-secondary);
+  color: var(--color-primary);
+  transition: all 0.3s ease;
+}
+
+.btn-secondary:hover {
+  background-color: var(--color-secondary-dark);
+  transform: translateY(-2px);
+}
+
+/* Link Styles */
+a.link-primary {
+  color: var(--color-primary);
+  transition: color 0.3s ease;
+}
+
+a.link-primary:hover {
+  color: var(--color-secondary);
+}
+
+a.link-secondary {
+  color: var(--color-secondary);
+  transition: color 0.3s ease;
+}
+
+a.link-secondary:hover {
+  color: var(--color-primary);
+}

@@ -7,22 +7,27 @@ export default {
   theme: {
     extend: {
       colors: {
+        // Dynamic brand colors from CSS variables
         primary: {
-          DEFAULT: 'var(--color-primary, #0B1530)',
+          DEFAULT: 'var(--color-primary)',
           50: '#E3F2FD',
           100: '#BBDEFB',
-          500: 'var(--color-primary, #0B1530)',
-          600: '#0A56A8',
-          700: '#08478D',
+          500: 'var(--color-primary)',
+          600: 'var(--color-primary)',
+          700: 'var(--color-primary)',
+          800: 'var(--color-primary)',
+          900: 'var(--color-primary)',
         },
         secondary: {
-          DEFAULT: 'var(--color-secondary, #C9A227)',
-          500: 'var(--color-secondary, #C9A227)',
+          DEFAULT: 'var(--color-secondary)',
+          500: 'var(--color-secondary)',
+          600: 'var(--color-secondary)',
+          700: 'var(--color-secondary)',
         },
         accent: {
-          DEFAULT: 'var(--color-accent, #1a2b5c)',
-          500: 'var(--color-accent, #1a2b5c)',
-          600: '#00A693',
+          DEFAULT: 'var(--color-accent)',
+          500: 'var(--color-accent)',
+          600: 'var(--color-accent)',
         },
         neutral: {
           50: '#F7FAFC',

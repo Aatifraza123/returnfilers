@@ -278,10 +278,7 @@ const AdminDashboard = () => {
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-6">
               <div>
-                <h1 className="text-2xl font-bold bg-gradient-to-r from-blue-900 via-blue-800 to-blue-900 bg-clip-text text-transparent">
-                  Dashboard
-                </h1>
-                <p className="text-sm text-slate-500 mt-0.5 font-medium">
+                <p className="text-sm text-slate-500 font-medium">
                   {currentTime.toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' })}
                 </p>
               </div>

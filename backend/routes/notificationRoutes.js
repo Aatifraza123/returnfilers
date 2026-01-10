@@ -7,7 +7,8 @@ const {
   markAllAsRead,
   deleteNotification,
   getAdminUnreadCount,
-  getUserUnreadCount
+  getUserUnreadCount,
+  sendNotificationToUser
 } = require('../controllers/notificationController');
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const { protectUser } = require('../middleware/userAuth');
@@ -18,6 +19,7 @@ router.get('/user/unread-count', protectUser, getUserUnreadCount);
 
 // Admin routes
 router.get('/admin', protectAdmin, getAdminNotifications);
+router.post('/send-to-user', protectAdmin, sendNotificationToUser);
 
 // User routes
 router.get('/user', protectUser, getUserNotifications);

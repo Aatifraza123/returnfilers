@@ -41,6 +41,7 @@ const AdminLayout = () => {
   const [showNotifications, setShowNotifications] = useState(false);
   const [notifications, setNotifications] = useState([]);
   const [unreadCount, setUnreadCount] = useState(0);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   // Save collapsed state to localStorage
   useEffect(() => {
@@ -175,6 +176,7 @@ const AdminLayout = () => {
     {
       title: 'Settings',
       items: [
+        { path: '/admin/profile', icon: <FaUser />, label: 'Profile', badge: null },
         { path: '/admin/settings', icon: <FaCog />, label: 'Settings', badge: null },
       ]
     }
@@ -347,139 +349,98 @@ const AdminLayout = () => {
               >
                 <FaBars className="text-lg" />
               </button>
-              <h1 className="text-lg font-bold text-[#0B1530]">
-                {menuSections.flatMap(s => s.items).find(item => isActive(item.path))?.label || 'Dashboard'}
-              </h1>
+              
+              {/* Breadcrumb / Page Title */}
+              <div className="flex items-center gap-2">
+                <div className="hidden sm:flex items-center gap-2 text-sm">
+                  <span className="text-gray-400">Admin</span>
+                  <span className="text-gray-300">/</span>
+                  <span className="text-[#0B1530] font-semibold">
+                    {menuSections.flatMap(s => s.items).find(item => isActive(item.path))?.label || 'Dashboard'}
+                  </span>
+                </div>
+              </div>
             </div>
             
             <div className="flex items-center gap-3">
-              {/* Notification Bell */}
+              {/* Admin Profile Dropdown */}
               <div className="relative">
                 <button 
-                  onClick={() => setShowNotifications(!showNotifications)}
-                  className="relative p-2 text-gray-600 hover:text-[#0B1530] hover:bg-gray-100 rounded-full transition-all duration-200"
+                  onClick={() => setShowProfileMenu(!showProfileMenu)}
+                  className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 transition-all duration-200 border border-transparent hover:border-gray-200"
                 >
-                  <FaBell className="text-lg" />
-                  {unreadCount > 0 && (
-                    <span className="absolute -top-0.5 -right-0.5 min-w-[20px] h-5 bg-gradient-to-r from-red-500 to-red-600 text-white text-[10px] rounded-full flex items-center justify-center font-bold px-1 shadow-lg animate-pulse">
-                      {unreadCount > 9 ? '9+' : unreadCount}
-                    </span>
-                  )}
+                  <div className="flex items-center gap-3">
+                    <div className="w-9 h-9 rounded-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5e] flex items-center justify-center text-white font-bold text-sm shadow-md">
+                      {user?.name?.charAt(0).toUpperCase() || 'A'}
+                    </div>
+                    <div className="hidden md:block text-left">
+                      <p className="text-sm font-semibold text-[#0B1530] leading-tight">
+                        {user?.name || 'Admin'}
+                      </p>
+                      <p className="text-xs text-gray-500 leading-tight">
+                        Administrator
+                      </p>
+                    </div>
+                  </div>
                 </button>
 
-                {/* Notification Dropdown */}
-                {showNotifications && (
+                {/* Profile Dropdown Menu */}
+                {showProfileMenu && (
                   <>
                     <div 
                       className="fixed inset-0 z-40" 
-                      onClick={() => setShowNotifications(false)}
+                      onClick={() => setShowProfileMenu(false)}
                     />
-                    <div className="absolute right-0 mt-2 w-96 bg-white rounded-2xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
-                      {/* Header */}
+                    <div className="absolute right-0 mt-2 w-64 bg-white rounded-xl shadow-2xl border border-gray-100 z-50 overflow-hidden">
+                      {/* Profile Header */}
                       <div className="p-4 bg-gradient-to-r from-[#0B1530] to-[#1a2b5e] text-white">
-                        <div className="flex items-center justify-between">
-                          <div className="flex items-center gap-2">
-                            <FaBell className="text-[#C9A227]" />
-                            <h3 className="font-bold">Notifications</h3>
+                        <div className="flex items-center gap-3">
+                          <div className="w-12 h-12 rounded-full bg-white/20 flex items-center justify-center text-white font-bold text-lg">
+                            {user?.name?.charAt(0).toUpperCase() || 'A'}
                           </div>
-                          {unreadCount > 0 && (
-                            <span className="text-xs bg-[#C9A227] text-[#0B1530] px-3 py-1 rounded-full font-bold">
-                              {unreadCount} new
-                            </span>
-                          )}
+                          <div>
+                            <p className="font-bold text-sm">{user?.name || 'Admin'}</p>
+                            <p className="text-xs text-white/70">{user?.email || 'razaaatif658@gmail.com'}</p>
+                          </div>
                         </div>
                       </div>
-                      
-                      {/* Notifications List */}
-                      <div className="max-h-[400px] overflow-y-auto">
-                        {notifications.length > 0 ? (
-                          notifications.map((notification, idx) => (
-                            <div
-                              key={notification.id}
-                              onClick={() => handleNotificationClick(notification)}
-                              className={`p-4 hover:bg-[#C9A227]/5 cursor-pointer transition-all duration-200 border-l-4 ${
-                                notification.type === 'contact' ? 'border-l-green-500' :
-                                notification.type === 'consultation' ? 'border-l-blue-500' :
-                                notification.type === 'booking' ? 'border-l-teal-500' :
-                                'border-l-purple-500'
-                              } ${idx !== notifications.length - 1 ? 'border-b border-gray-100' : ''}`}
-                            >
-                              <div className="flex items-start gap-3">
-                                <div className={`w-10 h-10 rounded-xl flex items-center justify-center flex-shrink-0 ${
-                                  notification.type === 'contact' ? 'bg-green-100' :
-                                  notification.type === 'consultation' ? 'bg-blue-100' :
-                                  notification.type === 'booking' ? 'bg-teal-100' :
-                                  'bg-purple-100'
-                                }`}>
-                                  {notification.icon}
-                                </div>
-                                <div className="flex-1 min-w-0">
-                                  <div className="flex items-start justify-between gap-2">
-                                    <div>
-                                      <p className="text-sm font-bold text-[#0B1530]">{notification.title}</p>
-                                      <p className="text-sm text-gray-600 mt-0.5">{notification.message}</p>
-                                    </div>
-                                    <span className={`text-[10px] px-2 py-0.5 rounded-full font-semibold flex-shrink-0 ${
-                                      notification.type === 'contact' ? 'bg-green-100 text-green-700' :
-                                      notification.type === 'consultation' ? 'bg-blue-100 text-blue-700' :
-                                      notification.type === 'booking' ? 'bg-teal-100 text-teal-700' :
-                                      'bg-purple-100 text-purple-700'
-                                    }`}>
-                                      {notification.type}
-                                    </span>
-                                  </div>
-                                  <div className="flex items-center gap-2 mt-2">
-                                    <FaClock className="text-[10px] text-gray-400" />
-                                    <span className="text-[11px] text-gray-400 font-medium">
-                                      {new Date(notification.time).toLocaleString('en-IN', {
-                                        day: 'numeric',
-                                        month: 'short',
-                                        hour: '2-digit',
-                                        minute: '2-digit'
-                                      })}
-                                    </span>
-                                  </div>
-                                </div>
-                              </div>
-                            </div>
-                          ))
-                        ) : (
-                          <div className="p-8 text-center">
-                            <div className="w-16 h-16 bg-gray-100 rounded-full flex items-center justify-center mx-auto mb-3">
-                              <FaBell className="text-2xl text-gray-300" />
-                            </div>
-                            <p className="text-gray-500 font-medium">No new notifications</p>
-                            <p className="text-xs text-gray-400 mt-1">You're all caught up!</p>
-                          </div>
-                        )}
+
+                      {/* Menu Items */}
+                      <div className="py-2">
+                        <Link
+                          to="/admin/profile"
+                          onClick={() => setShowProfileMenu(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 hover:text-[#0B1530]"
+                        >
+                          <FaUser className="text-gray-400" />
+                          <span className="text-sm font-medium">My Profile</span>
+                        </Link>
+                        <Link
+                          to="/admin/settings"
+                          onClick={() => setShowProfileMenu(false)}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-gray-50 transition-colors text-gray-700 hover:text-[#0B1530]"
+                        >
+                          <FaCog className="text-gray-400" />
+                          <span className="text-sm font-medium">Settings</span>
+                        </Link>
                       </div>
-                      
-                      {/* Footer */}
-                      {notifications.length > 0 && (
-                        <div className="p-3 bg-gray-50 border-t border-gray-100">
-                          <button
-                            onClick={() => {
-                              setShowNotifications(false);
-                              navigate('/admin/emails');
-                            }}
-                            className="w-full text-center text-sm text-[#0B1530] hover:text-[#C9A227] font-semibold py-2 hover:bg-white rounded-lg transition-colors"
-                          >
-                            View All Messages →
-                          </button>
-                        </div>
-                      )}
+
+                      {/* Logout */}
+                      <div className="border-t border-gray-100 py-2">
+                        <button
+                          onClick={() => {
+                            setShowProfileMenu(false);
+                            handleLogout();
+                          }}
+                          className="flex items-center gap-3 px-4 py-2.5 hover:bg-red-50 transition-colors text-red-600 hover:text-red-700 w-full"
+                        >
+                          <FaSignOutAlt className="text-red-500" />
+                          <span className="text-sm font-medium">Logout</span>
+                        </button>
+                      </div>
                     </div>
                   </>
                 )}
-              </div>
-              <div className="flex items-center gap-2 pl-3 border-l border-gray-200">
-                <div className="w-8 h-8 rounded-full bg-[#C9A227] flex items-center justify-center text-[#0B1530] font-bold text-sm">
-                  A
-                </div>
-                <div className="hidden md:block text-right">
-                  <p className="text-xs font-semibold text-[#0B1530]">Admin</p>
-                  <p className="text-xs text-gray-500">admin@ca.com</p>
-                </div>
               </div>
             </div>
           </div>

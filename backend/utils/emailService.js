@@ -6,25 +6,30 @@ const resend = process.env.RESEND_API_KEY ? new Resend(process.env.RESEND_API_KE
 
 // Initialize Nodemailer with SMTP (supports Zoho, Gmail, etc.)
 const createTransporter = () => {
-  if (!process.env.SMTP_HOST || !process.env.EMAIL_USER || !process.env.EMAIL_PASS) {
+  // Use environment variables or fallback to hardcoded for testing
+  const smtpHost = process.env.SMTP_HOST || 'smtppro.zoho.in';
+  const emailUser = process.env.EMAIL_USER || 'info@returnfilers.in';
+  const emailPass = process.env.EMAIL_PASS || 'rdwnce0XQPa5';
+  
+  if (!smtpHost || !emailUser || !emailPass) {
     return null;
   }
 
   console.log('🔧 Creating SMTP transporter:', {
-    host: process.env.SMTP_HOST,
-    user: process.env.EMAIL_USER,
-    pass: '***' + (process.env.EMAIL_PASS?.slice(-4) || '')
+    host: smtpHost,
+    user: emailUser,
+    pass: '***' + (emailPass?.slice(-4) || '')
   });
 
   // Detect provider and use appropriate settings
-  const isZoho = process.env.SMTP_HOST.includes('zoho');
-  const isGmail = process.env.SMTP_HOST.includes('gmail');
+  const isZoho = smtpHost.includes('zoho');
+  const isGmail = smtpHost.includes('gmail');
 
   let config = {
-    host: process.env.SMTP_HOST,
+    host: smtpHost,
     auth: {
-      user: process.env.EMAIL_USER,
-      pass: process.env.EMAIL_PASS
+      user: emailUser,
+      pass: emailPass
     }
   };
 
@@ -78,7 +83,7 @@ const sendEmail = async ({ to, subject, html, from }) => {
   if (transporter) {
     try {
       const info = await transporter.sendMail({
-        from: from || `"ReturnFilers" <${process.env.EMAIL_USER}>`,
+        from: from || `"ReturnFilers" <${process.env.EMAIL_USER || 'info@returnfilers.in'}>`,
         to: to,
         subject: subject,
         html: html

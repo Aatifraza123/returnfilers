@@ -2,9 +2,11 @@ import { useState, useContext, Fragment } from 'react';
 import { Dialog, Transition } from '@headlessui/react';
 import { useNavigate } from 'react-router-dom';
 import toast from 'react-hot-toast';
-import { FaTimes, FaEye, FaEyeSlash, FaGoogle } from 'react-icons/fa';
+import { FaTimes, FaEye, FaEyeSlash } from 'react-icons/fa';
 import api from '../../api/axios';
 import UserAuthContext from '../../context/UserAuthContext';
+import GoogleLoginButton from '../auth/GoogleLoginButton';
+import OTPVerification from '../auth/OTPVerification';
 
 const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to continue' }) => {
   const navigate = useNavigate();
@@ -12,6 +14,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
   const [isLogin, setIsLogin] = useState(true);
   const [loading, setLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
+  const [showOTPVerification, setShowOTPVerification] = useState(false);
+  const [registeredEmail, setRegisteredEmail] = useState('');
 
   const [formData, setFormData] = useState({
     name: '',
@@ -52,26 +56,41 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
         });
         
         if (data.success) {
-          login(data.user, data.token);
-          toast.success('Account created successfully!');
-          onSuccess && onSuccess(data.user);
-          onClose();
+          toast.success(data.message);
+          setRegisteredEmail(formData.email);
+          setShowOTPVerification(true);
         }
       }
     } catch (error) {
       console.error('Auth error:', error);
-      toast.error(error.response?.data?.message || 'Something went wrong');
+      
+      if (error.response?.data?.requiresVerification) {
+        toast.error(error.response.data.message);
+        setRegisteredEmail(error.response.data.email);
+        setShowOTPVerification(true);
+      } else {
+        toast.error(error.response?.data?.message || 'Something went wrong');
+      }
     } finally {
       setLoading(false);
     }
   };
 
-  const handleGoogleLogin = () => {
-    toast('Google login coming soon!', {
-      icon: 'ℹ️',
-      duration: 3000
-    });
-    // TODO: Implement Google OAuth
+  const handleOTPVerified = (user, token) => {
+    login(user, token);
+    onSuccess && onSuccess(user);
+    onClose();
+  };
+
+  const handleBackToRegistration = () => {
+    setShowOTPVerification(false);
+    setRegisteredEmail('');
+  };
+
+  const handleGoogleSuccess = () => {
+    // Toast is already shown in GoogleLoginButton component
+    onSuccess && onSuccess();
+    onClose();
   };
 
   return (
@@ -109,7 +128,17 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                   <FaTimes size={20} />
                 </button>
 
-                <div className="p-8">
+                {/* Show OTP Verification or Login Form */}
+                {showOTPVerification ? (
+                  <div className="p-8">
+                    <OTPVerification 
+                      email={registeredEmail}
+                      onVerified={handleOTPVerified}
+                      onBack={handleBackToRegistration}
+                    />
+                  </div>
+                ) : (
+                  <div className="p-8">
                   {/* Header */}
                   <div className="text-center mb-6">
                     <h2 className="text-2xl font-bold text-gray-900 mb-2">
@@ -227,14 +256,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                   </div>
 
                   {/* Google Login */}
-                  <button
-                    type="button"
-                    onClick={handleGoogleLogin}
-                    className="w-full border border-gray-300 bg-white text-gray-700 py-2.5 rounded-md font-medium text-sm hover:bg-gray-50 transition-colors flex items-center justify-center gap-2"
-                  >
-                    <FaGoogle className="text-red-500" />
-                    Continue with Google
-                  </button>
+                  <GoogleLoginButton onSuccess={handleGoogleSuccess} />
 
                   {/* Toggle */}
                   <div className="mt-6 text-center">
@@ -250,6 +272,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                     </p>
                   </div>
                 </div>
+                )}
               </Dialog.Panel>
             </Transition.Child>
           </div>

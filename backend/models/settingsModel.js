@@ -48,9 +48,11 @@ const settingsSchema = new mongoose.Schema({
   brandColors: {
     primary: { type: String, default: '#0B1530' },
     secondary: { type: String, default: '#C9A227' },
-    accent: { type: String, default: '#1a2b5c' },
+    accent: { type: String, default: '#1E3A8A' },
     footerBg: { type: String, default: '#0B1530' },
-    footerText: { type: String, default: '#ffffff' }
+    footerText: { type: String, default: '#ffffff' },
+    footerLink: { type: String, default: '#C9A227' },
+    footerCompanyName: { type: String, default: '#C9A227' }
   },
   
   // Hero Section

@@ -29,6 +29,11 @@ const userSchema = new mongoose.Schema({
     type: String,
     default: ''
   },
+  googleId: {
+    type: String,
+    unique: true,
+    sparse: true
+  },
   isVerified: {
     type: Boolean,
     default: false
@@ -56,7 +61,10 @@ const userSchema = new mongoose.Schema({
   resetPasswordExpire: Date,
   // Email verification
   verificationToken: String,
-  verificationTokenExpire: Date
+  verificationTokenExpire: Date,
+  // OTP for email verification
+  emailOTP: String,
+  emailOTPExpire: Date
 }, {
   timestamps: true
 });

@@ -58,8 +58,10 @@ const createQuote = async (req, res) => {
       sendQuoteEmails(quote)
         .then(() => console.log('Quote emails sent successfully'))
         .catch(err => console.error('Quote email sending failed:', err.message));
-      // Pass userId explicitly to ensure user notification is created
-      createQuoteNotification({ ...quote.toObject(), user: userId })
+      // Create notifications - pass quote with populated user field
+      const quoteData = quote.toObject();
+      quoteData.user = userId; // Ensure user ID is set
+      createQuoteNotification(quoteData)
         .catch(err => console.error('Quote notification failed:', err));
     });
   } catch (error) {

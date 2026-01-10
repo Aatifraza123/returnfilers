@@ -34,6 +34,18 @@ const Booking = () => {
     message: ''
   });
   
+  // Auto-fill user data when logged in
+  useEffect(() => {
+    if (user) {
+      setFormData(prev => ({
+        ...prev,
+        name: user.name || '',
+        email: user.email || '',
+        phone: user.phone || ''
+      }));
+    }
+  }, [user]);
+  
   // Fetch services from database
   useEffect(() => {
     fetchServices();
