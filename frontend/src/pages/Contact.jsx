@@ -178,9 +178,8 @@ const Contact = () => {
                 initial={{ opacity: 0, x: -30 }}
                 whileInView={{ opacity: 1, x: 0 }}
                 viewport={{ once: true }}
-                className="bg-white rounded-xl shadow-lg p-10 border border-gray-100 relative overflow-hidden" // Increased padding
+                className="bg-white rounded-xl shadow-lg p-10 border border-gray-100 relative overflow-hidden"
               >
-                <div className="absolute top-0 left-0 w-1.5 h-full bg-[#C9A227]"></div>
                 <h2 className="text-2xl font-serif font-bold mb-8 text-[#0B1530]">Contact Information</h2>
                 
                 <div className="space-y-6">
@@ -278,7 +277,7 @@ const Contact = () => {
               initial={{ opacity: 0, x: 30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
-              className="bg-white p-8 rounded-xl shadow-xl border-t-4 border-[#C9A227]"
+              className="bg-white p-8 rounded-xl shadow-xl border border-gray-100"
             >
               <h2 className="text-2xl font-serif font-bold mb-2 text-[#0B1530]">Send a Message</h2>
               <p className="text-gray-500 text-sm mb-6">Fill out the form below and we'll get back to you.</p>

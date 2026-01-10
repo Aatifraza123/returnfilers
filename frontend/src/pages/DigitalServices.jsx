@@ -243,23 +243,54 @@ const DigitalServices = () => {
                             <div className="flex gap-3">
                               <Link
                                 to={`/digital-services/${service.slug}/${pkg.name.toLowerCase().replace(/\s+/g, '-')}`}
-                                className={`
-                                  flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm
-                                  ${pkg.name === 'Business Website' 
-                                    ? 'border-2 border-[#C9A227] text-[#C9A227] hover:bg-[#C9A227] hover:text-[#0B1530]' 
-                                    : 'border-2 border-[#0B1530] text-[#0B1530] hover:bg-[#0B1530] hover:text-white'}
-                                `}
+                                className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm"
+                                style={{
+                                  borderWidth: '2px',
+                                  borderStyle: 'solid',
+                                  borderColor: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)',
+                                  color: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)'
+                                }}
+                                onMouseEnter={(e) => {
+                                  if (pkg.name === 'Business Website') {
+                                    e.currentTarget.style.background = 'var(--color-secondary)';
+                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                  } else {
+                                    e.currentTarget.style.background = 'var(--color-primary)';
+                                    e.currentTarget.style.color = 'white';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  e.currentTarget.style.background = 'transparent';
+                                  e.currentTarget.style.color = pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)';
+                                }}
                               >
                                 Details
                               </Link>
                               <button
                                 onClick={() => handleGetStarted(service, pkg)}
-                                className={`
-                                  flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm
-                                  ${pkg.name === 'Business Website' 
-                                    ? 'bg-[#C9A227] text-[#0B1530] hover:bg-white' 
-                                    : 'bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]'}
-                                `}
+                                className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm"
+                                style={{
+                                  background: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)',
+                                  color: pkg.name === 'Business Website' ? 'var(--color-primary)' : 'white'
+                                }}
+                                onMouseEnter={(e) => {
+                                  if (pkg.name === 'Business Website') {
+                                    e.currentTarget.style.background = 'white';
+                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                  } else {
+                                    e.currentTarget.style.background = 'var(--color-secondary)';
+                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                  }
+                                }}
+                                onMouseLeave={(e) => {
+                                  if (pkg.name === 'Business Website') {
+                                    e.currentTarget.style.background = 'var(--color-secondary)';
+                                    e.currentTarget.style.color = 'var(--color-primary)';
+                                  } else {
+                                    e.currentTarget.style.background = 'var(--color-primary)';
+                                    e.currentTarget.style.color = 'white';
+                                  }
+                                }}
                               >
                                 Get Started
                               </button>

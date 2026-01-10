@@ -131,7 +131,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all border-t-4 border-[#C9A227]">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all border border-gray-100">
                 
                 {/* Header */}
                 <div className="flex justify-between items-center mb-6">

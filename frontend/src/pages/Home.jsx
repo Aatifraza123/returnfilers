@@ -153,10 +153,22 @@ const Home = () => {
                 transition={{ delay: 0.5 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
               >
-                {/* UPDATED: Button triggers Modal */}
+                {/* UPDATED: Button triggers Modal with Dynamic Colors */}
                 <button
                   onClick={openModal}
-                  className="px-8 py-3.5 bg-[#C9A227] text-[#0B1530] rounded-full font-semibold text-base shadow-lg hover:bg-white transition-all hover:-translate-y-0.5"
+                  className="px-8 py-3.5 rounded-full font-semibold text-base shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                  style={{
+                    background: 'var(--color-secondary)',
+                    color: 'var(--color-primary)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--color-primary)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'var(--color-secondary)';
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
                 >
                   Book Consultation
                 </button>
@@ -602,10 +614,22 @@ const Home = () => {
           <p className="text-base lg:text-lg mb-8 text-gray-400 font-light">
             Schedule a free 30-minute consultation with our expert chartered accountants.
           </p>
-          {/* UPDATED: Button triggers Modal */}
+          {/* UPDATED: Button triggers Modal with Dynamic Colors */}
           <button
             onClick={openModal}
-            className="inline-block rounded-full bg-[#C9A227] px-10 py-4 text-[#0B1530] font-bold text-base hover:bg-white transition-all duration-300"
+            className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105"
+            style={{
+              background: 'var(--color-secondary)',
+              color: 'var(--color-primary)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--color-primary)';
+              e.currentTarget.style.color = 'white';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--color-secondary)';
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
           >
             Book Consultation
           </button>

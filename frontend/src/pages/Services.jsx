@@ -247,7 +247,19 @@ const Services = () => {
           </p>
           <Link
             to="/booking?service=Custom%20Service"
-            className="inline-flex items-center gap-2 px-8 py-4 bg-[#C9A227] text-[#0B1530] rounded-xl font-bold text-sm hover:bg-white transition-colors shadow-xl"
+            className="inline-flex items-center gap-2 px-8 py-4 rounded-xl font-bold text-sm transition-all duration-300 shadow-xl hover:shadow-2xl hover:scale-105"
+            style={{
+              background: 'var(--color-secondary)',
+              color: 'var(--color-primary)'
+            }}
+            onMouseEnter={(e) => {
+              e.currentTarget.style.background = 'var(--color-primary)';
+              e.currentTarget.style.color = 'white';
+            }}
+            onMouseLeave={(e) => {
+              e.currentTarget.style.background = 'var(--color-secondary)';
+              e.currentTarget.style.color = 'var(--color-primary)';
+            }}
           >
             Get Custom Quote <FaArrowRight size={12} />
           </Link>

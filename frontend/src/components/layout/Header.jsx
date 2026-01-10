@@ -148,10 +148,13 @@ const Header = () => {
                   className={({ isActive }) =>
                     `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
                       isActive 
-                        ? 'text-[#C9A227] font-semibold' 
-                        : 'text-gray-800 hover:text-[#0B1530]'
+                        ? 'font-semibold' 
+                        : 'text-gray-800 hover:text-gray-900'
                     }`
                   }
+                  style={({ isActive }) => ({
+                    color: isActive ? 'var(--color-secondary)' : undefined
+                  })}
                 >
                   {link.label}
                   {link.hasDropdown && <FaChevronDown className={`text-xs transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />}
@@ -164,7 +167,12 @@ const Header = () => {
                       <Link
                         key={service._id}
                         to={`/services/${service.slug || service._id}`}
-                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-colors"
+                        className="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50 transition-colors"
+                        style={{
+                          '--hover-color': 'var(--color-secondary)'
+                        }}
+                        onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
+                        onMouseLeave={(e) => e.currentTarget.style.color = ''}
                       >
                         {service.title}
                       </Link>
@@ -220,12 +228,15 @@ const Header = () => {
           })}
         </ul>
 
-        {/* CTA Button / User Menu */}
+        {/* CTA Button / User Menu - Original Desktop Size with Dynamic Colors */}
         <div className="hidden lg:flex items-center gap-3">
           {user ? (
             <Link
               to={dashboardLink}
-              className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
+              className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 text-white hover:shadow-xl"
+              style={{ 
+                background: `var(--color-primary)`
+              }}
             >
               Dashboard
             </Link>
@@ -233,13 +244,26 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 text-[#0B1530] hover:text-[#C9A227]"
+                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 hover:opacity-80"
+                style={{ color: 'var(--color-primary)' }}
               >
                 Login
               </Link>
               <Link
                 to="/quote"
-                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 shadow-lg hover:shadow-xl bg-[#0B1530] text-white hover:bg-[#C9A227] hover:text-[#0B1530]"
+                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 hover:shadow-xl"
+                style={{ 
+                  background: `var(--color-secondary)`,
+                  color: 'var(--color-primary)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--color-primary)';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--color-secondary)';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
               >
                 Get Quote
               </Link>
@@ -385,9 +409,12 @@ const Header = () => {
                         onClick={() => setMobileMenu(false)}
                         className={({ isActive }) =>
                           `flex items-center justify-between text-lg font-medium ${
-                            isActive ? 'text-[#C9A227]' : 'text-[#0B1530]'
+                            isActive ? '' : 'text-gray-800'
                           }`
                         }
+                        style={({ isActive }) => ({
+                          color: isActive ? 'var(--color-secondary)' : undefined
+                        })}
                       >
                         {link.label}
                       </NavLink>
@@ -399,28 +426,47 @@ const Header = () => {
                 {user ? (
                   <Link
                     to={dashboardLink}
-                    className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
+                    className="block text-white px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:shadow-lg transition-all"
+                    style={{ 
+                      background: `linear-gradient(to right, var(--color-primary), var(--color-primary))` 
+                    }}
                     onClick={() => setMobileMenu(false)}
                   >
                     Dashboard
                   </Link>
                 ) : (
-                  <>
+                  <div className="space-y-2">
                     <Link
                       to="/login"
-                      className="block bg-white text-[#0B1530] border-2 border-[#0B1530] px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#0B1530] hover:text-white transition-all shadow-md mb-3"
+                      className="block bg-white px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:bg-gray-50 transition-all border-2"
+                      style={{ 
+                        color: 'var(--color-primary)',
+                        borderColor: 'var(--color-primary)'
+                      }}
                       onClick={() => setMobileMenu(false)}
                     >
                       Login
                     </Link>
                     <Link
                       to="/quote"
-                      className="block bg-[#0B1530] text-white px-6 py-3 rounded-xl text-center text-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-md"
+                      className="block px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:shadow-lg transition-all"
+                      style={{ 
+                        background: `var(--color-secondary)`,
+                        color: 'var(--color-primary)'
+                      }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.background = 'var(--color-primary)';
+                        e.currentTarget.style.color = 'white';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.background = 'var(--color-secondary)';
+                        e.currentTarget.style.color = 'var(--color-primary)';
+                      }}
                       onClick={() => setMobileMenu(false)}
                     >
                       Get Quote
                     </Link>
-                  </>
+                  </div>
                 )}
               </li>
             </ul>

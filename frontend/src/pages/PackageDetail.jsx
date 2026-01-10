@@ -192,7 +192,19 @@ const PackageDetail = () => {
 
                 <button
                   onClick={handleBookNow}
-                  className="block w-full py-4 bg-[#0B1530] text-white rounded-xl font-bold text-center hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg hover:shadow-xl mb-4"
+                  className="block w-full py-3 rounded-lg font-semibold text-sm text-center transition-all shadow-lg hover:shadow-xl mb-4"
+                  style={{
+                    background: 'var(--color-primary)',
+                    color: 'white'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--color-secondary)';
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'var(--color-primary)';
+                    e.currentTarget.style.color = 'white';
+                  }}
                 >
                   Book Now
                 </button>
@@ -222,15 +234,38 @@ const PackageDetail = () => {
                     </div>
                     <div>
                       <p className="text-xs text-gray-500">Email Us</p>
-                      <p className="font-semibold text-[#0B1530]">Get in Touch</p>
+                      <a 
+                        href="mailto:info@returnfilers.in" 
+                        className="font-semibold text-[#0B1530] hover:text-[#C9A227] transition-colors"
+                      >
+                        info@returnfilers.in
+                      </a>
                     </div>
                   </Link>
                 </div>
 
                 <div className="mt-6 p-4 bg-[#C9A227]/10 rounded-lg border border-[#C9A227]/20">
-                  <p className="text-xs text-gray-600 text-center">
+                  <p className="text-xs text-gray-600 text-center mb-3">
                     <span className="font-semibold text-[#0B1530]">Free Consultation:</span> Discuss your requirements before booking
                   </p>
+                  <Link
+                    to="/booking?service=Free%20Consultation"
+                    className="block text-center px-4 py-2 rounded-lg text-sm font-semibold transition-all duration-300 hover:shadow-lg"
+                    style={{
+                      background: 'var(--color-secondary)',
+                      color: 'var(--color-primary)'
+                    }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.background = 'var(--color-primary)';
+                      e.currentTarget.style.color = 'white';
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.background = 'var(--color-secondary)';
+                      e.currentTarget.style.color = 'var(--color-primary)';
+                    }}
+                  >
+                    Book Consultation
+                  </Link>
                 </div>
               </motion.div>
             </div>

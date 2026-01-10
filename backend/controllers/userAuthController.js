@@ -388,32 +388,75 @@ const forgotPassword = async (req, res) => {
     try {
       await sendEmail({
         to: email,
-        subject: 'Password Reset Request',
+        subject: 'Password Reset Request - ReturnFilers',
         html: `
-          <div style="font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 600px; margin: 0 auto; background-color: #f9fafb;">
-            <div style="background: linear-gradient(135deg, #4F46E5 0%, #3b82f6 100%); padding: 30px 20px; text-align: center;">
-              <h1 style="color: white; font-size: 28px; margin: 0; font-weight: 700;">ReturnFilers</h1>
-              <p style="color: rgba(255,255,255,0.9); margin: 5px 0 0 0; font-size: 14px;">Professional Tax & Accounting Services</p>
-            </div>
-            <div style="padding: 40px 30px;">
-              <h2 style="color: #1f2937; font-size: 24px; margin: 0 0 15px 0; font-weight: 600;">Password Reset Request</h2>
-              <p style="color: #4b5563; font-size: 16px; line-height: 1.6; margin: 0 0 20px 0;">You requested to reset your password. Click the button below to reset it:</p>
-              <div style="text-align: center; margin: 30px 0;">
-                <a href="${resetUrl}" style="display: inline-block; background: linear-gradient(135deg, #4F46E5 0%, #3b82f6 100%); color: white; padding: 14px 32px; text-decoration: none; border-radius: 8px; font-weight: 600; font-size: 16px;">Reset Password</a>
-              </div>
-              <p style="color: #6b7280; font-size: 14px; line-height: 1.6; margin: 20px 0;">Or copy and paste this link in your browser:</p>
-              <div style="background-color: #f3f4f6; padding: 12px; border-radius: 6px; word-break: break-all; font-size: 13px; color: #4b5563;">
-                ${resetUrl}
-              </div>
-              <p style="color: #ef4444; font-size: 14px; margin: 20px 0; text-align: center; font-weight: 500;">⏱️ This link will expire in 30 minutes</p>
-              <div style="background-color: #fef3c7; border-left: 4px solid #fbbf24; padding: 15px; margin: 20px 0; border-radius: 4px;">
-                <p style="color: #92400e; font-size: 13px; margin: 0; line-height: 1.6;"><strong>Security Note:</strong> If you didn't request this password reset, please ignore this email.</p>
-              </div>
-            </div>
-            <div style="background-color: #f3f4f6; padding: 20px; text-align: center; border-top: 1px solid #e5e7eb;">
-              <p style="color: #6b7280; font-size: 12px; margin: 0;">© 2026 ReturnFilers. All rights reserved.</p>
-            </div>
-          </div>
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <meta charset="UTF-8">
+            <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          </head>
+          <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
+            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+              <tr>
+                <td align="center">
+                  <table width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1);">
+                    
+                    <!-- Header -->
+                    <tr>
+                      <td style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb;">
+                        <h1 style="margin: 0; font-size: 20px; font-weight: 600; color: #111827;">ReturnFilers</h1>
+                      </td>
+                    </tr>
+                    
+                    <!-- Content -->
+                    <tr>
+                      <td style="padding: 40px;">
+                        <h2 style="margin: 0 0 20px 0; font-size: 20px; font-weight: 600; color: #111827;">Reset Your Password</h2>
+                        <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #4b5563;">
+                          We received a request to reset your password. Click the button below to create a new password:
+                        </p>
+                        
+                        <!-- Button -->
+                        <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
+                          <tr>
+                            <td align="center">
+                              <a href="${resetUrl}" style="display: inline-block; padding: 12px 32px; background-color: #111827; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 500;">Reset Password</a>
+                            </td>
+                          </tr>
+                        </table>
+                        
+                        <p style="margin: 20px 0; font-size: 14px; line-height: 1.6; color: #6b7280;">
+                          Or copy and paste this link into your browser:
+                        </p>
+                        <div style="background-color: #f9fafb; padding: 12px; word-break: break-all; font-size: 13px; color: #4b5563; border: 1px solid #e5e7eb;">
+                          ${resetUrl}
+                        </div>
+                        
+                        <!-- Warning -->
+                        <div style="margin: 30px 0 0 0; padding: 16px; background-color: #fef3c7; border-left: 3px solid #f59e0b;">
+                          <p style="margin: 0; font-size: 13px; line-height: 1.5; color: #92400e;">
+                            <strong>Important:</strong> This link will expire in 30 minutes. If you didn't request this password reset, please ignore this email.
+                          </p>
+                        </div>
+                      </td>
+                    </tr>
+                    
+                    <!-- Footer -->
+                    <tr>
+                      <td style="padding: 20px 40px; text-align: center; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
+                        <p style="margin: 0; font-size: 13px; color: #6b7280;">
+                          © ${new Date().getFullYear()} ReturnFilers. All rights reserved.
+                        </p>
+                      </td>
+                    </tr>
+                    
+                  </table>
+                </td>
+              </tr>
+            </table>
+          </body>
+          </html>
         `
       });
 
