@@ -24,7 +24,6 @@ import Contact from './pages/Contact'
 import TermsConditions from './pages/TermsConditions'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
-import TermsConditions from './pages/TermsConditions'
 import RefundPolicy from './pages/RefundPolicy'
 import Auth from './pages/Auth'
 import ForgotPassword from './pages/ForgotPassword'
@@ -110,7 +109,6 @@ function App() {
           <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="quote" element={<Quote />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
-          <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="refund-policy" element={<RefundPolicy />} />
           <Route path="booking" element={<Booking />} />
           <Route path="digital-services" element={<DigitalServices />} />
