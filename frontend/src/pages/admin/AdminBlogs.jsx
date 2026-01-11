@@ -31,6 +31,7 @@ const AdminBlogs = () => {
   const [tableRows, setTableRows] = useState(3);
   const [tableCols, setTableCols] = useState(3);
   const [tableData, setTableData] = useState([]);
+  const [htmlMode, setHtmlMode] = useState(false); // HTML Mode toggle
   const [formData, setFormData] = useState({
     title: '', content: '', image: ''
   });
@@ -549,25 +550,53 @@ const AdminBlogs = () => {
                 }
               `}</style>
               
-              <div className="border border-gray-300 rounded-lg overflow-hidden">
-                <ReactQuill
-                  ref={quillRef}
-                  theme="snow"
-                  value={formData.content}
-                  onChange={(value) => setFormData({...formData, content: value})}
-                  placeholder="Write your blog content here..."
-                  modules={quillModules}
-                  style={{ minHeight: '400px' }}
-                  formats={[
-                    'header', 'font', 'size',
-                    'bold', 'italic', 'underline', 'strike',
-                    'script', 'color', 'background',
-                    'list', 'bullet', 'indent', 'direction', 'align',
-                    'link', 'image', 'video',
-                    'blockquote', 'code-block', 'formula'
-                  ]}
-                />
+              {/* HTML Mode Toggle */}
+              <div className="flex justify-end mb-4">
+                <button
+                  type="button"
+                  onClick={() => setHtmlMode(!htmlMode)}
+                  className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                    htmlMode 
+                      ? 'bg-[#C9A227] text-white shadow-md' 
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  {htmlMode ? '📝 Visual Editor' : '💻 HTML Mode'}
+                </button>
               </div>
+
+              {htmlMode ? (
+                /* HTML Mode - Direct Textarea */
+                <textarea
+                  value={formData.content}
+                  onChange={(e) => setFormData({...formData, content: e.target.value})}
+                  placeholder="Paste your HTML content here..."
+                  className="w-full min-h-[500px] p-4 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20"
+                  style={{ fontFamily: 'Monaco, Consolas, monospace' }}
+                />
+              ) : (
+                /* Visual Editor - ReactQuill */
+                <div className="border border-gray-300 rounded-lg overflow-hidden">
+                  <ReactQuill
+                    ref={quillRef}
+                    theme="snow"
+                    value={formData.content}
+                    onChange={(value) => setFormData({...formData, content: value})}
+                    placeholder="Write your blog content here..."
+                    modules={quillModules}
+                    style={{ minHeight: '400px' }}
+                    formats={[
+                      'header', 'font', 'size',
+                      'bold', 'italic', 'underline', 'strike',
+                      'script', 'color', 'background',
+                      'list', 'bullet', 'indent', 'direction', 'align',
+                      'link', 'image', 'video',
+                      'blockquote', 'code-block', 'formula'
+                    ]}
+                  />
+                </div>
+              )}
+
               <div className="flex items-center justify-between mt-2">
                 <div className="text-xs text-gray-500">
                   💡 <strong>Tips:</strong> 

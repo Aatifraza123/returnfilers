@@ -22,6 +22,7 @@ const AdminEmails = () => {
   const [searchTerm, setSearchTerm] = useState('');
   const [selectedEmail, setSelectedEmail] = useState(null);
   const [showBulkEmailModal, setShowBulkEmailModal] = useState(false);
+  const [allEmailsRaw, setAllEmailsRaw] = useState([]); // Store raw data with duplicates
   const [bulkEmailData, setBulkEmailData] = useState({
     subject: '',
     message: '',
@@ -135,7 +136,7 @@ const AdminEmails = () => {
       });
       
       // Combine all and mark type with proper field mapping
-      const allEmails = [
+      const allEmailsRaw = [
         ...consultations.map(c => ({ 
           ...c, 
           emailType: 'consultation', 
@@ -172,13 +173,30 @@ const AdminEmails = () => {
           message: '-',
           email: n.email || n._id
         }))
-      ].sort((a, b) => {
+      ];
+      
+      // Remove duplicates based on email address (keep first occurrence)
+      const seenEmails = new Set();
+      const allEmails = allEmailsRaw.filter(item => {
+        const email = (item.email || '').toLowerCase().trim();
+        if (!email || seenEmails.has(email)) {
+          return false;
+        }
+        seenEmails.add(email);
+        return true;
+      }).sort((a, b) => {
         const dateA = new Date(a.createdAt || 0);
         const dateB = new Date(b.createdAt || 0);
         return dateB - dateA;
       });
       
+      console.log('Total emails before deduplication:', allEmailsRaw.length);
+      console.log('Total emails after deduplication:', allEmails.length);
+      console.log('Duplicates removed:', allEmailsRaw.length - allEmails.length);
+      
+      // Store both: deduplicated for "all" view, raw for filtered views
       setEmails(allEmails);
+      setAllEmailsRaw(allEmailsRaw); // Store raw data for filters
     } catch (error) {
       console.error('Error fetching emails:', error);
       if (emails.length === 0) {
@@ -350,11 +368,14 @@ const AdminEmails = () => {
   };
 
   const getFilteredEmails = () => {
-    if (!emails || !Array.isArray(emails)) return [];
+    // Use raw data for specific filters, deduplicated data for "all"
+    const sourceData = filterType === 'all' ? emails : allEmailsRaw;
     
-    let filtered = emails;
+    if (!sourceData || !Array.isArray(sourceData)) return [];
     
-    // Filter by type
+    let filtered = sourceData;
+    
+    // Filter by type (only for non-all filters)
     if (filterType !== 'all') {
       filtered = filtered.filter(email => email.emailType === filterType);
     }
@@ -421,9 +442,9 @@ const AdminEmails = () => {
             className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent text-sm min-w-[200px]"
           >
             <option value="all">All Emails ({emails?.length || 0})</option>
-            <option value="contact">Contacts ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
-            <option value="consultation">Consultations ({emails?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
-            <option value="newsletter">Newsletter ({emails?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
+            <option value="contact">Contacts ({allEmailsRaw?.filter(e => e.emailType === 'contact')?.length || 0})</option>
+            <option value="consultation">Consultations ({allEmailsRaw?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
+            <option value="newsletter">Newsletter ({allEmailsRaw?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
           </select>
 
           {/* Search */}
@@ -673,12 +694,12 @@ const AdminEmails = () => {
                   className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent bg-white text-base font-medium"
                   disabled={sendingBulkEmail}
                 >
-                  <option value="all">All Recipients ({emails?.length || 0} total)</option>
-                  <option value="contact">Contacts Only ({emails?.filter(e => e.emailType === 'contact')?.length || 0})</option>
-                  <option value="consultation">Consultations Only ({emails?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
-                  <option value="quote">Quotes Only ({emails?.filter(e => e.emailType === 'quote')?.length || 0})</option>
-                  <option value="booking">Bookings Only ({emails?.filter(e => e.emailType === 'booking')?.length || 0})</option>
-                  <option value="newsletter">Newsletter Subscribers ({emails?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
+                  <option value="all">All Recipients ({emails?.length || 0} unique)</option>
+                  <option value="contact">Contacts Only ({allEmailsRaw?.filter(e => e.emailType === 'contact')?.length || 0})</option>
+                  <option value="consultation">Consultations Only ({allEmailsRaw?.filter(e => e.emailType === 'consultation')?.length || 0})</option>
+                  <option value="quote">Quotes Only ({allEmailsRaw?.filter(e => e.emailType === 'quote')?.length || 0})</option>
+                  <option value="booking">Bookings Only ({allEmailsRaw?.filter(e => e.emailType === 'booking')?.length || 0})</option>
+                  <option value="newsletter">Newsletter Subscribers ({allEmailsRaw?.filter(e => e.emailType === 'newsletter')?.length || 0})</option>
                 </select>
                 <div className="mt-2 p-3 bg-blue-50 border border-blue-200 rounded-lg">
                   <p className="text-sm text-blue-800">

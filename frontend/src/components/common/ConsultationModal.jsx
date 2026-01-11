@@ -131,27 +131,27 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white p-8 text-left align-middle shadow-xl transition-all border border-gray-100">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-100">
                 
                 {/* Header */}
-                <div className="flex justify-between items-center mb-6">
-                  <Dialog.Title as="h3" className="text-2xl font-bold text-[#0B1530]">
+                <div className="flex justify-between items-center mb-4">
+                  <Dialog.Title as="h3" className="text-xl font-bold text-[#0B1530]">
                     Book Consultation
                   </Dialog.Title>
                   <button 
                     onClick={closeModal} 
                     className="text-gray-400 hover:text-red-500 transition-colors"
                   >
-                    <FaTimes size={20} />
+                    <FaTimes size={18} />
                   </button>
                 </div>
 
-                <p className="text-gray-600 text-sm mb-6">
+                <p className="text-gray-600 text-sm mb-4">
                   Fill the form below and our expert CAs will connect with you within 24 hours.
                 </p>
 
                 {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-4">
+                <form onSubmit={handleSubmit} className="space-y-3">
                   
                   {/* Name */}
                   <div className="relative">
@@ -165,7 +165,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       onChange={handleChange}
                       placeholder="Full Name *"
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
                     />
                   </div>
 
@@ -181,7 +181,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       onChange={handleChange}
                       placeholder="Email Address *"
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
                     />
                   </div>
 
@@ -200,7 +200,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       pattern="[6-9][0-9]{9}"
                       title="Enter valid 10-digit mobile number"
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
                     />
                   </div>
 
@@ -214,7 +214,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       value={formData.service}
                       onChange={handleChange}
                       required
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all appearance-none text-sm text-gray-700"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all appearance-none text-sm text-gray-700"
                     >
                       <option value="">Select Service *</option>
                       {preSelectedService && !['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Web Development - Basic Website', 'Web Development - Business Website', 'Web Development - E-commerce Website', 'Web Development - Custom Web Application', 'Other'].includes(preSelectedService) && (
@@ -236,7 +236,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
 
                   {/* Message */}
                   <div className="relative">
-                    <div className="absolute top-3 left-3 pointer-events-none text-gray-400">
+                    <div className="absolute top-2.5 left-3 pointer-events-none text-gray-400">
                       <FaComment size={14} />
                     </div>
                     <textarea
@@ -245,7 +245,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                       onChange={handleChange}
                       rows="3"
                       placeholder="Briefly describe your requirements..."
-                      className="w-full pl-10 pr-4 py-3 bg-gray-50 border border-gray-200 rounded-xl focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all resize-none text-sm"
+                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all resize-none text-sm"
                     />
                   </div>
 
@@ -253,7 +253,7 @@ const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
                   <button
                     type="submit"
                     disabled={loading}
-                    className="w-full bg-[#0B1530] text-white py-3.5 rounded-xl font-bold text-base hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-4"
+                    className="w-full bg-[#0B1530] text-white py-2.5 rounded font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-3"
                   >
                     {loading ? 'Submitting...' : 'Confirm Booking'}
                   </button>

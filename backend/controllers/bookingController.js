@@ -199,7 +199,7 @@ const sendBookingEmail = async (booking) => {
   
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  // Use new professional templates
+  // Use working templates
   const adminHtml = getAdminNotificationTemplate({
     type: 'booking',
     data: {

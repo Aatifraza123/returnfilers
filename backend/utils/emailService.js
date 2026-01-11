@@ -34,15 +34,18 @@ const createTransporter = () => {
   };
 
   if (isZoho) {
-    // Zoho specific configuration - try port 465 with SSL
+    // Zoho specific configuration - optimized for deliverability
     config = {
       ...config,
       port: 465,
       secure: true,
+      requireTLS: true,
       tls: {
-        rejectUnauthorized: false,
+        rejectUnauthorized: true,
         minVersion: 'TLSv1.2'
-      }
+      },
+      // Add authentication method
+      authMethod: 'PLAIN'
     };
   } else if (isGmail) {
     // Gmail specific configuration
@@ -71,63 +74,44 @@ const createTransporter = () => {
 };
 
 /**
- * Send email via SMTP (primary) or Resend (fallback)
+ * Send email via SMTP (Zoho) - Simple format to avoid spam
  */
-const sendEmail = async ({ to, subject, html, from }) => {
-  console.log('📧 Attempting to send email to:', to);
+const sendEmail = async ({ to, subject, html, text, from }) => {
+  console.log('=================================================');
+  console.log('📧 EMAIL SERVICE CALLED - ZOHO SMTP MODE');
+  console.log('📧 To:', to);
   console.log('📧 Subject:', subject);
+  console.log('=================================================');
   
   const transporter = createTransporter();
-  
-  // Try SMTP first (Zoho/Gmail/etc)
-  if (transporter) {
-    try {
-      const info = await transporter.sendMail({
-        from: from || `"ReturnFilers" <${process.env.EMAIL_USER || 'info@returnfilers.in'}>`,
-        to: to,
-        subject: subject,
-        html: html,
-        text: html.replace(/<[^>]*>/g, ''), // Plain text fallback
-        headers: {
-          'Content-Type': 'text/html; charset=UTF-8',
-          'MIME-Version': '1.0'
-        }
-      });
-      
-      console.log('✅ Email sent via SMTP:', info.messageId);
-      return { success: true, provider: 'smtp', id: info.messageId };
-    } catch (error) {
-      console.log('❌ SMTP failed:', error.message);
-      console.log('Trying Resend as fallback...');
-    }
-  }
-  
-  // Fallback to Resend
-  if (!resend) {
-    console.log('❌ No email service configured');
-    throw new Error('Email service not configured');
+  if (!transporter) {
+    throw new Error('SMTP transporter not configured');
   }
   
   try {
-    const result = await resend.emails.send({
-      from: process.env.RESEND_FROM || 'ReturnFilers <onboarding@resend.dev>',
+    console.log('🔄 Sending via Zoho SMTP...');
+    
+    const mailOptions = {
+      from: from || `ReturnFilers <${process.env.EMAIL_USER || 'info@returnfilers.in'}>`,
       to: to,
       subject: subject,
       html: html,
-      text: html.replace(/<[^>]*>/g, '') // Plain text fallback
-    });
+      text: text || html.replace(/<[^>]*>/g, ''), // Auto-generate text from HTML
+      headers: {
+        'X-Mailer': 'Nodemailer',
+        'Reply-To': process.env.EMAIL_USER || 'info@returnfilers.in'
+      }
+    };
     
-    if (result.data?.id) {
-      console.log('✅ Email sent via Resend:', result.data.id);
-      return { success: true, provider: 'resend', id: result.data.id };
-    }
+    const info = await transporter.sendMail(mailOptions);
     
-    if (result.error) {
-      console.log('❌ Resend error:', result.error);
-      throw new Error(result.error.message || 'Resend failed');
-    }
+    console.log('✅✅✅ EMAIL SENT VIA ZOHO SMTP:', info.messageId);
+    console.log('=================================================');
+    return { success: true, provider: 'smtp', id: info.messageId };
   } catch (error) {
-    console.log('❌ Email failed:', error.message);
+    console.log('❌❌❌ SMTP FAILED:', error.message);
+    console.log('❌ Error details:', error);
+    console.log('=================================================');
     throw error;
   }
 };

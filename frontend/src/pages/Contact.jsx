@@ -1,12 +1,10 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useEffect } from 'react';
 import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
-import UserAuthContext from '../context/UserAuthContext';
-import AuthModal from '../components/common/AuthModal';
 import { 
   FaPhone, 
   FaEnvelope, 
@@ -19,22 +17,11 @@ import {
 } from 'react-icons/fa';
 
 const Contact = () => {
-  const { user } = useContext(UserAuthContext);
   const [loading, setLoading] = useState(false);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [openFaqIndex, setOpenFaqIndex] = useState(null);
   const [settings, setSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
-  const { register, handleSubmit, formState: { errors }, reset, setValue } = useForm();
-  
-  // Auto-fill user data when logged in
-  useEffect(() => {
-    if (user) {
-      setValue('name', user.name || '');
-      setValue('email', user.email || '');
-      setValue('phone', user.phone || '');
-    }
-  }, [user, setValue]);
+  const { register, handleSubmit, formState: { errors }, reset } = useForm();
   
   const fetchSettings = async () => {
     setSettingsLoading(true);
@@ -68,12 +55,6 @@ const Contact = () => {
   };
 
   const onSubmit = async (data) => {
-    // Check if user is logged in
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-    
     setLoading(true);
     try {
       const response = await api.post('/contacts', {
@@ -123,19 +104,7 @@ const Contact = () => {
   ];
 
   return (
-    <>
-      {/* Auth Modal */}
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={() => {
-          setShowAuthModal(false);
-          toast.success('Please submit the form again');
-        }}
-        message="Please login to contact us"
-      />
-      
-      <div className="font-sans bg-gray-50">
+    <div className="font-sans bg-gray-50">
       
       {/* ==================== HERO SECTION ==================== */}
       <section className="relative py-12 md:py-16 bg-[#0B1530] text-white overflow-hidden">
@@ -466,7 +435,6 @@ const Contact = () => {
         </div>
       </section>
     </div>
-    </>
   );
 };
 

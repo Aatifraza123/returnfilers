@@ -227,8 +227,15 @@ const Booking = () => {
       }
 
       // Always use bookings API with auth token
+      const authToken = token || localStorage.getItem('userToken');
+      
+      if (!authToken) {
+        setShowAuthModal(true);
+        return;
+      }
+      
       await api.post('/bookings', bookingData, {
-        headers: { Authorization: `Bearer ${token}` }
+        headers: { Authorization: `Bearer ${authToken}` }
       });
 
       setSubmitted(true);

@@ -69,9 +69,27 @@ const sendBulkEmail = async (req, res) => {
   }
 };
 
-// Helper function to send bulk emails in background using professional template
+// Helper function to send bulk emails in background using simple template
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   console.log('Starting background bulk email sending...');
+  console.log('📧 Original recipients count:', recipients.length);
+  
+  // Remove duplicates based on email address
+  const uniqueRecipients = [];
+  const seenEmails = new Set();
+  
+  for (const recipient of recipients) {
+    const email = recipient.email.toLowerCase().trim();
+    if (!seenEmails.has(email)) {
+      seenEmails.add(email);
+      uniqueRecipients.push(recipient);
+    } else {
+      console.log('⚠️ Skipping duplicate email:', email);
+    }
+  }
+  
+  console.log('📧 Unique recipients count:', uniqueRecipients.length);
+  console.log('📧 Duplicates removed:', recipients.length - uniqueRecipients.length);
   console.log('📧 Message type:', typeof message);
   console.log('📧 Message preview (first 200 chars):', message.substring(0, 200));
   
@@ -79,28 +97,22 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   const decodedMessage = he.decode(message);
   console.log('📧 Decoded message preview:', decodedMessage.substring(0, 200));
   
-  const { getEmailTemplate } = require('../utils/emailTemplates');
+  const { getBulkEmailTemplate } = require('../utils/emailTemplates');
   
   let sentCount = 0;
   let failedCount = 0;
 
   // Process emails one by one with delay
-  for (const recipient of recipients) {
+  for (const recipient of uniqueRecipients) {
     try {
       // Create unsubscribe link
       const unsubscribeUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/api/newsletter/unsubscribe/${encodeURIComponent(recipient.email)}`;
       
-      // Use professional email template
-      const html = getEmailTemplate({
-        title: subject,
-        content: `
-          <p>Dear <strong>${recipient.name || 'Valued Client'}</strong>,</p>
-          <div style="margin: 20px 0;">
-            ${decodedMessage}
-          </div>
-          <p style="margin-top: 25px;">Best regards,<br><strong>Team ReturnFilers</strong></p>
-        `,
-        footerText: 'Thank you for being a valued member of the ReturnFilers community.',
+      // Use simple bulk email template
+      const html = getBulkEmailTemplate({
+        subject: subject,
+        content: decodedMessage,
+        recipientName: recipient.name || 'Valued Client',
         unsubscribeUrl: unsubscribeUrl
       });
 
@@ -111,7 +123,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
       });
       
       sentCount++;
-      console.log(`✅ Sent to ${recipient.email} (${sentCount}/${recipients.length})`);
+      console.log(`✅ Sent to ${recipient.email} (${sentCount}/${uniqueRecipients.length})`);
       
       // Small delay between emails
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -122,7 +134,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
     }
   }
 
-  console.log(`Bulk email completed: ${sentCount} sent, ${failedCount} failed`);
+  console.log(`Bulk email completed: ${sentCount} sent, ${failedCount} failed, ${recipients.length - uniqueRecipients.length} duplicates skipped`);
 };
 
 // @desc    Submit contact message
@@ -166,18 +178,21 @@ const createContact = async (req, res) => {
       }
     });
 
+    console.log('✅ Response sent, now starting email process...');
+
     // Send emails in next event loop tick (completely non-blocking)
-    setImmediate(() => {
-      console.log('Starting email sending process for contact:', contact._id);
-      sendContactEmails(contact)
-        .then(() => {
-          console.log('Contact emails sent successfully');
-        })
-        .catch(err => {
-          console.error('Email sending failed (non-blocking):', err);
-        });
-      createContactNotification(contact)
-        .catch(err => console.error('Contact notification failed:', err));
+    setImmediate(async () => {
+      try {
+        console.log('🔄 Inside setImmediate - Starting email sending process for contact:', contact._id);
+        await sendContactEmails(contact);
+        console.log('✅ Contact emails sent successfully');
+        
+        await createContactNotification(contact);
+        console.log('✅ Contact notification created');
+      } catch (err) {
+        console.error('❌ Email sending failed (non-blocking):', err.message);
+        console.error('Error stack:', err.stack);
+      }
     });
   } catch (error) {
     console.error('Contact error:', error);
@@ -327,14 +342,14 @@ const deleteContact = async (req, res) => {
   }
 };
 
-// Helper function to send emails using professional templates
+// Helper function to send emails using simple templates
 const sendContactEmails = async (contact) => {
   console.log('sendContactEmails called for:', contact._id);
   
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  // Use new professional templates
+  // Use old working templates
   const adminHtml = getAdminNotificationTemplate({
     type: 'contact',
     data: {

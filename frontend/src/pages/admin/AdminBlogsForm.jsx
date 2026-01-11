@@ -75,6 +75,7 @@ const AdminBlogsForm = () => {
   const [loading, setLoading] = useState(false);
   const [content, setContent] = useState('');
   const [previewImage, setPreviewImage] = useState('');
+  const [htmlMode, setHtmlMode] = useState(false); // HTML Mode toggle
   const { register, handleSubmit, reset, watch, setValue } = useForm();
   const quillRef = useRef(null);
   const fileInputRef = useRef(null);
@@ -270,14 +271,41 @@ const AdminBlogsForm = () => {
 
               {/* Editor */}
               <div className="prose-editor">
-                {/* Hidden File Input for Quill Images */}
-                <input
-                  ref={fileInputRef}
-                  type="file"
-                  accept="image/*"
-                  className="hidden"
-                  onChange={handleImageSelect}
-                />
+                {/* HTML Mode Toggle */}
+                <div className="flex justify-end mb-4">
+                  <button
+                    type="button"
+                    onClick={() => setHtmlMode(!htmlMode)}
+                    className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
+                      htmlMode 
+                        ? 'bg-[#C9A227] text-white shadow-md' 
+                        : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                    }`}
+                  >
+                    {htmlMode ? '📝 Visual Editor' : '💻 HTML Mode'}
+                  </button>
+                </div>
+
+                {htmlMode ? (
+                  /* HTML Mode - Direct Textarea */
+                  <textarea
+                    value={content}
+                    onChange={(e) => setContent(e.target.value)}
+                    placeholder="Paste your HTML content here..."
+                    className="w-full min-h-[500px] p-4 border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20"
+                    style={{ fontFamily: 'Monaco, Consolas, monospace' }}
+                  />
+                ) : (
+                  /* Visual Editor - ReactQuill */
+                  <>
+                    {/* Hidden File Input for Quill Images */}
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      className="hidden"
+                      onChange={handleImageSelect}
+                    />
                 
                 <style>{`
                   .ql-toolbar.ql-snow {
@@ -479,6 +507,8 @@ const AdminBlogsForm = () => {
                     'width', 'height', 'style'
                   ]}
                 />
+                  </>
+                )}
               </div>
             </div>
           </div>

@@ -21,7 +21,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
     name: '',
     email: '',
     password: '',
-    phone: ''
+    phone: '',
+    consent: false
   });
 
   const handleChange = (e) => {
@@ -30,6 +31,13 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check consent for signup
+    if (!isLogin && !formData.consent) {
+      toast.error('Please agree to receive updates to continue');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -119,18 +127,18 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
               leaveFrom="opacity-100 scale-100"
               leaveTo="opacity-0 scale-95"
             >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded-2xl bg-white shadow-xl transition-all">
+              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-white shadow-xl transition-all">
                 {/* Close Button */}
                 <button
                   onClick={onClose}
-                  className="absolute top-4 right-4 z-10 text-gray-400 hover:text-gray-600 transition-colors"
+                  className="absolute top-3 right-3 z-10 text-gray-400 hover:text-gray-600 transition-colors"
                 >
-                  <FaTimes size={20} />
+                  <FaTimes size={18} />
                 </button>
 
                 {/* Show OTP Verification or Login Form */}
                 {showOTPVerification ? (
-                  <div className="p-8">
+                  <div className="p-6">
                     <OTPVerification 
                       email={registeredEmail}
                       onVerified={handleOTPVerified}
@@ -138,25 +146,25 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                     />
                   </div>
                 ) : (
-                  <div className="p-8">
+                  <div className="p-6">
                   {/* Header */}
-                  <div className="text-center mb-6">
-                    <h2 className="text-2xl font-bold text-gray-900 mb-2">
+                  <div className="text-center mb-4">
+                    <h2 className="text-xl font-bold text-gray-900 mb-1">
                       {isLogin ? 'Login' : 'Sign Up'}
                     </h2>
-                    <p className="text-gray-600 text-sm">
+                    <p className="text-gray-600 text-xs">
                       {message}
                     </p>
                   </div>
 
                   {/* Form */}
-                  <form onSubmit={handleSubmit} className="space-y-4">
+                  <form onSubmit={handleSubmit} className="space-y-3">
                     
                     {/* Signup Fields */}
                     {!isLogin && (
                       <>
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Full Name</label>
                           <input
                             type="text"
                             name="name"
@@ -164,19 +172,19 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                             placeholder="Enter your name"
                             value={formData.name}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
                           />
                         </div>
                         
                         <div>
-                          <label className="block text-sm font-medium text-gray-700 mb-1">Phone (Optional)</label>
+                          <label className="block text-xs font-medium text-gray-700 mb-1">Phone (Optional)</label>
                           <input
                             type="tel"
                             name="phone"
                             placeholder="Enter phone number"
                             value={formData.phone}
                             onChange={handleChange}
-                            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                            className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
                           />
                         </div>
                       </>
@@ -184,7 +192,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
 
                     {/* Email */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Email</label>
                       <input
                         type="email"
                         name="email"
@@ -192,13 +200,13 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                         placeholder="Enter your email"
                         value={formData.email}
                         onChange={handleChange}
-                        className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                        className="w-full px-3 py-2 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
                       />
                     </div>
 
                     {/* Password */}
                     <div>
-                      <label className="block text-sm font-medium text-gray-700 mb-1">Password</label>
+                      <label className="block text-xs font-medium text-gray-700 mb-1">Password</label>
                       <div className="relative">
                         <input
                           type={showPassword ? "text" : "password"}
@@ -207,14 +215,14 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                           placeholder="Enter your password"
                           value={formData.password}
                           onChange={handleChange}
-                          className="w-full px-3 py-2 pr-10 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
+                          className="w-full px-3 py-2 pr-10 border border-gray-300 rounded focus:outline-none focus:ring-1 focus:ring-gray-400 focus:border-gray-400 text-sm"
                         />
                         <button
                           type="button"
                           onClick={() => setShowPassword(!showPassword)}
                           className="absolute right-3 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600"
                         >
-                          {showPassword ? <FaEyeSlash size={16} /> : <FaEye size={16} />}
+                          {showPassword ? <FaEyeSlash size={14} /> : <FaEye size={14} />}
                         </button>
                       </div>
                     </div>
@@ -235,18 +243,36 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                       </div>
                     )}
 
+                    {/* Consent Checkbox - Only for Signup */}
+                    {!isLogin && (
+                      <div className="flex items-start gap-2">
+                        <input
+                          type="checkbox"
+                          id="consent"
+                          name="consent"
+                          checked={formData.consent}
+                          onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
+                          required
+                          className="mt-0.5 w-3.5 h-3.5 text-[#0B1530] border-gray-300 rounded focus:ring-[#0B1530]"
+                        />
+                        <label htmlFor="consent" className="text-xs text-gray-600 leading-tight">
+                          I agree to receive updates, newsletters, and promotional emails from ReturnFilers. I understand I can unsubscribe at any time.
+                        </label>
+                      </div>
+                    )}
+
                     {/* Submit Button */}
                     <button
                       type="submit"
                       disabled={loading}
-                      className="w-full bg-gray-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                      className="w-full bg-gray-900 text-white py-2 rounded font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                     >
                       {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Sign Up')}
                     </button>
                   </form>
 
                   {/* Divider */}
-                  <div className="relative my-6">
+                  <div className="relative my-4">
                     <div className="absolute inset-0 flex items-center">
                       <div className="w-full border-t border-gray-200"></div>
                     </div>
@@ -259,8 +285,8 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                   <GoogleLoginButton onSuccess={handleGoogleSuccess} />
 
                   {/* Toggle */}
-                  <div className="mt-6 text-center">
-                    <p className="text-sm text-gray-600">
+                  <div className="mt-4 text-center">
+                    <p className="text-xs text-gray-600">
                       {isLogin ? "Don't have an account?" : "Already have an account?"}
                       <button
                         type="button"

@@ -77,7 +77,7 @@ const sendQuoteEmails = async (quote) => {
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  // Use new professional templates
+  // Use old working templates
   const adminHtml = getAdminNotificationTemplate({
     type: 'quote',
     data: {

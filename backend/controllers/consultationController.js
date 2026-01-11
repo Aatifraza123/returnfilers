@@ -224,7 +224,7 @@ const sendConsultationEmails = async (consultation) => {
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
-  // Use new professional templates
+  // Use old working templates
   const adminHtml = getAdminNotificationTemplate({
     type: 'consultation',
     data: {
