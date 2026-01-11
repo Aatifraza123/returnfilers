@@ -3,6 +3,7 @@ const mongoose = require('mongoose');
 const { sendEmail, sendBulkEmails } = require('../utils/emailService');
 const nodemailer = require('nodemailer');
 const { createContactNotification } = require('../utils/notificationHelper');
+const he = require('he'); // HTML entity decoder
 
 // @desc    Send bulk email
 // @route   POST /api/contacts/bulk-email
@@ -13,6 +14,12 @@ const sendBulkEmail = async (req, res) => {
 
     console.log('BULK EMAIL REQUEST');
     console.log('Recipients count:', recipients?.length);
+    console.log('Subject:', subject);
+    console.log('Message type:', typeof message);
+    console.log('Message length:', message?.length);
+    console.log('Message first 300 chars:', message?.substring(0, 300));
+    console.log('Has < character:', message?.includes('<'));
+    console.log('Has &lt; encoded:', message?.includes('&lt;'));
 
     // Validation
     if (!recipients || !Array.isArray(recipients) || recipients.length === 0) {
@@ -65,6 +72,12 @@ const sendBulkEmail = async (req, res) => {
 // Helper function to send bulk emails in background using professional template
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   console.log('Starting background bulk email sending...');
+  console.log('📧 Message type:', typeof message);
+  console.log('📧 Message preview (first 200 chars):', message.substring(0, 200));
+  
+  // Decode HTML entities (ReactQuill sometimes encodes them)
+  const decodedMessage = he.decode(message);
+  console.log('📧 Decoded message preview:', decodedMessage.substring(0, 200));
   
   const { getEmailTemplate } = require('../utils/emailTemplates');
   
@@ -74,17 +87,21 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
   // Process emails one by one with delay
   for (const recipient of recipients) {
     try {
+      // Create unsubscribe link
+      const unsubscribeUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/api/newsletter/unsubscribe/${encodeURIComponent(recipient.email)}`;
+      
       // Use professional email template
       const html = getEmailTemplate({
         title: subject,
         content: `
           <p>Dear <strong>${recipient.name || 'Valued Client'}</strong>,</p>
           <div style="margin: 20px 0;">
-            ${message}
+            ${decodedMessage}
           </div>
           <p style="margin-top: 25px;">Best regards,<br><strong>Team ReturnFilers</strong></p>
         `,
-        footerText: 'Thank you for being a valued member of the ReturnFilers community.'
+        footerText: 'Thank you for being a valued member of the ReturnFilers community.',
+        unsubscribeUrl: unsubscribeUrl
       });
 
       await sendEmail({

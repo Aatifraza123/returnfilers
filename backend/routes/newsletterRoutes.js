@@ -4,11 +4,13 @@ const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const {
   subscribe,
   getSubscribers,
-  deleteSubscriber
+  deleteSubscriber,
+  unsubscribe
 } = require('../controllers/newsletterController');
 
-// Public route - anyone can subscribe
+// Public routes
 router.post('/subscribe', subscribe);
+router.get('/unsubscribe/:email', unsubscribe); // Public unsubscribe link
 
 // Admin routes - protected
 router.get('/', protectAdmin, getSubscribers);

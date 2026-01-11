@@ -86,7 +86,12 @@ const sendEmail = async ({ to, subject, html, from }) => {
         from: from || `"ReturnFilers" <${process.env.EMAIL_USER || 'info@returnfilers.in'}>`,
         to: to,
         subject: subject,
-        html: html
+        html: html,
+        text: html.replace(/<[^>]*>/g, ''), // Plain text fallback
+        headers: {
+          'Content-Type': 'text/html; charset=UTF-8',
+          'MIME-Version': '1.0'
+        }
       });
       
       console.log('✅ Email sent via SMTP:', info.messageId);
@@ -108,7 +113,8 @@ const sendEmail = async ({ to, subject, html, from }) => {
       from: process.env.RESEND_FROM || 'ReturnFilers <onboarding@resend.dev>',
       to: to,
       subject: subject,
-      html: html
+      html: html,
+      text: html.replace(/<[^>]*>/g, '') // Plain text fallback
     });
     
     if (result.data?.id) {

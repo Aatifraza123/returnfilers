@@ -18,6 +18,7 @@ const Login = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showOTPVerification, setShowOTPVerification] = useState(false);
   const [registeredEmail, setRegisteredEmail] = useState('');
+  const [consent, setConsent] = useState(false);
 
   const [formData, setFormData] = useState({
     name: '',
@@ -32,6 +33,13 @@ const Login = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check consent for signup
+    if (!isLogin && !consent) {
+      toast.error('Please accept the terms and conditions to sign up');
+      return;
+    }
+    
     setLoading(true);
 
     try {
@@ -223,9 +231,31 @@ const Login = () => {
                   </div>
                 )}
 
+                {!isLogin && (
+                  <div className="flex items-start gap-2">
+                    <input
+                      type="checkbox"
+                      id="consent"
+                      checked={consent}
+                      onChange={(e) => setConsent(e.target.checked)}
+                      className="mt-1 w-4 h-4 text-gray-900 border-gray-300 rounded focus:ring-gray-400"
+                    />
+                    <label htmlFor="consent" className="text-xs text-gray-600">
+                      I agree to the{' '}
+                      <Link to="/terms-conditions" target="_blank" className="text-gray-900 hover:underline">
+                        Terms & Conditions
+                      </Link>
+                      {' '}and{' '}
+                      <Link to="/privacy-policy" target="_blank" className="text-gray-900 hover:underline">
+                        Privacy Policy
+                      </Link>
+                    </label>
+                  </div>
+                )}
+
                 <button
                   type="submit"
-                  disabled={loading}
+                  disabled={loading || (!isLogin && !consent)}
                   className="w-full bg-gray-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                 >
                   {loading ? 'Please wait...' : (isLogin ? 'Login' : 'Sign Up')}

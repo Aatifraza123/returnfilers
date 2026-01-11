@@ -80,10 +80,10 @@ const Header = () => {
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
       scrolled 
-        ? 'bg-white/95 backdrop-blur-lg shadow-md py-2' 
+        ? 'bg-white/95 backdrop-blur-lg shadow-md py-1.5' 
         : isHomePage 
-          ? 'bg-white/90 backdrop-blur-sm py-2.5' 
-          : 'bg-white/80 backdrop-blur-sm py-2.5'
+          ? 'bg-white/90 backdrop-blur-sm py-2' 
+          : 'bg-white/80 backdrop-blur-sm py-2'
     }`}>
       {/* Remove gradient overlay for home page */}
       
@@ -95,7 +95,7 @@ const Header = () => {
               <img 
                 src={settings.logo} 
                 alt={settings.companyName || 'Logo'} 
-                className="h-11 sm:h-12 md:h-14 object-contain"
+                className="h-9 sm:h-10 md:h-11 object-contain"
                 style={{ mixBlendMode: 'multiply' }}
                 onError={(e) => {
                   e.target.style.display = 'none';
@@ -103,7 +103,7 @@ const Header = () => {
                 }}
               />
               <div 
-                className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-base sm:text-lg md:text-xl font-bold shadow-md"
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
                 style={{ display: 'none' }}
               >
                 {settings?.logoText || 'RF'}
@@ -111,12 +111,12 @@ const Header = () => {
             </>
           ) : (
             <div 
-              className="w-11 h-11 sm:w-12 sm:h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-base sm:text-lg md:text-xl font-bold shadow-md"
+              className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
             >
               {settings?.logoText || 'RF'}
             </div>
           )}
-          <span className={`text-lg sm:text-xl md:text-2xl font-serif font-bold tracking-tight transition-colors ${
+          <span className={`text-base sm:text-lg md:text-xl font-serif font-bold tracking-tight transition-colors ${
             isHomePage && !scrolled ? 'text-[#0B1530]' : 'text-[#0B1530]'
           }`}>
             {settings?.companyName || 'ReturnFilers'}
@@ -146,7 +146,7 @@ const Header = () => {
                 <NavLink
                   to={link.to}
                   className={({ isActive }) =>
-                    `text-base font-medium transition-all duration-200 relative group flex items-center gap-1 ${
+                    `text-sm font-medium transition-all duration-200 relative group flex items-center gap-1 ${
                       isActive 
                         ? 'font-semibold' 
                         : 'text-gray-800 hover:text-gray-900'
@@ -229,11 +229,11 @@ const Header = () => {
         </ul>
 
         {/* CTA Button / User Menu - Original Desktop Size with Dynamic Colors */}
-        <div className="hidden lg:flex items-center gap-3">
+        <div className="hidden lg:flex items-center gap-2.5">
           {user ? (
             <Link
               to={dashboardLink}
-              className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 text-white hover:shadow-xl"
+              className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 text-white hover:shadow-xl"
               style={{ 
                 background: `var(--color-primary)`
               }}
@@ -244,14 +244,14 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 hover:opacity-80"
+                className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:opacity-80"
                 style={{ color: 'var(--color-primary)' }}
               >
                 Login
               </Link>
               <Link
                 to="/quote"
-                className="px-6 py-2.5 rounded-full text-base font-medium transition-all duration-300 hover:shadow-xl"
+                className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-xl"
                 style={{ 
                   background: `var(--color-secondary)`,
                   color: 'var(--color-primary)'

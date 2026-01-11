@@ -108,10 +108,109 @@ const deleteSubscriber = async (req, res) => {
   }
 };
 
+// @desc    Unsubscribe from newsletter (public)
+// @route   GET /api/newsletter/unsubscribe/:email
+// @access  Public
+const unsubscribe = async (req, res) => {
+  try {
+    const email = decodeURIComponent(req.params.email);
+    
+    console.log('📧 UNSUBSCRIBE REQUEST');
+    console.log('Email:', email);
+
+    const subscriber = await Newsletter.findOne({ email: email.toLowerCase() });
+    
+    if (!subscriber) {
+      return res.send(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+          <meta charset="UTF-8">
+          <meta name="viewport" content="width=device-width, initial-scale=1.0">
+          <title>Already Unsubscribed - ReturnFilers</title>
+          <style>
+            body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 40px 20px; }
+            .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border: 1px solid #e0e0e0; text-align: center; }
+            h1 { color: #333; margin: 0 0 20px 0; font-size: 24px; }
+            p { color: #666; line-height: 1.6; margin: 0 0 20px 0; }
+            a { color: #000; text-decoration: underline; }
+          </style>
+        </head>
+        <body>
+          <div class="container">
+            <h1>Already Unsubscribed</h1>
+            <p>This email address is not in our mailing list.</p>
+            <p><a href="https://returnfilers.in">Return to ReturnFilers</a></p>
+          </div>
+        </body>
+        </html>
+      `);
+    }
+
+    // Update status to unsubscribed instead of deleting
+    subscriber.status = 'unsubscribed';
+    await subscriber.save();
+
+    console.log('✅ User unsubscribed:', email);
+
+    res.send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Unsubscribed Successfully - ReturnFilers</title>
+        <style>
+          body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 40px 20px; }
+          .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border: 1px solid #e0e0e0; text-align: center; }
+          h1 { color: #333; margin: 0 0 20px 0; font-size: 24px; }
+          p { color: #666; line-height: 1.6; margin: 0 0 20px 0; }
+          .success { color: #22c55e; font-weight: 600; font-size: 18px; margin: 20px 0; }
+          a { color: #000; text-decoration: underline; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>✓ Unsubscribed Successfully</h1>
+          <p class="success">You have been unsubscribed from our mailing list.</p>
+          <p>We're sorry to see you go. You will no longer receive promotional emails from ReturnFilers.</p>
+          <p>If you change your mind, you can always subscribe again on our website.</p>
+          <p><a href="https://returnfilers.in">Return to ReturnFilers</a></p>
+        </div>
+      </body>
+      </html>
+    `);
+  } catch (error) {
+    console.error('❌ Unsubscribe error:', error);
+    res.status(500).send(`
+      <!DOCTYPE html>
+      <html>
+      <head>
+        <meta charset="UTF-8">
+        <title>Error - ReturnFilers</title>
+        <style>
+          body { font-family: Arial, sans-serif; background-color: #f5f5f5; margin: 0; padding: 40px 20px; }
+          .container { max-width: 600px; margin: 0 auto; background: white; padding: 40px; border: 1px solid #e0e0e0; text-align: center; }
+          h1 { color: #ef4444; margin: 0 0 20px 0; font-size: 24px; }
+          p { color: #666; line-height: 1.6; }
+        </style>
+      </head>
+      <body>
+        <div class="container">
+          <h1>Error</h1>
+          <p>Something went wrong. Please try again later or contact us at info@returnfilers.in</p>
+        </div>
+      </body>
+      </html>
+    `);
+  }
+};
+
 module.exports = {
   subscribe,
   getSubscribers,
-  deleteSubscriber
+  deleteSubscriber,
+  unsubscribe
 };
 
 

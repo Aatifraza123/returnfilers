@@ -3,47 +3,56 @@
  * No border radius, no gradients, no fancy colors
  */
 
-const getEmailTemplate = ({ title, content, footerText, ctaButton }) => {
+const getEmailTemplate = ({ title, content, footerText, ctaButton, unsubscribeUrl }) => {
   return `
     <!DOCTYPE html>
     <html>
     <head>
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
-      <style>
+      <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+      <!--[if !mso]><!-->
+      <meta http-equiv="X-UA-Compatible" content="IE=edge">
+      <!--<![endif]-->
+      <style type="text/css">
         @media only screen and (max-width: 600px) {
-          .email-container { width: 100% !important; }
-          .email-padding { padding: 20px !important; }
-          .email-header { padding: 15px 20px !important; }
-          .email-footer { padding: 15px 20px !important; }
+          .email-container {
+            width: 100% !important;
+          }
+          .email-padding {
+            padding: 20px !important;
+          }
+          .logo-img {
+            max-width: 140px !important;
+          }
         }
       </style>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: Arial, Helvetica, sans-serif; background-color: #f5f5f5; width: 100% !important; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%;">
+      <table width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #f5f5f5; margin: 0; padding: 0;">
         <tr>
-          <td align="center">
-            <table class="email-container" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
+          <td align="center" style="padding: 20px 10px;">
+            <table class="email-container" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #ffffff; max-width: 600px; width: 100%;">
               
-              <!-- Header -->
+              <!-- Header with Logo -->
               <tr>
-                <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                  <h1 style="margin: 0; font-size: 20px; font-weight: 600; color: #111827;">ReturnFilers</h1>
+                <td align="center" class="email-padding" style="padding: 30px 20px; border-bottom: 1px solid #e5e7eb; background-color: #ffffff;">
+                  <img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" class="logo-img" width="160" style="display: block; border: 0; max-width: 160px; height: auto; margin: 0 auto;" />
                 </td>
               </tr>
               
               <!-- Content -->
               <tr>
-                <td class="email-padding" style="padding: 40px;">
-                  <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #111827;">${title}</h2>
-                  <div style="color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0;">
+                <td class="email-padding" style="padding: 30px 20px; color: #4b5563; font-size: 14px; line-height: 1.6;">
+                  <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #111827; font-family: Arial, Helvetica, sans-serif;">${title}</h2>
+                  <div style="color: #4b5563; font-size: 14px; line-height: 1.6; margin: 0; font-family: Arial, Helvetica, sans-serif;">
                     ${content}
                   </div>
                   ${ctaButton ? `
-                    <table width="100%" cellpadding="0" cellspacing="0" style="margin: 25px 0 0 0;">
+                    <table width="100%" cellpadding="0" cellspacing="0" border="0" style="margin: 25px 0 0 0;">
                       <tr>
                         <td align="center">
-                          <a href="${ctaButton.url}" style="display: inline-block; padding: 12px 30px; background: #111827; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 14px;">${ctaButton.text}</a>
+                          <a href="${ctaButton.url}" style="display: inline-block; padding: 12px 30px; background-color: #111827; color: #ffffff; text-decoration: none; font-weight: 600; font-size: 14px; font-family: Arial, Helvetica, sans-serif;">${ctaButton.text}</a>
                         </td>
                       </tr>
                     </table>
@@ -53,15 +62,20 @@ const getEmailTemplate = ({ title, content, footerText, ctaButton }) => {
               
               <!-- Footer -->
               <tr>
-                <td class="email-footer" style="padding: 20px 40px; text-align: center; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
-                  <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
+                <td align="center" class="email-padding" style="padding: 20px; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
+                  <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;">
                     ${footerText || 'Your trusted partner for professional tax and financial services'}
                   </p>
-                  <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
+                  <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280; font-family: Arial, Helvetica, sans-serif;">
                     <a href="https://returnfilers.in" style="color: #2563eb; text-decoration: none;">returnfilers.in</a> | 
                     <a href="mailto:info@returnfilers.in" style="color: #2563eb; text-decoration: none;">info@returnfilers.in</a>
                   </p>
-                  <p style="margin: 0; font-size: 12px; color: #9ca3af;">
+                  ${unsubscribeUrl ? `
+                  <p style="margin: 10px 0 0 0; font-size: 12px; color: #9ca3af; font-family: Arial, Helvetica, sans-serif;">
+                    <a href="${unsubscribeUrl}" style="color: #9ca3af; text-decoration: underline;">Unsubscribe from this list</a>
+                  </p>
+                  ` : ''}
+                  <p style="margin: 10px 0 0 0; font-size: 12px; color: #9ca3af; font-family: Arial, Helvetica, sans-serif;">
                     © ${new Date().getFullYear()} ReturnFilers. All rights reserved.
                   </p>
                 </td>
@@ -185,7 +199,7 @@ const getAdminNotificationTemplate = ({ type, data }) => {
     `;
   }
 
-  // Ultra simple clean template - no border radius, no fancy colors, fully responsive
+  // Ultra simple clean template - no border radius, no fancy colors, fully responsive with logo
   return `
     <!DOCTYPE html>
     <html>
@@ -193,24 +207,28 @@ const getAdminNotificationTemplate = ({ type, data }) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
+        body { margin: 0; padding: 0; width: 100% !important; }
+        table { border-collapse: collapse; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; pointer-events: none; }
         @media only screen and (max-width: 600px) {
           .email-container { width: 100% !important; }
           .email-padding { padding: 20px !important; }
-          .email-header { padding: 15px 20px !important; }
-          .email-footer { padding: 15px 20px !important; }
+          .email-header { padding: 12px 20px !important; }
+          .email-footer { padding: 12px 20px !important; }
+          .logo-img { max-width: 120px !important; height: auto !important; }
         }
       </style>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; width: 100%;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px 0;">
         <tr>
           <td align="center">
-            <table class="email-container" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
+            <table class="email-container" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
               
-              <!-- Header -->
+              <!-- Header with Logo -->
               <tr>
-                <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                  <h1 style="margin: 0; font-size: 20px; font-weight: 600; color: #111827;">ReturnFilers Admin</h1>
+                <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb; background-color: #ffffff;">
+                  <img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" class="logo-img" style="max-width: 160px; height: auto; display: block; margin: 0 auto;" />
                 </td>
               </tr>
               
@@ -319,7 +337,7 @@ const getCustomerConfirmationTemplate = ({ type, data }) => {
     `;
   }
 
-  // Ultra simple clean template - no border radius, fully responsive
+  // Ultra simple clean template - no border radius, fully responsive with logo
   return `
     <!DOCTYPE html>
     <html>
@@ -327,24 +345,28 @@ const getCustomerConfirmationTemplate = ({ type, data }) => {
       <meta charset="UTF-8">
       <meta name="viewport" content="width=device-width, initial-scale=1.0">
       <style>
+        body { margin: 0; padding: 0; width: 100% !important; }
+        table { border-collapse: collapse; }
+        img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; pointer-events: none; }
         @media only screen and (max-width: 600px) {
           .email-container { width: 100% !important; }
           .email-padding { padding: 20px !important; }
-          .email-header { padding: 15px 20px !important; }
-          .email-footer { padding: 15px 20px !important; }
+          .email-header { padding: 12px 20px !important; }
+          .email-footer { padding: 12px 20px !important; }
+          .logo-img { max-width: 120px !important; height: auto !important; }
         }
       </style>
     </head>
-    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5;">
-      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 40px 20px;">
+    <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; width: 100%;">
+      <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px 0;">
         <tr>
           <td align="center">
-            <table class="email-container" width="600" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
+            <table class="email-container" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
               
-              <!-- Header -->
+              <!-- Header with Logo -->
               <tr>
-                <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                  <h1 style="margin: 0; font-size: 20px; font-weight: 600; color: #111827;">ReturnFilers</h1>
+                <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb; background-color: #ffffff;">
+                  <img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" class="logo-img" style="max-width: 160px; height: auto; display: block; margin: 0 auto;" />
                 </td>
               </tr>
               
@@ -383,3 +405,5 @@ module.exports = {
   getAdminNotificationTemplate,
   getCustomerConfirmationTemplate
 };
+
+

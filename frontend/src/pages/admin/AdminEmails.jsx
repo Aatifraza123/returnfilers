@@ -29,6 +29,7 @@ const AdminEmails = () => {
   });
   const [sendingBulkEmail, setSendingBulkEmail] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'contact', 'consultation', 'newsletter'
+  const [htmlMode, setHtmlMode] = useState(false); // Toggle between visual and HTML mode
 
   // Email templates
   const emailTemplates = {
@@ -308,10 +309,33 @@ const AdminEmails = () => {
         name: e.name
       }));
 
+      // Debug: Log what we're sending
+      console.log('📧 Sending bulk email:');
+      console.log('Subject:', bulkEmailData.subject);
+      console.log('Message type:', typeof bulkEmailData.message);
+      console.log('Message length:', bulkEmailData.message.length);
+      console.log('Message preview (first 300 chars):', bulkEmailData.message.substring(0, 300));
+      console.log('Has < character:', bulkEmailData.message.includes('<'));
+      console.log('Has &lt; encoded:', bulkEmailData.message.includes('&lt;'));
+
+      // Clean the message: Remove ReactQuill's wrapper <p> tags if content is already HTML
+      let cleanMessage = bulkEmailData.message;
+      
+      // If message starts with <p>&lt; it means ReactQuill wrapped already-encoded HTML
+      // We need to extract the inner text and decode it
+      if (cleanMessage.includes('&lt;') && cleanMessage.includes('&gt;')) {
+        console.log('⚠️ Detected double-encoded HTML, cleaning...');
+        // Create a temporary div to decode HTML entities
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = cleanMessage;
+        cleanMessage = tempDiv.textContent || tempDiv.innerText || cleanMessage;
+        console.log('✅ Cleaned message preview:', cleanMessage.substring(0, 300));
+      }
+
       await api.post('/contacts/bulk-email', {
         recipients,
         subject: bulkEmailData.subject,
-        message: bulkEmailData.message
+        message: cleanMessage
       }, config);
 
       toast.success('Bulk email sent successfully!');
@@ -706,48 +730,83 @@ const AdminEmails = () => {
 
               {/* HTML Editor */}
               <div>
-                <label className="text-sm font-semibold text-gray-700 mb-2 block">
-                  Message
-                </label>
-                <div className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white">
-                  <ReactQuill
-                    theme="snow"
-                    value={bulkEmailData.message}
-                    onChange={(value) => setBulkEmailData({ ...bulkEmailData, message: value })}
-                    placeholder="Write your email message here... You can add text, images, links, and more!"
-                    modules={{
-                      toolbar: [
-                        [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
-                        [{ 'font': [] }],
-                        [{ 'size': ['small', false, 'large', 'huge'] }],
-                        ['bold', 'italic', 'underline', 'strike'],
-                        [{ 'color': [] }, { 'background': [] }],
-                        [{ 'script': 'sub'}, { 'script': 'super' }],
-                        [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
-                        [{ 'direction': 'rtl' }, { 'align': [] }],
-                        ['blockquote', 'code-block'],
-                        ['link', 'image', 'video'],
-                        ['clean']
-                      ]
-                    }}
-                    formats={[
-                      'header', 'font', 'size',
-                      'bold', 'italic', 'underline', 'strike',
-                      'color', 'background',
-                      'script',
-                      'list', 'bullet', 'indent',
-                      'direction', 'align',
-                      'blockquote', 'code-block',
-                      'link', 'image', 'video'
-                    ]}
-                    style={{ minHeight: '300px' }}
-                    readOnly={sendingBulkEmail}
-                  />
+                <div className="flex items-center justify-between mb-2">
+                  <label className="text-sm font-semibold text-gray-700">
+                    Message
+                  </label>
+                  <button
+                    type="button"
+                    onClick={() => setHtmlMode(!htmlMode)}
+                    className="text-xs px-3 py-1 bg-gray-100 hover:bg-gray-200 rounded transition-colors"
+                    disabled={sendingBulkEmail}
+                  >
+                    {htmlMode ? '📝 Visual Editor' : '💻 HTML Mode'}
+                  </button>
                 </div>
+                
+                {htmlMode ? (
+                  // HTML Mode - Direct textarea
+                  <textarea
+                    value={bulkEmailData.message}
+                    onChange={(e) => setBulkEmailData({ ...bulkEmailData, message: e.target.value })}
+                    placeholder="Paste your HTML code here..."
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent font-mono text-sm"
+                    rows="15"
+                    disabled={sendingBulkEmail}
+                  />
+                ) : (
+                  // Visual Mode - ReactQuill
+                  <div className="border-2 border-gray-300 rounded-lg overflow-hidden bg-white">
+                    <ReactQuill
+                      theme="snow"
+                      value={bulkEmailData.message}
+                      onChange={(value) => setBulkEmailData({ ...bulkEmailData, message: value })}
+                      placeholder="Write your email message here... You can add text, images, links, and more!"
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, 4, 5, 6, false] }],
+                          [{ 'font': [] }],
+                          [{ 'size': ['small', false, 'large', 'huge'] }],
+                          ['bold', 'italic', 'underline', 'strike'],
+                          [{ 'color': [] }, { 'background': [] }],
+                          [{ 'script': 'sub'}, { 'script': 'super' }],
+                          [{ 'list': 'ordered'}, { 'list': 'bullet' }, { 'indent': '-1'}, { 'indent': '+1' }],
+                          [{ 'direction': 'rtl' }, { 'align': [] }],
+                          ['blockquote', 'code-block'],
+                          ['link', 'image', 'video'],
+                          ['clean']
+                        ]
+                      }}
+                      formats={[
+                        'header', 'font', 'size',
+                        'bold', 'italic', 'underline', 'strike',
+                        'color', 'background',
+                        'script',
+                        'list', 'bullet', 'indent',
+                        'direction', 'align',
+                        'blockquote', 'code-block',
+                        'link', 'image', 'video'
+                      ]}
+                      style={{ minHeight: '300px' }}
+                      readOnly={sendingBulkEmail}
+                    />
+                  </div>
+                )}
+                
                 <div className="mt-2 flex flex-wrap gap-2 text-xs text-gray-600">
-                  <span className="px-2 py-1 bg-gray-100 rounded">💡 Tip: Click image icon to add images</span>
-                  <span className="px-2 py-1 bg-gray-100 rounded">🔗 Click link icon to add hyperlinks</span>
-                  <span className="px-2 py-1 bg-gray-100 rounded">🎨 Use color picker for text colors</span>
+                  {htmlMode ? (
+                    <>
+                      <span className="px-2 py-1 bg-blue-50 text-blue-700 rounded">💻 HTML Mode: Paste your HTML code directly</span>
+                      <span className="px-2 py-1 bg-gray-100 rounded">✓ Images will display properly</span>
+                      <span className="px-2 py-1 bg-gray-100 rounded">✓ Colors and styling will work</span>
+                    </>
+                  ) : (
+                    <>
+                      <span className="px-2 py-1 bg-gray-100 rounded">💡 Tip: Click image icon to add images</span>
+                      <span className="px-2 py-1 bg-gray-100 rounded">🔗 Click link icon to add hyperlinks</span>
+                      <span className="px-2 py-1 bg-gray-100 rounded">🎨 Use color picker for text colors</span>
+                    </>
+                  )}
                 </div>
               </div>
 
