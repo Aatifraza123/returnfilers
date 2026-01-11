@@ -70,7 +70,7 @@ const RefundPolicy = () => {
   };
 
   return (
-    <div className="font-sans text-gray-800 bg-white min-h-screen">
+    <div className="font-sans text-gray-800 bg-white min-h-screen pt-20">
       
       {/* ==================== HERO SECTION - SIMPLE ==================== */}
       <section className="py-6 md:py-8 border-b border-gray-200">

@@ -78,7 +78,7 @@ const ServiceDetail = () => {
 
   if (loading) {
     return (
-      <div className="min-h-screen flex items-center justify-center bg-gray-50">
+      <div className="min-h-screen flex items-center justify-center bg-gray-50 pt-20">
         <Loader size="lg" text="Loading service details..." />
       </div>
     );
@@ -124,7 +124,7 @@ const ServiceDetail = () => {
       
       {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
-      <section className="relative min-h-[30vh] flex items-end">
+      <section className="relative min-h-[30vh] flex items-end mt-16">
         <div className="absolute inset-0">
           <img
             src={getServiceImage()}

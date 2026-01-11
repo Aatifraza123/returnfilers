@@ -105,7 +105,7 @@ const Quote = () => {
         message="Please login to request a quote"
       />
       
-    <div className="min-h-screen bg-gray-50 py-8 md:py-12">
+    <div className="min-h-screen bg-gray-50 py-8 md:py-12 pt-24">
       <div className="container mx-auto px-4 max-w-2xl">
         {/* Header */}
         <div className="text-center mb-8">

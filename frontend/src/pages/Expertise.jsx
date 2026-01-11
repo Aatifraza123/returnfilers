@@ -130,7 +130,7 @@ const Expertise = () => {
   return (
     <main className="font-sans text-gray-800 bg-gray-50">
       {/* Hero Section */}
-      <section className="relative py-12 md:py-16 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden">
+      <section className="relative py-12 md:py-16 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden mt-16">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 max-w-5xl">
           <motion.span

@@ -80,7 +80,7 @@ const PackageDetail = () => {
       />
       
       {/* Header */}
-      <section className="bg-[#0B1530] text-white py-12">
+      <section className="bg-[#0B1530] text-white py-12 mt-16">
         <div className="container mx-auto px-4 max-w-6xl">
           <Link
             to="/digital-services"

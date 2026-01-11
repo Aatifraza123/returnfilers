@@ -92,7 +92,7 @@ const About = () => {
   }
 
   return (
-    <main className="font-sans text-gray-800 bg-gray-50">
+    <main className="font-sans text-gray-800 bg-gray-50 pt-20">
       
       {/* ==================== HERO SECTION ==================== */}
       <section className="relative py-16 md:py-20 bg-gradient-to-br from-[#0B1530] via-[#101d42] to-[#1a2b5e] text-white overflow-hidden">

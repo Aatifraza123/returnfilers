@@ -183,7 +183,7 @@ const ExpertiseDetail = () => {
   return (
     <main className="font-sans bg-gray-50">
       {/* Hero Section - Compact v3.0 - Icon removed */}
-      <section className="relative min-h-[40vh] flex items-center">
+      <section className="relative min-h-[40vh] flex items-center mt-16">
         <div className="absolute inset-0">
           <img src={expertise.heroImage} alt={expertise.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B1530] via-[#0B1530]/90 to-[#0B1530]/70" />

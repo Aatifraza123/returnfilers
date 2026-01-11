@@ -78,7 +78,7 @@ const Blog = () => {
     <main className="font-sans text-gray-800 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       
       {/* ==================== MODERN HERO SECTION ==================== */}
-      <section className="relative py-8 md:py-10 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden">
+      <section className="relative py-8 md:py-10 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden mt-16">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <motion.div

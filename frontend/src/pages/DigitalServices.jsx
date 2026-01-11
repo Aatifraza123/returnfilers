@@ -150,7 +150,7 @@ const DigitalServices = () => {
       />
       
       {/* Hero Section - Compact */}
-      <section className="relative py-16 bg-[#0B1530] text-white overflow-hidden">
+      <section className="relative py-16 bg-[#0B1530] text-white overflow-hidden mt-16">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="absolute top-0 right-0 w-96 h-96 bg-[#C9A227] rounded-full blur-[128px] opacity-10 pointer-events-none" />
         

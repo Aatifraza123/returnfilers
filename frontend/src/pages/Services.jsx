@@ -86,7 +86,7 @@ const Services = () => {
       />
       
       {/* Hero Section */}
-      <section className="bg-[#0B1530] py-16 md:py-20">
+      <section className="bg-[#0B1530] py-12 md:py-16 mt-16">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-xs font-semibold uppercase tracking-wider mb-4">
             Our Services
@@ -122,7 +122,7 @@ const Services = () => {
       </section>
 
       {/* Services Grid */}
-      <section className="py-12 md:py-16 bg-gray-50">
+      <section className="py-8 md:py-12 bg-gray-50">
         <div className="container mx-auto px-6 max-w-7xl">
           
           {filteredServices.length > 0 ? (
@@ -237,7 +237,7 @@ const Services = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-16 bg-[#0B1530]">
+      <section className="py-12 bg-[#0B1530]">
         <div className="container mx-auto px-6 max-w-3xl text-center">
           <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
             Need a Custom Solution?
