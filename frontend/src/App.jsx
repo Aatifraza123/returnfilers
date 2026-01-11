@@ -42,6 +42,7 @@ import AdminLogin from './pages/admin/AdminLogin'
 import AdminDashboard from './pages/admin/AdminDashboard'
 import AdminConsultations from './pages/admin/AdminConsultations'
 import AdminContacts from './pages/admin/AdminContacts'
+import AdminCustomers from './pages/admin/AdminCustomers'
 
 // Admin - Services
 import AdminServices from './pages/admin/AdminServices'
@@ -133,6 +134,7 @@ function App() {
           <Route index element={<Navigate to="/admin/dashboard" replace />} />
           
           <Route path="dashboard" element={<AdminDashboard />} />
+          <Route path="customers" element={<AdminCustomers />} />
           <Route path="consultations" element={<AdminConsultations />} />
           
           {/* Service Routes (List, Add, Edit, View) */}

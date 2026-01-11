@@ -1,5 +1,5 @@
 import { useState, useEffect, useContext } from 'react';
-import { FaUser, FaEnvelope, FaPhone, FaLock, FaSave } from 'react-icons/fa';
+import { FaUser, FaEnvelope, FaPhone, FaLock, FaSave, FaShieldAlt, FaClock, FaCalendar } from 'react-icons/fa';
 import toast from 'react-hot-toast';
 import api from '../../api/axios';
 import AuthContext from '../../context/AuthContext';
@@ -8,6 +8,7 @@ const AdminProfile = () => {
   const { user } = useContext(AuthContext);
   const [loading, setLoading] = useState(false);
   const [showPasswordForm, setShowPasswordForm] = useState(false);
+  const [adminStats, setAdminStats] = useState(null);
   
   const [profileData, setProfileData] = useState({
     name: '',
@@ -33,6 +34,11 @@ const AdminProfile = () => {
           name: data.admin.name || '',
           email: data.admin.email || '',
           phone: data.admin.phone || ''
+        });
+        setAdminStats({
+          createdAt: data.admin.createdAt,
+          lastLogin: data.admin.lastLogin,
+          role: data.admin.role || 'Admin'
         });
       }
     } catch (error) {
@@ -112,9 +118,34 @@ const AdminProfile = () => {
         <p className="text-gray-600 text-sm mt-1">Manage your account settings</p>
       </div>
 
+      {/* Admin Info Card */}
+      <div className="bg-white rounded-lg border border-gray-200 p-6 mb-6">
+        <div className="flex items-center gap-4">
+          <div className="w-20 h-20 bg-gray-900 text-white rounded-full flex items-center justify-center text-3xl font-bold">
+            {profileData.name?.charAt(0).toUpperCase() || 'A'}
+          </div>
+          <div className="flex-1">
+            <h2 className="text-2xl font-bold text-gray-900">{profileData.name || 'Admin'}</h2>
+            <p className="text-gray-600">{profileData.email}</p>
+            <div className="flex items-center gap-4 mt-2">
+              <span className="px-3 py-1 bg-gray-900 text-white rounded-lg text-xs font-medium flex items-center gap-1">
+                <FaShieldAlt size={12} />
+                {adminStats?.role || 'Administrator'}
+              </span>
+              {adminStats?.createdAt && (
+                <span className="text-xs text-gray-500 flex items-center gap-1">
+                  <FaCalendar size={10} />
+                  Member since {new Date(adminStats.createdAt).toLocaleDateString()}
+                </span>
+              )}
+            </div>
+          </div>
+        </div>
+      </div>
+
       <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
         {/* Profile Information */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
           <h2 className="text-lg font-semibold text-gray-900 mb-4">Profile Information</h2>
           
           <form onSubmit={handleProfileSubmit} className="space-y-4">
@@ -128,7 +159,7 @@ const AdminProfile = () => {
                 name="name"
                 value={profileData.name}
                 onChange={handleProfileChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
                 required
               />
             </div>
@@ -141,7 +172,7 @@ const AdminProfile = () => {
               <input
                 type="email"
                 value={profileData.email}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md bg-gray-50 text-sm"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg bg-gray-50"
                 disabled
               />
               <p className="text-xs text-gray-500 mt-1">Email cannot be changed</p>
@@ -150,21 +181,22 @@ const AdminProfile = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">
                 <FaPhone className="inline mr-2" />
-                Phone (Optional)
+                Phone
               </label>
               <input
                 type="tel"
                 name="phone"
                 value={profileData.phone}
                 onChange={handleProfileChange}
-                className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                placeholder="+91 XXXXX XXXXX"
+                className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-gray-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full bg-gray-900 text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               <FaSave />
               {loading ? 'Saving...' : 'Save Changes'}
@@ -173,17 +205,23 @@ const AdminProfile = () => {
         </div>
 
         {/* Change Password */}
-        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-6">
-          <h2 className="text-lg font-semibold text-gray-900 mb-4">Change Password</h2>
+        <div className="bg-white rounded-lg border border-gray-200 p-6">
+          <h2 className="text-lg font-semibold text-gray-900 mb-4">Security</h2>
           
           {!showPasswordForm ? (
-            <button
-              onClick={() => setShowPasswordForm(true)}
-              className="w-full bg-gray-100 text-gray-900 py-2.5 rounded-md font-medium text-sm hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
-            >
-              <FaLock />
-              Change Password
-            </button>
+            <div className="space-y-4">
+              <div className="p-4 bg-gray-50 rounded-lg">
+                <p className="text-sm text-gray-600 mb-2">Password</p>
+                <p className="text-sm font-medium text-gray-900">••••••••••••</p>
+              </div>
+              <button
+                onClick={() => setShowPasswordForm(true)}
+                className="w-full bg-gray-100 text-gray-900 py-2.5 rounded-lg font-medium hover:bg-gray-200 transition-colors flex items-center justify-center gap-2"
+              >
+                <FaLock />
+                Change Password
+              </button>
+            </div>
           ) : (
             <form onSubmit={handlePasswordSubmit} className="space-y-4">
               <div>
@@ -195,7 +233,7 @@ const AdminProfile = () => {
                   name="currentPassword"
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
                   required
                 />
               </div>
@@ -209,7 +247,7 @@ const AdminProfile = () => {
                   name="newPassword"
                   value={passwordData.newPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
                   required
                   minLength={6}
                 />
@@ -225,7 +263,7 @@ const AdminProfile = () => {
                   name="confirmPassword"
                   value={passwordData.confirmPassword}
                   onChange={handlePasswordChange}
-                  className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-1 focus:ring-gray-400 text-sm"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900"
                   required
                   minLength={6}
                 />
@@ -235,10 +273,10 @@ const AdminProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-gray-900 text-white py-2.5 rounded-md font-medium text-sm hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                  className="flex-1 bg-gray-900 text-white py-2.5 rounded-lg font-medium hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                 >
                   <FaLock />
-                  {loading ? 'Changing...' : 'Change Password'}
+                  {loading ? 'Changing...' : 'Update Password'}
                 </button>
                 <button
                   type="button"
@@ -250,7 +288,7 @@ const AdminProfile = () => {
                       confirmPassword: ''
                     });
                   }}
-                  className="px-4 py-2.5 border border-gray-300 rounded-md text-sm font-medium text-gray-700 hover:bg-gray-50"
+                  className="px-4 py-2.5 border border-gray-300 rounded-lg font-medium text-gray-700 hover:bg-gray-50"
                 >
                   Cancel
                 </button>
