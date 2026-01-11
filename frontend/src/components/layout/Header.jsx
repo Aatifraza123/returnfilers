@@ -80,10 +80,10 @@ const Header = () => {
   return (
     <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
       scrolled 
-        ? 'bg-white/95 backdrop-blur-lg shadow-md py-1.5' 
+        ? 'bg-white/95 backdrop-blur-lg shadow-md py-2.5' 
         : isHomePage 
-          ? 'bg-white/90 backdrop-blur-sm py-2' 
-          : 'bg-white/80 backdrop-blur-sm py-2'
+          ? 'bg-white/90 backdrop-blur-sm py-3' 
+          : 'bg-white/80 backdrop-blur-sm py-3'
     }`}>
       {/* Remove gradient overlay for home page */}
       
@@ -233,7 +233,7 @@ const Header = () => {
           {user ? (
             <Link
               to={dashboardLink}
-              className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 text-white hover:shadow-xl"
+              className="px-5 py-2 rounded-md text-sm font-medium transition-all duration-300 text-white hover:shadow-xl"
               style={{ 
                 background: `var(--color-primary)`
               }}
@@ -244,14 +244,14 @@ const Header = () => {
             <>
               <Link
                 to="/login"
-                className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:opacity-80"
+                className="px-5 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:opacity-80"
                 style={{ color: 'var(--color-primary)' }}
               >
                 Login
               </Link>
               <Link
                 to="/quote"
-                className="px-5 py-2 rounded-full text-sm font-medium transition-all duration-300 hover:shadow-xl"
+                className="px-5 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:shadow-xl"
                 style={{ 
                   background: `var(--color-secondary)`,
                   color: 'var(--color-primary)'
@@ -426,7 +426,7 @@ const Header = () => {
                 {user ? (
                   <Link
                     to={dashboardLink}
-                    className="block text-white px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:shadow-lg transition-all"
+                    className="block text-white px-5 py-2.5 rounded-md text-center text-base font-semibold hover:shadow-lg transition-all"
                     style={{ 
                       background: `linear-gradient(to right, var(--color-primary), var(--color-primary))` 
                     }}
@@ -438,7 +438,7 @@ const Header = () => {
                   <div className="space-y-2">
                     <Link
                       to="/login"
-                      className="block bg-white px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:bg-gray-50 transition-all border-2"
+                      className="block bg-white px-5 py-2.5 rounded-md text-center text-base font-semibold hover:bg-gray-50 transition-all border-2"
                       style={{ 
                         color: 'var(--color-primary)',
                         borderColor: 'var(--color-primary)'
@@ -449,7 +449,7 @@ const Header = () => {
                     </Link>
                     <Link
                       to="/quote"
-                      className="block px-5 py-2.5 rounded-lg text-center text-base font-semibold hover:shadow-lg transition-all"
+                      className="block px-5 py-2.5 rounded-md text-center text-base font-semibold hover:shadow-lg transition-all"
                       style={{ 
                         background: `var(--color-secondary)`,
                         color: 'var(--color-primary)'

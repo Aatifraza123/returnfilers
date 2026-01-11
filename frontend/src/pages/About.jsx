@@ -39,43 +39,43 @@ const About = () => {
   }, []);
 
   const stats = [
-    { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 100}+`, label: 'Happy Clients' },
-    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 3}+`, label: 'Years Experience' },
-    { icon: <FaHandshake />, value: `${settings?.about?.projectsCompleted || 200}+`, label: 'Projects Completed' },
-    { icon: <FaChartLine />, value: `${settings?.about?.successRate || 98}%`, label: 'Success Rate' },
+    { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 500}+`, label: 'Happy Clients' },
+    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 10}+`, label: 'Years Experience' },
+    { icon: <FaHandshake />, value: `${settings?.about?.projectsCompleted || 1000}+`, label: 'Tax Returns Filed' },
+    { icon: <FaChartLine />, value: `${settings?.about?.successRate || 99}%`, label: 'Client Satisfaction' },
   ];
 
   const team = [
     {
-      name: 'CA Rajesh Kumar',
-      position: 'Founder & Senior Partner',
-      qualification: 'FCA, DISA',
+      name: 'CA Aatif Raza',
+      position: 'Founder & Managing Partner',
+      qualification: 'Chartered Accountant',
       image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:rajesh@example.com' },
-      about: 'Leads complex audits, large-scale tax planning and high-stakes financial strategy for enterprises.',
+      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
+      about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
     },
     {
       name: 'CA Priya Sharma',
-      position: 'Partner - Tax Advisory',
-      qualification: 'ACA, MBA (Finance)',
+      position: 'Senior Tax Consultant',
+      qualification: 'CA, Tax Specialist',
       image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:priya@example.com' },
-      about: 'Specializes in direct and indirect taxation, cross-border structuring and compliance.',
+      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
+      about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
     },
     {
-      name: 'CA Amit Patel',
-      position: 'Partner - Audit Services',
-      qualification: 'FCA, CFA',
+      name: 'CA Amit Verma',
+      position: 'Audit & Compliance Head',
+      qualification: 'CA, Audit Expert',
       image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:amit@example.com' },
-      about: 'Focuses on risk-based audits, internal controls and financial reporting advisory.',
+      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
+      about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
     },
   ];
 
   const values = [
-    { icon: <FaShieldAlt />, title: 'Integrity', desc: 'Upholding the highest ethical standards in every financial decision.' },
-    { icon: <FaLightbulb />, title: 'Innovation', desc: 'Leveraging modern technology for smarter financial solutions.' },
-    { icon: <FaBalanceScale />, title: 'Excellence', desc: 'Delivering precision and perfection in every audit and report.' },
+    { icon: <FaShieldAlt />, title: 'Trust & Transparency', desc: 'We believe in complete transparency with our clients. No hidden charges, clear communication at every step.' },
+    { icon: <FaLightbulb />, title: 'Expert Guidance', desc: 'Our team of qualified CAs provides expert advice tailored to your unique financial situation and business needs.' },
+    { icon: <FaBalanceScale />, title: 'Compliance First', desc: 'We ensure 100% compliance with all tax laws and regulations, keeping you stress-free and penalty-free.' },
   ];
 
   const fadeInUp = {
@@ -120,7 +120,7 @@ const About = () => {
             transition={{ delay: 0.2, duration: 0.8 }}
             className="text-lg md:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed"
           >
-            Your trusted partner in financial excellence. We combine {settings?.about?.yearsOfExperience || 3}+ years of expertise with modern strategies to drive your business growth.
+            Your trusted partner for all tax and financial services. We simplify complex tax matters and help individuals and businesses achieve financial compliance with ease.
           </motion.p>
         </div>
       </section>
@@ -189,7 +189,7 @@ const About = () => {
                 variants={fadeInUp}
                 className="text-base md:text-lg text-gray-200 font-light leading-relaxed mb-4 italic"
               >
-                "{settings?.about?.mission || 'Founded with a singular vision: to provide comprehensive, transparent, and strategic financial solutions to businesses of all sizes.'}"
+                "{settings?.about?.mission || 'To provide hassle-free, accurate, and timely tax filing services to individuals and businesses across India.'}"
               </motion.p>
               
               <motion.p
@@ -199,7 +199,7 @@ const About = () => {
                 variants={fadeInUp}
                 className="text-sm md:text-base text-gray-400 leading-relaxed max-w-3xl mx-auto"
               >
-                {settings?.about?.vision || 'From a small practice to a full-service chartered accountancy firm serving over 100 clients across India, our journey has been driven by integrity, expertise, and long-term relationships. We don\'t just balance books; we build futures.'}
+                {settings?.about?.vision || 'ReturnFilers was founded with a simple mission: to make tax filing easy and stress-free for everyone. From GST registration to income tax returns, from business incorporation to financial advisory - we handle it all. Our team of experienced Chartered Accountants is dedicated to providing personalized service and expert guidance to help you stay compliant and maximize your savings.'}
               </motion.p>
             </div>
 
@@ -211,18 +211,18 @@ const About = () => {
               className="mt-8 flex gap-6 md:gap-8 justify-center"
             >
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.clientsServed || 100}+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.clientsServed || 500}+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Clients</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.yearsExperience || 3}+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.yearsExperience || 10}+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Years</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">100%</div>
-                  <div className="text-xs text-gray-500 uppercase mt-1">Commitment</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">24/7</div>
+                  <div className="text-xs text-gray-500 uppercase mt-1">Support</div>
                </div>
             </motion.div>
           </div>
@@ -239,9 +239,9 @@ const About = () => {
             variants={fadeInUp}
             className="text-center mb-12"
           >
-            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]">Our Leadership Team</h2>
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]">Meet Our Expert Team</h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-base md:text-lg">
-              Seasoned professionals combining deep domain expertise with a client-first mindset.
+              Qualified Chartered Accountants dedicated to your financial success and peace of mind.
             </p>
           </motion.div>
 

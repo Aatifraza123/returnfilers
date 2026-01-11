@@ -21,6 +21,7 @@ import ExpertiseDetail from './pages/ExpertiseDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
+import TermsConditions from './pages/TermsConditions'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import TermsConditions from './pages/TermsConditions'
@@ -106,6 +107,7 @@ function App() {
           <Route path="blog/:id" element={<BlogPost />} />
           {/* <Route path="portfolio" element={<Portfolio />} /> */}
           <Route path="contact" element={<Contact />} />
+          <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="quote" element={<Quote />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="terms-conditions" element={<TermsConditions />} />

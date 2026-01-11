@@ -60,7 +60,7 @@ const AdminLogin = () => {
           <div className="flex flex-col lg:flex-row">
             
             {/* Left Side - Dark Background */}
-            <div className="hidden lg:block lg:w-2/5 relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 overflow-hidden">
+            <div className="hidden lg:block lg:w-[45%] relative bg-gradient-to-br from-slate-900 via-slate-800 to-slate-900 p-12 overflow-hidden">
               {/* Geometric Shapes Background */}
               <div className="absolute top-10 right-10 w-64 h-64 border-2 border-white/10 rounded-lg transform rotate-12"></div>
               <div className="absolute top-20 right-20 w-48 h-48 border-2 border-white/10 rounded-lg transform -rotate-6"></div>
@@ -94,7 +94,7 @@ const AdminLogin = () => {
             </div>
 
             {/* Right Side - Form */}
-            <div className="w-full lg:w-3/5 p-8">
+            <div className="w-full lg:w-[55%] p-8">
               <div className="mb-6">
                 <h2 className="text-2xl font-bold text-gray-900 mb-2">
                   Admin Login

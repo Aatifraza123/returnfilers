@@ -102,7 +102,7 @@ const Home = () => {
       <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} />
 
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative min-h-[75vh] flex items-center justify-center overflow-hidden pt-28 pb-24">
+      <section className="relative min-h-[75vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-24">
         
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
@@ -156,7 +156,7 @@ const Home = () => {
                 {/* UPDATED: Button triggers Modal with Dynamic Colors */}
                 <button
                   onClick={openModal}
-                  className="px-8 py-3.5 rounded-full font-semibold text-base shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
+                  className="px-6 py-3 md:px-8 md:py-3.5 rounded-full font-semibold text-sm md:text-base shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
                   style={{
                     background: 'var(--color-secondary)',
                     color: 'var(--color-primary)'
@@ -175,7 +175,7 @@ const Home = () => {
                 
                 <Link
                   to="/services"
-                  className="px-8 py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-base hover:bg-white/10 transition-all backdrop-blur-sm"
+                  className="px-6 py-3 md:px-8 md:py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm md:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
                 >
                   Our Services
                 </Link>

@@ -256,7 +256,16 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                           className="mt-0.5 w-3.5 h-3.5 text-[#0B1530] border-gray-300 rounded focus:ring-[#0B1530]"
                         />
                         <label htmlFor="consent" className="text-xs text-gray-600 leading-tight">
-                          I agree to receive updates, newsletters, and promotional emails from ReturnFilers. I understand I can unsubscribe at any time.
+                          I agree to the{' '}
+                          <a 
+                            href="/terms-conditions" 
+                            target="_blank" 
+                            rel="noopener noreferrer"
+                            className="text-[#0B1530] underline hover:text-[#C9A227]"
+                          >
+                            Terms & Conditions
+                          </a>
+                          {' '}and consent to receive updates, newsletters, and promotional emails from ReturnFilers.
                         </label>
                       </div>
                     )}
