@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const {
   loginAdmin,
+  googleLoginAdmin,
   getAdminProfile,
   updateAdminProfile,
   changeAdminPassword
@@ -10,6 +11,7 @@ const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 
 // Public routes
 router.post('/login', loginAdmin);
+router.post('/google', googleLoginAdmin);
 
 // Protected routes
 router.get('/me', protectAdmin, getAdminProfile);

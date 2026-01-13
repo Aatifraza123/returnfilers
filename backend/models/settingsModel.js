@@ -141,7 +141,13 @@ const settingsSchema = new mongoose.Schema({
     successRate: { type: Number, default: 98 },
     teamSize: { type: Number, default: 5 },
     missionStatement: { type: String, default: '' },
-    visionStatement: { type: String, default: '' }
+    visionStatement: { type: String, default: '' },
+    team: [{
+      name: { type: String, default: '' },
+      position: { type: String, default: '' },
+      qualification: { type: String, default: '' },
+      about: { type: String, default: '' }
+    }]
   },
   
   // Feature Toggles

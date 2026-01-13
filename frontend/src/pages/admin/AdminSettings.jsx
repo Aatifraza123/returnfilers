@@ -91,7 +91,8 @@ const AdminSettings = () => {
       successRate: 98,
       teamSize: 5,
       missionStatement: '',
-      visionStatement: ''
+      visionStatement: '',
+      team: []
     },
     features: {
       enableChatbot: true,
@@ -491,6 +492,101 @@ const AdminSettings = () => {
             <div>
               <label className="block text-sm font-medium text-gray-700 mb-1">Vision Statement</label>
               <textarea value={settings.about?.visionStatement || ''} onChange={(e) => handleChange('about.visionStatement', e.target.value)} rows="3" className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 resize-none" />
+            </div>
+            
+            {/* Team Members Section */}
+            <div className="border-t border-gray-200 pt-4 mt-6">
+              <div className="flex items-center justify-between mb-4">
+                <h3 className="text-base font-bold text-gray-900">Team Members</h3>
+                <button
+                  type="button"
+                  onClick={() => {
+                    const newTeam = [...(settings.about?.team || []), { name: '', position: '', qualification: '', about: '' }];
+                    handleChange('about.team', newTeam);
+                  }}
+                  className="px-3 py-1.5 bg-gray-900 text-white text-sm rounded-lg hover:bg-gray-800"
+                >
+                  + Add Member
+                </button>
+              </div>
+              
+              {settings.about?.team && settings.about.team.length > 0 ? (
+                <div className="space-y-4">
+                  {settings.about.team.map((member, index) => (
+                    <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                      <div className="flex items-center justify-between mb-3">
+                        <span className="text-sm font-medium text-gray-700">Member {index + 1}</span>
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const newTeam = settings.about.team.filter((_, i) => i !== index);
+                            handleChange('about.team', newTeam);
+                          }}
+                          className="text-red-600 hover:text-red-800 text-sm"
+                        >
+                          Remove
+                        </button>
+                      </div>
+                      <div className="grid md:grid-cols-2 gap-3">
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">Name</label>
+                          <input
+                            type="text"
+                            value={member.name || ''}
+                            onChange={(e) => {
+                              const newTeam = [...settings.about.team];
+                              newTeam[index].name = e.target.value;
+                              handleChange('about.team', newTeam);
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">Position</label>
+                          <input
+                            type="text"
+                            value={member.position || ''}
+                            onChange={(e) => {
+                              const newTeam = [...settings.about.team];
+                              newTeam[index].position = e.target.value;
+                              handleChange('about.team', newTeam);
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">Qualification</label>
+                          <input
+                            type="text"
+                            value={member.qualification || ''}
+                            onChange={(e) => {
+                              const newTeam = [...settings.about.team];
+                              newTeam[index].qualification = e.target.value;
+                              handleChange('about.team', newTeam);
+                            }}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 text-sm"
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-xs font-medium text-gray-600 mb-1">About</label>
+                          <textarea
+                            value={member.about || ''}
+                            onChange={(e) => {
+                              const newTeam = [...settings.about.team];
+                              newTeam[index].about = e.target.value;
+                              handleChange('about.team', newTeam);
+                            }}
+                            rows="2"
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 resize-none text-sm"
+                          />
+                        </div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+              ) : (
+                <p className="text-sm text-gray-500 text-center py-4">No team members added. Click "Add Member" to start.</p>
+              )}
             </div>
           </div>
         )}

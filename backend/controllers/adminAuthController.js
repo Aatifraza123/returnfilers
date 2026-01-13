@@ -1,5 +1,8 @@
 const Admin = require('../models/adminModel');
 const jwt = require('jsonwebtoken');
+const { OAuth2Client } = require('google-auth-library');
+
+const googleClient = new OAuth2Client(process.env.GOOGLE_CLIENT_ID);
 
 // Generate JWT Token
 const generateToken = (id) => {
@@ -187,8 +190,75 @@ const changeAdminPassword = async (req, res) => {
   }
 };
 
+// @desc    Admin Google Login
+// @route   POST /api/admin/auth/google
+// @access  Public
+const googleLoginAdmin = async (req, res) => {
+  try {
+    const { credential } = req.body;
+
+    if (!credential) {
+      return res.status(400).json({
+        success: false,
+        message: 'Google credential is required'
+      });
+    }
+
+    // Verify Google token
+    const ticket = await googleClient.verifyIdToken({
+      idToken: credential,
+      audience: process.env.GOOGLE_CLIENT_ID
+    });
+
+    const payload = ticket.getPayload();
+    const { email, name, picture } = payload;
+
+    // Check if admin exists with this email
+    let admin = await Admin.findOne({ email });
+
+    if (!admin) {
+      return res.status(401).json({
+        success: false,
+        message: 'No admin account found with this email. Please contact administrator.'
+      });
+    }
+
+    // Check if admin is active
+    if (!admin.isActive) {
+      return res.status(401).json({
+        success: false,
+        message: 'Account is deactivated'
+      });
+    }
+
+    // Update last login
+    admin.lastLogin = new Date();
+    await admin.save();
+
+    res.json({
+      success: true,
+      message: 'Google login successful',
+      admin: {
+        id: admin._id,
+        name: admin.name,
+        email: admin.email,
+        phone: admin.phone,
+        role: admin.role
+      },
+      token: generateToken(admin._id)
+    });
+  } catch (error) {
+    console.error('Google login error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Google authentication failed'
+    });
+  }
+};
+
 module.exports = {
   loginAdmin,
+  googleLoginAdmin,
   getAdminProfile,
   updateAdminProfile,
   changeAdminPassword

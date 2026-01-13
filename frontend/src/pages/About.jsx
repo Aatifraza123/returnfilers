@@ -42,26 +42,28 @@ const About = () => {
     { icon: <FaChartLine />, value: `${settings?.about?.successRate || 99}%`, label: 'Client Satisfaction' },
   ];
 
-  const team = [
-    {
-      name: 'CA Rajan Kumar',
-      position: 'Founder & Managing Partner',
-      qualification: 'Chartered Accountant',
-      about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
-    },
-    {
-      name: 'CA Priya Sharma',
-      position: 'Senior Tax Consultant',
-      qualification: 'CA, Tax Specialist',
-      about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
-    },
-    {
-      name: 'CA Amit Verma',
-      position: 'Audit & Compliance Head',
-      qualification: 'CA, Audit Expert',
-      about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
-    },
-  ];
+  const team = settings?.about?.team && settings.about.team.length > 0 
+    ? settings.about.team 
+    : [
+        {
+          name: 'CA Rajan Kumar',
+          position: 'Founder & Managing Partner',
+          qualification: 'Chartered Accountant',
+          about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
+        },
+        {
+          name: 'CA Priya Sharma',
+          position: 'Senior Tax Consultant',
+          qualification: 'CA, Tax Specialist',
+          about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
+        },
+        {
+          name: 'CA Amit Verma',
+          position: 'Audit & Compliance Head',
+          qualification: 'CA, Audit Expert',
+          about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
+        },
+      ];
 
   const values = [
     { icon: <FaShieldAlt />, title: 'Trust & Transparency', desc: 'We believe in complete transparency with our clients. No hidden charges, clear communication at every step.' },
