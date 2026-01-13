@@ -124,7 +124,7 @@ const ServiceDetail = () => {
       
       {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
-      <section className="relative min-h-[30vh] flex items-end mt-10h">
+      <section className="relative min-h-[32vh] flex items-end mt-16">
         <div className="absolute inset-0">
           <img
             src={getServiceImage()}
@@ -137,20 +137,20 @@ const ServiceDetail = () => {
 
         <div className="container mx-auto px-6 max-w-5xl relative z-10 pb-8">
           {/* Breadcrumb */}
-          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-3 transition-colors">
+          <Link to="/services" className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] text-sm mb-4 transition-colors">
             <FaArrowLeft size={12} />
             Back to All Services
           </Link>
 
-          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-4">
-            <div>
-              <span className="inline-block px-3 py-1 bg-[#C9A227] text-[#0B1530] text-xs font-bold uppercase rounded mb-2">
+          <div className="flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+            <div className="space-y-3">
+              <span className="inline-block px-3 py-1 bg-[#C9A227] text-[#0B1530] text-xs font-bold uppercase rounded">
                 {service.category}
               </span>
-              <h1 className="text-2xl md:text-3xl font-bold text-white mb-1">
+              <h1 className="text-2xl md:text-3xl font-bold text-white leading-tight">
                 {service.title}
               </h1>
-              <p className="text-gray-300 text-sm">
+              <p className="text-gray-300 text-sm leading-relaxed">
                 {service.description?.substring(0, 100)}...
               </p>
             </div>
