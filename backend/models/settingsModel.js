@@ -150,6 +150,7 @@ const settingsSchema = new mongoose.Schema({
     enableTestimonials: { type: Boolean, default: true },
     enableBlog: { type: Boolean, default: true },
     enableNewsletter: { type: Boolean, default: true },
+    enableSocialMedia: { type: Boolean, default: true },
     showPricing: { type: Boolean, default: true }
   },
   

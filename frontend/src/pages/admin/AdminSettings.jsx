@@ -98,6 +98,7 @@ const AdminSettings = () => {
       enableTestimonials: true,
       enableBlog: true,
       enableNewsletter: true,
+      enableSocialMedia: true,
       showPricing: true
     },
     testimonialsSettings: {
@@ -503,6 +504,7 @@ const AdminSettings = () => {
                 { key: 'enableTestimonials', label: 'Enable Testimonials' },
                 { key: 'enableBlog', label: 'Enable Blog' },
                 { key: 'enableNewsletter', label: 'Enable Newsletter' },
+                { key: 'enableSocialMedia', label: 'Enable Social Media Links' },
                 { key: 'showPricing', label: 'Show Pricing' }
               ].map((feature) => (
                 <label key={feature.key} className="flex items-center gap-3 p-3 border border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50">

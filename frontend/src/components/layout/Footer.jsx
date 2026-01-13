@@ -110,9 +110,9 @@ const Footer = () => {
               </h3>
             </div>
             <p className="text-gray-300 text-sm md:text-base leading-relaxed">
-              {settings?.footer?.description || `Professional chartered accountancy services with ${settings?.about?.yearsOfExperience || 3}+ years of experience in taxation, auditing, and financial consulting.`}
+              {settings?.footer?.description || 'Return Filers combines technology-driven e-filing with expert tax support to ensure error-free tax returns. Our platform provides trusted advice and seamless compliance solutions at reasonable pricing.'}
             </p>
-            {socialLinks.length > 0 && (
+            {settings?.features?.enableSocialMedia && socialLinks.length > 0 && (
               <div className="flex space-x-4 pt-2">
                 {socialLinks.map(({ href, icon: Icon, platform }) => {
                   const platformColors = settings?.socialMediaColors?.[platform];
@@ -220,32 +220,6 @@ const Footer = () => {
             </div>
           )}
         </div>
-        
-        {/* Business Details - Bottom Section */}
-        {(settings?.businessDetails?.gstNumber || settings?.businessDetails?.panNumber || settings?.businessDetails?.registrationNumber) && (
-          <div className="border-t border-gray-700 mt-6 pt-4">
-            <div className="flex flex-wrap items-center justify-center gap-x-6 gap-y-2 text-gray-400 text-xs">
-              {settings?.businessDetails?.gstNumber && (
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">GST:</span>
-                  <span>{settings.businessDetails.gstNumber}</span>
-                </div>
-              )}
-              {settings?.businessDetails?.panNumber && (
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">PAN:</span>
-                  <span>{settings.businessDetails.panNumber}</span>
-                </div>
-              )}
-              {settings?.businessDetails?.registrationNumber && (
-                <div className="flex items-center gap-1">
-                  <span className="font-semibold text-gray-300">Reg No:</span>
-                  <span>{settings.businessDetails.registrationNumber}</span>
-                </div>
-              )}
-            </div>
-          </div>
-        )}
       </div>
     </footer>
   );

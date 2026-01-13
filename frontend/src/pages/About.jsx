@@ -5,9 +5,6 @@ import {
   FaUsers,
   FaHandshake,
   FaChartLine,
-  FaLinkedin,
-  FaTwitter,
-  FaEnvelope,
   FaShieldAlt,
   FaLightbulb,
   FaBalanceScale,
@@ -86,10 +83,10 @@ const About = () => {
   }
 
   return (
-    <main className="font-sans text-gray-800 bg-gray-50 pt-20">
+    <main className="font-sans text-gray-800 bg-gray-50">
       
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative py-16 md:py-20 bg-gradient-to-br from-[#0B1530] via-[#101d42] to-[#1a2b5e] text-white overflow-hidden">
+      <section className="relative py-12 md:py-14 bg-gradient-to-br from-[#0B1530] via-[#101d42] to-[#1a2b5e] text-white overflow-hidden mt-16">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
         <div className="container mx-auto px-6 text-center relative z-10 max-w-5xl">
           <motion.span
@@ -247,34 +244,16 @@ const About = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.2 }}
-                className="group relative bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 h-[380px]"
+                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 p-6"
               >
-                {/* Image */}
-                <div className="h-[70%] w-full overflow-hidden transition-all duration-500 group-hover:h-[40%]">
-                  <img
-                    src={member.image}
-                    alt={member.name}
-                    className="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105"
-                  />
-                </div>
-
-                {/* Basic Info */}
-                <div className="px-5 pt-3 pb-3 text-center bg-white relative z-10 h-[30%] flex flex-col justify-center transition-all duration-500 group-hover:h-auto group-hover:pt-2">
-                  <h3 className="text-lg md:text-xl font-bold text-[#0B1530]">{member.name}</h3>
-                  <p className="text-[#C9A227] font-medium text-xs md:text-sm mt-1">{member.position}</p>
-                  <p className="text-xs text-gray-400 mt-1 group-hover:hidden transition-opacity">{member.qualification}</p>
-                </div>
-
-                {/* Hover Details */}
-                <div className="absolute bottom-0 left-0 w-full bg-white px-5 pb-4 pt-0 transform translate-y-full group-hover:translate-y-0 transition-transform duration-500 ease-out flex flex-col items-center justify-end h-[60%]">
-                  <p className="text-xs md:text-sm text-gray-600 text-center mb-4 leading-relaxed opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-100">
+                {/* Info */}
+                <div className="text-center">
+                  <h3 className="text-lg md:text-xl font-bold text-[#0B1530] mb-2">{member.name}</h3>
+                  <p className="text-[#C9A227] font-medium text-xs md:text-sm mb-2">{member.position}</p>
+                  <p className="text-xs text-gray-400 mb-3">{member.qualification}</p>
+                  <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
                     {member.about}
                   </p>
-                  <div className="flex gap-3 opacity-0 group-hover:opacity-100 transition-opacity duration-500 delay-200">
-                    <a href={member.social.linkedin} className="p-2.5 bg-gray-100 text-[#0B1530] rounded-full hover:bg-[#0B1530] hover:text-white transition-colors"><FaLinkedin size={16}/></a>
-                    <a href={member.social.twitter} className="p-2.5 bg-gray-100 text-[#0B1530] rounded-full hover:bg-[#0B1530] hover:text-white transition-colors"><FaTwitter size={16}/></a>
-                    <a href={member.social.email} className="p-2.5 bg-gray-100 text-[#0B1530] rounded-full hover:bg-[#0B1530] hover:text-white transition-colors"><FaEnvelope size={16}/></a>
-                  </div>
                 </div>
               </motion.div>
             ))}

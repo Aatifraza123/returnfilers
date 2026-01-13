@@ -341,7 +341,7 @@ const Home = () => {
                 delivery, we simplify complex regulatory processes into clear,
                 actionable steps. From corporate compliances to tax return
                 filings, we bring together expertise and technology to provide
-                reliable, end-to-end support. Our goal is to empower businesses
+                reliable, end-to-end support. <br/> <br/>Our goal is to empower businesses
                 with peace of mind, knowing that their compliance obligations
                 are handled with precision and care.{" "}
                 {settings?.about?.yearEstablished || 2022}, we have been helping

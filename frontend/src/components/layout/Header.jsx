@@ -43,7 +43,8 @@ const Header = () => {
         // Fetch services
         const { data: servicesData } = await api.get('/services');
         const serviceList = servicesData.services || servicesData.data || servicesData || [];
-        setServices(serviceList.filter(s => s.active !== false));
+        // Filter out "Other Services" category from navbar dropdown
+        setServices(serviceList.filter(s => s.active !== false && s.category?.toLowerCase() !== 'other services'));
         
         // Fetch blogs only if enabled in settings
         if (settings?.features?.enableBlog) {
@@ -183,6 +184,12 @@ const Header = () => {
                         className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
                       >
                         🌐 Digital Services
+                      </Link>
+                      <Link
+                        to="/other-services"
+                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
+                      >
+                        📋 Other Services
                       </Link>
                       <Link
                         to="/services"
@@ -342,6 +349,16 @@ const Header = () => {
                                   className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
                                 >
                                   🌐 Digital Services
+                                </Link>
+                                <Link
+                                  to="/other-services"
+                                  onClick={() => {
+                                    setMobileMenu(false);
+                                    setMobileServicesOpen(false);
+                                  }}
+                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                >
+                                  📋 Other Services
                                 </Link>
                                 <Link
                                   to="/services"

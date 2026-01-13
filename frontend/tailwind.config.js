@@ -37,8 +37,8 @@ export default {
         }
       },
       fontFamily: {
-        sans: ['Inter', 'sans-serif'],
-        serif: ['Playfair Display', 'serif'],
+        sans: ['Roboto', 'sans-serif'],
+        serif: ['Roboto', 'serif'],
       },
       animation: {
         'bounce-slow': 'bounce-slow 3s ease-in-out infinite',
