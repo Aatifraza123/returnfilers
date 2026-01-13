@@ -47,27 +47,21 @@ const About = () => {
 
   const team = [
     {
-      name: 'CA Aatif Raza',
+      name: 'CA Rajan Kumar',
       position: 'Founder & Managing Partner',
       qualification: 'Chartered Accountant',
-      image: 'https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
       about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
     },
     {
       name: 'CA Priya Sharma',
       position: 'Senior Tax Consultant',
       qualification: 'CA, Tax Specialist',
-      image: 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
       about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
     },
     {
       name: 'CA Amit Verma',
       position: 'Audit & Compliance Head',
       qualification: 'CA, Audit Expert',
-      image: 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?q=80&w=1000&auto=format&fit=crop',
-      social: { linkedin: '#', twitter: '#', email: 'mailto:info@returnfilers.in' },
       about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
     },
   ];
