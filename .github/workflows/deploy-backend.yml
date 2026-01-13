@@ -13,18 +13,50 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
+      - name: Check secrets
+        run: |
+          if [ -z "${{ secrets.VPS_HOST }}" ]; then
+            echo "❌ VPS_HOST secret not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VPS_USERNAME }}" ]; then
+            echo "❌ VPS_USERNAME secret not set"
+            exit 1
+          fi
+          if [ -z "${{ secrets.VPS_PASSWORD }}" ] && [ -z "${{ secrets.VPS_SSH_KEY }}" ]; then
+            echo "❌ Neither VPS_PASSWORD nor VPS_SSH_KEY is set"
+            exit 1
+          fi
+          echo "✅ All required secrets are set"
+      
       - name: Deploy to VPS
         uses: appleboy/ssh-action@master
         with:
           host: ${{ secrets.VPS_HOST }}
           username: ${{ secrets.VPS_USERNAME }}
           password: ${{ secrets.VPS_PASSWORD }}
-          # Ya SSH key use karo:
-          # key: ${{ secrets.VPS_SSH_KEY }}
+          port: 22
+          timeout: 60s
+          command_timeout: 30m
           script: |
-            cd ~/ca-website/backend
+            echo "🚀 Starting deployment..."
+            
+            # Navigate to backend directory
+            cd ~/ca-website/backend || cd /home/${{ secrets.VPS_USERNAME }}/ca-website/backend || cd /var/www/ca-website/backend
+            
+            echo "📥 Pulling latest code..."
             git pull origin main
-            npm install
-            pm2 restart all
+            
+            echo "📦 Installing dependencies..."
+            npm install --production
+            
+            echo "🔄 Restarting backend..."
+            pm2 restart all || pm2 restart backend || pm2 restart ca-website-backend
+            
+            echo "💾 Saving PM2 configuration..."
             pm2 save
-            echo "Backend deployed successfully!"
+            
+            echo "✅ Deployment completed successfully!"
+            
+            echo "📊 PM2 Status:"
+            pm2 status
