@@ -124,7 +124,7 @@ const ServiceDetail = () => {
       
       {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
-      <section className="relative min-h-[30vh] flex items-end mt-10">
+      <section className="relative min-h-[30vh] flex items-end mt-10h">
         <div className="absolute inset-0">
           <img
             src={getServiceImage()}
