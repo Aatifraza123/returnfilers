@@ -42,28 +42,29 @@ const About = () => {
     { icon: <FaChartLine />, value: `${settings?.about?.successRate || 99}%`, label: 'Client Satisfaction' },
   ];
 
-  const team = settings?.about?.team && settings.about.team.length > 0 
-    ? settings.about.team 
-    : [
-        {
-          name: 'CA Rajan Kumar',
-          position: 'Founder & Managing Partner',
-          qualification: 'Chartered Accountant',
-          about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
-        },
-        {
-          name: 'CA Priya Sharma',
-          position: 'Senior Tax Consultant',
-          qualification: 'CA, Tax Specialist',
-          about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
-        },
-        {
-          name: 'CA Amit Verma',
-          position: 'Audit & Compliance Head',
-          qualification: 'CA, Audit Expert',
-          about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
-        },
-      ];
+  // Use team from settings if available, otherwise use default
+  const defaultTeam = [
+    {
+      name: 'CA Rajan Kumar',
+      position: 'Founder & Managing Partner',
+      qualification: 'Chartered Accountant',
+      about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
+    },
+    {
+      name: 'CA Priya Sharma',
+      position: 'Senior Tax Consultant',
+      qualification: 'CA, Tax Specialist',
+      about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
+    },
+    {
+      name: 'CA Amit Verma',
+      position: 'Audit & Compliance Head',
+      qualification: 'CA, Audit Expert',
+      about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
+    },
+  ];
+
+  const team = settings?.about?.team !== undefined ? settings.about.team : defaultTeam;
 
   const values = [
     { icon: <FaShieldAlt />, title: 'Trust & Transparency', desc: 'We believe in complete transparency with our clients. No hidden charges, clear communication at every step.' },
@@ -238,28 +239,34 @@ const About = () => {
             </p>
           </motion.div>
 
-          <div className="grid md:grid-cols-3 gap-6">
-            {team.map((member, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 p-6"
-              >
-                {/* Info */}
-                <div className="text-center">
-                  <h3 className="text-lg md:text-xl font-bold text-[#0B1530] mb-2">{member.name}</h3>
-                  <p className="text-[#C9A227] font-medium text-xs md:text-sm mb-2">{member.position}</p>
-                  <p className="text-xs text-gray-400 mb-3">{member.qualification}</p>
-                  <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
-                    {member.about}
-                  </p>
-                </div>
-              </motion.div>
-            ))}
-          </div>
+          {team.length > 0 ? (
+            <div className="grid md:grid-cols-3 gap-6">
+              {team.map((member, index) => (
+                <motion.div
+                  key={index}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: index * 0.2 }}
+                  className="bg-white rounded-xl shadow-md hover:shadow-xl transition-all duration-300 overflow-hidden border border-gray-100 p-6"
+                >
+                  {/* Info */}
+                  <div className="text-center">
+                    <h3 className="text-lg md:text-xl font-bold text-[#0B1530] mb-2">{member.name}</h3>
+                    <p className="text-[#C9A227] font-medium text-xs md:text-sm mb-2">{member.position}</p>
+                    <p className="text-xs text-gray-400 mb-3">{member.qualification}</p>
+                    <p className="text-xs md:text-sm text-gray-600 leading-relaxed">
+                      {member.about}
+                    </p>
+                  </div>
+                </motion.div>
+              ))}
+            </div>
+          ) : (
+            <div className="text-center py-12">
+              <p className="text-gray-500 text-lg">No team members to display at the moment.</p>
+            </div>
+          )}
         </div>
       </section>
 

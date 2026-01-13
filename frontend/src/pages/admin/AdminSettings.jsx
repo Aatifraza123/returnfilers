@@ -209,7 +209,7 @@ const AdminSettings = () => {
 
   return (
     <div className="p-6">
-      <div className="mb-6 flex items-center justify-between">
+      <div className="mb-6 flex items-center justify-between sticky top-0 bg-white z-10 py-4 border-b border-gray-200">
         <div>
           <h1 className="text-2xl font-bold text-gray-900 mb-2">Settings</h1>
           <p className="text-gray-600">Manage website settings</p>
@@ -217,10 +217,10 @@ const AdminSettings = () => {
         <button
           onClick={handleSave}
           disabled={saving}
-          className="px-4 py-2 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center gap-2"
+          className="px-6 py-2.5 bg-gray-900 text-white rounded-lg hover:bg-gray-800 transition-colors disabled:opacity-50 flex items-center gap-2 shadow-lg"
         >
           <FaSave />
-          {saving ? 'Saving...' : 'Save'}
+          {saving ? 'Saving...' : 'Save Changes'}
         </button>
       </div>
 
@@ -519,10 +519,13 @@ const AdminSettings = () => {
                         <button
                           type="button"
                           onClick={() => {
-                            const newTeam = settings.about.team.filter((_, i) => i !== index);
-                            handleChange('about.team', newTeam);
+                            if (window.confirm('Are you sure you want to remove this team member?')) {
+                              const newTeam = settings.about.team.filter((_, i) => i !== index);
+                              handleChange('about.team', newTeam);
+                              toast.success('Team member removed. Click Save to apply changes.');
+                            }
                           }}
-                          className="text-red-600 hover:text-red-800 text-sm"
+                          className="px-3 py-1.5 bg-red-600 text-white text-sm rounded-lg hover:bg-red-700 transition-colors"
                         >
                           Remove
                         </button>
