@@ -23,6 +23,7 @@ const bookingRoutes = require('./routes/bookingRoutes');
 const digitalServiceRoutes = require('./routes/digitalServiceRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
+const sitemapRoutes = require('./routes/sitemapRoutes');
 
 const app = express();
 
@@ -156,6 +157,10 @@ console.log('✓ Settings routes registered at /api/settings');
 
 app.use('/api/notifications', notificationRoutes);
 console.log('✓ Notification routes registered at /api/notifications');
+
+// Sitemap route
+app.use('/sitemap.xml', sitemapRoutes);
+console.log('✓ Sitemap route registered at /sitemap.xml');
 
 // Public routes last - /api/blogs in publicRoutes won't be reached (blogRoutes handles it first)
 app.use('/api', publicRoutes); 
