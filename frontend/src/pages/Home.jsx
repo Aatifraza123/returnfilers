@@ -152,7 +152,7 @@ const Home = () => {
       <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} />
 
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative min-h-[75vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-28 pb-24">
+      <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-28 pb-16 md:pb-24">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img

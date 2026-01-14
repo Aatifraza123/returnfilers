@@ -87,7 +87,7 @@ const BlogPost = () => {
       />
 
       {/* Parallax Hero Section */}
-      <div className="relative h-[35vh] md:h-[40vh] overflow-hidden mt-16">
+      <div className="relative h-[35vh] md:h-[40vh] overflow-hidden mt-12 md:mt-16">
         <motion.div 
           style={{ y }}
           className="absolute inset-0 z-0"
