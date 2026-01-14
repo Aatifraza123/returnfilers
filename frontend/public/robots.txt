@@ -1,0 +1,11 @@
+# Allow all search engines to crawl the site
+User-agent: *
+Allow: /
+
+# Disallow admin and private areas
+Disallow: /admin
+Disallow: /login
+Disallow: /api/
+
+# Sitemap location
+Sitemap: https://www.returnfilers.in/sitemap.xml
