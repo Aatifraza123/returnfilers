@@ -9,7 +9,7 @@ const Blog = require('../models/blogModel');
 // @route   POST /api/admin/services
 exports.createService = async (req, res) => {
   try {
-    const { title, description, icon, price, category, features, image } = req.body;
+    const { title, description, icon, price, category, features, image, faqs } = req.body;
     
     const service = await Service.create({
       title,
@@ -18,7 +18,8 @@ exports.createService = async (req, res) => {
       price,
       category,
       features: Array.isArray(features) ? features : (features ? features.split(',').map(f => f.trim()) : []),
-      image
+      image,
+      faqs: faqs || []
     });
 
     res.status(201).json(service);

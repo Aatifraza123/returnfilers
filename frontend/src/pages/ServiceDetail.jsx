@@ -1,5 +1,6 @@
 import { useState, useEffect, useContext } from 'react';
 import { useParams, Link, useNavigate } from 'react-router-dom';
+import { motion, AnimatePresence } from 'framer-motion';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
 import Loader from '../components/common/Loader';
@@ -15,7 +16,8 @@ import {
   FaFileAlt,
   FaShieldAlt,
   FaHeadset,
-  FaChartLine
+  FaChartLine,
+  FaQuestionCircle
 } from 'react-icons/fa';
 
 const ServiceDetail = () => {
@@ -27,6 +29,7 @@ const ServiceDetail = () => {
   const [loading, setLoading] = useState(true);
   const [settings, setSettings] = useState(null);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [openFaqIndex, setOpenFaqIndex] = useState(null);
 
   const handleBookNow = () => {
     if (!user) {
@@ -304,28 +307,78 @@ const ServiceDetail = () => {
 
       {/* FAQ Section */}
       {service.faqs && service.faqs.length > 0 && (
-        <section className="py-10 bg-gray-50">
+        <section className="py-10 bg-gradient-to-b from-white to-gray-50">
           <div className="container mx-auto px-6 max-w-5xl">
-            <h2 className="text-xl font-bold text-[#0B1530] mb-6 flex items-center gap-2">
-              <span className="text-[#C9A227]">❓</span>
-              Frequently Asked Questions
-            </h2>
-            <div className="space-y-3">
-              {service.faqs.map((faq, index) => (
-                <details
-                  key={index}
-                  className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-[#C9A227] transition-colors"
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              className="text-center mb-8"
+            >
+              <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+                Got Questions?
+              </span>
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1530] mb-3">
+                Frequently Asked Questions
+              </h2>
+              <p className="text-gray-500 max-w-2xl mx-auto text-sm">
+                Find answers to common questions about this service
+              </p>
+            </motion.div>
+
+            <div className="grid md:grid-cols-2 gap-4">
+              {service.faqs.map((faq, idx) => (
+                <motion.div
+                  key={idx}
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className="bg-white rounded-xl overflow-hidden hover:shadow-lg transition-all duration-300"
                 >
-                  <summary className="flex items-center justify-between cursor-pointer p-4 font-semibold text-[#0B1530] text-sm hover:bg-gray-50 transition-colors">
-                    <span className="flex-1 pr-4">{faq.question}</span>
-                    <span className="text-[#C9A227] group-open:rotate-180 transition-transform">
-                      ▼
-                    </span>
-                  </summary>
-                  <div className="px-4 pb-4 pt-2 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
-                    {faq.answer}
-                  </div>
-                </details>
+                  <button
+                    onClick={() => setOpenFaqIndex(openFaqIndex === idx ? null : idx)}
+                    className="w-full p-5 flex items-start gap-4 cursor-pointer focus:outline-none text-left"
+                  >
+                    <div className={`flex-shrink-0 w-10 h-10 rounded-full flex items-center justify-center transition-all duration-300 ${
+                      openFaqIndex === idx ? 'bg-[#C9A227] text-white' : 'bg-[#C9A227]/10 text-[#C9A227]'
+                    }`}>
+                      <FaQuestionCircle size={18} />
+                    </div>
+                    
+                    <div className="flex-1">
+                      <h3 className={`font-semibold text-sm md:text-base transition-colors ${
+                        openFaqIndex === idx ? 'text-[#C9A227]' : 'text-[#0B1530]'
+                      }`}>
+                        {faq.question}
+                      </h3>
+                    </div>
+                    
+                    <div className={`flex-shrink-0 w-6 h-6 rounded-full bg-[#C9A227]/10 flex items-center justify-center transition-transform duration-300 ${
+                      openFaqIndex === idx ? 'rotate-180' : ''
+                    }`}>
+                      <span className="text-[#C9A227] text-xs">▼</span>
+                    </div>
+                  </button>
+                  
+                  <AnimatePresence>
+                    {openFaqIndex === idx && (
+                      <motion.div
+                        initial={{ height: 0, opacity: 0 }}
+                        animate={{ height: 'auto', opacity: 1 }}
+                        exit={{ height: 0, opacity: 0 }}
+                        transition={{ duration: 0.3 }}
+                        className="overflow-hidden"
+                      >
+                        <div className="px-5 pb-5 pl-[4.5rem]">
+                          <p className="text-sm text-gray-600 leading-relaxed">
+                            {faq.answer}
+                          </p>
+                        </div>
+                      </motion.div>
+                    )}
+                  </AnimatePresence>
+                </motion.div>
               ))}
             </div>
           </div>

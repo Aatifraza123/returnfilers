@@ -69,13 +69,14 @@ const updateService = async (req, res) => {
     const service = await Service.findById(req.params.id);
 
     if (service) {
-      // Update all fields, including image - handle empty strings properly
+      // Update all fields, including image and faqs - handle empty strings properly
       if (req.body.title !== undefined) service.title = req.body.title;
       if (req.body.description !== undefined) service.description = req.body.description;
       if (req.body.price !== undefined) service.price = req.body.price;
       if (req.body.category !== undefined) service.category = req.body.category;
       if (req.body.features !== undefined) service.features = req.body.features;
       if (req.body.icon !== undefined) service.icon = req.body.icon;
+      if (req.body.faqs !== undefined) service.faqs = req.body.faqs;
       
       // ✅ Properly handle image field - allow empty string to clear image
       if (req.body.image !== undefined) {
@@ -83,7 +84,7 @@ const updateService = async (req, res) => {
       }
       
       const updatedService = await service.save();
-      console.log('Service updated:', updatedService._id, 'Image:', updatedService.image);
+      console.log('Service updated:', updatedService._id, 'Image:', updatedService.image, 'FAQs:', updatedService.faqs?.length);
       res.json(updatedService);
     } else {
       res.status(404).json({ message: 'Service not found' });
