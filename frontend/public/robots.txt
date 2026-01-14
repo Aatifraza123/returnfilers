@@ -8,4 +8,4 @@ Disallow: /login
 Disallow: /api/
 
 # Sitemap location
-Sitemap: https://www.returnfilers.in/sitemap.xml
+Sitemap: https://api.returnfilers.in/sitemap.xml
