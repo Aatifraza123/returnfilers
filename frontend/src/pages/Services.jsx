@@ -86,7 +86,7 @@ const Services = () => {
       />
       
       {/* Hero Section */}
-      <section className="bg-[#0B1530] py-12 md:py-16 mt-16">
+      <section className="bg-[#0B1530] py-12 md:py-16 pt-20 md:pt-28">
         <div className="container mx-auto px-6 text-center max-w-3xl">
           <span className="inline-block px-4 py-1 rounded-full bg-[#C9A227]/10 text-[#C9A227] text-xs font-semibold uppercase tracking-wider mb-4">
             Our Services

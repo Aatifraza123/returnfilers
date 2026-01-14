@@ -282,7 +282,7 @@ const Booking = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-18">
+    <div className="min-h-screen bg-gray-50 pt-20 md:pt-28">
       {/* Auth Modal */}
       <AuthModal 
         isOpen={showAuthModal}

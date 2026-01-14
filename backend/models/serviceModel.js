@@ -27,6 +27,13 @@ const serviceSchema = mongoose.Schema({
     type: [String],
     default: []
   },
+  faqs: {
+    type: [{
+      question: { type: String, required: true },
+      answer: { type: String, required: true }
+    }],
+    default: []
+  },
   // ✅ NEW IMAGE FIELD
   image: { 
     type: String, 

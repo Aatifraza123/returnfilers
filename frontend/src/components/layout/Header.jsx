@@ -104,23 +104,27 @@ const Header = () => {
                 }}
               />
               <div 
-                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
-                style={{ display: 'none' }}
+                className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+                style={{ 
+                  display: 'none',
+                  background: settings?.brandColors?.secondary
+                }}
               >
-                {settings?.logoText || 'RF'}
+                {settings?.logoText}
               </div>
             </>
           ) : (
             <div 
-              className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+              className="w-9 h-9 sm:w-10 sm:h-10 md:w-11 md:h-11 rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-sm sm:text-base md:text-lg font-bold shadow-md"
+              style={{ 
+                background: settings?.brandColors?.secondary
+              }}
             >
-              {settings?.logoText || 'RF'}
+              {settings?.logoText}
             </div>
           )}
-          <span className={`text-base sm:text-lg md:text-xl font-serif font-bold tracking-tight transition-colors ${
-            isHomePage && !scrolled ? 'text-[#0B1530]' : 'text-[#0B1530]'
-          }`}>
-            {settings?.companyName || 'ReturnFilers'}
+          <span className="text-base sm:text-lg md:text-xl font-serif font-bold tracking-tight text-[#0B1530]">
+            {settings?.companyName}
           </span>
         </Link>
 
@@ -260,16 +264,16 @@ const Header = () => {
                 to="/quote"
                 className="px-5 py-2 rounded-md text-sm font-medium transition-all duration-300 hover:shadow-xl"
                 style={{ 
-                  background: `var(--color-secondary)`,
-                  color: 'var(--color-primary)'
+                  background: settings?.brandColors?.secondary,
+                  color: settings?.brandColors?.primary
                 }}
                 onMouseEnter={(e) => {
-                  e.currentTarget.style.background = 'var(--color-primary)';
+                  e.currentTarget.style.background = settings?.brandColors?.primary;
                   e.currentTarget.style.color = 'white';
                 }}
                 onMouseLeave={(e) => {
-                  e.currentTarget.style.background = 'var(--color-secondary)';
-                  e.currentTarget.style.color = 'var(--color-primary)';
+                  e.currentTarget.style.background = settings?.brandColors?.secondary;
+                  e.currentTarget.style.color = settings?.brandColors?.primary;
                 }}
               >
                 Get Quote

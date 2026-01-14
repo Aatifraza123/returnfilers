@@ -107,7 +107,7 @@ const Contact = () => {
     <div className="font-sans bg-gray-50">
       
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative py-12 md:py-16 bg-[#0B1530] text-white overflow-hidden mt-16">
+      <section className="relative py-12 md:py-16 bg-[#0B1530] text-white overflow-hidden pt-20 md:pt-28">
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-6 text-center relative z-10">
           <motion.span 

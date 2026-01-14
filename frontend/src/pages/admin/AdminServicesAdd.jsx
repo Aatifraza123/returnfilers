@@ -15,6 +15,7 @@ const AdminServicesForm = () => {
   const isViewMode = Boolean(id) && location.pathname.includes('view')
 
   const [loading, setLoading] = useState(false)
+  const [faqs, setFaqs] = useState([{ question: '', answer: '' }])
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm()
 
   // Auth Config
@@ -58,6 +59,11 @@ const AdminServicesForm = () => {
             ? service.features.join('\n') 
             : (service.features || '')
 
+          // Set FAQs if they exist
+          if (service.faqs && service.faqs.length > 0) {
+            setFaqs(service.faqs)
+          }
+
           reset({
             title: service.title || '',
             description: service.description || '',
@@ -86,7 +92,8 @@ const AdminServicesForm = () => {
       // Features को वापस Array में बदलें
       const formattedData = {
         ...data,
-        features: data.features.split('\n').map(f => f.trim()).filter(f => f !== '')
+        features: data.features.split('\n').map(f => f.trim()).filter(f => f !== ''),
+        faqs: faqs.filter(faq => faq.question.trim() && faq.answer.trim())
       }
 
       if (isEditMode) {
@@ -187,6 +194,71 @@ const AdminServicesForm = () => {
                 isViewMode ? 'bg-gray-50 text-gray-600' : 'bg-white'
               }`}
             />
+          </div>
+
+          {/* FAQs Section */}
+          <div className="mb-6">
+            <div className="flex items-center justify-between mb-3">
+              <label className="block text-sm font-medium text-neutral-700">
+                FAQs (Frequently Asked Questions)
+              </label>
+              {!isViewMode && (
+                <button
+                  type="button"
+                  onClick={() => setFaqs([...faqs, { question: '', answer: '' }])}
+                  className="px-3 py-1 bg-[#0B1530] text-white text-xs rounded hover:bg-blue-900 transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              )}
+            </div>
+            
+            <div className="space-y-3">
+              {faqs.map((faq, index) => (
+                <div key={index} className="p-4 border border-gray-200 rounded-lg bg-gray-50">
+                  <div className="flex items-center justify-between mb-2">
+                    <span className="text-xs font-medium text-gray-600">FAQ {index + 1}</span>
+                    {!isViewMode && faqs.length > 1 && (
+                      <button
+                        type="button"
+                        onClick={() => setFaqs(faqs.filter((_, i) => i !== index))}
+                        className="text-red-600 hover:text-red-800 text-xs"
+                      >
+                        Remove
+                      </button>
+                    )}
+                  </div>
+                  <input
+                    type="text"
+                    placeholder="Question"
+                    value={faq.question}
+                    onChange={(e) => {
+                      const newFaqs = [...faqs]
+                      newFaqs[index].question = e.target.value
+                      setFaqs(newFaqs)
+                    }}
+                    disabled={isViewMode}
+                    className={`w-full px-3 py-2 border rounded-lg mb-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1530] ${
+                      isViewMode ? 'bg-gray-100 text-gray-600' : 'bg-white'
+                    }`}
+                  />
+                  <textarea
+                    placeholder="Answer"
+                    value={faq.answer}
+                    onChange={(e) => {
+                      const newFaqs = [...faqs]
+                      newFaqs[index].answer = e.target.value
+                      setFaqs(newFaqs)
+                    }}
+                    disabled={isViewMode}
+                    rows="3"
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1530] resize-none ${
+                      isViewMode ? 'bg-gray-100 text-gray-600' : 'bg-white'
+                    }`}
+                  />
+                </div>
+              ))}
+            </div>
           </div>
 
           {/* Buttons */}

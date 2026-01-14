@@ -124,7 +124,7 @@ const ServiceDetail = () => {
       
       {/* Updated: Compact hero section without icon */}
       {/* Hero Section */}
-      <section className="relative min-h-[32vh] flex items-end mt-16">
+      <section className="relative min-h-[32vh] flex items-end pt-20 md:pt-28">
         <div className="absolute inset-0">
           <img
             src={getServiceImage()}
@@ -296,6 +296,36 @@ const ServiceDetail = () => {
           </div>
         </div>
       </section>
+
+      {/* FAQ Section */}
+      {service.faqs && service.faqs.length > 0 && (
+        <section className="py-10 bg-gray-50">
+          <div className="container mx-auto px-6 max-w-5xl">
+            <h2 className="text-xl font-bold text-[#0B1530] mb-6 flex items-center gap-2">
+              <span className="text-[#C9A227]">❓</span>
+              Frequently Asked Questions
+            </h2>
+            <div className="space-y-3">
+              {service.faqs.map((faq, index) => (
+                <details
+                  key={index}
+                  className="group bg-white rounded-lg border border-gray-200 overflow-hidden hover:border-[#C9A227] transition-colors"
+                >
+                  <summary className="flex items-center justify-between cursor-pointer p-4 font-semibold text-[#0B1530] text-sm hover:bg-gray-50 transition-colors">
+                    <span className="flex-1 pr-4">{faq.question}</span>
+                    <span className="text-[#C9A227] group-open:rotate-180 transition-transform">
+                      ▼
+                    </span>
+                  </summary>
+                  <div className="px-4 pb-4 pt-2 text-gray-600 text-sm leading-relaxed border-t border-gray-100">
+                    {faq.answer}
+                  </div>
+                </details>
+              ))}
+            </div>
+          </div>
+        </section>
+      )}
 
       {/* Related Services */}
       {relatedServices.length > 0 && (

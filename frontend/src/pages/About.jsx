@@ -37,34 +37,13 @@ const About = () => {
 
   const stats = [
     { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 500}+`, label: 'Happy Clients' },
-    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 10}+`, label: 'Years Experience' },
+    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 3}+`, label: 'Years Experience' },
     { icon: <FaHandshake />, value: `${settings?.about?.projectsCompleted || 1000}+`, label: 'Tax Returns Filed' },
     { icon: <FaChartLine />, value: `${settings?.about?.successRate || 99}%`, label: 'Client Satisfaction' },
   ];
 
-  // Use team from settings if available, otherwise use default
-  const defaultTeam = [
-    {
-      name: 'CA Rajan Kumar',
-      position: 'Founder & Managing Partner',
-      qualification: 'Chartered Accountant',
-      about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
-    },
-    {
-      name: 'CA Priya Sharma',
-      position: 'Senior Tax Consultant',
-      qualification: 'CA, Tax Specialist',
-      about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
-    },
-    {
-      name: 'CA Amit Verma',
-      position: 'Audit & Compliance Head',
-      qualification: 'CA, Audit Expert',
-      about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
-    },
-  ];
-
-  const team = settings?.about?.team !== undefined ? settings.about.team : defaultTeam;
+  // Use team from settings, no default fallback
+  const team = settings?.about?.team || [];
 
   const values = [
     { icon: <FaShieldAlt />, title: 'Trust & Transparency', desc: 'We believe in complete transparency with our clients. No hidden charges, clear communication at every step.' },
@@ -89,7 +68,7 @@ const About = () => {
     <main className="font-sans text-gray-800 bg-gray-50">
       
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative py-12 md:py-14 bg-gradient-to-br from-[#0B1530] via-[#101d42] to-[#1a2b5e] text-white overflow-hidden mt-16">
+      <section className="relative py-12 md:py-14 bg-gradient-to-br from-[#0B1530] via-[#101d42] to-[#1a2b5e] text-white overflow-hidden pt-20 md:pt-28">
         <div className="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]" />
         <div className="container mx-auto px-6 text-center relative z-10 max-w-5xl">
           <motion.span
@@ -210,7 +189,7 @@ const About = () => {
                </div>
                <div className="w-px bg-white/10 h-8"></div>
                <div className="text-center">
-                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.yearsExperience || 10}+</div>
+                  <div className="text-xl md:text-2xl font-bold text-white">{settings?.about?.yearsOfExperience || 3}+</div>
                   <div className="text-xs text-gray-500 uppercase mt-1">Years</div>
                </div>
                <div className="w-px bg-white/10 h-8"></div>

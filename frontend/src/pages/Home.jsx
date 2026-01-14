@@ -152,7 +152,7 @@ const Home = () => {
       <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} />
 
       {/* ==================== HERO SECTION ==================== */}
-      <section className="relative min-h-[75vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-28 pb-24">
+      <section className="relative min-h-[75vh] md:min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-28 pb-24">
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
@@ -333,7 +333,7 @@ const Home = () => {
                 Business Growth in Financial Success
               </h2>
               <p className="text-gray-600 text-base leading-relaxed mb-6">
-                About Us We are a trusted partner for businesses seeking
+                We are a trusted partner for businesses seeking
                 seamless compliance and return filing solutions. Our team of
                 experienced professionals ensures that your organization stays
                 fully aligned with statutory requirements while you focus on

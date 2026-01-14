@@ -8,6 +8,7 @@ const AdminServices = () => {
   const [loading, setLoading] = useState(true);
   const [showForm, setShowForm] = useState(false);
   const [editingService, setEditingService] = useState(null);
+  const [faqs, setFaqs] = useState([{ question: '', answer: '' }]);
   const [formData, setFormData] = useState({
     title: '',
     description: '',
@@ -58,7 +59,8 @@ const AdminServices = () => {
       const submitData = {
         ...formData,
         price: Number(formData.price),
-        features: formData.features ? formData.features.split(',').map(f => f.trim()) : []
+        features: formData.features ? formData.features.split(',').map(f => f.trim()) : [],
+        faqs: faqs.filter(faq => faq.question.trim() && faq.answer.trim())
       };
 
       if (editingService) {
@@ -75,6 +77,7 @@ const AdminServices = () => {
       
       setShowForm(false);
       setEditingService(null);
+      setFaqs([{ question: '', answer: '' }]);
       setFormData({ title: '', description: '', price: '', category: '', timeline: '3-7 Working Days', icon: '', features: '', image: '' });
       fetchServices();
     } catch (error) {
@@ -94,12 +97,14 @@ const AdminServices = () => {
       features: service.features ? (Array.isArray(service.features) ? service.features.join(', ') : service.features) : '',
       image: service.image || ''
     });
+    setFaqs(service.faqs && service.faqs.length > 0 ? service.faqs : [{ question: '', answer: '' }]);
     setShowForm(true);
   };
 
   const handleCancel = () => {
     setShowForm(false);
     setEditingService(null);
+    setFaqs([{ question: '', answer: '' }]);
     setFormData({ title: '', description: '', price: '', category: '', timeline: '3-7 Working Days', icon: '', features: '', image: '' });
   };
 
@@ -251,6 +256,60 @@ const AdminServices = () => {
                 value={formData.features}
                 onChange={e => setFormData({...formData, features: e.target.value})}
               />
+            </div>
+
+            {/* FAQs Section */}
+            <div className="border-t pt-4 mt-4">
+              <div className="flex items-center justify-between mb-3">
+                <label className="block text-sm font-medium text-gray-700">FAQs (Frequently Asked Questions)</label>
+                <button
+                  type="button"
+                  onClick={() => setFaqs([...faqs, { question: '', answer: '' }])}
+                  className="px-3 py-1 bg-gray-900 text-white text-xs rounded hover:bg-gray-800 transition-colors"
+                >
+                  + Add FAQ
+                </button>
+              </div>
+              <div className="space-y-3">
+                {faqs.map((faq, index) => (
+                  <div key={index} className="p-3 border border-gray-200 rounded-lg bg-gray-50">
+                    <div className="flex items-center justify-between mb-2">
+                      <span className="text-xs font-medium text-gray-600">FAQ {index + 1}</span>
+                      {faqs.length > 1 && (
+                        <button
+                          type="button"
+                          onClick={() => setFaqs(faqs.filter((_, i) => i !== index))}
+                          className="text-red-600 hover:text-red-800 text-xs"
+                        >
+                          Remove
+                        </button>
+                      )}
+                    </div>
+                    <input
+                      type="text"
+                      placeholder="Question"
+                      value={faq.question}
+                      onChange={(e) => {
+                        const newFaqs = [...faqs];
+                        newFaqs[index].question = e.target.value;
+                        setFaqs(newFaqs);
+                      }}
+                      className="w-full border border-gray-300 p-2 rounded-lg mb-2 text-sm focus:outline-none focus:border-gray-900"
+                    />
+                    <textarea
+                      placeholder="Answer"
+                      value={faq.answer}
+                      onChange={(e) => {
+                        const newFaqs = [...faqs];
+                        newFaqs[index].answer = e.target.value;
+                        setFaqs(newFaqs);
+                      }}
+                      rows="2"
+                      className="w-full border border-gray-300 p-2 rounded-lg text-sm focus:outline-none focus:border-gray-900 resize-none"
+                    />
+                  </div>
+                ))}
+              </div>
             </div>
             
             <div className="flex gap-3">
