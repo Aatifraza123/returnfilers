@@ -28,7 +28,8 @@ const DigitalServices = () => {
       setShowAuthModal(true);
       return;
     }
-    navigate(`/booking?service=${encodeURIComponent(service.title + ' - ' + pkg.name)}`);
+    const serviceName = pkg ? `${service.title} - ${pkg.name}` : service.title;
+    navigate(`/booking?service=${encodeURIComponent(serviceName)}`);
   };
 
   const faqs = [
@@ -143,7 +144,10 @@ const DigitalServices = () => {
         onSuccess={() => {
           setShowAuthModal(false);
           if (selectedPackage) {
-            navigate(`/booking?service=${encodeURIComponent(selectedPackage.service.title + ' - ' + selectedPackage.pkg.name)}`);
+            const serviceName = selectedPackage.pkg 
+              ? `${selectedPackage.service.title} - ${selectedPackage.pkg.name}` 
+              : selectedPackage.service.title;
+            navigate(`/booking?service=${encodeURIComponent(serviceName)}`);
           }
         }}
         message="Please login to book this package"
@@ -179,128 +183,122 @@ const DigitalServices = () => {
           {services.length === 0 ? (
             <div className="text-center py-12 text-gray-500">No services available at the moment.</div>
           ) : (
-            <div className="space-y-32">
-              {services.map((service) => (
-                <div key={service._id}>
-                  {/* Service Header */}
-                  <div className="text-center mb-16">
-                    <div className="inline-flex items-center justify-center p-4 rounded-2xl bg-[#0B1530] text-[#C9A227] text-3xl mb-6 shadow-xl shadow-[#0B1530]/20">
-                      <FaCode />
-                    </div>
-                    <h2 className="text-4xl md:text-5xl font-bold text-[#0B1530] mb-4 font-serif">{service.title}</h2>
-                    <p className="text-gray-600 max-w-2xl mx-auto text-lg leading-relaxed">{service.description}</p>
-                  </div>
-
-                  {/* 3. Modern Package Cards */}
-                  {settings?.features?.showPricing && service.packages?.length > 0 && (
-                    <div className="grid md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                      {service.packages.map((pkg, pIdx) => (
-                        <motion.div
-                          key={pIdx}
-                          initial={{ opacity: 0, y: 30 }}
-                          whileInView={{ opacity: 1, y: 0 }}
-                          viewport={{ once: true }}
-                          transition={{ delay: pIdx * 0.1 }}
-                          className={`
-                            relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300
-                            ${pkg.name === 'Business Website' 
-                              ? 'bg-[#0B1530] text-white shadow-2xl scale-105 border border-[#C9A227]/30 ring-4 ring-[#C9A227]/10 z-10' 
-                              : 'bg-white text-gray-800 border border-gray-100 hover:border-[#C9A227]/50 shadow-lg hover:shadow-xl'}
-                          `}
-                        >
-                          {pkg.name === 'Business Website' && (
-                            <div className="absolute top-0 inset-x-0 h-0" />
-                          )}
-
-                          <div className="p-8 pb-0">
-                            <h3 className={`text-xl font-bold mb-2 ${pkg.name === 'Business Website' ? 'text-white' : 'text-[#0B1530]'}`}>
-                              {pkg.name}
-                            </h3>
-                            <div className="flex items-baseline gap-1 mb-6">
-                              <span className={`text-3xl font-bold ${pkg.name === 'Business Website' ? 'text-white' : 'text-black'}`}>
-                                ₹{pkg.price}
-                              </span>
-                            </div>
-                            <div className={`text-xs font-semibold uppercase tracking-wider mb-6 ${pkg.name === 'Business Website' ? 'text-gray-400' : 'text-gray-500'}`}>
-                              {pkg.timeline} Delivery
-                            </div>
-                          </div>
-
-                          <div className="p-8 pt-0 flex-grow">
-                            <ul className="space-y-4">
-                              {pkg.features.map((feature, fIdx) => (
-                                <li key={fIdx} className="flex items-start gap-3 text-sm">
-                                  <FaCheckCircle className={`mt-1 flex-shrink-0 ${pkg.name === 'Business Website' ? 'text-[#C9A227]' : 'text-[#0B1530]'}`} />
-                                  <span className={`leading-relaxed ${pkg.name === 'Business Website' ? 'text-gray-300' : 'text-gray-600'}`}>
-                                    {feature}
-                                  </span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
-
-                          <div className="p-8 mt-auto">
-                            <div className="flex gap-3">
-                              <Link
-                                to={`/digital-services/${service.slug}/${pkg.name.toLowerCase().replace(/\s+/g, '-')}`}
-                                className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm"
-                                style={{
-                                  borderWidth: '2px',
-                                  borderStyle: 'solid',
-                                  borderColor: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)',
-                                  color: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)'
-                                }}
-                                onMouseEnter={(e) => {
-                                  if (pkg.name === 'Business Website') {
-                                    e.currentTarget.style.background = 'var(--color-secondary)';
-                                    e.currentTarget.style.color = 'var(--color-primary)';
-                                  } else {
-                                    e.currentTarget.style.background = 'var(--color-primary)';
-                                    e.currentTarget.style.color = 'white';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  e.currentTarget.style.background = 'transparent';
-                                  e.currentTarget.style.color = pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)';
-                                }}
-                              >
-                                Details
-                              </Link>
-                              <button
-                                onClick={() => handleGetStarted(service, pkg)}
-                                className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm"
-                                style={{
-                                  background: pkg.name === 'Business Website' ? 'var(--color-secondary)' : 'var(--color-primary)',
-                                  color: pkg.name === 'Business Website' ? 'var(--color-primary)' : 'white'
-                                }}
-                                onMouseEnter={(e) => {
-                                  if (pkg.name === 'Business Website') {
-                                    e.currentTarget.style.background = 'white';
-                                    e.currentTarget.style.color = 'var(--color-primary)';
-                                  } else {
-                                    e.currentTarget.style.background = 'var(--color-secondary)';
-                                    e.currentTarget.style.color = 'var(--color-primary)';
-                                  }
-                                }}
-                                onMouseLeave={(e) => {
-                                  if (pkg.name === 'Business Website') {
-                                    e.currentTarget.style.background = 'var(--color-secondary)';
-                                    e.currentTarget.style.color = 'var(--color-primary)';
-                                  } else {
-                                    e.currentTarget.style.background = 'var(--color-primary)';
-                                    e.currentTarget.style.color = 'white';
-                                  }
-                                }}
-                              >
-                                Get Started
-                              </button>
-                            </div>
-                          </div>
-                        </motion.div>
-                      ))}
+            <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
+              {services.map((service, idx) => (
+                <motion.div
+                  key={service._id}
+                  initial={{ opacity: 0, y: 30 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: idx * 0.1 }}
+                  className={`relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300 ${
+                    idx === 1 
+                      ? 'bg-[#0B1530] text-white shadow-2xl scale-105 border-2 border-[#C9A227]' 
+                      : 'bg-white border border-gray-100 hover:border-[#C9A227]/50 shadow-lg hover:shadow-xl'
+                  }`}
+                >
+                  {idx === 1 && (
+                    <div className="absolute top-0 right-0 bg-[#C9A227] text-[#0B1530] px-4 py-1 text-xs font-bold rounded-bl-lg">
+                      POPULAR
                     </div>
                   )}
-                </div>
+                  
+                  <div className="p-8">
+                    <div className={`inline-flex items-center justify-center p-3 rounded-xl text-2xl mb-4 ${
+                      idx === 1 
+                        ? 'bg-[#C9A227] text-[#0B1530]' 
+                        : 'bg-[#0B1530] text-[#C9A227]'
+                    }`}>
+                      <FaCode />
+                    </div>
+                    <h3 className={`text-2xl font-bold mb-3 ${idx === 1 ? 'text-white' : 'text-[#0B1530]'}`}>
+                      {service.title}
+                    </h3>
+                    <p className={`mb-6 leading-relaxed ${idx === 1 ? 'text-gray-300' : 'text-gray-600'}`}>
+                      {service.description}
+                    </p>
+                    
+                    <div className="flex items-baseline gap-2 mb-6">
+                      <span className={`text-4xl font-bold ${idx === 1 ? 'text-[#C9A227]' : 'text-[#0B1530]'}`}>
+                        ₹{service.price}
+                      </span>
+                      <span className={`text-sm ${idx === 1 ? 'text-gray-400' : 'text-gray-500'}`}>
+                        / {service.timeline}
+                      </span>
+                    </div>
+
+                    <div className="space-y-3 mb-8">
+                      {service.features.slice(0, 6).map((feature, fIdx) => (
+                        <div key={fIdx} className="flex items-start gap-3 text-sm">
+                          <FaCheckCircle className={`mt-1 flex-shrink-0 ${idx === 1 ? 'text-[#C9A227]' : 'text-[#C9A227]'}`} />
+                          <span className={`leading-relaxed ${idx === 1 ? 'text-gray-300' : 'text-gray-600'}`}>
+                            {feature}
+                          </span>
+                        </div>
+                      ))}
+                      {service.features.length > 6 && (
+                        <div className={`text-sm italic ${idx === 1 ? 'text-gray-400' : 'text-gray-500'}`}>
+                          +{service.features.length - 6} more features
+                        </div>
+                      )}
+                    </div>
+
+                    <div className="flex gap-3 mt-auto">
+                      <Link
+                        to={`/digital-services/${service.slug}`}
+                        className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm border-2"
+                        style={{
+                          borderColor: idx === 1 ? 'var(--color-secondary)' : 'var(--color-primary)',
+                          color: idx === 1 ? 'var(--color-secondary)' : 'var(--color-primary)',
+                          background: 'transparent'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (idx === 1) {
+                            e.currentTarget.style.background = 'var(--color-secondary)';
+                            e.currentTarget.style.color = 'var(--color-primary)';
+                          } else {
+                            e.currentTarget.style.background = 'var(--color-primary)';
+                            e.currentTarget.style.color = 'white';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          e.currentTarget.style.background = 'transparent';
+                          e.currentTarget.style.color = idx === 1 ? 'var(--color-secondary)' : 'var(--color-primary)';
+                        }}
+                      >
+                        View Details
+                      </Link>
+                      <button
+                        onClick={() => handleGetStarted(service, null)}
+                        className="flex-1 py-3 rounded-lg font-semibold text-center transition-all duration-300 text-sm"
+                        style={{
+                          background: idx === 1 ? 'var(--color-secondary)' : 'var(--color-primary)',
+                          color: idx === 1 ? 'var(--color-primary)' : 'white'
+                        }}
+                        onMouseEnter={(e) => {
+                          if (idx === 1) {
+                            e.currentTarget.style.background = 'white';
+                            e.currentTarget.style.color = 'var(--color-primary)';
+                          } else {
+                            e.currentTarget.style.background = 'var(--color-secondary)';
+                            e.currentTarget.style.color = 'var(--color-primary)';
+                          }
+                        }}
+                        onMouseLeave={(e) => {
+                          if (idx === 1) {
+                            e.currentTarget.style.background = 'var(--color-secondary)';
+                            e.currentTarget.style.color = 'var(--color-primary)';
+                          } else {
+                            e.currentTarget.style.background = 'var(--color-primary)';
+                            e.currentTarget.style.color = 'white';
+                          }
+                        }}
+                      >
+                        Get Started
+                      </button>
+                    </div>
+                  </div>
+                </motion.div>
               ))}
             </div>
           )}

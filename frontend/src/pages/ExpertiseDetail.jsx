@@ -182,28 +182,28 @@ const ExpertiseDetail = () => {
 
   return (
     <main className="font-sans bg-gray-50">
-      {/* Hero Section - Compact v3.0 - Icon removed */}
-      <section className="relative min-h-[40vh] flex items-center pt-20 md:pt-28">
+      {/* Hero Section - Compact */}
+      <section className="relative min-h-[30vh] flex items-center pt-20 md:pt-24">
         <div className="absolute inset-0">
           <img src={expertise.heroImage} alt={expertise.title} className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-gradient-to-r from-[#0B1530] via-[#0B1530]/90 to-[#0B1530]/70" />
         </div>
         
-        <div className="container mx-auto px-6 relative z-10 py-12">
-          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#C9A227] hover:text-white mb-5 transition-colors text-sm">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 py-8 md:py-10">
+          <Link to="/expertise" className="inline-flex items-center gap-2 text-[#C9A227] hover:text-white mb-4 transition-colors text-xs md:text-sm">
             <FaArrowLeft size={12} /> Back to All Services
           </Link>
           
           <motion.div
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="max-w-3xl"
+            className="max-w-2xl"
           >
-            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-sm">{expertise.tagline}</span>
-            <h1 className="text-3xl md:text-4xl lg:text-5xl font-serif font-bold text-white mt-3 mb-3">
+            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-xs md:text-sm">{expertise.tagline}</span>
+            <h1 className="text-2xl md:text-3xl lg:text-4xl font-serif font-bold text-white mt-2 mb-2">
               {expertise.title}
             </h1>
-            <p className="text-base md:text-lg text-gray-300 leading-relaxed">
+            <p className="text-sm md:text-base text-gray-300 leading-relaxed">
               {expertise.description}
             </p>
           </motion.div>

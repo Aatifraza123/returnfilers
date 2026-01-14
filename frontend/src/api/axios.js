@@ -25,7 +25,8 @@ if (import.meta.env.DEV) {
 // Add a request interceptor (Automatically adds Token to every request)
 api.interceptors.request.use(
   (config) => {
-    const token = localStorage.getItem('token'); // Get token from storage
+    // Check for both user token and admin token
+    const token = localStorage.getItem('token') || localStorage.getItem('adminToken');
     if (token) {
       config.headers.Authorization = `Bearer ${token}`;
     }

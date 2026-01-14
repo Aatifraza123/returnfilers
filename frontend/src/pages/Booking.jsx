@@ -79,17 +79,13 @@ const Booking = () => {
           .forEach(s => serviceList.push(s.title));
       }
       
-      // Add web development packages
+      // Add web development services (now as separate services, not packages)
       if (Array.isArray(digitalServices)) {
         digitalServices
           .filter(d => d.active !== false)
           .forEach(service => {
-            if (service.packages && Array.isArray(service.packages) && service.packages.length > 0) {
-              service.packages.forEach(pkg => {
-                // Add full format: "Service - Package"
-                serviceList.push(`${service.title} - ${pkg.name}`);
-              });
-            }
+            // Add digital service directly
+            serviceList.push(service.title);
           });
       }
       
@@ -111,10 +107,9 @@ const Booking = () => {
         'GST Registration',
         'Income Tax Return',
         'Company Registration',
-        'Web Development - Basic Website',
-        'Web Development - Business Website',
-        'Web Development - E-commerce Website',
-        'Web Development - Custom Web Application',
+        'Basic Website',
+        'Business Website',
+        'E-commerce Website',
         'Other'
       ]);
     } finally {

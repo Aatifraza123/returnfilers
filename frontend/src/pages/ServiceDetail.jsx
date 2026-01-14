@@ -59,6 +59,11 @@ const ServiceDetail = () => {
       const { data } = await api.get(`/services/${id}`);
       const serviceData = data.service || data;
       setService(serviceData);
+      
+      // Debug: Check if FAQs are present
+      console.log('📋 Service Data:', serviceData);
+      console.log('❓ FAQs:', serviceData.faqs);
+      console.log('❓ FAQs Length:', serviceData.faqs?.length);
 
       // Fetch related services from same category
       const allServices = await api.get('/services');

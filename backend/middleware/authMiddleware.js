@@ -1,5 +1,6 @@
 const jwt = require('jsonwebtoken');
 const User = require('../models/userModel');
+const Admin = require('../models/adminModel');
 
 const protect = async (req, res, next) => {
   let token;
@@ -12,13 +13,19 @@ const protect = async (req, res, next) => {
       // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-      // Get user from the token
-      req.user = await User.findById(decoded.id).select('-password');
+      // Try to find user first, then admin
+      let user = await User.findById(decoded.id).select('-password');
+      
+      if (!user) {
+        // If not a regular user, check if it's an admin
+        user = await Admin.findById(decoded.id).select('-password');
+      }
 
-      if (!req.user) {
+      if (!user) {
         return res.status(401).json({ message: 'User not found' });
       }
 
+      req.user = user;
       next();
     } catch (error) {
       console.log('Auth error:', error.message);
@@ -31,7 +38,8 @@ const protect = async (req, res, next) => {
 
 const admin = (req, res, next) => {
   console.log('Admin check - User:', req.user?.email, 'isAdmin:', req.user?.isAdmin);
-  if (req.user && req.user.isAdmin === true) {
+  // Check if user is admin (either from Admin model or User model with isAdmin flag)
+  if (req.user && (req.user.isAdmin === true || req.user.role === 'admin')) {
     next();
   } else {
     res.status(403).json({ message: 'Not authorized as admin', user: req.user?.email, isAdmin: req.user?.isAdmin });
