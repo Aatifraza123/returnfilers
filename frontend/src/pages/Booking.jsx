@@ -282,7 +282,7 @@ const Booking = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 pt-20 md:pt-28">
+    <div className="min-h-screen bg-gray-50 pt-14 md:pt-14">
       {/* Auth Modal */}
       <AuthModal 
         isOpen={showAuthModal}
@@ -300,7 +300,7 @@ const Booking = () => {
       />
       
       {/* Header */}
-      <div className="bg-[#0B1530] pt-20 pb-16">
+      <div className="bg-[#0B1530] pt-12 pb-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Book a Service</h1>
           <p className="text-gray-300 max-w-xl mx-auto">
