@@ -623,7 +623,7 @@ const AIChatbot = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-gray-100 hover:bg-[#0B1530] text-gray-600 hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
+                  className="px-2.5 py-1 bg-gray-100 hover:bg-[#0B1530] text-[#0B1530] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
                 >
                   {q}
                 </button>
