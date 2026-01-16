@@ -107,7 +107,7 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={part}
-          className="inline-block px-2 py-0.5 bg-gray-100 text-[#0B1530] rounded font-semibold hover:bg-[#0B1530] hover:text-white transition-all duration-200"
+          className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-semibold hover:bg-blue-100 transition-all duration-200 border border-blue-200"
         >
           {displayName}
         </a>
@@ -623,7 +623,7 @@ const AIChatbot = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-gray-100 hover:bg-[#0B1530] text-[#0B1530] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
+                  className="px-2.5 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-[11px] font-medium transition-all duration-200 border border-gray-200 hover:border-gray-300"
                 >
                   {q}
                 </button>
@@ -647,7 +647,7 @@ const AIChatbot = () => {
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#0B1530] text-white rounded-xl flex items-center justify-center hover:bg-[#2d3e5f] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B1530]"
+              className="w-9 h-9 bg-[#0B1530] text-white rounded-xl flex items-center justify-center hover:bg-[#1a2d4d] hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B1530] disabled:hover:scale-100"
             >
               <FaPaperPlane size={13} />
             </button>
