@@ -524,7 +524,7 @@ const AIChatbot = () => {
           }}
           className="relative group"
         >
-          <div className="w-12 h-12 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2847] transition-colors group-hover:scale-110 duration-200 active:scale-95">
+          <div className="w-12 h-12 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#2d3e5f] transition-colors group-hover:scale-110 duration-200 active:scale-95">
             <FaRobot size={20} className="text-white" />
             <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#0B1530] rounded-full animate-pulse"></span>
           </div>
@@ -558,14 +558,14 @@ const AIChatbot = () => {
           <div className="flex items-center gap-1">
             <button 
               onClick={clearChat}
-              className="w-8 h-8 rounded-lg hover:bg-[#1a2847] flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors"
               title="New chat"
             >
               <FaRedo size={12} />
             </button>
             <button 
               onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-lg hover:bg-[#1a2847] flex items-center justify-center transition-colors"
+              className="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors"
             >
               <FaTimes size={14} />
             </button>
@@ -647,7 +647,7 @@ const AIChatbot = () => {
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#0B1530] text-white rounded-xl flex items-center justify-center hover:bg-[#1a2847] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B1530]"
+              className="w-9 h-9 bg-[#0B1530] text-white rounded-xl flex items-center justify-center hover:bg-[#2d3e5f] transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#0B1530]"
             >
               <FaPaperPlane size={13} />
             </button>

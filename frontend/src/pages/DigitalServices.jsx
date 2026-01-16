@@ -4,7 +4,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import { 
   FaCode, FaCheckCircle, FaStar, 
   FaChevronLeft, FaChevronRight, FaPlus, FaMinus, FaArrowRight,
-  FaReact, FaNodeJs, FaWordpress, FaShopify, FaPalette, FaRocket,
+  FaReact, FaNodeJs, FaPalette, FaRocket,
   FaMobile, FaSearch, FaLock, FaBolt
 } from 'react-icons/fa';
 import api from '../api/axios';
@@ -189,7 +189,7 @@ const DigitalServices = () => {
       <section className="py-12 md:py-16 bg-white">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4" style={{ color: 'var(--color-primary)' }}>
               Why Choose Our Digital Services
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-base">
@@ -200,10 +200,10 @@ const DigitalServices = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Feature 1 */}
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <FaMobile />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Mobile Responsive</h3>
+              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>Mobile Responsive</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 All websites are fully responsive and optimized for mobile, tablet, and desktop devices
               </p>
@@ -211,10 +211,10 @@ const DigitalServices = () => {
 
             {/* Feature 2 */}
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <FaSearch />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">SEO Optimized</h3>
+              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>SEO Optimized</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 Built with SEO best practices to help your website rank higher in search engines
               </p>
@@ -222,10 +222,10 @@ const DigitalServices = () => {
 
             {/* Feature 3 */}
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <FaBolt />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Fast Loading</h3>
+              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>Fast Loading</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 Optimized for speed with fast loading times to provide the best user experience
               </p>
@@ -233,10 +233,10 @@ const DigitalServices = () => {
 
             {/* Feature 4 */}
             <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
-              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+              <div className="w-12 h-12 rounded-lg flex items-center justify-center text-white text-xl mb-4" style={{ backgroundColor: 'var(--color-primary)' }}>
                 <FaLock />
               </div>
-              <h3 className="text-lg font-bold text-gray-900 mb-3">Secure & Reliable</h3>
+              <h3 className="text-lg font-bold mb-3" style={{ color: 'var(--color-primary)' }}>Secure & Reliable</h3>
               <p className="text-gray-600 text-sm leading-relaxed">
                 Built with security best practices and reliable hosting for 99.9% uptime
               </p>
@@ -249,7 +249,7 @@ const DigitalServices = () => {
       <section className="py-12 md:py-16 bg-gray-50">
         <div className="container mx-auto px-6 max-w-7xl">
           <div className="text-center mb-12">
-            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold mb-4" style={{ color: 'var(--color-primary)' }}>
               Technologies We Use
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-base">
@@ -260,26 +260,26 @@ const DigitalServices = () => {
           <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
             {/* Tech 1 */}
             <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
-              <FaReact className="text-4xl text-[#61DAFB] mb-3" />
-              <h4 className="text-sm font-bold text-gray-900">React</h4>
+              <FaReact className="text-4xl mb-3" style={{ color: 'var(--color-primary)' }} />
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>React</h4>
             </div>
 
             {/* Tech 2 */}
             <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
-              <FaNodeJs className="text-4xl text-[#339933] mb-3" />
-              <h4 className="text-sm font-bold text-gray-900">Node.js</h4>
+              <FaNodeJs className="text-4xl mb-3" style={{ color: 'var(--color-primary)' }} />
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>Node.js</h4>
             </div>
 
-            {/* Tech 3 */}
+            {/* Tech 3 - MongoDB */}
             <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
-              <FaWordpress className="text-4xl text-[#21759B] mb-3" />
-              <h4 className="text-sm font-bold text-gray-900">WordPress</h4>
+              <FaCode className="text-4xl mb-3" style={{ color: 'var(--color-primary)' }} />
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>MongoDB</h4>
             </div>
 
-            {/* Tech 4 */}
+            {/* Tech 4 - Tailwind CSS */}
             <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
-              <FaShopify className="text-4xl text-[#96BF48] mb-3" />
-              <h4 className="text-sm font-bold text-gray-900">Shopify</h4>
+              <FaPalette className="text-4xl mb-3" style={{ color: 'var(--color-primary)' }} />
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>Tailwind CSS</h4>
             </div>
 
             {/* Tech 5 */}
@@ -288,7 +288,7 @@ const DigitalServices = () => {
                 className="text-4xl mb-3"
                 style={{ color: 'var(--color-secondary)' }}
               />
-              <h4 className="text-sm font-bold text-gray-900">UI/UX Design</h4>
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>UI/UX Design</h4>
             </div>
 
             {/* Tech 6 */}
@@ -297,7 +297,7 @@ const DigitalServices = () => {
                 className="text-4xl mb-3"
                 style={{ color: 'var(--color-primary)' }}
               />
-              <h4 className="text-sm font-bold text-gray-900">Deployment</h4>
+              <h4 className="text-sm font-bold" style={{ color: 'var(--color-primary)' }}>Deployment</h4>
             </div>
           </div>
         </div>

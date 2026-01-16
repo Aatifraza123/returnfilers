@@ -179,8 +179,7 @@ const Home = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 font-medium text-sm mb-6 backdrop-blur-sm"
-                style={{ color: 'var(--color-secondary)' }}
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 font-medium text-sm mb-6 backdrop-blur-sm text-white"
               >
                 <FaBriefcase className="text-xs" /> Since{" "}
                 {settings?.about?.yearEstablished || 2022}

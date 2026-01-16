@@ -41,6 +41,8 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
+      console.log('🔄 Fetching dashboard data...');
+      
       const [services, blogs, consultations, contacts, bookings, quotes, users] = await Promise.all([
         api.get('/services'),
         api.get('/blogs'),
@@ -50,6 +52,8 @@ const AdminDashboard = () => {
         api.get('/quotes'),
         api.get('/users/stats')
       ]);
+
+      console.log('✅ Users stats response:', users.data);
 
       setStats({
         services: services.data.services?.length || services.data.length || 0,
@@ -62,6 +66,18 @@ const AdminDashboard = () => {
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
+      console.error('Error response:', error.response?.data);
+      
+      // Set default values even if API fails
+      setStats({
+        services: 0,
+        blogs: 0,
+        consultations: 0,
+        contacts: 0,
+        bookings: 0,
+        quotes: 0,
+        users: 0
+      });
     } finally {
       setLoading(false);
     }
