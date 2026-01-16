@@ -52,77 +52,56 @@ const registerUser = async (req, res) => {
           await sendEmail({
             to: email,
             subject: 'Email Verification - OTP',
-            html: `
-              <!DOCTYPE html>
-              <html>
-              <head>
-                <meta charset="UTF-8">
-                <meta name="viewport" content="width=device-width, initial-scale=1.0">
-                <style>
-                  body { margin: 0; padding: 0; width: 100% !important; }
-                  table { border-collapse: collapse; }
-                  img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; pointer-events: none; }
-                  @media only screen and (max-width: 600px) {
-                    .email-container { width: 100% !important; }
-                    .email-padding { padding: 20px !important; }
-                    .email-header { padding: 12px 20px !important; }
-                    .email-footer { padding: 12px 20px !important; }
-                    .logo-img { max-width: 120px !important; height: auto !important; }
-                  }
-                </style>
-              </head>
-              <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; width: 100%;">
-                <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px 0;">
-                  <tr>
-                    <td align="center">
-                      <table class="email-container" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
-                        
-                        <!-- Header with Logo -->
-                        <tr>
-                          <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb; background-color: #ffffff;">
-                            <img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" class="logo-img" style="max-width: 160px; height: auto; display: block; margin: 0 auto;" />
-                          </td>
-                        </tr>
-                        
-                        <!-- Content -->
-                        <tr>
-                          <td class="email-padding" style="padding: 40px;">
-                            <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #111827;">Email Verification</h2>
-                            <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.6; color: #4b5563;">Please verify your email address using the OTP below:</p>
-                            
-                            <div style="background-color: #f9fafb; border: 2px solid #e5e7eb; padding: 30px; text-align: center; margin: 25px 0;">
-                              <p style="color: #6b7280; font-size: 13px; margin: 0 0 15px 0;">Your OTP Code</p>
-                              <h1 style="color: #111827; font-size: 36px; letter-spacing: 6px; margin: 0; font-weight: 700;">${otp}</h1>
-                            </div>
-                            
-                            <p style="color: #ef4444; font-size: 13px; margin: 20px 0; text-align: center; font-weight: 500;">This OTP will expire in 10 minutes</p>
-                            
-                            <div style="background-color: #fef3c7; border-left: 3px solid #f59e0b; padding: 14px; margin: 20px 0;">
-                              <p style="color: #92400e; font-size: 13px; margin: 0; line-height: 1.5;"><strong>Security Note:</strong> Never share this OTP with anyone.</p>
-                            </div>
-                          </td>
-                        </tr>
-                        
-                        <!-- Footer -->
-                        <tr>
-                          <td class="email-footer" style="padding: 20px 40px; text-align: center; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
-                            <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
-                              <a href="https://returnfilers.in" style="color: #2563eb; text-decoration: none;">returnfilers.in</a> | 
-                              <a href="mailto:info@returnfilers.in" style="color: #2563eb; text-decoration: none;">info@returnfilers.in</a>
-                            </p>
-                            <p style="margin: 0; font-size: 12px; color: #9ca3af;">
-                              © ${new Date().getFullYear()} ReturnFilers. All rights reserved.
-                            </p>
-                          </td>
-                        </tr>
-                        
-                      </table>
-                    </td>
-                  </tr>
-                </table>
-              </body>
-              </html>
-            `
+            html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Email Verification</title>
+<style type="text/css">
+body { margin: 0; padding: 0; width: 100% !important; min-height: 100vh; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; max-width: 100%; display: block; }
+@media only screen and (max-width: 600px) {
+  .email-container { width: 100% !important; min-width: 100% !important; }
+  .email-padding { padding: 20px !important; }
+  .text-content { width: 100% !important; max-width: 100% !important; }
+  img { max-width: 100% !important; height: auto !important; }
+}
+</style>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background-color:#f5f5f5;width:100%;min-height:100vh;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f5f5f5;width:100%;min-height:100vh;">
+<tr><td align="center" style="padding:0;">
+<table class="email-container" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color:#ffffff;max-width:600px;width:100%;margin:0;padding:0;border:0;">
+<tr><td align="center" class="email-padding" style="padding:20px;">
+<img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" width="100" height="auto" style="display:block;border:0;max-width:100px;width:100%;height:auto;margin:0 auto;" />
+</td></tr>
+<tr><td class="email-padding" style="padding:30px 40px;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<h2 style="margin:0 0 20px 0;font-size:18px;font-weight:600;color:#000000;font-family:Arial,Helvetica,sans-serif;">Email Verification</h2>
+<p style="margin:0 0 20px 0;font-size:14px;line-height:1.6;color:#333333;">Please verify your email address using the OTP below:</p>
+<div style="background-color:#f5f5f5;border:2px solid #dddddd;padding:30px;text-align:center;margin:25px 0;">
+<p style="color:#666666;font-size:13px;margin:0 0 15px 0;">Your OTP Code</p>
+<h1 style="color:#000000;font-size:36px;letter-spacing:6px;margin:0;font-weight:700;">${otp}</h1>
+</div>
+<p style="color:#666666;font-size:13px;margin:20px 0;text-align:center;font-weight:500;">This OTP will expire in 10 minutes</p>
+<div style="background-color:#f5f5f5;border-left:3px solid #999999;padding:14px;margin:20px 0;">
+<p style="color:#333333;font-size:13px;margin:0;line-height:1.5;"><strong>Security Note:</strong> Never share this OTP with anyone.</p>
+</div>
+</div>
+</td></tr>
+<tr><td align="center" class="email-padding" style="padding:20px 40px;background-color:#f5f5f5;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<p style="margin:0 0 10px 0;font-size:13px;color:#666666;font-family:Arial,Helvetica,sans-serif;"><a href="https://returnfilers.in" style="color:#000000;text-decoration:none;">returnfilers.in</a> | <a href="mailto:info@returnfilers.in" style="color:#000000;text-decoration:none;">info@returnfilers.in</a></p>
+<p style="margin:10px 0 0 0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+</div>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`
           });
           console.log('✅ OTP resent successfully');
 
@@ -169,77 +148,56 @@ const registerUser = async (req, res) => {
       await sendEmail({
         to: email,
         subject: 'Email Verification - OTP',
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-              body { margin: 0; padding: 0; width: 100% !important; }
-              table { border-collapse: collapse; }
-              img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; display: block; pointer-events: none; }
-              @media only screen and (max-width: 600px) {
-                .email-container { width: 100% !important; }
-                .email-padding { padding: 20px !important; }
-                .email-header { padding: 12px 20px !important; }
-                .email-footer { padding: 12px 20px !important; }
-                .logo-img { max-width: 120px !important; height: auto !important; }
-              }
-            </style>
-          </head>
-          <body style="margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif; background-color: #f5f5f5; width: 100%;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="background-color: #f5f5f5; padding: 20px 0;">
-              <tr>
-                <td align="center">
-                  <table class="email-container" width="100%" cellpadding="0" cellspacing="0" style="background-color: #ffffff; box-shadow: 0 1px 3px rgba(0,0,0,0.1); max-width: 600px;">
-                    
-                    <!-- Header with Logo -->
-                    <tr>
-                      <td class="email-header" style="padding: 20px 40px; text-align: center; border-bottom: 1px solid #e5e7eb; background-color: #ffffff;">
-                        <img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" class="logo-img" style="max-width: 160px; height: auto; display: block; margin: 0 auto;" />
-                      </td>
-                    </tr>
-                    
-                    <!-- Content -->
-                    <tr>
-                      <td class="email-padding" style="padding: 40px;">
-                        <h2 style="margin: 0 0 20px 0; font-size: 18px; font-weight: 600; color: #111827;">Welcome to ReturnFilers!</h2>
-                        <p style="margin: 0 0 20px 0; font-size: 14px; line-height: 1.6; color: #4b5563;">Thank you for registering. Please verify your email address using the OTP below:</p>
-                        
-                        <div style="background-color: #f9fafb; border: 2px solid #e5e7eb; padding: 30px; text-align: center; margin: 25px 0;">
-                          <p style="color: #6b7280; font-size: 13px; margin: 0 0 15px 0;">Your OTP Code</p>
-                          <h1 style="color: #111827; font-size: 36px; letter-spacing: 6px; margin: 0; font-weight: 700;">${otp}</h1>
-                        </div>
-                        
-                        <p style="color: #ef4444; font-size: 13px; margin: 20px 0; text-align: center; font-weight: 500;">This OTP will expire in 10 minutes</p>
-                        
-                        <div style="background-color: #fef3c7; border-left: 3px solid #f59e0b; padding: 14px; margin: 20px 0;">
-                          <p style="color: #92400e; font-size: 13px; margin: 0; line-height: 1.5;"><strong>Security Note:</strong> Never share this OTP with anyone.</p>
-                        </div>
-                      </td>
-                    </tr>
-                    
-                    <!-- Footer -->
-                    <tr>
-                      <td class="email-footer" style="padding: 20px 40px; text-align: center; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
-                        <p style="margin: 0 0 10px 0; font-size: 13px; color: #6b7280;">
-                          <a href="https://returnfilers.in" style="color: #2563eb; text-decoration: none;">returnfilers.in</a> | 
-                          <a href="mailto:info@returnfilers.in" style="color: #2563eb; text-decoration: none;">info@returnfilers.in</a>
-                        </p>
-                        <p style="margin: 0; font-size: 12px; color: #9ca3af;">
-                          © ${new Date().getFullYear()} ReturnFilers. All rights reserved.
-                        </p>
-                      </td>
-                    </tr>
-                    
-                  </table>
-                </td>
-              </tr>
-            </table>
-          </body>
-          </html>
-        `
+        html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Welcome to ReturnFilers</title>
+<style type="text/css">
+body { margin: 0; padding: 0; width: 100% !important; min-height: 100vh; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; max-width: 100%; display: block; }
+@media only screen and (max-width: 600px) {
+  .email-container { width: 100% !important; min-width: 100% !important; }
+  .email-padding { padding: 20px !important; }
+  .text-content { width: 100% !important; max-width: 100% !important; }
+  img { max-width: 100% !important; height: auto !important; }
+}
+</style>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background-color:#f5f5f5;width:100%;min-height:100vh;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f5f5f5;width:100%;min-height:100vh;">
+<tr><td align="center" style="padding:0;">
+<table class="email-container" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color:#ffffff;max-width:600px;width:100%;margin:0;padding:0;border:0;">
+<tr><td align="center" class="email-padding" style="padding:20px;">
+<img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" width="100" height="auto" style="display:block;border:0;max-width:100px;width:100%;height:auto;margin:0 auto;" />
+</td></tr>
+<tr><td class="email-padding" style="padding:30px 40px;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<h2 style="margin:0 0 20px 0;font-size:18px;font-weight:600;color:#000000;font-family:Arial,Helvetica,sans-serif;">Welcome to ReturnFilers!</h2>
+<p style="margin:0 0 20px 0;font-size:14px;line-height:1.6;color:#333333;">Thank you for registering. Please verify your email address using the OTP below:</p>
+<div style="background-color:#f5f5f5;border:2px solid #dddddd;padding:30px;text-align:center;margin:25px 0;">
+<p style="color:#666666;font-size:13px;margin:0 0 15px 0;">Your OTP Code</p>
+<h1 style="color:#000000;font-size:36px;letter-spacing:6px;margin:0;font-weight:700;">${otp}</h1>
+</div>
+<p style="color:#666666;font-size:13px;margin:20px 0;text-align:center;font-weight:500;">This OTP will expire in 10 minutes</p>
+<div style="background-color:#f5f5f5;border-left:3px solid #999999;padding:14px;margin:20px 0;">
+<p style="color:#333333;font-size:13px;margin:0;line-height:1.5;"><strong>Security Note:</strong> Never share this OTP with anyone.</p>
+</div>
+</div>
+</td></tr>
+<tr><td align="center" class="email-padding" style="padding:20px 40px;background-color:#f5f5f5;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<p style="margin:0 0 10px 0;font-size:13px;color:#666666;font-family:Arial,Helvetica,sans-serif;"><a href="https://returnfilers.in" style="color:#000000;text-decoration:none;">returnfilers.in</a> | <a href="mailto:info@returnfilers.in" style="color:#000000;text-decoration:none;">info@returnfilers.in</a></p>
+<p style="margin:10px 0 0 0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+</div>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`
       });
       console.log('✅ OTP email sent successfully');
 
@@ -480,75 +438,59 @@ const forgotPassword = async (req, res) => {
     // Create reset URL
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
     
-    // Send email with reset link - Simple & Clean
+    // Send email with reset link - Fully Responsive
     try {
       await sendEmail({
         to: email,
         subject: 'Reset Your Password - ReturnFilers',
-        html: `
-          <!DOCTYPE html>
-          <html>
-          <head>
-            <meta charset="UTF-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-          </head>
-          <body style="margin: 0; padding: 20px; font-family: Arial, sans-serif; background-color: #f5f5f5;">
-            <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border: 1px solid #e5e7eb;">
-              
-              <!-- Header -->
-              <tr>
-                <td style="padding: 30px; text-align: center; border-bottom: 1px solid #e5e7eb;">
-                  <h1 style="margin: 0; font-size: 24px; color: #111827;">ReturnFilers</h1>
-                </td>
-              </tr>
-              
-              <!-- Content -->
-              <tr>
-                <td style="padding: 40px 30px;">
-                  <h2 style="margin: 0 0 20px 0; font-size: 20px; color: #111827;">Reset Your Password</h2>
-                  
-                  <p style="margin: 0 0 20px 0; font-size: 15px; line-height: 1.6; color: #4b5563;">
-                    We received a request to reset your password. Click the button below to create a new password:
-                  </p>
-                  
-                  <!-- Button -->
-                  <table width="100%" cellpadding="0" cellspacing="0" style="margin: 30px 0;">
-                    <tr>
-                      <td align="center">
-                        <a href="${resetUrl}" style="display: inline-block; padding: 14px 40px; background-color: #111827; color: #ffffff; text-decoration: none; font-size: 15px; font-weight: 600; border-radius: 4px;">Reset Password</a>
-                      </td>
-                    </tr>
-                  </table>
-                  
-                  <p style="margin: 20px 0 10px 0; font-size: 14px; color: #6b7280;">
-                    Or copy and paste this link into your browser:
-                  </p>
-                  <p style="margin: 0 0 30px 0; padding: 12px; background-color: #f9fafb; border: 1px solid #e5e7eb; word-break: break-all; font-size: 13px; color: #4b5563;">
-                    ${resetUrl}
-                  </p>
-                  
-                  <!-- Important Notice -->
-                  <div style="padding: 15px; background-color: #fef3c7; border-left: 4px solid #f59e0b; margin-top: 30px;">
-                    <p style="margin: 0; font-size: 14px; color: #92400e;">
-                      <strong>Important:</strong> This link will expire in 15 minutes. If you didn't request this password reset, please ignore this email.
-                    </p>
-                  </div>
-                </td>
-              </tr>
-              
-              <!-- Footer -->
-              <tr>
-                <td style="padding: 20px 30px; text-align: center; background-color: #f9fafb; border-top: 1px solid #e5e7eb;">
-                  <p style="margin: 0; font-size: 13px; color: #6b7280;">
-                    © ${new Date().getFullYear()} ReturnFilers. All rights reserved.
-                  </p>
-                </td>
-              </tr>
-              
-            </table>
-          </body>
-          </html>
-        `
+        html: `<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Reset Your Password</title>
+<style type="text/css">
+body { margin: 0; padding: 0; width: 100% !important; min-height: 100vh; -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+table { border-collapse: collapse; mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration: none; max-width: 100%; display: block; }
+@media only screen and (max-width: 600px) {
+  .email-container { width: 100% !important; min-width: 100% !important; }
+  .email-padding { padding: 20px !important; }
+  .text-content { width: 100% !important; max-width: 100% !important; }
+  img { max-width: 100% !important; height: auto !important; }
+}
+</style>
+</head>
+<body style="margin:0;padding:0;font-family:Arial,Helvetica,sans-serif;background-color:#f5f5f5;width:100%;min-height:100vh;">
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="background-color:#f5f5f5;width:100%;min-height:100vh;">
+<tr><td align="center" style="padding:0;">
+<table class="email-container" border="0" cellpadding="0" cellspacing="0" width="600" style="background-color:#ffffff;max-width:600px;width:100%;margin:0;padding:0;border:0;">
+<tr><td align="center" class="email-padding" style="padding:20px;">
+<img src="https://res.cloudinary.com/derzj7d4u/image/upload/v1767980265/Minimalist_logo_with_blue_and_gray_color_scheme-removebg-preview_cngnod.png" alt="ReturnFilers" width="100" height="auto" style="display:block;border:0;max-width:100px;width:100%;height:auto;margin:0 auto;" />
+</td></tr>
+<tr><td class="email-padding" style="padding:30px 40px;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<h2 style="margin:0 0 20px 0;font-size:18px;font-weight:600;color:#000000;font-family:Arial,Helvetica,sans-serif;">Reset Your Password</h2>
+<p style="margin:0 0 20px 0;font-size:14px;line-height:1.6;color:#333333;">We received a request to reset your password. Click the button below to create a new password:</p>
+<table border="0" cellpadding="0" cellspacing="0" width="100%" style="margin:25px 0 0 0;"><tr><td align="center"><a href="${resetUrl}" style="display:inline-block;padding:12px 30px;background-color:#000000;color:#ffffff;text-decoration:none;font-weight:600;font-size:14px;font-family:Arial,Helvetica,sans-serif;">Reset Password</a></td></tr></table>
+<p style="margin:20px 0 10px 0;font-size:14px;color:#666666;">Or copy and paste this link into your browser:</p>
+<p style="margin:0 0 30px 0;padding:12px;background-color:#f5f5f5;border:1px solid #dddddd;word-break:break-all;font-size:13px;color:#333333;">${resetUrl}</p>
+<div style="background-color:#f5f5f5;border-left:4px solid #999999;padding:15px;margin-top:30px;">
+<p style="margin:0;font-size:14px;color:#333333;"><strong>Important:</strong> This link will expire in 15 minutes. If you didn't request this password reset, please ignore this email.</p>
+</div>
+</div>
+</td></tr>
+<tr><td align="center" class="email-padding" style="padding:20px 40px;background-color:#f5f5f5;">
+<div class="text-content" style="max-width:540px;margin:0 auto;">
+<p style="margin:0 0 10px 0;font-size:13px;color:#666666;font-family:Arial,Helvetica,sans-serif;"><a href="https://returnfilers.in" style="color:#000000;text-decoration:none;">returnfilers.in</a> | <a href="mailto:info@returnfilers.in" style="color:#000000;text-decoration:none;">info@returnfilers.in</a></p>
+<p style="margin:10px 0 0 0;font-size:12px;color:#999999;font-family:Arial,Helvetica,sans-serif;">© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+</div>
+</td></tr>
+</table>
+</td></tr>
+</table>
+</body>
+</html>`
       });
 
       res.json({
@@ -921,5 +863,7 @@ module.exports = {
   forgotPassword,
   resetPassword
 };
+
+
 
 
