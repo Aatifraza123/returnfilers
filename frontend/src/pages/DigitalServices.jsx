@@ -3,7 +3,9 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Link, useNavigate } from 'react-router-dom';
 import { 
   FaCode, FaCheckCircle, FaStar, 
-  FaChevronLeft, FaChevronRight, FaPlus, FaMinus 
+  FaChevronLeft, FaChevronRight, FaPlus, FaMinus, FaArrowRight,
+  FaReact, FaNodeJs, FaWordpress, FaShopify, FaPalette, FaRocket,
+  FaMobile, FaSearch, FaLock, FaBolt
 } from 'react-icons/fa';
 import api from '../api/axios';
 import Loader from '../components/common/Loader';
@@ -154,9 +156,15 @@ const DigitalServices = () => {
       />
       
       {/* Hero Section - Compact */}
-      <section className="relative py-16 bg-[#0B1530] text-white overflow-hidden pt-20 md:pt-28">
+      <section 
+        className="relative py-16 text-white overflow-hidden pt-20 md:pt-28"
+        style={{ backgroundColor: 'var(--color-primary)' }}
+      >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
-        <div className="absolute top-0 right-0 w-96 h-96 bg-[#C9A227] rounded-full blur-[128px] opacity-10 pointer-events-none" />
+        <div 
+          className="absolute top-0 right-0 w-96 h-96 rounded-full blur-[128px] opacity-10 pointer-events-none"
+          style={{ backgroundColor: 'var(--color-secondary)' }}
+        />
         
         <div className="container mx-auto px-4 text-center relative z-10 max-w-3xl">
           <motion.h1
@@ -164,7 +172,7 @@ const DigitalServices = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
           >
-            Digital <span className="text-[#C9A227]">Services</span>
+            Digital <span style={{ color: 'var(--color-secondary)' }}>Services</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -177,6 +185,124 @@ const DigitalServices = () => {
         </div>
       </section>
 
+      {/* Why Choose Digital Services */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
+              Why Choose Our Digital Services
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              We combine creativity, technology, and business strategy to deliver exceptional digital solutions
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Feature 1 */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
+              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                <FaMobile />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Mobile Responsive</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                All websites are fully responsive and optimized for mobile, tablet, and desktop devices
+              </p>
+            </div>
+
+            {/* Feature 2 */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
+              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                <FaSearch />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">SEO Optimized</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Built with SEO best practices to help your website rank higher in search engines
+              </p>
+            </div>
+
+            {/* Feature 3 */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
+              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                <FaBolt />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Fast Loading</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Optimized for speed with fast loading times to provide the best user experience
+              </p>
+            </div>
+
+            {/* Feature 4 */}
+            <div className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300">
+              <div className="w-12 h-12 bg-gray-900 rounded-lg flex items-center justify-center text-white text-xl mb-4">
+                <FaLock />
+              </div>
+              <h3 className="text-lg font-bold text-gray-900 mb-3">Secure & Reliable</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Built with security best practices and reliable hosting for 99.9% uptime
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* Technologies We Use */}
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
+              Technologies We Use
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              We work with modern, industry-standard technologies to build powerful digital solutions
+            </p>
+          </div>
+
+          <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-6">
+            {/* Tech 1 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaReact className="text-4xl text-[#61DAFB] mb-3" />
+              <h4 className="text-sm font-bold text-gray-900">React</h4>
+            </div>
+
+            {/* Tech 2 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaNodeJs className="text-4xl text-[#339933] mb-3" />
+              <h4 className="text-sm font-bold text-gray-900">Node.js</h4>
+            </div>
+
+            {/* Tech 3 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaWordpress className="text-4xl text-[#21759B] mb-3" />
+              <h4 className="text-sm font-bold text-gray-900">WordPress</h4>
+            </div>
+
+            {/* Tech 4 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaShopify className="text-4xl text-[#96BF48] mb-3" />
+              <h4 className="text-sm font-bold text-gray-900">Shopify</h4>
+            </div>
+
+            {/* Tech 5 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaPalette 
+                className="text-4xl mb-3"
+                style={{ color: 'var(--color-secondary)' }}
+              />
+              <h4 className="text-sm font-bold text-gray-900">UI/UX Design</h4>
+            </div>
+
+            {/* Tech 6 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:border-gray-300 hover:shadow-md transition-all duration-300 flex flex-col items-center">
+              <FaRocket 
+                className="text-4xl mb-3"
+                style={{ color: 'var(--color-primary)' }}
+              />
+              <h4 className="text-sm font-bold text-gray-900">Deployment</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+
       {/* Services Section */}
       <section className="py-24 bg-white relative">
         <div className="container mx-auto px-4 max-w-7xl">
@@ -184,45 +310,69 @@ const DigitalServices = () => {
             <div className="text-center py-12 text-gray-500">No services available at the moment.</div>
           ) : (
             <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {services.map((service, idx) => (
+              {services.map((service, idx) => {
+                const isPopular = idx === 1;
+                return (
                 <motion.div
                   key={service._id}
                   initial={{ opacity: 0, y: 30 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: idx * 0.1 }}
-                  className={`relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300 ${
-                    idx === 1 
-                      ? 'bg-[#0B1530] text-white shadow-2xl scale-105 border-2 border-[#C9A227]' 
-                      : 'bg-white border border-gray-100 hover:border-[#C9A227]/50 shadow-lg hover:shadow-xl'
-                  }`}
+                  className="relative flex flex-col h-full rounded-2xl overflow-hidden transition-all duration-300 shadow-lg hover:shadow-xl"
+                  style={{
+                    backgroundColor: isPopular ? 'var(--color-primary)' : 'white',
+                    color: isPopular ? 'white' : 'inherit',
+                    border: isPopular ? '2px solid var(--color-secondary)' : '1px solid #f3f4f6',
+                    transform: isPopular ? 'scale(1.05)' : 'scale(1)'
+                  }}
                 >
-                  {idx === 1 && (
-                    <div className="absolute top-0 right-0 bg-[#C9A227] text-[#0B1530] px-4 py-1 text-xs font-bold rounded-bl-lg">
+                  {isPopular && (
+                    <div 
+                      className="absolute top-0 right-0 px-4 py-1 text-xs font-bold rounded-bl-lg"
+                      style={{
+                        backgroundColor: 'var(--color-secondary)',
+                        color: 'var(--color-primary)'
+                      }}
+                    >
                       POPULAR
                     </div>
                   )}
                   
                   <div className="p-8">
-                    <div className={`inline-flex items-center justify-center p-3 rounded-xl text-2xl mb-4 ${
-                      idx === 1 
-                        ? 'bg-[#C9A227] text-[#0B1530]' 
-                        : 'bg-[#0B1530] text-[#C9A227]'
-                    }`}>
+                    <div 
+                      className="inline-flex items-center justify-center p-3 rounded-xl text-2xl mb-4"
+                      style={{
+                        backgroundColor: isPopular ? 'var(--color-secondary)' : 'var(--color-primary)',
+                        color: isPopular ? 'var(--color-primary)' : 'var(--color-secondary)'
+                      }}
+                    >
                       <FaCode />
                     </div>
-                    <h3 className={`text-2xl font-bold mb-3 ${idx === 1 ? 'text-white' : 'text-[#0B1530]'}`}>
+                    <h3 
+                      className="text-2xl font-bold mb-3"
+                      style={{ color: isPopular ? 'white' : 'var(--color-primary)' }}
+                    >
                       {service.title}
                     </h3>
-                    <p className={`mb-6 leading-relaxed ${idx === 1 ? 'text-gray-300' : 'text-gray-600'}`}>
+                    <p 
+                      className="mb-6 leading-relaxed"
+                      style={{ color: isPopular ? '#d1d5db' : '#4b5563' }}
+                    >
                       {service.description}
                     </p>
                     
                     <div className="flex items-baseline gap-2 mb-6">
-                      <span className={`text-4xl font-bold ${idx === 1 ? 'text-[#C9A227]' : 'text-[#0B1530]'}`}>
+                      <span 
+                        className="text-4xl font-bold"
+                        style={{ color: isPopular ? 'var(--color-secondary)' : 'var(--color-primary)' }}
+                      >
                         ₹{service.price}
                       </span>
-                      <span className={`text-sm ${idx === 1 ? 'text-gray-400' : 'text-gray-500'}`}>
+                      <span 
+                        className="text-sm"
+                        style={{ color: isPopular ? '#9ca3af' : '#6b7280' }}
+                      >
                         / {service.timeline}
                       </span>
                     </div>
@@ -230,14 +380,23 @@ const DigitalServices = () => {
                     <div className="space-y-3 mb-8">
                       {service.features.slice(0, 6).map((feature, fIdx) => (
                         <div key={fIdx} className="flex items-start gap-3 text-sm">
-                          <FaCheckCircle className={`mt-1 flex-shrink-0 ${idx === 1 ? 'text-[#C9A227]' : 'text-[#C9A227]'}`} />
-                          <span className={`leading-relaxed ${idx === 1 ? 'text-gray-300' : 'text-gray-600'}`}>
+                          <FaCheckCircle 
+                            className="mt-1 flex-shrink-0"
+                            style={{ color: 'var(--color-secondary)' }}
+                          />
+                          <span 
+                            className="leading-relaxed"
+                            style={{ color: isPopular ? '#d1d5db' : '#4b5563' }}
+                          >
                             {feature}
                           </span>
                         </div>
                       ))}
                       {service.features.length > 6 && (
-                        <div className={`text-sm italic ${idx === 1 ? 'text-gray-400' : 'text-gray-500'}`}>
+                        <div 
+                          className="text-sm italic"
+                          style={{ color: isPopular ? '#9ca3af' : '#6b7280' }}
+                        >
                           +{service.features.length - 6} more features
                         </div>
                       )}
@@ -299,7 +458,8 @@ const DigitalServices = () => {
                     </div>
                   </div>
                 </motion.div>
-              ))}
+              );
+              })}
             </div>
           )}
         </div>
@@ -314,10 +474,19 @@ const DigitalServices = () => {
             viewport={{ once: true }}
             className="text-center mb-12"
           >
-            <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+            <span 
+              className="inline-block px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full mb-4"
+              style={{
+                backgroundColor: 'var(--color-secondary-10)',
+                color: 'var(--color-secondary)'
+              }}
+            >
               Got Questions?
             </span>
-            <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+            <h2 
+              className="text-3xl lg:text-4xl font-serif font-bold mb-3"
+              style={{ color: 'var(--color-primary)' }}
+            >
               Frequently Asked Questions
             </h2>
             <p className="text-gray-500 max-w-2xl mx-auto">
@@ -333,14 +502,23 @@ const DigitalServices = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: index * 0.1 }}
-                className="bg-white border-2 border-gray-100 rounded-xl overflow-hidden hover:border-[#C9A227]/30 transition-all"
+                className="bg-white border-2 border-gray-100 rounded-xl overflow-hidden hover:border-secondary/30 transition-all"
               >
                 <button
                   onClick={() => setOpenFaq(openFaq === index ? null : index)}
                   className="w-full px-6 py-5 flex items-center justify-between text-left hover:bg-gray-50 transition-colors"
                 >
-                  <span className="font-semibold text-[#0B1530] pr-4">{faq.question}</span>
-                  <div className={`flex-shrink-0 w-8 h-8 rounded-full bg-[#C9A227]/10 flex items-center justify-center text-[#C9A227] transition-transform ${openFaq === index ? 'rotate-180' : ''}`}>
+                  <span 
+                    className="font-semibold pr-4"
+                    style={{ color: 'var(--color-primary)' }}
+                  >{faq.question}</span>
+                  <div 
+                    className={`flex-shrink-0 w-8 h-8 rounded-full flex items-center justify-center transition-transform ${openFaq === index ? 'rotate-180' : ''}`}
+                    style={{
+                      backgroundColor: 'var(--color-secondary-10)',
+                      color: 'var(--color-secondary)'
+                    }}
+                  >
                     {openFaq === index ? <FaMinus size={14} /> : <FaPlus size={14} />}
                   </div>
                 </button>
@@ -364,29 +542,47 @@ const DigitalServices = () => {
             ))}
           </div>
 
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="mt-12 text-center p-6 bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] rounded-2xl text-white"
+          <div 
+            className="mt-12 text-center p-6 rounded-2xl text-white"
+            style={{
+              background: `linear-gradient(to bottom right, var(--color-primary), var(--color-primary))`
+            }}
           >
             <h3 className="text-xl font-bold mb-2">Still have questions?</h3>
             <p className="text-gray-300 mb-4">We're here to help! Contact us for more information.</p>
             <div className="flex flex-col sm:flex-row gap-3 justify-center">
               <Link
                 to="/contact"
-                className="px-6 py-3 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-white transition-all"
+                className="px-6 py-3 rounded-lg font-semibold transition-all"
+                style={{
+                  backgroundColor: 'var(--color-secondary)',
+                  color: 'var(--color-primary)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'var(--color-secondary)';
+                }}
               >
                 Contact Us
               </Link>
               <a
                 href="tel:+918447127264"
-                className="px-6 py-3 border-2 border-white text-white rounded-lg font-semibold hover:bg-white hover:text-[#0B1530] transition-all"
+                className="px-6 py-3 border-2 border-white text-white rounded-lg font-semibold transition-all"
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.backgroundColor = 'white';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.backgroundColor = 'transparent';
+                  e.currentTarget.style.color = 'white';
+                }}
               >
                 Call: +91 84471 27264
               </a>
             </div>
-          </motion.div>
+          </div>
         </div>
       </section>
 
@@ -401,10 +597,19 @@ const DigitalServices = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+              <span 
+                className="inline-block px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full mb-4"
+                style={{
+                  backgroundColor: 'var(--color-secondary-10)',
+                  color: 'var(--color-secondary)'
+                }}
+              >
                 Client Reviews
               </span>
-              <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+              <h2 
+                className="text-3xl lg:text-4xl font-serif font-bold mb-3"
+                style={{ color: 'var(--color-primary)' }}
+              >
                 Trusted by Clients
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
@@ -419,14 +624,14 @@ const DigitalServices = () => {
                 <>
                   <button
                     onClick={prevTestimonial}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
+                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-all"
                     aria-label="Previous testimonial"
                   >
                     <FaChevronLeft size={16} />
                   </button>
                   <button
                     onClick={nextTestimonial}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
+                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-primary hover:bg-secondary hover:text-white transition-all"
                     aria-label="Next testimonial"
                   >
                     <FaChevronRight size={18} />
@@ -447,7 +652,7 @@ const DigitalServices = () => {
                   >
                     {/* Left: Author */}
                     <div className="flex flex-col items-center md:w-48 flex-shrink-0">
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
+                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-primary to-primary flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
                         {testimonials[currentTestimonial]?.image ? (
                           <img 
                             src={testimonials[currentTestimonial].image} 
@@ -464,7 +669,7 @@ const DigitalServices = () => {
                         </span>
                       </div>
                       <div className="text-center">
-                        <div className="font-bold text-[#0B1530]">{testimonials[currentTestimonial]?.name}</div>
+                        <div className="font-bold text-primary">{testimonials[currentTestimonial]?.name}</div>
                         <div className="text-xs text-gray-500">{testimonials[currentTestimonial]?.title}</div>
                       </div>
                       {/* Stars - Always Gold Color */}
@@ -482,7 +687,7 @@ const DigitalServices = () => {
                     {/* Right: Quote */}
                     <div className="flex-1 relative md:pl-6 md:border-l border-gray-100">
                       {/* Quote Icon */}
-                      <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center shadow-lg">
+                      <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-secondary rounded-full flex items-center justify-center shadow-lg">
                         <svg className="w-5 h-5 text-white" fill="currentColor" viewBox="0 0 24 24">
                           <path d="M14.017 21v-7.391c0-5.704 3.731-9.57 8.983-10.609l.995 2.151c-2.432.917-3.995 3.638-3.995 5.849h4v10h-9.983zm-14.017 0v-7.391c0-5.704 3.748-9.57 9-10.609l.996 2.151c-2.433.917-3.996 3.638-3.996 5.849h3.983v10h-9.983z"/>
                         </svg>
@@ -504,7 +709,7 @@ const DigitalServices = () => {
                       onClick={() => setCurrentTestimonial(idx)}
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
                         idx === currentTestimonial 
-                          ? 'bg-[#C9A227] w-6' 
+                          ? 'bg-secondary w-6' 
                           : 'bg-gray-300 hover:bg-gray-400'
                       }`}
                       aria-label={`Go to testimonial ${idx + 1}`}
@@ -516,9 +721,49 @@ const DigitalServices = () => {
           </div>
         </section>
       )}
+
+      {/* ==================== CTA SECTION ==================== */}
+      <section className="py-12 md:py-16 bg-primary text-center">
+        <div className="container mx-auto px-6 max-w-3xl">
+          <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
+            Need a Custom Digital Solution?
+          </h2>
+          <p className="text-gray-400 text-sm md:text-base mb-8">
+            Get a personalized quote for your unique project requirements
+          </p>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            <Link
+              to="/quote"
+              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg"
+              style={{
+                background: 'var(--color-secondary)',
+                color: 'var(--color-primary)'
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = 'var(--color-primary)';
+                e.currentTarget.style.color = 'white';
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = 'var(--color-secondary)';
+                e.currentTarget.style.color = 'var(--color-primary)';
+              }}
+            >
+              Get Custom Quote <FaArrowRight size={12} />
+            </Link>
+            
+            <Link
+              to="/contact"
+              className="inline-block px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 border-2 border-white/20 text-white hover:bg-white/10"
+            >
+              Contact Us
+            </Link>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };
 
 export default DigitalServices;
+
 

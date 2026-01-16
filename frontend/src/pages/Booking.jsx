@@ -253,7 +253,7 @@ const Booking = () => {
           <div className="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
             <FaCheckCircle className="text-4xl text-green-500" />
           </div>
-          <h2 className="text-2xl font-bold text-[#0B1530] mb-3">Booking Confirmed!</h2>
+          <h2 className="text-2xl font-bold text-primary mb-3">Booking Confirmed!</h2>
           <p className="text-gray-600 mb-6">
             We'll review your request and contact you within 24 hours.
           </p>
@@ -267,7 +267,7 @@ const Booking = () => {
               setFiles([]);
               setConsent(false);
             }}
-            className="px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+            className="px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors"
           >
             Book Another Service
           </button>
@@ -295,7 +295,7 @@ const Booking = () => {
       />
       
       {/* Header */}
-      <div className="bg-[#0B1530] pt-12 pb-16">
+      <div className="bg-primary pt-12 pb-16">
         <div className="container mx-auto px-4 text-center">
           <h1 className="text-3xl md:text-4xl font-bold text-white mb-3">Book a Service</h1>
           <p className="text-gray-300 max-w-xl mx-auto">
@@ -315,7 +315,7 @@ const Booking = () => {
             {/* Personal Details */}
             <div className="grid md:grid-cols-2 gap-4 mb-4">
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+                <label className="block text-xs font-semibold text-primary mb-1.5">
                   Full Name <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -324,12 +324,12 @@ const Booking = () => {
                   value={formData.name}
                   onChange={handleChange}
                   placeholder="Enter your full name"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+                <label className="block text-xs font-semibold text-primary mb-1.5">
                   Email <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -338,12 +338,12 @@ const Booking = () => {
                   value={formData.email}
                   onChange={handleChange}
                   placeholder="Enter your email"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+                <label className="block text-xs font-semibold text-primary mb-1.5">
                   Phone Number <span className="text-red-500">*</span>
                 </label>
                 <input
@@ -355,19 +355,19 @@ const Booking = () => {
                   maxLength={10}
                   pattern="[6-9][0-9]{9}"
                   title="Enter valid 10-digit mobile number"
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors"
                   required
                 />
               </div>
               <div>
-                <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+                <label className="block text-xs font-semibold text-primary mb-1.5">
                   Service Required <span className="text-red-500">*</span>
                 </label>
                 <select
                   name="service"
                   value={formData.service}
                   onChange={handleChange}
-                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors bg-white"
+                  className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors bg-white"
                   required
                   disabled={loadingServices}
                 >
@@ -386,7 +386,7 @@ const Booking = () => {
 
             {/* Message */}
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+              <label className="block text-xs font-semibold text-primary mb-1.5">
                 Additional Message (Optional)
               </label>
               <textarea
@@ -395,17 +395,17 @@ const Booking = () => {
                 onChange={handleChange}
                 placeholder="Any specific requirements or notes..."
                 rows={2}
-                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-[#C9A227] transition-colors resize-none"
+                className="w-full px-3 py-2.5 text-sm border border-gray-300 rounded-lg focus:outline-none focus:border-secondary transition-colors resize-none"
               />
             </div>
 
             {/* File Upload - Optional (Hidden for digital services) */}
             {requiresDocuments && (
             <div className="mb-4">
-              <label className="block text-xs font-semibold text-[#0B1530] mb-1.5">
+              <label className="block text-xs font-semibold text-primary mb-1.5">
                 Upload Documents <span className="text-gray-400">(Optional)</span>
               </label>
-              <div className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-[#C9A227] transition-colors cursor-pointer">
+              <div className="border-2 border-dashed border-gray-300 rounded-lg p-5 text-center hover:border-secondary transition-colors cursor-pointer">
                 <input
                   type="file"
                   multiple
@@ -427,9 +427,9 @@ const Booking = () => {
                   {files.map((file, index) => (
                     <div key={index} className="flex items-center justify-between bg-gray-50 px-3 py-2 rounded-lg">
                       <div className="flex items-center gap-2">
-                        <FaFileAlt className="text-[#C9A227] text-sm" />
+                        <FaFileAlt className="text-secondary text-sm" />
                         <div>
-                          <p className="text-sm font-medium text-[#0B1530]">{file.name}</p>
+                          <p className="text-sm font-medium text-primary">{file.name}</p>
                           <p className="text-xs text-gray-500">{(file.size / 1024 / 1024).toFixed(2)} MB</p>
                         </div>
                       </div>
@@ -451,7 +451,7 @@ const Booking = () => {
                     type="checkbox"
                     checked={consent}
                     onChange={(e) => setConsent(e.target.checked)}
-                    className="mt-1 w-4 h-4 text-[#C9A227] border-gray-300 rounded focus:ring-[#C9A227]"
+                    className="mt-1 w-4 h-4 text-secondary border-gray-300 rounded focus:ring-secondary"
                   />
                   <span className="text-sm text-gray-700">
                     I agree to the <strong>Terms & Conditions</strong> and authorize ReturnFilers to securely store and process my documents. My data will be kept <strong>100% confidential</strong>.
@@ -482,7 +482,7 @@ const Booking = () => {
             <button
               type="submit"
               disabled={loading}
-              className="w-full py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+              className="w-full py-3 bg-primary text-white rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
             >
               {loading ? (
                 <><FaSpinner className="animate-spin" /> Submitting...</>
@@ -495,7 +495,7 @@ const Booking = () => {
           {/* Info Box */}
           <div className="bg-gray-50 px-5 md:px-6 py-4 border-t">
             <p className="text-xs text-gray-600">
-              <span className="font-semibold text-[#0B1530]">Common Documents:</span> PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)
+              <span className="font-semibold text-primary">Common Documents:</span> PAN Card • Aadhaar • Address Proof • Bank Details • Business Proof (if applicable)
             </p>
           </div>
         </motion.div>

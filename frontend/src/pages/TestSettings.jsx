@@ -14,10 +14,10 @@ const TestSettings = () => {
     <div className="min-h-screen bg-gray-100 p-8">
       <div className="max-w-4xl mx-auto bg-white rounded-lg shadow-lg p-6">
         <div className="flex justify-between items-center mb-6">
-          <h1 className="text-3xl font-bold text-[#0B1530]">Settings Test Page</h1>
+          <h1 className="text-3xl font-bold text-primary">Settings Test Page</h1>
           <button
             onClick={handleRefresh}
-            className="px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#0B1530] transition"
+            className="px-4 py-2 bg-secondary text-white rounded-lg hover:bg-primary transition"
           >
             Refresh Settings
           </button>

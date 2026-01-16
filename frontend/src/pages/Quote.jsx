@@ -1,14 +1,10 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
-import UserAuthContext from '../context/UserAuthContext';
-import AuthModal from '../components/common/AuthModal';
 
 const Quote = () => {
   const navigate = useNavigate();
-  const { user, token } = useContext(UserAuthContext);
-  const [showAuthModal, setShowAuthModal] = useState(false);
   const [loading, setLoading] = useState(false);
   const [formData, setFormData] = useState({
     name: '',
@@ -19,18 +15,6 @@ const Quote = () => {
     message: '',
     budget: ''
   });
-
-  // Auto-fill user data when logged in
-  useEffect(() => {
-    if (user) {
-      setFormData(prev => ({
-        ...prev,
-        name: user.name || '',
-        email: user.email || '',
-        phone: user.phone || ''
-      }));
-    }
-  }, [user]);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -48,12 +32,6 @@ const Quote = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     
-    // Check if user is logged in
-    if (!user) {
-      setShowAuthModal(true);
-      return;
-    }
-    
     // Validate phone is exactly 10 digits
     if (formData.phone.length !== 10) {
       toast.error('Please enter a valid 10-digit phone number');
@@ -63,9 +41,8 @@ const Quote = () => {
     setLoading(true);
 
     try {
-      const response = await api.post('/quotes', formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
+      // No auth required - send without token
+      const response = await api.post('/quotes', formData);
       toast.success('Quote request submitted successfully! We will contact you soon.');
       setFormData({
         name: '',
@@ -88,23 +65,6 @@ const Quote = () => {
   };
 
   return (
-    <>
-      {/* Auth Modal */}
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={(userData) => {
-          setFormData({
-            ...formData,
-            name: userData.name,
-            email: userData.email,
-            phone: userData.phone || formData.phone
-          });
-          setShowAuthModal(false);
-        }}
-        message="Please login to request a quote"
-      />
-      
     <div className="min-h-screen bg-gray-50 py-8 md:py-12 pt-20 md:pt-28">
       <div className="container mx-auto px-4 max-w-2xl">
         {/* Header */}
@@ -248,7 +208,6 @@ const Quote = () => {
         </div>
       </div>
     </div>
-    </>
   );
 };
 

@@ -31,6 +31,7 @@ const AdminEmails = () => {
   const [sendingBulkEmail, setSendingBulkEmail] = useState(false);
   const [filterType, setFilterType] = useState('all'); // 'all', 'contact', 'consultation', 'newsletter'
   const [htmlMode, setHtmlMode] = useState(false); // Toggle between visual and HTML mode
+  const [showPreview, setShowPreview] = useState(false); // Preview modal state
 
   // Email templates
   const emailTemplates = {
@@ -43,7 +44,7 @@ const AdminEmails = () => {
       message: `
         <h2 style="color: #0B1530;">Welcome!</h2>
         <p>Thank you for reaching out to ReturnFilers. We're excited to work with you!</p>
-        <p>Our team of professional chartered accountants is dedicated to providing you with exceptional service.</p>
+        <p>Our team of professional tax and business consultants is dedicated to providing you with exceptional service.</p>
         <p>We will be in touch with you soon.</p>
         <br>
         <p>Best regards,<br><strong>ReturnFilers Team</strong></p>
@@ -403,7 +404,7 @@ const AdminEmails = () => {
     return (
       <div className="flex items-center justify-center min-h-[400px]">
         <div className="text-center">
-          <div className="inline-block w-12 h-12 border-4 border-[#C9A227] border-t-transparent rounded-full animate-spin mb-4"></div>
+          <div className="inline-block w-12 h-12 border-4 border-secondary border-t-transparent rounded-full animate-spin mb-4"></div>
           <p className="text-gray-600">Loading emails...</p>
         </div>
       </div>
@@ -415,16 +416,16 @@ const AdminEmails = () => {
       {/* Header */}
       <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-3">
         <div>
-          <h1 className="text-2xl font-bold text-[#0B1530] mb-1">Emails</h1>
+          <h1 className="text-2xl font-bold text-primary mb-1">Emails</h1>
           <p className="text-sm text-gray-600">View all email inquiries and consultation requests</p>
         </div>
         <div className="flex items-center gap-3">
           <div className="text-sm text-gray-500">
-            Total: <span className="font-bold text-[#0B1530]">{filteredEmails.length}</span>
+            Total: <span className="font-bold text-primary">{filteredEmails.length}</span>
           </div>
           <button
             onClick={() => setShowBulkEmailModal(true)}
-            className="flex items-center gap-2 px-4 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium"
+            className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium"
           >
             <FaPaperPlane className="text-sm" />
             Send Bulk Email
@@ -439,7 +440,7 @@ const AdminEmails = () => {
           <select
             value={filterType}
             onChange={(e) => setFilterType(e.target.value)}
-            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent text-sm min-w-[200px]"
+            className="px-4 py-2 border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent text-sm min-w-[200px]"
           >
             <option value="all">All Emails ({emails?.length || 0})</option>
             <option value="contact">Contacts ({allEmailsRaw?.filter(e => e.emailType === 'contact')?.length || 0})</option>
@@ -455,7 +456,7 @@ const AdminEmails = () => {
               placeholder="Search by name, email, phone, topic..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+              className="w-full pl-10 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
             />
           </div>
         </div>
@@ -486,7 +487,7 @@ const AdminEmails = () => {
                         : 'N/A'
                       }
                     </td>
-                    <td className="p-3 font-medium text-[#0B1530] text-sm">
+                    <td className="p-3 font-medium text-primary text-sm">
                       <div className="flex items-center gap-2">
                         {email.name}
                         <span className={`text-xs px-2 py-0.5 rounded-full font-semibold ${
@@ -534,7 +535,7 @@ const AdminEmails = () => {
                         <select
                           value={email.status || 'pending'}
                           onChange={(e) => handleStatusUpdate(email._id, email.emailType, e.target.value)}
-                          className={`text-xs px-2 py-1 rounded-full font-semibold border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-[#C9A227] ${
+                          className={`text-xs px-2 py-1 rounded-full font-semibold border-0 cursor-pointer focus:outline-none focus:ring-2 focus:ring-secondary ${
                             email.status === 'closed' ? 'bg-green-100 text-green-800' :
                             email.status === 'contacted' ? 'bg-blue-100 text-blue-800' :
                             'bg-yellow-100 text-yellow-800'
@@ -592,7 +593,7 @@ const AdminEmails = () => {
           <div className="bg-white rounded-xl max-w-2xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
             <div className="p-4 border-b border-gray-200">
               <div className="flex items-center justify-between">
-                <h2 className="text-xl font-bold text-[#0B1530]">Email Details</h2>
+                <h2 className="text-xl font-bold text-primary">Email Details</h2>
                 <button
                   onClick={() => setSelectedEmail(null)}
                   className="text-gray-400 hover:text-gray-600 text-2xl"
@@ -605,19 +606,19 @@ const AdminEmails = () => {
               <div className="grid grid-cols-2 gap-3">
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Name</label>
-                  <p className="text-[#0B1530] font-semibold">{selectedEmail.name}</p>
+                  <p className="text-primary font-semibold">{selectedEmail.name}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Email</label>
-                  <p className="text-[#0B1530]">{selectedEmail.email}</p>
+                  <p className="text-primary">{selectedEmail.email}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Phone</label>
-                  <p className="text-[#0B1530]">{selectedEmail.phone || 'Not provided'}</p>
+                  <p className="text-primary">{selectedEmail.phone || 'Not provided'}</p>
                 </div>
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Date</label>
-                  <p className="text-[#0B1530] text-sm">
+                  <p className="text-primary text-sm">
                     {selectedEmail.createdAt 
                       ? format(new Date(selectedEmail.createdAt), 'PPpp')
                       : 'Unknown'
@@ -627,14 +628,14 @@ const AdminEmails = () => {
                 {selectedEmail.topic && (
                   <div className="col-span-2">
                     <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Topic/Service</label>
-                    <p className="text-[#0B1530] font-semibold">{selectedEmail.topic}</p>
+                    <p className="text-primary font-semibold">{selectedEmail.topic}</p>
                   </div>
                 )}
               </div>
               {selectedEmail.message && (
                 <div>
                   <label className="text-xs font-semibold text-gray-500 uppercase mb-1 block">Message</label>
-                  <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-[#C9A227]">
+                  <div className="bg-gray-50 rounded-lg p-3 border-l-4 border-secondary">
                     <p className="text-gray-700 leading-relaxed text-sm">
                       {selectedEmail.message}
                     </p>
@@ -651,7 +652,7 @@ const AdminEmails = () => {
               </button>
               <a
                 href={`mailto:${selectedEmail.email}`}
-                className="px-4 py-2 bg-[#0B1530] text-white rounded-lg hover:bg-[#1a2b5e] transition-colors text-sm"
+                className="px-4 py-2 bg-primary text-white rounded-lg hover:bg-[#1a2b5e] transition-colors text-sm"
               >
                 Reply via Email
               </a>
@@ -667,7 +668,7 @@ const AdminEmails = () => {
             <div className="p-6 border-b border-gray-200">
               <div className="flex items-center justify-between">
                 <div>
-                  <h2 className="text-2xl font-bold text-[#0B1530]">Send Bulk Email</h2>
+                  <h2 className="text-2xl font-bold text-primary">Send Bulk Email</h2>
                   <p className="text-sm text-gray-600 mt-1">
                     Send email to {filteredEmails.length} recipients 
                     {filterType !== 'all' && <span className="font-semibold"> ({filterType})</span>}
@@ -691,7 +692,7 @@ const AdminEmails = () => {
                 <select
                   value={filterType}
                   onChange={(e) => setFilterType(e.target.value)}
-                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent bg-white text-base font-medium"
+                  className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent bg-white text-base font-medium"
                   disabled={sendingBulkEmail}
                 >
                   <option value="all">All Recipients ({emails?.length || 0} unique)</option>
@@ -722,7 +723,7 @@ const AdminEmails = () => {
                 <select
                   value={bulkEmailData.template}
                   onChange={(e) => handleTemplateChange(e.target.value)}
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   disabled={sendingBulkEmail}
                 >
                   <option value="blank">Blank Template</option>
@@ -744,7 +745,7 @@ const AdminEmails = () => {
                   value={bulkEmailData.subject}
                   onChange={(e) => setBulkEmailData({ ...bulkEmailData, subject: e.target.value })}
                   placeholder="Enter email subject"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent"
                   disabled={sendingBulkEmail}
                 />
               </div>
@@ -771,7 +772,7 @@ const AdminEmails = () => {
                     value={bulkEmailData.message}
                     onChange={(e) => setBulkEmailData({ ...bulkEmailData, message: e.target.value })}
                     placeholder="Paste your HTML code here..."
-                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#C9A227] focus:border-transparent font-mono text-sm"
+                    className="w-full px-4 py-3 border-2 border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-secondary focus:border-transparent font-mono text-sm"
                     rows="15"
                     disabled={sendingBulkEmail}
                   />
@@ -839,30 +840,143 @@ const AdminEmails = () => {
                 </p>
               </div>
             </div>
+            <div className="p-6 border-t border-gray-200 flex justify-between items-center gap-3">
+              <button
+                onClick={() => setShowPreview(true)}
+                disabled={!bulkEmailData.subject || !bulkEmailData.message}
+                className="px-6 py-2 border-2 border-secondary text-secondary rounded-lg hover:bg-secondary hover:text-white transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                <FaEye />
+                Preview Email
+              </button>
+              <div className="flex gap-3">
+                <button
+                  onClick={() => setShowBulkEmailModal(false)}
+                  className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
+                  disabled={sendingBulkEmail}
+                >
+                  Cancel
+                </button>
+                <button
+                  onClick={handleSendBulkEmail}
+                  disabled={sendingBulkEmail || !bulkEmailData.subject || !bulkEmailData.message}
+                  className="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                >
+                  {sendingBulkEmail ? (
+                    <>
+                      <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
+                      Sending...
+                    </>
+                  ) : (
+                    <>
+                      <FaPaperPlane />
+                      Send to All
+                    </>
+                  )}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* Email Preview Modal */}
+      {showPreview && (
+        <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-[60] p-4" onClick={() => setShowPreview(false)}>
+          <div className="bg-white rounded-xl max-w-4xl w-full max-h-[90vh] overflow-y-auto" onClick={(e) => e.stopPropagation()}>
+            <div className="p-6 border-b border-gray-200">
+              <div className="flex items-center justify-between">
+                <div>
+                  <h2 className="text-2xl font-bold text-primary flex items-center gap-2">
+                    <FaEye />
+                    Email Preview
+                  </h2>
+                  <p className="text-sm text-gray-600 mt-1">
+                    This is how your email will look to recipients
+                  </p>
+                </div>
+                <button
+                  onClick={() => setShowPreview(false)}
+                  className="text-gray-400 hover:text-gray-600 text-3xl"
+                >
+                  ×
+                </button>
+              </div>
+            </div>
+            
+            <div className="p-6">
+              {/* Email Header Info */}
+              <div className="bg-gray-50 rounded-lg p-4 mb-6 space-y-2">
+                <div className="flex items-start gap-3">
+                  <span className="text-sm font-semibold text-gray-600 min-w-[80px]">From:</span>
+                  <span className="text-sm text-gray-900">ReturnFilers &lt;noreply@returnfilers.com&gt;</span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-sm font-semibold text-gray-600 min-w-[80px]">To:</span>
+                  <span className="text-sm text-gray-900">
+                    {filteredEmails.length} recipients
+                    {filteredEmails.length > 0 && (
+                      <span className="text-gray-500 ml-2">
+                        ({filteredEmails.slice(0, 3).map(e => e.email).join(', ')}
+                        {filteredEmails.length > 3 && ` +${filteredEmails.length - 3} more`})
+                      </span>
+                    )}
+                  </span>
+                </div>
+                <div className="flex items-start gap-3">
+                  <span className="text-sm font-semibold text-gray-600 min-w-[80px]">Subject:</span>
+                  <span className="text-sm text-gray-900 font-semibold">{bulkEmailData.subject || '(No subject)'}</span>
+                </div>
+              </div>
+
+              {/* Email Body Preview */}
+              <div className="border-2 border-gray-200 rounded-lg overflow-hidden">
+                <div className="bg-gray-100 px-4 py-2 border-b border-gray-200">
+                  <p className="text-xs font-semibold text-gray-600 uppercase">Email Body</p>
+                </div>
+                <div className="bg-white p-6">
+                  {/* Render HTML content */}
+                  <div 
+                    className="prose prose-sm max-w-none"
+                    dangerouslySetInnerHTML={{ __html: bulkEmailData.message }}
+                    style={{
+                      fontFamily: 'Arial, sans-serif',
+                      lineHeight: '1.6',
+                      color: '#333'
+                    }}
+                  />
+                </div>
+              </div>
+
+              {/* Preview Tips */}
+              <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4">
+                <p className="text-sm text-blue-800 font-semibold mb-2">📧 Preview Tips:</p>
+                <ul className="text-xs text-blue-700 space-y-1 ml-4 list-disc">
+                  <li>Check if all images are displaying correctly</li>
+                  <li>Verify links are working and pointing to correct URLs</li>
+                  <li>Ensure text formatting and colors look professional</li>
+                  <li>Review subject line for clarity and impact</li>
+                  <li>Confirm recipient count is correct</li>
+                </ul>
+              </div>
+            </div>
+
             <div className="p-6 border-t border-gray-200 flex justify-end gap-3">
               <button
-                onClick={() => setShowBulkEmailModal(false)}
+                onClick={() => setShowPreview(false)}
                 className="px-6 py-2 border border-gray-300 rounded-lg hover:bg-gray-50 transition-colors text-sm font-medium"
-                disabled={sendingBulkEmail}
               >
-                Cancel
+                Close Preview
               </button>
               <button
-                onClick={handleSendBulkEmail}
-                disabled={sendingBulkEmail || !bulkEmailData.subject || !bulkEmailData.message}
-                className="px-6 py-2 bg-[#C9A227] text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium flex items-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed"
+                onClick={() => {
+                  setShowPreview(false);
+                  handleSendBulkEmail();
+                }}
+                className="px-6 py-2 bg-secondary text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium flex items-center gap-2"
               >
-                {sendingBulkEmail ? (
-                  <>
-                    <div className="w-4 h-4 border-2 border-white border-t-transparent rounded-full animate-spin"></div>
-                    Sending...
-                  </>
-                ) : (
-                  <>
-                    <FaPaperPlane />
-                    Send to All
-                  </>
-                )}
+                <FaPaperPlane />
+                Looks Good, Send Now
               </button>
             </div>
           </div>

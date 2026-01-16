@@ -205,10 +205,10 @@ const AdminDigitalServices = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-6">
-        <h1 className="text-2xl font-bold text-[#0B1530]">Digital Services</h1>
+        <h1 className="text-2xl font-bold text-primary">Digital Services</h1>
         <button
           onClick={openAddModal}
-          className="flex items-center gap-2 px-4 py-2 bg-[#0B1530] text-white rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+          className="flex items-center gap-2 px-4 py-2 bg-primary text-white rounded-lg hover:bg-secondary hover:text-primary transition-colors"
         >
           <FaPlus /> Add Service
         </button>
@@ -226,11 +226,11 @@ const AdminDigitalServices = () => {
             <div className="p-6 bg-gray-50 border-b">
               <div className="flex justify-between items-start">
                 <div className="flex items-center gap-3">
-                  <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl">
+                  <div className="w-12 h-12 bg-primary rounded-lg flex items-center justify-center text-secondary text-xl">
                     {service.icon === 'FaCode' ? <FaCode /> : <FaChartBar />}
                   </div>
                   <div>
-                    <h3 className="text-lg font-bold text-[#0B1530]">{service.title}</h3>
+                    <h3 className="text-lg font-bold text-primary">{service.title}</h3>
                     <p className="text-sm text-gray-500">{service.timeline}</p>
                   </div>
                 </div>
@@ -263,24 +263,24 @@ const AdminDigitalServices = () => {
             {/* Packages */}
             {service.packages && service.packages.length > 0 && (
               <div className="p-6">
-                <h4 className="font-bold text-[#0B1530] mb-4 flex items-center gap-2">
-                  <span className="text-[#C9A227]">📦</span> Packages ({service.packages.length})
+                <h4 className="font-bold text-primary mb-4 flex items-center gap-2">
+                  <span className="text-secondary">📦</span> Packages ({service.packages.length})
                 </h4>
                 <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-4">
                   {service.packages.map((pkg, idx) => (
-                    <div key={idx} className="border-2 border-gray-200 rounded-lg p-4 hover:border-[#C9A227] transition-colors">
+                    <div key={idx} className="border-2 border-gray-200 rounded-lg p-4 hover:border-secondary transition-colors">
                       <div className="flex items-start justify-between mb-2">
-                        <h5 className="font-bold text-[#0B1530] text-sm">{pkg.name}</h5>
+                        <h5 className="font-bold text-primary text-sm">{pkg.name}</h5>
                         {pkg.name === 'Business Website' && (
-                          <span className="text-xs bg-[#C9A227] text-white px-2 py-0.5 rounded-full">Popular</span>
+                          <span className="text-xs bg-secondary text-white px-2 py-0.5 rounded-full">Popular</span>
                         )}
                       </div>
-                      <p className="text-2xl font-bold text-[#C9A227] mb-1">₹{pkg.price}</p>
+                      <p className="text-2xl font-bold text-secondary mb-1">₹{pkg.price}</p>
                       <p className="text-xs text-gray-500 mb-3">{pkg.timeline}</p>
                       <ul className="space-y-1">
                         {pkg.features.slice(0, 3).map((feature, fIdx) => (
                           <li key={fIdx} className="text-xs text-gray-600 flex items-start gap-1">
-                            <span className="text-[#C9A227] mt-0.5">✓</span>
+                            <span className="text-secondary mt-0.5">✓</span>
                             <span>{feature}</span>
                           </li>
                         ))}
@@ -312,7 +312,7 @@ const AdminDigitalServices = () => {
             className="bg-white rounded-xl shadow-2xl max-w-2xl w-full max-h-[90vh] overflow-y-auto"
           >
             <div className="sticky top-0 bg-white border-b border-gray-200 p-4 flex justify-between items-center">
-              <h2 className="text-xl font-bold text-[#0B1530]">
+              <h2 className="text-xl font-bold text-primary">
                 {editMode ? 'Edit Service' : 'Add New Service'}
               </h2>
               <button onClick={closeModal} className="text-gray-500 hover:text-red-500">
@@ -330,7 +330,7 @@ const AdminDigitalServices = () => {
                     value={formData.title}
                     onChange={handleChange}
                     required
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   />
                 </div>
 
@@ -343,7 +343,7 @@ const AdminDigitalServices = () => {
                     onChange={handleChange}
                     required
                     placeholder="web-development"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -355,7 +355,7 @@ const AdminDigitalServices = () => {
                     name="icon"
                     value={formData.icon}
                     onChange={handleChange}
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   >
                     <option value="FaCode">Code (Web Dev)</option>
                     <option value="FaChartBar">Chart (Data Analysis)</option>
@@ -371,7 +371,7 @@ const AdminDigitalServices = () => {
                     onChange={handleChange}
                     required
                     placeholder="14999"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   />
                 </div>
 
@@ -384,7 +384,7 @@ const AdminDigitalServices = () => {
                     onChange={handleChange}
                     required
                     placeholder="7-15 Days"
-                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                    className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                   />
                 </div>
               </div>
@@ -397,7 +397,7 @@ const AdminDigitalServices = () => {
                   onChange={handleChange}
                   required
                   rows="3"
-                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                  className="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                 />
               </div>
 
@@ -410,7 +410,7 @@ const AdminDigitalServices = () => {
                       value={feature}
                       onChange={(e) => handleFeatureChange(index, e.target.value)}
                       placeholder="Feature description"
-                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-[#C9A227] focus:border-transparent"
+                      className="flex-1 px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-secondary focus:border-transparent"
                     />
                     {formData.features.length > 1 && (
                       <button
@@ -426,7 +426,7 @@ const AdminDigitalServices = () => {
                 <button
                   type="button"
                   onClick={addFeature}
-                  className="text-sm text-[#C9A227] hover:text-[#0B1530] font-semibold"
+                  className="text-sm text-secondary hover:text-primary font-semibold"
                 >
                   + Add Feature
                 </button>
@@ -441,7 +441,7 @@ const AdminDigitalServices = () => {
                   <button
                     type="button"
                     onClick={addPackage}
-                    className="text-sm px-3 py-1 bg-[#C9A227] text-[#0B1530] rounded-lg hover:bg-[#0B1530] hover:text-white font-semibold"
+                    className="text-sm px-3 py-1 bg-secondary text-primary rounded-lg hover:bg-primary hover:text-white font-semibold"
                   >
                     + Add Package
                   </button>
@@ -450,7 +450,7 @@ const AdminDigitalServices = () => {
                 {formData.packages.map((pkg, pkgIndex) => (
                   <div key={pkgIndex} className="mb-6 p-4 bg-gray-50 rounded-lg border-2 border-gray-200">
                     <div className="flex items-center justify-between mb-3">
-                      <h4 className="font-bold text-[#0B1530]">Package {pkgIndex + 1}</h4>
+                      <h4 className="font-bold text-primary">Package {pkgIndex + 1}</h4>
                       <button
                         type="button"
                         onClick={() => removePackage(pkgIndex)}
@@ -509,7 +509,7 @@ const AdminDigitalServices = () => {
                       <button
                         type="button"
                         onClick={() => addPackageFeature(pkgIndex)}
-                        className="text-xs text-[#C9A227] hover:text-[#0B1530] font-semibold"
+                        className="text-xs text-secondary hover:text-primary font-semibold"
                       >
                         + Add Feature
                       </button>
@@ -528,7 +528,7 @@ const AdminDigitalServices = () => {
                   name="active"
                   checked={formData.active}
                   onChange={handleChange}
-                  className="w-4 h-4 text-[#C9A227] focus:ring-[#C9A227]"
+                  className="w-4 h-4 text-secondary focus:ring-secondary"
                 />
                 <label className="text-sm font-semibold text-gray-700">Active</label>
               </div>
@@ -536,7 +536,7 @@ const AdminDigitalServices = () => {
               <div className="flex gap-3 pt-4">
                 <button
                   type="submit"
-                  className="flex-1 px-6 py-3 bg-[#0B1530] text-white rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                  className="flex-1 px-6 py-3 bg-primary text-white rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors"
                 >
                   {editMode ? 'Update Service' : 'Create Service'}
                 </button>

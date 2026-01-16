@@ -22,7 +22,7 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^\+\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-4">
-              <span className="w-1 h-1 rounded-full bg-[#0B1530] mt-1.5 flex-shrink-0"></span>
+              <span className="w-1 h-1 rounded-full bg-primary mt-1.5 flex-shrink-0"></span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -33,7 +33,7 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^[-•*]\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#C9A227] mt-1.5 flex-shrink-0"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-secondary mt-1.5 flex-shrink-0"></span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -45,7 +45,7 @@ const MessageContent = ({ content, isUser }) => {
           const num = trimmedLine.match(/^\d+/)[0];
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
-              <span className="w-4 h-4 rounded bg-[#0B1530] text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
+              <span className="w-4 h-4 rounded bg-primary text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -54,7 +54,7 @@ const MessageContent = ({ content, isUser }) => {
         // Headers (ending with :)
         if (trimmedLine.endsWith(':') && trimmedLine.length < 50 && !trimmedLine.includes('http') && !trimmedLine.includes('₹')) {
           return (
-            <div key={idx} className="font-semibold text-[#0B1530] mt-2 mb-1 text-[12px]">
+            <div key={idx} className="font-semibold text-primary mt-2 mb-1 text-[12px]">
               {formatText(trimmedLine)}
             </div>
           );
@@ -80,16 +80,16 @@ const formatText = (text) => {
   return parts.map((part, idx) => {
     if (!part) return null;
     if (part.startsWith('**') && part.endsWith('**')) {
-      return <strong key={idx} className="font-semibold text-[#0B1530]">{part.slice(2, -2)}</strong>;
+      return <strong key={idx} className="font-semibold text-primary">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith('₹')) {
-      return <span key={idx} className="font-semibold text-[#0B1530] bg-[#C9A227]/20 px-1 rounded">{part}</span>;
+      return <span key={idx} className="font-semibold text-primary bg-secondary/20 px-1 rounded">{part}</span>;
     }
     if (part.startsWith('|')) {
       return <span key={idx} className="text-gray-500 text-[11px]">{part}</span>;
     }
     if (part.startsWith('+91')) {
-      return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
+      return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-primary underline">{part}</a>;
     }
     // Internal route links (e.g., /booking, /services, /contact)
     if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog') {
@@ -107,7 +107,7 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={part}
-          className="inline-block px-2 py-0.5 bg-[#C9A227]/20 text-[#0B1530] rounded font-semibold hover:bg-[#C9A227] transition-colors"
+          className="inline-block px-2 py-0.5 bg-secondary/20 text-primary rounded font-semibold hover:bg-secondary transition-colors"
         >
           {displayName}
         </a>
@@ -176,6 +176,9 @@ const AIChatbot = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isVisible, setIsVisible] = useState(true);
   const [settings, setSettings] = useState(null);
+  const [position, setPosition] = useState({ bottom: 24, right: 24 });
+  const [isDragging, setIsDragging] = useState(false);
+  const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
@@ -244,6 +247,75 @@ const AIChatbot = () => {
       window.removeEventListener('resize', handleScroll);
     };
   }, []);
+
+  // Drag functionality
+  const handleMouseDown = (e) => {
+    setIsDragging(true);
+    setDragStart({
+      x: e.clientX - (window.innerWidth - position.right),
+      y: e.clientY - (window.innerHeight - position.bottom)
+    });
+  };
+
+  const handleTouchStart = (e) => {
+    const touch = e.touches[0];
+    setIsDragging(true);
+    setDragStart({
+      x: touch.clientX - (window.innerWidth - position.right),
+      y: touch.clientY - (window.innerHeight - position.bottom)
+    });
+  };
+
+  useEffect(() => {
+    const handleMouseMove = (e) => {
+      if (!isDragging) return;
+      
+      const newRight = window.innerWidth - e.clientX + dragStart.x;
+      const newBottom = window.innerHeight - e.clientY + dragStart.y;
+      
+      const maxRight = window.innerWidth - 60;
+      const maxBottom = window.innerHeight - 60;
+      
+      setPosition({
+        right: Math.max(10, Math.min(newRight, maxRight)),
+        bottom: Math.max(10, Math.min(newBottom, maxBottom))
+      });
+    };
+
+    const handleTouchMove = (e) => {
+      if (!isDragging) return;
+      const touch = e.touches[0];
+      
+      const newRight = window.innerWidth - touch.clientX + dragStart.x;
+      const newBottom = window.innerHeight - touch.clientY + dragStart.y;
+      
+      const maxRight = window.innerWidth - 60;
+      const maxBottom = window.innerHeight - 60;
+      
+      setPosition({
+        right: Math.max(10, Math.min(newRight, maxRight)),
+        bottom: Math.max(10, Math.min(newBottom, maxBottom))
+      });
+    };
+
+    const handleMouseUp = () => {
+      setIsDragging(false);
+    };
+
+    if (isDragging) {
+      document.addEventListener('mousemove', handleMouseMove);
+      document.addEventListener('mouseup', handleMouseUp);
+      document.addEventListener('touchmove', handleTouchMove);
+      document.addEventListener('touchend', handleMouseUp);
+    }
+
+    return () => {
+      document.removeEventListener('mousemove', handleMouseMove);
+      document.removeEventListener('mouseup', handleMouseUp);
+      document.removeEventListener('touchmove', handleTouchMove);
+      document.removeEventListener('touchend', handleMouseUp);
+    };
+  }, [isDragging, dragStart]);
 
   const clearChat = () => {
     setMessages([
@@ -418,49 +490,62 @@ const AIChatbot = () => {
     <>
       {/* Floating Chat Button with Tooltip */}
       <div
-        className={`fixed bottom-6 right-4 md:right-6 z-50 transition-all duration-300 ${
+        className={`fixed z-50 transition-all duration-300 ${
           isOpen ? 'scale-0 opacity-0' : isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
         }`}
+        style={{ 
+          bottom: `${position.bottom}px`, 
+          right: `${position.right}px`,
+          cursor: isDragging ? 'grabbing' : 'grab'
+        }}
       >
         {/* Tooltip Message */}
         <div className="absolute bottom-full right-0 mb-3 animate-bounce-slow">
-          <div className="bg-white px-4 py-2.5 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap relative">
+          <div className="bg-white px-3 py-2 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap relative">
             <button
               onClick={() => setIsVisible(false)}
-              className="absolute -top-2 -right-2 w-6 h-6 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-md"
+              className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-md"
               aria-label="Close tooltip"
             >
-              <FaTimes size={12} />
+              <FaTimes size={10} />
             </button>
-            <p className="text-sm font-medium text-[#0B1530]">👋 Need help with taxes?</p>
-            <p className="text-xs text-gray-500">Chat with our AI assistant</p>
+            <p className="text-xs font-medium text-primary">👋 Need help?</p>
+            <p className="text-[10px] text-gray-500">Chat with AI</p>
             {/* Arrow */}
             <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-r border-b border-gray-100 transform rotate-45"></div>
           </div>
         </div>
         
         <button
-          onClick={() => setIsOpen(true)}
+          onMouseDown={handleMouseDown}
+          onTouchStart={handleTouchStart}
+          onClick={(e) => {
+            if (!isDragging) setIsOpen(true);
+          }}
           className="relative group"
         >
-          <div className="w-14 h-14 md:w-16 md:h-16 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a2b5c] transition-colors group-hover:scale-110 duration-200">
-            <FaRobot size={24} className="text-[#C9A227] md:text-[28px]" />
-            <span className="absolute -top-1 -right-1 w-4 h-4 md:w-5 md:h-5 bg-[#C9A227] rounded-full animate-pulse"></span>
+          <div className="w-12 h-12 bg-primary rounded-full shadow-lg flex items-center justify-center hover:bg-primary transition-colors group-hover:scale-110 duration-200 active:scale-95">
+            <FaRobot size={20} className="text-secondary" />
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-secondary rounded-full animate-pulse"></span>
           </div>
         </button>
       </div>
 
       {/* Chat Window */}
       <div 
-        className={`fixed bottom-6 right-4 md:right-6 z-50 w-[calc(100vw-2rem)] sm:w-[380px] md:w-[400px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
-          isOpen && isVisible ? 'opacity-100 scale-100 h-[75vh] sm:h-[500px] md:h-[550px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
+        className={`fixed z-50 w-[calc(100vw-2rem)] sm:w-[340px] md:w-[360px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
+          isOpen && isVisible ? 'opacity-100 scale-100 h-[70vh] sm:h-[450px] md:h-[480px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
         }`}
+        style={{ 
+          bottom: `${position.bottom}px`, 
+          right: `${position.right}px`
+        }}
       >
         {/* Header */}
-        <div className="bg-[#0B1530] text-white p-4 flex items-center justify-between flex-shrink-0">
+        <div className="bg-primary text-white p-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 bg-[#C9A227]/20 rounded-full flex items-center justify-center">
-              <FaRobot size={18} className="text-[#C9A227]" />
+            <div className="w-10 h-10 bg-secondary/20 rounded-full flex items-center justify-center">
+              <FaRobot size={18} className="text-secondary" />
             </div>
             <div>
               <h3 className="font-bold text-sm">{settings?.companyName || 'ReturnFilers'} AI</h3>
@@ -494,14 +579,14 @@ const AIChatbot = () => {
               <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                   msg.role === 'user' 
-                    ? 'bg-[#C9A227] text-[#0B1530]' 
-                    : 'bg-[#0B1530] text-[#C9A227]'
+                    ? 'bg-secondary text-primary' 
+                    : 'bg-primary text-secondary'
                 }`}>
                   {msg.role === 'user' ? <FaUser size={10} /> : <FaRobot size={11} />}
                 </div>
                 <div className={`px-3 py-2.5 text-[13px] leading-relaxed ${
                   msg.role === 'user'
-                    ? 'bg-[#0B1530] text-white rounded-2xl rounded-br-sm'
+                    ? 'bg-primary text-white rounded-2xl rounded-br-sm'
                     : 'bg-white text-gray-700 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100'
                 }`}>
                   <MessageContent content={msg.content} isUser={msg.role === 'user'} />
@@ -513,14 +598,14 @@ const AIChatbot = () => {
           {loading && messages[messages.length - 1]?.content === '' && (
             <div className="flex justify-start">
               <div className="flex items-end gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#0B1530] text-[#C9A227] flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-primary text-secondary flex items-center justify-center">
                   <FaRobot size={11} />
                 </div>
                 <div className="bg-white px-3 py-2.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-primary rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                   </div>
                 </div>
               </div>
@@ -538,7 +623,7 @@ const AIChatbot = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-gray-100 hover:bg-[#0B1530] text-gray-600 hover:text-white rounded-lg text-[11px] font-medium transition-colors"
+                  className="px-2.5 py-1 bg-gray-100 hover:bg-primary text-gray-600 hover:text-white rounded-lg text-[11px] font-medium transition-colors"
                 >
                   {q}
                 </button>
@@ -557,19 +642,19 @@ const AIChatbot = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your question..."
               disabled={loading}
-              className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#C9A227]/50 disabled:opacity-50 placeholder-gray-400"
+              className="flex-1 px-3 py-2 bg-gray-100 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-secondary/50 disabled:opacity-50 placeholder-gray-400"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#0B1530] text-[#C9A227] rounded-xl flex items-center justify-center hover:bg-[#1a2b5c] transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+              className="w-9 h-9 bg-primary text-secondary rounded-xl flex items-center justify-center hover:bg-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
             >
               <FaPaperPlane size={13} />
             </button>
           </form>
           
           <div className="mt-1.5 text-center">
-            <a href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`} className="text-[10px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
+            <a href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`} className="text-[10px] text-gray-400 hover:text-primary flex items-center justify-center gap-1 transition-colors">
               <FaPhoneAlt size={8} /> {settings?.phone || '+91 84471 27264'}
             </a>
           </div>

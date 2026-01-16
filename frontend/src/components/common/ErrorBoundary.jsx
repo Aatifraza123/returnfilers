@@ -19,7 +19,7 @@ class ErrorBoundary extends React.Component {
       return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
           <div className="text-center max-w-md">
-            <h1 className="text-4xl font-bold text-[#0B1530] mb-4">Oops! Something went wrong</h1>
+            <h1 className="text-4xl font-bold text-primary mb-4">Oops! Something went wrong</h1>
             <p className="text-gray-600 mb-6">
               {this.state.error?.message || 'An unexpected error occurred'}
             </p>
@@ -28,7 +28,7 @@ class ErrorBoundary extends React.Component {
                 this.setState({ hasError: false, error: null });
                 window.location.href = '/';
               }}
-              className="px-6 py-3 bg-[#0B1530] text-white rounded-lg hover:bg-[#C9A227] transition-colors"
+              className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors"
             >
               Go to Home
             </button>

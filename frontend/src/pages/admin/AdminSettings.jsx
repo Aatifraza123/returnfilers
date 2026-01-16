@@ -41,7 +41,7 @@ const AdminSettings = () => {
     },
     hero: {
       title: 'Professional Tax & Financial Services',
-      subtitle: 'Expert Chartered Accountants for Your Business Growth',
+      subtitle: 'Expert Tax & Business Consultants for Your Business Growth',
       ctaText: 'Get Started',
       ctaLink: '/quote',
       backgroundImage: ''
@@ -311,18 +311,499 @@ const AdminSettings = () => {
         )}
 
         {activeTab === 'brand' && (
-          <div className="space-y-4">
-            <h2 className="text-lg font-bold text-gray-900 mb-4">Brand Colors</h2>
-            <div className="grid md:grid-cols-2 gap-4">
-              {['primary', 'secondary', 'accent', 'footerBg', 'footerText', 'footerLink', 'footerCompanyName'].map((color) => (
-                <div key={color}>
-                  <label className="block text-sm font-medium text-gray-700 mb-1 capitalize">{color.replace(/([A-Z])/g, ' $1')}</label>
+          <div className="space-y-6">
+            <div>
+              <h2 className="text-lg font-bold text-gray-900 mb-1">Brand Colors</h2>
+              <p className="text-sm text-gray-500 mb-4">Customize your website's color scheme. Changes apply to entire website instantly.</p>
+            </div>
+
+            {/* Color Presets */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-gradient-to-br from-purple-50 to-blue-50">
+              <h3 className="text-md font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <FaStar className="text-yellow-500" />
+                Professional Color Presets
+              </h3>
+              <p className="text-xs text-gray-600 mb-4">Click any preset to apply instantly</p>
+              <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-3">
+                {/* Current/Default */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#0B1530',
+                        secondary: '#C9A227',
+                        accent: '#1E3A8A',
+                        footerBg: '#0B1530',
+                        footerText: '#ffffff',
+                        footerLink: '#C9A227',
+                        footerCompanyName: '#C9A227'
+                      }
+                    }));
+                    toast.success('Classic Navy & Gold applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-blue-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#0B1530' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#C9A227' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#1E3A8A' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Classic Navy & Gold</p>
+                  <p className="text-xs text-gray-500">Professional & Trustworthy</p>
+                </button>
+
+                {/* Modern Blue */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#1E40AF',
+                        secondary: '#F59E0B',
+                        accent: '#3B82F6',
+                        footerBg: '#1E3A8A',
+                        footerText: '#ffffff',
+                        footerLink: '#FCD34D',
+                        footerCompanyName: '#F59E0B'
+                      }
+                    }));
+                    toast.success('Modern Blue & Amber applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-blue-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#1E40AF' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#F59E0B' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#3B82F6' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Modern Blue & Amber</p>
+                  <p className="text-xs text-gray-500">Fresh & Energetic</p>
+                </button>
+
+                {/* Corporate Green */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#065F46',
+                        secondary: '#10B981',
+                        accent: '#059669',
+                        footerBg: '#064E3B',
+                        footerText: '#ffffff',
+                        footerLink: '#34D399',
+                        footerCompanyName: '#10B981'
+                      }
+                    }));
+                    toast.success('Corporate Green applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-green-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#065F46' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#10B981' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#059669' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Corporate Green</p>
+                  <p className="text-xs text-gray-500">Growth & Prosperity</p>
+                </button>
+
+                {/* Royal Purple */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#5B21B6',
+                        secondary: '#F59E0B',
+                        accent: '#7C3AED',
+                        footerBg: '#4C1D95',
+                        footerText: '#ffffff',
+                        footerLink: '#FCD34D',
+                        footerCompanyName: '#FBBF24'
+                      }
+                    }));
+                    toast.success('Royal Purple & Gold applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-purple-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#5B21B6' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#F59E0B' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#7C3AED' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Royal Purple & Gold</p>
+                  <p className="text-xs text-gray-500">Luxury & Premium</p>
+                </button>
+
+                {/* Deep Teal */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#0F766E',
+                        secondary: '#F97316',
+                        accent: '#14B8A6',
+                        footerBg: '#115E59',
+                        footerText: '#ffffff',
+                        footerLink: '#FB923C',
+                        footerCompanyName: '#F97316'
+                      }
+                    }));
+                    toast.success('Deep Teal & Orange applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-teal-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#0F766E' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#F97316' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#14B8A6' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Deep Teal & Orange</p>
+                  <p className="text-xs text-gray-500">Bold & Creative</p>
+                </button>
+
+                {/* Elegant Black */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#1F2937',
+                        secondary: '#EF4444',
+                        accent: '#374151',
+                        footerBg: '#111827',
+                        footerText: '#ffffff',
+                        footerLink: '#F87171',
+                        footerCompanyName: '#EF4444'
+                      }
+                    }));
+                    toast.success('Elegant Black & Red applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-red-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#1F2937' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#EF4444' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#374151' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Elegant Black & Red</p>
+                  <p className="text-xs text-gray-500">Sophisticated & Bold</p>
+                </button>
+
+                {/* Ocean Blue */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#0C4A6E',
+                        secondary: '#06B6D4',
+                        accent: '#0284C7',
+                        footerBg: '#075985',
+                        footerText: '#ffffff',
+                        footerLink: '#22D3EE',
+                        footerCompanyName: '#06B6D4'
+                      }
+                    }));
+                    toast.success('Ocean Blue applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-cyan-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#0C4A6E' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#06B6D4' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#0284C7' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Ocean Blue</p>
+                  <p className="text-xs text-gray-500">Calm & Trustworthy</p>
+                </button>
+
+                {/* Warm Sunset */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#92400E',
+                        secondary: '#F59E0B',
+                        accent: '#B45309',
+                        footerBg: '#78350F',
+                        footerText: '#ffffff',
+                        footerLink: '#FCD34D',
+                        footerCompanyName: '#FBBF24'
+                      }
+                    }));
+                    toast.success('Warm Sunset applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-amber-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#92400E' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#F59E0B' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#B45309' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Warm Sunset</p>
+                  <p className="text-xs text-gray-500">Welcoming & Friendly</p>
+                </button>
+
+                {/* Professional Gray */}
+                <button
+                  type="button"
+                  onClick={() => {
+                    setSettings(prev => ({
+                      ...prev,
+                      brandColors: {
+                        ...prev.brandColors,
+                        primary: '#374151',
+                        secondary: '#3B82F6',
+                        accent: '#6B7280',
+                        footerBg: '#1F2937',
+                        footerText: '#ffffff',
+                        footerLink: '#60A5FA',
+                        footerCompanyName: '#3B82F6'
+                      }
+                    }));
+                    toast.success('Professional Gray & Blue applied!');
+                  }}
+                  className="bg-white p-3 rounded-lg border-2 border-gray-200 hover:border-gray-400 transition-all group"
+                >
+                  <div className="flex gap-2 mb-2">
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#374151' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#3B82F6' }}></div>
+                    <div className="w-12 h-12 rounded" style={{ backgroundColor: '#6B7280' }}></div>
+                  </div>
+                  <p className="text-xs font-bold text-gray-900">Professional Gray & Blue</p>
+                  <p className="text-xs text-gray-500">Clean & Modern</p>
+                </button>
+              </div>
+            </div>
+
+            {/* Main Brand Colors */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <h3 className="text-md font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <FaPaintBrush className="text-gray-600" />
+                Main Brand Colors
+              </h3>
+              <p className="text-xs text-gray-500 mb-3">Primary colors used throughout the website for buttons, headers, and main elements</p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Primary Color</label>
+                  <p className="text-xs text-gray-500 mb-2">Main navy blue - Headers, buttons, backgrounds</p>
                   <div className="flex items-center gap-2">
-                    <input type="color" value={settings.brandColors?.[color] || '#000000'} onChange={(e) => handleChange(`brandColors.${color}`, e.target.value)} className="w-12 h-10 rounded border cursor-pointer" />
-                    <input type="text" value={settings.brandColors?.[color] || '#000000'} onChange={(e) => handleChange(`brandColors.${color}`, e.target.value)} className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono" />
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.primary || '#0B1530'} 
+                      onChange={(e) => handleChange('brandColors.primary', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.primary || '#0B1530'} 
+                      onChange={(e) => handleChange('brandColors.primary', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
                   </div>
                 </div>
-              ))}
+
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Secondary Color</label>
+                  <p className="text-xs text-gray-500 mb-2">Gold accent - CTAs, links, highlights</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.secondary || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.secondary', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.secondary || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.secondary', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Accent Color</label>
+                  <p className="text-xs text-gray-500 mb-2">Additional accent for special elements</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.accent || '#1E3A8A'} 
+                      onChange={(e) => handleChange('brandColors.accent', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.accent || '#1E3A8A'} 
+                      onChange={(e) => handleChange('brandColors.accent', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Footer Colors */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-gray-50">
+              <h3 className="text-md font-bold text-gray-900 mb-3 flex items-center gap-2">
+                <FaAlignLeft className="text-gray-600" />
+                Footer Colors
+              </h3>
+              <p className="text-xs text-gray-500 mb-3">Customize footer section colors separately from main website</p>
+              <div className="grid md:grid-cols-2 gap-4">
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Footer Background</label>
+                  <p className="text-xs text-gray-500 mb-2">Background color of footer section</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.footerBg || '#0B1530'} 
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.footerBg || '#0B1530'} 
+                      onChange={(e) => handleChange('brandColors.footerBg', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Footer Text</label>
+                  <p className="text-xs text-gray-500 mb-2">Regular text color in footer</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.footerText || '#ffffff'} 
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.footerText || '#ffffff'} 
+                      onChange={(e) => handleChange('brandColors.footerText', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Footer Links</label>
+                  <p className="text-xs text-gray-500 mb-2">Color for clickable links in footer</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.footerLink || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.footerLink', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.footerLink || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.footerLink', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+
+                <div className="bg-white p-3 rounded-lg border border-gray-200">
+                  <label className="block text-sm font-semibold text-gray-700 mb-2">Footer Company Name</label>
+                  <p className="text-xs text-gray-500 mb-2">Company name color in footer</p>
+                  <div className="flex items-center gap-2">
+                    <input 
+                      type="color" 
+                      value={settings.brandColors?.footerCompanyName || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.footerCompanyName', e.target.value)} 
+                      className="w-16 h-12 rounded border-2 cursor-pointer" 
+                    />
+                    <input 
+                      type="text" 
+                      value={settings.brandColors?.footerCompanyName || '#C9A227'} 
+                      onChange={(e) => handleChange('brandColors.footerCompanyName', e.target.value)} 
+                      className="flex-1 px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:border-gray-900 font-mono text-sm" 
+                    />
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Color Preview */}
+            <div className="border border-gray-200 rounded-lg p-4 bg-white">
+              <h3 className="text-md font-bold text-gray-900 mb-3">Color Preview</h3>
+              <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
+                <div className="text-center">
+                  <div 
+                    className="w-full h-20 rounded-lg mb-2 border-2 border-gray-200" 
+                    style={{ backgroundColor: settings.brandColors?.primary }}
+                  ></div>
+                  <p className="text-xs font-medium text-gray-700">Primary</p>
+                  <p className="text-xs text-gray-500 font-mono">{settings.brandColors?.primary}</p>
+                </div>
+                <div className="text-center">
+                  <div 
+                    className="w-full h-20 rounded-lg mb-2 border-2 border-gray-200" 
+                    style={{ backgroundColor: settings.brandColors?.secondary }}
+                  ></div>
+                  <p className="text-xs font-medium text-gray-700">Secondary</p>
+                  <p className="text-xs text-gray-500 font-mono">{settings.brandColors?.secondary}</p>
+                </div>
+                <div className="text-center">
+                  <div 
+                    className="w-full h-20 rounded-lg mb-2 border-2 border-gray-200" 
+                    style={{ backgroundColor: settings.brandColors?.accent }}
+                  ></div>
+                  <p className="text-xs font-medium text-gray-700">Accent</p>
+                  <p className="text-xs text-gray-500 font-mono">{settings.brandColors?.accent}</p>
+                </div>
+                <div className="text-center">
+                  <div 
+                    className="w-full h-20 rounded-lg mb-2 border-2 border-gray-200" 
+                    style={{ backgroundColor: settings.brandColors?.footerBg }}
+                  ></div>
+                  <p className="text-xs font-medium text-gray-700">Footer BG</p>
+                  <p className="text-xs text-gray-500 font-mono">{settings.brandColors?.footerBg}</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Info Box */}
+            <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
+              <div className="flex gap-3">
+                <FaInfoCircle className="text-blue-600 mt-0.5 flex-shrink-0" />
+                <div>
+                  <h4 className="text-sm font-semibold text-blue-900 mb-1">How Color Changes Work</h4>
+                  <ul className="text-xs text-blue-800 space-y-1">
+                    <li>• Changes apply to entire website including admin panel</li>
+                    <li>• Primary color affects headers, buttons, and main elements</li>
+                    <li>• Secondary color affects CTAs, links, and accent elements</li>
+                    <li>• Click "Save Changes" to apply new colors</li>
+                    <li>• Page will reload automatically after saving</li>
+                  </ul>
+                </div>
+              </div>
             </div>
           </div>
         )}

@@ -27,7 +27,7 @@ router.get('/my-quotes', protectUser, getUserQuotes);
 
 // @route   /api/quotes
 router.route('/')
-  .post(protectUser, createQuote)  // Private: User must be logged in
+  .post(createQuote)  // Public: Anyone can submit quote request
   .get(protectAdmin, getQuotes);        // Private: Only Admin can view
 
 // @route   /api/quotes/:id

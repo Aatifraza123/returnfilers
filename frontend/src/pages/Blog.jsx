@@ -78,7 +78,7 @@ const Blog = () => {
     <main className="font-sans text-gray-800 bg-gradient-to-br from-gray-50 via-white to-gray-50">
       
       {/* ==================== MODERN HERO SECTION ==================== */}
-      <section className="relative py-8 md:py-10 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden mt-16">
+      <section className="relative py-8 md:py-10 bg-gradient-to-br from-primary via-primary to-primary text-white overflow-hidden mt-16">
         {/* Animated Background Elements */}
         <div className="absolute inset-0">
           <motion.div
@@ -92,7 +92,7 @@ const Blog = () => {
               repeat: Infinity,
               ease: "easeInOut",
             }}
-            className="absolute top-0 right-0 w-96 h-96 bg-[#C9A227]/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
+            className="absolute top-0 right-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl translate-x-1/2 -translate-y-1/2"
           ></motion.div>
           <motion.div
             animate={{
@@ -106,7 +106,7 @@ const Blog = () => {
               ease: "easeInOut",
               delay: 0.5,
             }}
-            className="absolute bottom-0 left-0 w-96 h-96 bg-[#C9A227]/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
+            className="absolute bottom-0 left-0 w-96 h-96 bg-secondary/10 rounded-full blur-3xl -translate-x-1/2 translate-y-1/2"
           ></motion.div>
           
           {/* Grid Pattern */}
@@ -119,16 +119,16 @@ const Blog = () => {
             initial={{ opacity: 0, scale: 0.8, y: -20 }}
             animate={{ opacity: 1, scale: 1, y: 0 }}
             transition={{ duration: 0.6, ease: "easeOut", type: "spring", stiffness: 100 }}
-            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-[#C9A227]/20 backdrop-blur-sm border border-[#C9A227]/30 mb-3"
+            className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-secondary/20 backdrop-blur-sm border border-secondary/30 mb-3"
           >
             <motion.div
               initial={{ rotate: -180, opacity: 0 }}
               animate={{ rotate: 0, opacity: 1 }}
               transition={{ delay: 0.3, duration: 0.5 }}
             >
-              <FaBookOpen className="text-[#C9A227]" size={14} />
+              <FaBookOpen className="text-secondary" size={14} />
             </motion.div>
-            <span className="text-[#C9A227] font-semibold tracking-wider uppercase text-xs">
+            <span className="text-secondary font-semibold tracking-wider uppercase text-xs">
               Insights & Articles
             </span>
           </motion.div>
@@ -145,7 +145,7 @@ const Blog = () => {
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
               transition={{ delay: 0.4, duration: 0.7, ease: "easeOut" }}
-              className="text-transparent bg-clip-text bg-gradient-to-r from-[#C9A227] via-[#F5D76E] to-[#C9A227] animate-gradient"
+              className="text-transparent bg-clip-text bg-gradient-to-r from-secondary via-[#F5D76E] to-secondary animate-gradient"
             >
               Blog
             </motion.span>
@@ -169,12 +169,12 @@ const Blog = () => {
             className="flex flex-wrap items-center justify-center gap-6 text-sm"
           >
             <div className="flex items-center gap-2">
-              <FaBookOpen className="text-[#C9A227]" size={16} />
+              <FaBookOpen className="text-secondary" size={16} />
               <span className="text-gray-300">{blogs.length} Articles</span>
             </div>
             <div className="w-1 h-1 bg-gray-500 rounded-full"></div>
             <div className="flex items-center gap-2">
-              <FaClock className="text-[#C9A227]" size={16} />
+              <FaClock className="text-secondary" size={16} />
               <span className="text-gray-300">Updated Weekly</span>
             </div>
           </motion.div>
@@ -199,8 +199,8 @@ const Blog = () => {
               >
                 <div className="relative bg-white rounded-2xl overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-500 border border-gray-200/60">
                   {/* Featured Badge */}
-                  <div className="absolute top-6 left-6 z-20 bg-gradient-to-r from-[#C9A227] to-[#F5D76E] px-4 py-2 rounded-full shadow-lg">
-                    <span className="text-[#0B1530] text-xs font-bold uppercase tracking-wider">Featured</span>
+                  <div className="absolute top-6 left-6 z-20 bg-gradient-to-r from-secondary to-[#F5D76E] px-4 py-2 rounded-full shadow-lg">
+                    <span className="text-primary text-xs font-bold uppercase tracking-wider">Featured</span>
                   </div>
 
                   <div className="grid md:grid-cols-2 gap-0">
@@ -220,12 +220,12 @@ const Blog = () => {
                           }}
                         />
                       </motion.div>
-                      <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/80 via-[#0B1530]/20 to-transparent"></div>
+                      <div className="absolute inset-0 bg-gradient-to-t from-primary/80 via-primary/20 to-transparent"></div>
                       
                       {/* Category Badge on Image */}
                       {featuredBlog.category && (
                         <div className="absolute bottom-4 left-4 bg-white/95 backdrop-blur-xl px-3 py-1.5 rounded-full">
-                          <span className="text-[#0B1530] text-[10px] font-bold uppercase tracking-wider">
+                          <span className="text-primary text-[10px] font-bold uppercase tracking-wider">
                             {featuredBlog.category}
                           </span>
                         </div>
@@ -236,18 +236,18 @@ const Blog = () => {
                     <div className="p-6 md:p-8 flex flex-col justify-center bg-gradient-to-br from-white to-gray-50">
                       <div className="flex items-center gap-3 mb-3 text-[10px] text-gray-500">
                         <span className="flex items-center gap-1">
-                          <FaCalendarAlt className="text-[#C9A227]" size={10} />
+                          <FaCalendarAlt className="text-secondary" size={10} />
                           {featuredBlog.createdAt ? format(new Date(featuredBlog.createdAt), 'MMM dd, yyyy') : 'Draft'}
                         </span>
                         {featuredBlog.readTime && (
                           <span className="flex items-center gap-1">
-                            <FaClock className="text-[#C9A227]" size={10} />
+                            <FaClock className="text-secondary" size={10} />
                             {featuredBlog.readTime}
                           </span>
                         )}
                       </div>
 
-                      <h2 className="text-2xl md:text-3xl font-serif font-bold text-[#0B1530] mb-3 group-hover:text-[#C9A227] transition-colors line-clamp-2">
+                      <h2 className="text-2xl md:text-3xl font-serif font-bold text-primary mb-3 group-hover:text-secondary transition-colors line-clamp-2">
                         {featuredBlog.title}
                       </h2>
                       
@@ -257,7 +257,7 @@ const Blog = () => {
 
                       <motion.div
                         whileHover={{ x: 5 }}
-                        className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#C9A227] transition-colors"
+                        className="inline-flex items-center gap-1.5 text-primary font-semibold text-xs group-hover:text-secondary transition-colors"
                       >
                         Read Full Article
                         <FaArrowRight className="group-hover:translate-x-1 transition-transform" size={12} />
@@ -279,7 +279,7 @@ const Blog = () => {
               initial={{ opacity: 0, y: 20 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
-              className="text-xl md:text-2xl font-serif font-bold text-[#0B1530] mb-6 md:mb-8"
+              className="text-xl md:text-2xl font-serif font-bold text-primary mb-6 md:mb-8"
             >
               Latest Articles
             </motion.h2>
@@ -327,7 +327,7 @@ const Blog = () => {
                         </motion.div>
                         
                         {/* Gradient Overlay */}
-                        <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/70 via-transparent to-transparent"></div>
+                        <div className="absolute inset-0 bg-gradient-to-t from-primary/70 via-transparent to-transparent"></div>
                         
                         {/* Shine Effect */}
                         <motion.div
@@ -338,7 +338,7 @@ const Blog = () => {
                         {/* Category Badge */}
                         {blog.category && (
                           <div className="absolute top-3 right-3 bg-white/95 backdrop-blur-xl px-2.5 py-1 rounded-full shadow-md border border-gray-200/50">
-                            <span className="text-[#0B1530] text-[10px] font-bold uppercase tracking-wider">
+                            <span className="text-primary text-[10px] font-bold uppercase tracking-wider">
                               {blog.category}
                             </span>
                           </div>
@@ -350,18 +350,18 @@ const Blog = () => {
                         {/* Date & Read Time */}
                         <div className="flex items-center gap-2 mb-3 text-[10px] text-gray-500">
                           <span className="flex items-center gap-1">
-                            <FaCalendarAlt className="text-[#C9A227]" size={9} />
+                            <FaCalendarAlt className="text-secondary" size={9} />
                             {blog.createdAt ? format(new Date(blog.createdAt), 'MMM dd, yyyy') : 'Draft'}
                           </span>
                           {blog.readTime && (
                             <span className="flex items-center gap-1">
-                              <FaClock className="text-[#C9A227]" size={9} />
+                              <FaClock className="text-secondary" size={9} />
                               {blog.readTime}
                             </span>
                           )}
                         </div>
 
-                        <h3 className="text-lg md:text-xl font-serif font-bold text-[#0B1530] mb-2 line-clamp-2 group-hover:text-[#C9A227] transition-colors duration-300">
+                        <h3 className="text-lg md:text-xl font-serif font-bold text-primary mb-2 line-clamp-2 group-hover:text-secondary transition-colors duration-300">
                           {blog.title}
                         </h3>
                         
@@ -373,7 +373,7 @@ const Blog = () => {
                         <div className="mt-auto pt-3 border-t border-gray-100/50">
                           <motion.div
                             whileHover={{ x: 5 }}
-                            className="inline-flex items-center gap-1.5 text-[#0B1530] font-semibold text-xs group-hover:text-[#C9A227] transition-colors"
+                            className="inline-flex items-center gap-1.5 text-primary font-semibold text-xs group-hover:text-secondary transition-colors"
                           >
                             Read Article
                             <FaArrowRight className="group-hover:translate-x-1 transition-transform" size={10} />
@@ -382,7 +382,7 @@ const Blog = () => {
                       </div>
 
                       {/* Decorative Corner */}
-                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-[#C9A227]/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                      <div className="absolute top-0 right-0 w-16 h-16 bg-gradient-to-br from-secondary/10 to-transparent rounded-bl-full opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
                     </div>
                   </Link>
                 </motion.div>
@@ -418,3 +418,4 @@ const Blog = () => {
 };
 
 export default Blog;
+

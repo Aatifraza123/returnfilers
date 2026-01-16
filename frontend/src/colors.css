@@ -1,9 +1,16 @@
 /* Global Color System - Dynamic from Admin Settings */
 :root {
-  /* Brand Colors - Will be overridden by settings */
+  /* Brand Colors - Will be set by ThemeProvider from Admin Settings */
+  /* Initial defaults to prevent flash of unstyled content */
   --color-primary: #0B1530;
   --color-secondary: #C9A227;
   --color-accent: #1E3A8A;
+  --color-primary-90: rgba(11, 21, 48, 0.9);
+  --color-primary-70: rgba(11, 21, 48, 0.7);
+  --color-primary-10: rgba(11, 21, 48, 0.1);
+  --color-secondary-light: rgba(201, 162, 39, 0.1);
+  --color-secondary-10: rgba(201, 162, 39, 0.1);
+  --color-bg-light: #ffffff;
   
   /* Footer Colors */
   --color-footer-bg: #0B1530;
@@ -11,19 +18,13 @@
   --color-footer-link: #C9A227;
   --color-footer-company: #C9A227;
   
-  /* Derived Colors */
-  --color-primary-light: #1a2b5c;
-  --color-primary-dark: #050a18;
-  --color-secondary-light: #d4b03a;
-  --color-secondary-dark: #a88920;
-  
-  /* Semantic Colors */
+  /* Semantic Colors - Fixed values */
   --color-success: #10b981;
   --color-error: #ef4444;
   --color-warning: #f59e0b;
   --color-info: #3b82f6;
   
-  /* Neutral Colors */
+  /* Neutral Colors - Fixed values */
   --color-gray-50: #f9fafb;
   --color-gray-100: #f3f4f6;
   --color-gray-200: #e5e7eb;

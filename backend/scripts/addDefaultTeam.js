@@ -4,21 +4,21 @@ const Settings = require('../models/settingsModel');
 
 const defaultTeam = [
   {
-    name: 'CA Rajan Kumar',
+    name: 'Rajan Kumar',
     position: 'Founder & Managing Partner',
-    qualification: 'Chartered Accountant',
+    qualification: 'Tax Consultant',
     about: 'Expert in taxation, GST compliance, and business advisory with a passion for helping businesses grow.',
   },
   {
-    name: 'CA Priya Sharma',
+    name: 'Priya Sharma',
     position: 'Senior Tax Consultant',
-    qualification: 'CA, Tax Specialist',
+    qualification: 'Tax Specialist',
     about: 'Specializes in income tax planning, GST filing, and helping individuals maximize their tax savings.',
   },
   {
-    name: 'CA Amit Verma',
+    name: 'Amit Verma',
     position: 'Audit & Compliance Head',
-    qualification: 'CA, Audit Expert',
+    qualification: 'Audit Expert',
     about: 'Focuses on statutory audits, internal controls, and ensuring complete regulatory compliance.',
   },
 ];

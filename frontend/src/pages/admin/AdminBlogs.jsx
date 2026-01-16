@@ -378,11 +378,11 @@ const AdminBlogs = () => {
   return (
     <div className="p-6">
       <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold text-[#0B1530]">Manage Blogs</h1>
+        <h1 className="text-3xl font-bold text-primary">Manage Blogs</h1>
         {!showForm && (
           <button 
             onClick={() => setShowForm(true)}
-            className="bg-[#0B1530] text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-[#C9A227] hover:text-[#0B1530] transition-all"
+            className="bg-primary text-white px-4 py-2 rounded-lg flex items-center gap-2 hover:bg-secondary hover:text-primary transition-all"
           >
             <FaPlus /> Write New Blog
           </button>
@@ -393,7 +393,7 @@ const AdminBlogs = () => {
       {showForm && (
         <div className="bg-white p-6 rounded-xl shadow-md mb-8 border border-gray-200">
           <div className="flex justify-between items-center mb-4">
-            <h2 className="text-xl font-bold text-[#0B1530]">
+            <h2 className="text-xl font-bold text-primary">
               {editingBlog ? 'Edit Blog' : 'Write New Blog'}
             </h2>
             <button 
@@ -557,7 +557,7 @@ const AdminBlogs = () => {
                   onClick={() => setHtmlMode(!htmlMode)}
                   className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
                     htmlMode 
-                      ? 'bg-[#C9A227] text-white shadow-md' 
+                      ? 'bg-secondary text-white shadow-md' 
                       : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                   }`}
                 >
@@ -571,7 +571,7 @@ const AdminBlogs = () => {
                   value={formData.content}
                   onChange={(e) => setFormData({...formData, content: e.target.value})}
                   placeholder="Paste your HTML content here..."
-                  className="w-full min-h-[500px] p-4 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20"
+                  className="w-full min-h-[500px] p-4 border border-gray-300 rounded-lg font-mono text-sm focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                   style={{ fontFamily: 'Monaco, Consolas, monospace' }}
                 />
               ) : (
@@ -609,7 +609,7 @@ const AdminBlogs = () => {
                   <button
                     type="button"
                     onClick={() => setShowTableModal(true)}
-                    className="px-3 py-1.5 text-xs bg-[#0B1530] text-white hover:bg-[#1a2b5c] rounded border border-[#0B1530] transition-colors flex items-center gap-1"
+                    className="px-3 py-1.5 text-xs bg-primary text-white hover:bg-primary rounded border border-primary transition-colors flex items-center gap-1"
                     title="Insert Table"
                   >
                     <FaTable /> Insert Table
@@ -654,7 +654,7 @@ const AdminBlogs = () => {
         {blogs.map((blog) => (
           <div key={blog._id} className="bg-white rounded-xl shadow-sm border border-gray-100 overflow-hidden hover:shadow-md transition-shadow">
             <div className="p-6">
-              <h3 className="text-xl font-bold text-[#0B1530] mb-2">{blog.title}</h3>
+              <h3 className="text-xl font-bold text-primary mb-2">{blog.title}</h3>
               <div 
                 className="text-gray-500 text-sm mb-4 line-clamp-3" 
                 dangerouslySetInnerHTML={{ __html: blog.content }}
@@ -693,7 +693,7 @@ const AdminBlogs = () => {
             onClick={() => setShowTableModal(false)}
           />
           <div className="fixed top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 bg-white rounded-xl shadow-2xl z-50 w-[90%] max-w-3xl max-h-[90vh] overflow-hidden">
-            <div className="p-4 bg-[#0B1530] text-white flex justify-between items-center">
+            <div className="p-4 bg-primary text-white flex justify-between items-center">
               <h3 className="text-lg font-bold">Table Editor</h3>
               <button 
                 onClick={() => setShowTableModal(false)}
@@ -716,7 +716,7 @@ const AdminBlogs = () => {
                         max="20"
                         value={tableRows}
                         onChange={(e) => setTableRows(parseInt(e.target.value) || 2)}
-                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#C9A227]"
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-secondary"
                       />
                     </div>
                     <div>
@@ -727,14 +727,14 @@ const AdminBlogs = () => {
                         max="10"
                         value={tableCols}
                         onChange={(e) => setTableCols(parseInt(e.target.value) || 2)}
-                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-[#C9A227]"
+                        className="w-24 border border-gray-300 rounded-lg px-3 py-2 focus:outline-none focus:border-secondary"
                       />
                     </div>
                     <div className="flex items-end">
                       <button
                         type="button"
                         onClick={() => initTableData(tableRows, tableCols)}
-                        className="bg-[#C9A227] text-[#0B1530] px-4 py-2 rounded-lg font-medium hover:bg-[#c9a432] transition-colors"
+                        className="bg-secondary text-primary px-4 py-2 rounded-lg font-medium hover:bg-[#c9a432] transition-colors"
                       >
                         Create Table
                       </button>
@@ -766,16 +766,16 @@ const AdminBlogs = () => {
                     <table className="w-full border-collapse">
                       <tbody>
                         {tableData.map((row, rowIndex) => (
-                          <tr key={rowIndex} className={rowIndex === 0 ? 'bg-[#0B1530]' : 'bg-white'}>
+                          <tr key={rowIndex} className={rowIndex === 0 ? 'bg-primary' : 'bg-white'}>
                             {row.map((cell, colIndex) => (
                               <td key={colIndex} className="border border-gray-300 p-0">
                                 <input
                                   type="text"
                                   value={cell}
                                   onChange={(e) => updateCell(rowIndex, colIndex, e.target.value)}
-                                  className={`w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-[#C9A227] ${
+                                  className={`w-full px-3 py-2 focus:outline-none focus:ring-2 focus:ring-secondary ${
                                     rowIndex === 0 
-                                      ? 'bg-[#0B1530] text-white font-semibold placeholder-white/50' 
+                                      ? 'bg-primary text-white font-semibold placeholder-white/50' 
                                       : 'bg-white text-gray-700'
                                   }`}
                                   placeholder={rowIndex === 0 ? 'Header' : 'Cell'}
@@ -833,7 +833,7 @@ const AdminBlogs = () => {
                 <button
                   type="button"
                   onClick={insertTable}
-                  className="px-6 py-2 bg-[#0B1530] text-white rounded-lg font-medium hover:bg-[#1a2b5c] transition-colors"
+                  className="px-6 py-2 bg-primary text-white rounded-lg font-medium hover:bg-primary transition-colors"
                 >
                   Insert Table
                 </button>

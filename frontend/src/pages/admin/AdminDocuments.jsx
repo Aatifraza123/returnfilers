@@ -120,7 +120,7 @@ const AdminDocuments = () => {
   if (loading) {
     return (
       <div className="flex items-center justify-center h-64">
-        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-[#C9A227]"></div>
+        <div className="animate-spin rounded-full h-12 w-12 border-b-2 border-secondary"></div>
       </div>
     );
   }
@@ -129,7 +129,7 @@ const AdminDocuments = () => {
     <div className="p-6">
       {/* Header */}
       <div className="mb-6">
-        <h1 className="text-3xl font-bold text-[#0B1530] mb-2">Document Submissions</h1>
+        <h1 className="text-3xl font-bold text-primary mb-2">Document Submissions</h1>
         <p className="text-gray-600">Manage client document uploads</p>
       </div>
 
@@ -137,7 +137,7 @@ const AdminDocuments = () => {
       <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-6">
         <div className="bg-white p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Total</p>
-          <p className="text-2xl font-bold text-[#0B1530]">{documents.length}</p>
+          <p className="text-2xl font-bold text-primary">{documents.length}</p>
         </div>
         <div className="bg-yellow-50 p-4 rounded-lg shadow">
           <p className="text-gray-600 text-sm">Pending</p>
@@ -169,7 +169,7 @@ const AdminDocuments = () => {
               placeholder="Search by name, email, or service..."
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
-              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-[#C9A227]"
+              className="w-full pl-10 pr-4 py-2 border rounded-lg focus:outline-none focus:border-secondary"
             />
           </div>
           <div className="relative">
@@ -177,7 +177,7 @@ const AdminDocuments = () => {
             <select
               value={filterStatus}
               onChange={(e) => setFilterStatus(e.target.value)}
-              className="pl-10 pr-8 py-2 border rounded-lg focus:outline-none focus:border-[#C9A227] appearance-none bg-white"
+              className="pl-10 pr-8 py-2 border rounded-lg focus:outline-none focus:border-secondary appearance-none bg-white"
             >
               <option value="all">All Status</option>
               <option value="pending">Pending</option>
@@ -218,13 +218,13 @@ const AdminDocuments = () => {
                     </div>
                   </td>
                   <td className="px-6 py-4">
-                    <span className="px-2 py-1 bg-[#0B1530]/10 text-[#0B1530] rounded text-sm font-medium">
+                    <span className="px-2 py-1 bg-primary/10 text-primary rounded text-sm font-medium">
                       {doc.service}
                     </span>
                   </td>
                   <td className="px-6 py-4">
                     <div className="flex items-center gap-1 text-sm">
-                      <FaFileAlt className="text-[#C9A227]" />
+                      <FaFileAlt className="text-secondary" />
                       {doc.documents?.length || 0} file(s)
                     </div>
                   </td>
@@ -282,9 +282,9 @@ const AdminDocuments = () => {
       {viewingDoc && (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
           <div className="bg-white rounded-xl max-w-3xl w-full max-h-[90vh] overflow-y-auto">
-            <div className="sticky top-0 bg-[#0B1530] text-white p-4 flex justify-between items-center">
+            <div className="sticky top-0 bg-primary text-white p-4 flex justify-between items-center">
               <h2 className="text-xl font-bold">Document Details</h2>
-              <button onClick={() => setViewingDoc(null)} className="text-white hover:text-[#C9A227]">
+              <button onClick={() => setViewingDoc(null)} className="text-white hover:text-secondary">
                 <FaTimes size={20} />
               </button>
             </div>
@@ -324,7 +324,7 @@ const AdminDocuments = () => {
                   {viewingDoc.documents?.map((file, idx) => (
                     <div key={idx} className="flex items-center justify-between bg-gray-50 p-3 rounded-lg">
                       <div className="flex items-center gap-3">
-                        <FaFileAlt className="text-[#C9A227]" />
+                        <FaFileAlt className="text-secondary" />
                         <div>
                           <p className="font-medium text-sm">{file.name}</p>
                           <p className="text-xs text-gray-500">
@@ -334,7 +334,7 @@ const AdminDocuments = () => {
                       </div>
                       <button
                         onClick={() => downloadFile(file)}
-                        className="flex items-center gap-1 px-3 py-1 bg-[#0B1530] text-white rounded text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                        className="flex items-center gap-1 px-3 py-1 bg-primary text-white rounded text-sm hover:bg-secondary hover:text-primary transition-colors"
                       >
                         <FaDownload size={12} /> Download
                       </button>

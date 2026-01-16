@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Link } from "react-router-dom";
-import ConsultationModal from "../components/common/ConsultationModal"; // Import the Modal
+import ConsultationModal from "../components/common/ConsultationModal";
 import api from "../api/axios";
 import {
   FaChartLine,
@@ -148,9 +148,8 @@ const Home = () => {
 
   return (
     <main className="font-sans text-gray-800">
-      {/* Render the Modal */}
-      <ConsultationModal isOpen={isModalOpen} closeModal={closeModal} />
-
+      <ConsultationModal isOpen={isModalOpen} onClose={closeModal} />
+      
       {/* ==================== HERO SECTION ==================== */}
       <section className="relative min-h-screen flex items-center justify-center overflow-hidden pt-20 md:pt-28 pb-16 md:pb-24">
         {/* Background Image */}
@@ -164,7 +163,12 @@ const Home = () => {
             className="w-full h-full object-cover"
           />
           {/* Gradient Overlay */}
-          <div className="absolute inset-0 bg-gradient-to-r from-[#0B1530] via-[#0B1530]/85 to-[#0B1530]/40" />
+          <div 
+            className="absolute inset-0 bg-gradient-to-r"
+            style={{
+              background: `linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-rgb, 11, 21, 48), 0.85), rgba(var(--color-primary-rgb, 11, 21, 48), 0.4))`
+            }}
+          />
         </div>
 
         <div className="container mx-auto px-6 relative z-10">
@@ -175,7 +179,8 @@ const Home = () => {
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ delay: 0.2 }}
-                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 text-[#C9A227] font-medium text-sm mb-6 backdrop-blur-sm"
+                className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full bg-white/10 border border-white/10 font-medium text-sm mb-6 backdrop-blur-sm"
+                style={{ color: 'var(--color-secondary)' }}
               >
                 <FaBriefcase className="text-xs" /> Since{" "}
                 {settings?.about?.yearEstablished || 2022}
@@ -228,10 +233,10 @@ const Home = () => {
                 </button>
 
                 <Link
-                  to="/services"
+                  to="/quote"
                   className="px-6 py-3 md:px-8 md:py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm md:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
                 >
-                  Our Services
+                  Get Custom Quote
                 </Link>
               </motion.div>
 
@@ -243,15 +248,15 @@ const Home = () => {
                 className="flex flex-wrap justify-center lg:justify-start gap-6 pt-6 border-t border-white/10"
               >
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#C9A227]" />{" "}
+                  <FaCheckCircle style={{ color: 'var(--color-secondary)' }} />{" "}
                   {settings?.about?.yearsOfExperience || 3}+ Years Exp.
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#C9A227]" />{" "}
+                  <FaCheckCircle style={{ color: 'var(--color-secondary)' }} />{" "}
                   {settings?.about?.clientsServed || 100}+ Clients
                 </div>
                 <div className="flex items-center gap-2 text-gray-300 text-sm">
-                  <FaCheckCircle className="text-[#C9A227]" /> Certified Experts
+                  <FaCheckCircle style={{ color: 'var(--color-secondary)' }} /> Certified Experts
                 </div>
               </motion.div>
             </div>
@@ -270,7 +275,10 @@ const Home = () => {
                   alt="Tax and Finance Professional"
                   className="w-full h-full object-cover"
                 />
-                <div className="absolute inset-0 bg-[#0B1530]/20 mix-blend-multiply"></div>
+                <div 
+                  className="absolute inset-0 mix-blend-multiply"
+                  style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
+                ></div>
               </div>
 
               {/* Modern Floating Badge */}
@@ -280,11 +288,20 @@ const Home = () => {
                 transition={{ delay: 0.8 }}
                 className="absolute bottom-8 -left-6 bg-white p-5 rounded-xl shadow-xl flex items-center gap-4 max-w-xs"
               >
-                <div className="w-12 h-12 bg-[#0B1530] rounded-full flex items-center justify-center text-[#C9A227] text-xl">
+                <div 
+                  className="w-12 h-12 rounded-full flex items-center justify-center text-xl"
+                  style={{ 
+                    backgroundColor: 'var(--color-primary)',
+                    color: 'var(--color-secondary)'
+                  }}
+                >
                   <FaUserTie />
                 </div>
                 <div>
-                  <p className="text-[#0B1530] font-bold text-lg">
+                  <p 
+                    className="font-bold text-lg"
+                    style={{ color: 'var(--color-primary)' }}
+                  >
                     Expert Advice
                   </p>
                   <p className="text-gray-500 text-sm">
@@ -297,125 +314,46 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ==================== ABOUT SECTION ==================== */}
-      <section className="py-16 md:py-20 bg-white">
-        <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Image */}
-            <motion.div
-              initial={{ opacity: 0, x: -30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-              className="relative"
-            >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
-                  alt="About ReturnFilers"
-                  className="w-full h-[400px] object-cover"
-                />
-                <div className="absolute inset-0 bg-gradient-to-t from-[#0B1530]/40 to-transparent"></div>
+      {/* ==================== STATS STRIP ==================== */}
+      <section 
+        className="py-8"
+        style={{ backgroundColor: 'var(--color-secondary)' }}
+      >
+        <div className="container mx-auto max-w-6xl px-6">
+          <div 
+            className="flex flex-wrap justify-around items-center gap-8"
+            style={{ color: 'var(--color-primary)' }}
+          >
+            <div className="text-center">
+              <div className="text-4xl font-serif font-bold">
+                {settings?.about?.yearsOfExperience || 3}+
               </div>
-            </motion.div>
-
-            {/* Right: Content */}
-            <motion.div
-              initial={{ opacity: 0, x: 30 }}
-              whileInView={{ opacity: 1, x: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.6 }}
-            >
-              <span className="text-[#C9A227] font-bold tracking-widest uppercase text-sm mb-4 block">
-                About Us
-              </span>
-              <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-6">
-                Business Growth in Financial Success
-              </h2>
-              <p className="text-gray-600 text-base leading-relaxed mb-6">
-                We are a trusted partner for businesses seeking
-                seamless compliance and return filing solutions. Our team of
-                experienced professionals ensures that your organization stays
-                fully aligned with statutory requirements while you focus on
-                growth. With a commitment to accuracy, transparency, and timely
-                delivery, we simplify complex regulatory processes into clear,
-                actionable steps. From corporate compliances to tax return
-                filings, we bring together expertise and technology to provide
-                reliable, end-to-end support. <br/> <br/>Our goal is to empower businesses
-                with peace of mind, knowing that their compliance obligations
-                are handled with precision and care.{" "}
-                {settings?.about?.yearEstablished || 2022}, we have been helping
-                businesses and individuals navigate the complex world of
-                taxation, compliance, and financial planning.
-              </p>
-              
-
-              {/* Key Points */}
-              <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaUsers className="text-[#C9A227]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0B1530]">
-                      {settings?.about?.clientsServed || 100}+ Clients
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Trusted by businesses
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaLock className="text-[#C9A227]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0B1530]">
-                      100% Confidential
-                    </h4>
-                    <p className="text-sm text-gray-500">Your data is secure</p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaCheckCircle className="text-[#C9A227]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0B1530]">
-                      Timely Delivery
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Never miss deadlines
-                    </p>
-                  </div>
-                </div>
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-[#C9A227]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <FaChartLine className="text-[#C9A227]" />
-                  </div>
-                  <div>
-                    <h4 className="font-bold text-[#0B1530]">
-                      {settings?.about?.yearsOfExperience || 3}+ Years
-                      Experience
-                    </h4>
-                    <p className="text-sm text-gray-500">
-                      Since {settings?.about?.yearEstablished || 2022}
-                    </p>
-                  </div>
-                </div>
+              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+                Years Experience
               </div>
-
-              <Link
-                to="/about"
-                className="inline-flex items-center gap-2 text-[#0B1530] font-semibold hover:text-[#C9A227] transition-all group"
-              >
-                Learn More About Us{" "}
-                <FaArrowRight
-                  size={12}
-                  className="group-hover:translate-x-1 transition-transform"
-                />
-              </Link>
-            </motion.div>
+            </div>
+            <div 
+              className="h-10 w-px hidden md:block"
+              style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
+            ></div>
+            <div className="text-center">
+              <div className="text-4xl font-serif font-bold">
+                {settings?.about?.clientsServed || 100}+
+              </div>
+              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+                Happy Clients
+              </div>
+            </div>
+            <div 
+              className="h-10 w-px hidden md:block"
+              style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
+            ></div>
+            <div className="text-center">
+              <div className="text-4xl font-serif font-bold">100%</div>
+              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+                Confidentiality
+              </div>
+            </div>
           </div>
         </div>
       </section>
@@ -430,10 +368,16 @@ const Home = () => {
             variants={containerVariants}
             className="text-center mb-16"
           >
-            <span className="text-[#C9A227] font-bold tracking-widest uppercase text-sm">
+            <span 
+              className="font-bold tracking-widest uppercase text-sm"
+              style={{ color: 'var(--color-secondary)' }}
+            >
               Our Expertise
             </span>
-            <h2 className="text-3xl lg:text-4xl font-serif font-bold mt-3 mb-3 text-[#0B1530]">
+            <h2 
+              className="text-3xl lg:text-4xl font-serif font-bold mt-3 mb-3"
+              style={{ color: 'var(--color-primary)' }}
+            >
               Comprehensive Solutions
             </h2>
             <p className="text-gray-600 max-w-2xl mx-auto text-base font-light">
@@ -454,28 +398,30 @@ const Home = () => {
                 key={idx}
                 variants={cardVariants}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-[#C9A227]/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-secondary/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
               >
                 <div
-                  className="w-14 h-14 bg-[#F4F6F9] rounded-xl flex items-center justify-center text-2xl mb-6 transition-all duration-300"
+                  className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-6 transition-all duration-300"
                   style={{
                     backgroundColor: "#F4F6F9",
-                    color: "#0B1530",
+                    color: "var(--color-primary)",
                     transition: "all 0.3s ease",
                   }}
                   onMouseEnter={(e) => {
                     e.currentTarget.style.backgroundColor = "#F4F6F9";
-                    e.currentTarget.style.color =
-                      "var(--color-secondary, #C9A227)";
+                    e.currentTarget.style.color = "var(--color-secondary)";
                   }}
                   onMouseLeave={(e) => {
                     e.currentTarget.style.backgroundColor = "#F4F6F9";
-                    e.currentTarget.style.color = "#0B1530";
+                    e.currentTarget.style.color = "var(--color-primary)";
                   }}
                 >
                   {service.icon}
                 </div>
-                <h3 className="text-xl font-bold text-[#0B1530] mb-3">
+                <h3 
+                  className="text-xl font-bold mb-3"
+                  style={{ color: 'var(--color-primary)' }}
+                >
                   {service.title}
                 </h3>
                 <p className="text-gray-600 text-base leading-relaxed mb-6">
@@ -487,7 +433,10 @@ const Home = () => {
                       ? "/digital-services"
                       : `/expertise/${service.slug}`
                   }
-                  className="text-base font-bold text-[#0B1530] hover:text-[#C9A227] flex items-center gap-2 transition-colors"
+                  className="text-base font-bold flex items-center gap-2 transition-colors"
+                  style={{ color: 'var(--color-primary)' }}
+                  onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
+                  onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
                 >
                   Read More <FaArrowRight size={12} />
                 </Link>
@@ -505,7 +454,7 @@ const Home = () => {
             alt="Strategic Meeting"
             className="w-full h-full object-cover"
           />
-          <div className="absolute inset-0 bg-[#0B1530]/90" />
+          <div className="absolute inset-0" style={{ backgroundColor: '#0B1530', opacity: 0.9 }} />
         </div>
 
         <div className="relative z-10 container mx-auto max-w-5xl">
@@ -513,7 +462,8 @@ const Home = () => {
             initial={{ opacity: 0, y: 20 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            className="text-[#C9A227] font-bold tracking-widest uppercase text-sm mb-4 block"
+            className="font-bold tracking-widest uppercase text-sm mb-4 block"
+            style={{ color: 'var(--color-secondary)' }}
           >
             Why Choose Us
           </motion.span>
@@ -552,7 +502,10 @@ const Home = () => {
                 key={idx}
                 className="bg-white/5 border border-white/10 p-6 rounded-2xl backdrop-blur-sm hover:bg-white/10 transition-colors"
               >
-                <div className="text-[#C9A227] text-3xl mb-4 flex justify-center">
+                <div 
+                  className="text-3xl mb-4 flex justify-center"
+                  style={{ color: 'var(--color-secondary)' }}
+                >
                   {feature.icon}
                 </div>
                 <h4 className="text-white font-bold text-lg mb-2">
@@ -565,34 +518,350 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ==================== STATS STRIP ==================== */}
-      <section className="py-8 bg-[#C9A227]">
-        <div className="container mx-auto max-w-6xl px-6">
-          <div className="flex flex-wrap justify-around items-center gap-8 text-[#0B1530]">
-            <div className="text-center">
-              <div className="text-4xl font-serif font-bold">
-                {settings?.about?.yearsOfExperience || 3}+
+      {/* ==================== ABOUT SECTION ==================== */}
+      <section className="py-16 md:py-20 bg-white">
+        <div className="container mx-auto max-w-7xl px-6">
+          <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Left: Image */}
+            <motion.div
+              initial={{ opacity: 0, x: -30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+              className="relative"
+            >
+              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
+                <img
+                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
+                  alt="About ReturnFilers"
+                  className="w-full h-[400px] object-cover"
+                />
+                <div 
+                  className="absolute inset-0 bg-gradient-to-t to-transparent"
+                  style={{ 
+                    background: `linear-gradient(to top, rgba(var(--color-primary-rgb, 11, 21, 48), 0.4), transparent)`
+                  }}
+                ></div>
               </div>
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
-                Years Experience
+            </motion.div>
+
+            {/* Right: Content */}
+            <motion.div
+              initial={{ opacity: 0, x: 30 }}
+              whileInView={{ opacity: 1, x: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.6 }}
+            >
+              <span 
+                className="font-bold tracking-widest uppercase text-sm mb-4 block"
+                style={{ color: 'var(--color-secondary)' }}
+              >
+                About Us
+              </span>
+              <h2 
+                className="text-3xl lg:text-4xl font-serif font-bold mb-6"
+                style={{ color: 'var(--color-primary)' }}
+              >
+                Business Growth in Financial Success
+              </h2>
+              <p className="text-gray-600 text-base leading-relaxed mb-6">
+                We are a trusted partner for businesses seeking
+                seamless compliance and return filing solutions. Our team of
+                experienced professionals ensures that your organization stays
+                fully aligned with statutory requirements while you focus on
+                growth. With a commitment to accuracy, transparency, and timely
+                delivery, we simplify complex regulatory processes into clear,
+                actionable steps. From corporate compliances to tax return
+                filings, we bring together expertise and technology to provide
+                reliable, end-to-end support. <br/> <br/>Our goal is to empower businesses
+                with peace of mind, knowing that their compliance obligations
+                are handled with precision and care.{" "}
+                {settings?.about?.yearEstablished || 2022}, we have been helping
+                businesses and individuals navigate the complex world of
+                taxation, compliance, and financial planning.
+              </p>
+              
+
+              {/* Key Points */}
+              <div className="grid sm:grid-cols-2 gap-4 mb-8">
+                <div className="flex items-start gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: 'var(--color-secondary-10)' }}
+                  >
+                    <FaUsers style={{ color: 'var(--color-secondary)' }} />
+                  </div>
+                  <div>
+                    <h4 
+                      className="font-bold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      {settings?.about?.clientsServed || 100}+ Clients
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      Trusted by businesses
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: 'var(--color-secondary-10)' }}
+                  >
+                    <FaLock style={{ color: 'var(--color-secondary)' }} />
+                  </div>
+                  <div>
+                    <h4 
+                      className="font-bold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      100% Confidential
+                    </h4>
+                    <p className="text-sm text-gray-500">Your data is secure</p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: 'var(--color-secondary-10)' }}
+                  >
+                    <FaCheckCircle style={{ color: 'var(--color-secondary)' }} />
+                  </div>
+                  <div>
+                    <h4 
+                      className="font-bold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      Timely Delivery
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      Never miss deadlines
+                    </p>
+                  </div>
+                </div>
+                <div className="flex items-start gap-3">
+                  <div 
+                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    style={{ backgroundColor: 'var(--color-secondary-10)' }}
+                  >
+                    <FaChartLine style={{ color: 'var(--color-secondary)' }} />
+                  </div>
+                  <div>
+                    <h4 
+                      className="font-bold"
+                      style={{ color: 'var(--color-primary)' }}
+                    >
+                      {settings?.about?.yearsOfExperience || 3}+ Years
+                      Experience
+                    </h4>
+                    <p className="text-sm text-gray-500">
+                      Since {settings?.about?.yearEstablished || 2022}
+                    </p>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>
-            <div className="text-center">
-              <div className="text-4xl font-serif font-bold">
-                {settings?.about?.clientsServed || 100}+
+
+              <Link
+                to="/about"
+                className="inline-flex items-center gap-2 font-semibold transition-all group"
+                style={{ color: 'var(--color-primary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+              >
+                Learn More About Us{" "}
+                <FaArrowRight
+                  size={12}
+                  className="group-hover:translate-x-1 transition-transform"
+                />
+              </Link>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== HOW IT WORKS ==================== */}
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 
+              className="text-3xl md:text-4xl font-serif font-bold mb-4"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              How It Works
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              Simple 4-step process to get started with our services
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
+            {/* Step 1 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.1 }}
+              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb' }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div 
+                  className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  01
+                </div>
+                <h3 
+                  className="text-lg font-bold"
+                  style={{ color: 'var(--color-primary)' }}
+                >Contact Us</h3>
               </div>
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
-                Happy Clients
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Reach out via phone, email, or our website form to discuss your requirements
+              </p>
+            </motion.div>
+
+            {/* Step 2 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.2 }}
+              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb' }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div 
+                  className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  02
+                </div>
+                <h3 
+                  className="text-lg font-bold"
+                  style={{ color: 'var(--color-primary)' }}
+                >Get Quote</h3>
               </div>
-            </div>
-            <div className="h-10 w-px bg-[#0B1530]/20 hidden md:block"></div>
-            <div className="text-center">
-              <div className="text-4xl font-serif font-bold">100%</div>
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
-                Confidentiality
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Receive a transparent quote with detailed breakdown of services and pricing
+              </p>
+            </motion.div>
+
+            {/* Step 3 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb' }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div 
+                  className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  03
+                </div>
+                <h3 
+                  className="text-lg font-bold"
+                  style={{ color: 'var(--color-primary)' }}
+                >Submit Documents</h3>
               </div>
-            </div>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Upload required documents securely through our online portal
+              </p>
+            </motion.div>
+
+            {/* Step 4 */}
+            <motion.div
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.4 }}
+              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb' }}
+              onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+            >
+              <div className="flex items-center gap-3 mb-4">
+                <div 
+                  className="w-10 h-10 text-white rounded-full flex items-center justify-center font-bold text-sm"
+                  style={{ backgroundColor: 'var(--color-primary)' }}
+                >
+                  04
+                </div>
+                <h3 
+                  className="text-lg font-bold"
+                  style={{ color: 'var(--color-primary)' }}
+                >Get Results</h3>
+              </div>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Receive completed filings and certificates with ongoing support
+              </p>
+            </motion.div>
+          </div>
+        </div>
+      </section>
+
+      {/* ==================== INDUSTRIES WE SERVE ==================== */}
+      <section className="py-12 md:py-16 bg-white">
+        <div className="container mx-auto px-6 max-w-7xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 
+              className="text-3xl md:text-4xl font-serif font-bold mb-4"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              Industries We Serve
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              Providing specialized tax and compliance solutions across diverse sectors
+            </p>
+          </motion.div>
+
+          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6">
+            {[
+              { name: 'E-commerce & Retail', desc: 'Online stores, marketplaces, retail businesses' },
+              { name: 'IT & Software', desc: 'Tech startups, software companies, IT services' },
+              { name: 'Manufacturing', desc: 'Production units, factories, industrial businesses' },
+              { name: 'Real Estate', desc: 'Property developers, real estate agents, builders' },
+              { name: 'Healthcare', desc: 'Clinics, hospitals, medical practitioners' },
+              { name: 'Professional Services', desc: 'Consultants, agencies, service providers' }
+            ].map((industry, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+                style={{ borderColor: '#e5e7eb' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+              >
+                <h3 
+                  className="text-lg font-bold mb-2"
+                  style={{ color: 'var(--color-primary)' }}
+                >{industry.name}</h3>
+                <p className="text-gray-600 text-sm">{industry.desc}</p>
+              </motion.div>
+            ))}
           </div>
         </div>
       </section>
@@ -608,10 +877,19 @@ const Home = () => {
               viewport={{ once: true }}
               className="text-center mb-12"
             >
-              <span className="inline-block px-4 py-1.5 bg-[#C9A227]/10 text-[#C9A227] text-xs font-bold uppercase tracking-wider rounded-full mb-4">
+              <span 
+                className="inline-block px-4 py-1.5 text-xs font-bold uppercase tracking-wider rounded-full mb-4"
+                style={{ 
+                  backgroundColor: 'var(--color-secondary-10)',
+                  color: 'var(--color-secondary)'
+                }}
+              >
                 Client Reviews
               </span>
-              <h2 className="text-3xl lg:text-4xl font-serif font-bold text-[#0B1530] mb-3">
+              <h2 
+                className="text-3xl lg:text-4xl font-serif font-bold mb-3"
+                style={{ color: 'var(--color-primary)' }}
+              >
                 Trusted by Clients
               </h2>
               <p className="text-gray-500 max-w-xl mx-auto">
@@ -621,26 +899,6 @@ const Home = () => {
 
             {/* Carousel Container */}
             <div className="relative max-w-5xl mx-auto">
-              {/* Navigation Buttons */}
-              {testimonials.length > 1 && (
-                <>
-                  <button
-                    onClick={prevTestimonial}
-                    className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 md:-translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
-                    aria-label="Previous testimonial"
-                  >
-                    <FaChevronLeft size={16} />
-                  </button>
-                  <button
-                    onClick={nextTestimonial}
-                    className="absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 md:translate-x-14 z-10 w-10 h-10 bg-white rounded-full shadow-lg flex items-center justify-center text-[#0B1530] hover:bg-[#C9A227] hover:text-white transition-all"
-                    aria-label="Next testimonial"
-                  >
-                    <FaChevronRight size={18} />
-                  </button>
-                </>
-              )}
-
               {/* Testimonial Card */}
               <div className="overflow-hidden px-4">
                 <AnimatePresence mode="wait">
@@ -654,7 +912,12 @@ const Home = () => {
                   >
                     {/* Left: Author */}
                     <div className="flex flex-col items-center md:w-48 flex-shrink-0">
-                      <div className="w-16 h-16 rounded-full overflow-hidden bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3">
+                      <div 
+                        className="w-16 h-16 rounded-full overflow-hidden flex items-center justify-center text-white font-bold text-2xl shadow-md mb-3"
+                        style={{
+                          background: `linear-gradient(to bottom right, var(--color-primary), var(--color-primary))`
+                        }}
+                      >
                         {testimonials[currentTestimonial]?.image ? (
                           <img
                             src={testimonials[currentTestimonial].image}
@@ -677,7 +940,10 @@ const Home = () => {
                         </span>
                       </div>
                       <div className="text-center">
-                        <div className="font-bold text-[#0B1530]">
+                        <div 
+                          className="font-bold"
+                          style={{ color: 'var(--color-primary)' }}
+                        >
                           {testimonials[currentTestimonial]?.name}
                         </div>
                         <div className="text-xs text-gray-500">
@@ -694,7 +960,7 @@ const Home = () => {
                               color:
                                 i <
                                 (testimonials[currentTestimonial]?.rating || 5)
-                                  ? "#C9A227"
+                                  ? "var(--color-secondary)"
                                   : "#e5e7eb",
                             }}
                           />
@@ -705,7 +971,10 @@ const Home = () => {
                     {/* Right: Quote */}
                     <div className="flex-1 relative md:pl-6 md:border-l border-gray-100">
                       {/* Quote Icon */}
-                      <div className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 bg-[#C9A227] rounded-full flex items-center justify-center shadow-lg">
+                      <div 
+                        className="absolute -top-2 -left-2 md:top-0 md:-left-3 w-10 h-10 rounded-full flex items-center justify-center shadow-lg"
+                        style={{ backgroundColor: 'var(--color-secondary)' }}
+                      >
                         <svg
                           className="w-5 h-5 text-white"
                           fill="currentColor"
@@ -731,9 +1000,10 @@ const Home = () => {
                       onClick={() => setCurrentTestimonial(idx)}
                       className={`w-2.5 h-2.5 rounded-full transition-all ${
                         idx === currentTestimonial
-                          ? "bg-[#C9A227] w-6"
+                          ? "w-6"
                           : "bg-gray-300 hover:bg-gray-400"
                       }`}
+                      style={idx === currentTestimonial ? { backgroundColor: 'var(--color-secondary)' } : {}}
                       aria-label={`Go to testimonial ${idx + 1}`}
                     />
                   ))}
@@ -744,35 +1014,128 @@ const Home = () => {
         </section>
       )}
 
+      {/* ==================== FAQ SECTION ==================== */}
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="container mx-auto px-6 max-w-4xl">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 
+              className="text-3xl md:text-4xl font-serif font-bold mb-4"
+              style={{ color: 'var(--color-primary)' }}
+            >
+              Frequently Asked Questions
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              Quick answers to common questions about our services
+            </p>
+          </motion.div>
+
+          <div className="space-y-4">
+            {[
+              {
+                q: 'What services do you provide?',
+                a: 'We offer comprehensive tax planning, GST filing, ITR filing, company registration, audit services, and financial advisory for individuals and businesses.'
+              },
+              {
+                q: 'How long does it take to file ITR?',
+                a: 'ITR filing typically takes 2-3 business days once we receive all required documents. We ensure timely filing before deadlines.'
+              },
+              {
+                q: 'Do you provide GST registration services?',
+                a: 'Yes, we handle complete GST registration including application filing, documentation, and follow-up with authorities.'
+              },
+              {
+                q: 'What are your consultation charges?',
+                a: 'We offer free initial consultations. Service charges vary based on requirements. Contact us for a detailed quote.'
+              },
+              {
+                q: 'Is my financial data secure?',
+                a: 'Absolutely. We use bank-grade encryption and secure cloud storage. Your data is 100% confidential and protected.'
+              },
+              {
+                q: 'Do you provide support after filing?',
+                a: 'Yes, we provide ongoing support for queries, notices, and updates even after filing completion.'
+              }
+            ].map((faq, idx) => (
+              <motion.div
+                key={idx}
+                initial={{ opacity: 0, y: 20 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ delay: idx * 0.1 }}
+                className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+                style={{ borderColor: '#e5e7eb' }}
+                onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
+              >
+                <h3 
+                  className="text-lg font-bold mb-2"
+                  style={{ color: 'var(--color-primary)' }}
+                >{faq.q}</h3>
+                <p className="text-gray-600 text-sm leading-relaxed">{faq.a}</p>
+              </motion.div>
+            ))}
+          </div>
+
+          <div className="text-center mt-8">
+            <Link
+              to="/contact"
+              className="inline-flex items-center gap-2 font-semibold transition-all"
+              style={{ color: 'var(--color-primary)' }}
+              onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
+              onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+            >
+              Have more questions? Contact us <FaArrowRight size={12} />
+            </Link>
+          </div>
+        </div>
+      </section>
+
       {/* ==================== CTA SECTION ==================== */}
-      <section className="py-12 md:py-16 px-6 bg-[#0B1530] text-center">
+      <section 
+        className="py-12 md:py-16 px-6 text-center"
+        style={{ backgroundColor: 'var(--color-primary)' }}
+      >
         <div className="container mx-auto max-w-3xl">
           <h2 className="text-2xl lg:text-3xl font-serif font-bold mb-4 text-white">
             Ready to Optimize Your Finances?
           </h2>
           <p className="text-base lg:text-lg mb-8 text-gray-400 font-light">
-            Schedule a free 30-minute consultation with our expert chartered
-            accountants.
+            Schedule a free 30-minute consultation with our expert tax and business
+            consultants.
           </p>
-          {/* UPDATED: Button triggers Modal with Dynamic Colors */}
-          <button
-            onClick={openModal}
-            className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105"
-            style={{
-              background: "var(--color-secondary)",
-              color: "var(--color-primary)",
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = "var(--color-primary)";
-              e.currentTarget.style.color = "white";
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = "var(--color-secondary)";
-              e.currentTarget.style.color = "var(--color-primary)";
-            }}
-          >
-            Book Consultation
-          </button>
+          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+            {/* UPDATED: Button triggers Modal with Dynamic Colors */}
+            <button
+              onClick={openModal}
+              className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105"
+              style={{
+                background: "var(--color-secondary)",
+                color: "var(--color-primary)",
+              }}
+              onMouseEnter={(e) => {
+                e.currentTarget.style.background = "var(--color-primary)";
+                e.currentTarget.style.color = "white";
+              }}
+              onMouseLeave={(e) => {
+                e.currentTarget.style.background = "var(--color-secondary)";
+                e.currentTarget.style.color = "var(--color-primary)";
+              }}
+            >
+              Book Consultation
+            </button>
+            
+            <Link
+              to="/quote"
+              className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105 border-2 border-white/20 text-white hover:bg-white/10"
+            >
+              Get Custom Quote
+            </Link>
+          </div>
         </div>
       </section>
     </main>
@@ -780,3 +1143,4 @@ const Home = () => {
 };
 
 export default Home;
+

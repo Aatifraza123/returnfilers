@@ -87,11 +87,11 @@ const MyQuotes = () => {
         <div className="mb-8">
           <button
             onClick={() => navigate('/dashboard')}
-            className="flex items-center gap-2 text-gray-600 hover:text-[#0B1530] mb-4"
+            className="flex items-center gap-2 text-gray-600 hover:text-primary mb-4"
           >
             <FaArrowLeft /> Back to Dashboard
           </button>
-          <h1 className="text-3xl font-bold text-[#0B1530]">My Quotes</h1>
+          <h1 className="text-3xl font-bold text-primary">My Quotes</h1>
           <p className="text-gray-600 mt-2">View all your quote requests</p>
         </div>
 
@@ -103,7 +103,7 @@ const MyQuotes = () => {
             <p className="text-gray-500 mb-6">You haven't requested any quotes yet.</p>
             <button
               onClick={() => navigate('/quote')}
-              className="px-6 py-3 bg-[#C9A227] text-[#0B1530] rounded-lg font-semibold hover:bg-[#0B1530] hover:text-white transition-colors"
+              className="px-6 py-3 bg-secondary text-primary rounded-lg font-semibold hover:bg-primary hover:text-white transition-colors"
             >
               Request Quote
             </button>
@@ -121,7 +121,7 @@ const MyQuotes = () => {
                 {/* Quote Header */}
                 <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4 mb-4 pb-4 border-b border-gray-100">
                   <div>
-                    <h3 className="text-xl font-bold text-[#0B1530] mb-1">{quote.service}</h3>
+                    <h3 className="text-xl font-bold text-primary mb-1">{quote.service}</h3>
                     <p className="text-sm text-gray-500">
                       Requested on {new Date(quote.createdAt).toLocaleDateString('en-IN', { 
                         year: 'numeric', 
@@ -142,24 +142,24 @@ const MyQuotes = () => {
                 <div className="grid md:grid-cols-2 gap-4 mb-4">
                   <div className="space-y-2">
                     <div className="flex items-center gap-2 text-gray-600">
-                      <FaEnvelope className="text-[#C9A227]" />
+                      <FaEnvelope className="text-secondary" />
                       <span className="text-sm">{quote.email}</span>
                     </div>
                     <div className="flex items-center gap-2 text-gray-600">
-                      <FaPhone className="text-[#C9A227]" />
+                      <FaPhone className="text-secondary" />
                       <span className="text-sm">{quote.phone}</span>
                     </div>
                   </div>
                   <div className="space-y-2">
                     {quote.company && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <FaBuilding className="text-[#C9A227]" />
+                        <FaBuilding className="text-secondary" />
                         <span className="text-sm">{quote.company}</span>
                       </div>
                     )}
                     {quote.budget && (
                       <div className="flex items-center gap-2 text-gray-600">
-                        <FaDollarSign className="text-[#C9A227]" />
+                        <FaDollarSign className="text-secondary" />
                         <span className="text-sm">Budget: {quote.budget}</span>
                       </div>
                     )}
@@ -170,7 +170,7 @@ const MyQuotes = () => {
                 {quote.message && (
                   <div className="mt-4 pt-4 border-t border-gray-100">
                     <p className="text-sm text-gray-600">
-                      <span className="font-semibold text-[#0B1530]">Message:</span> {quote.message}
+                      <span className="font-semibold text-primary">Message:</span> {quote.message}
                     </p>
                   </div>
                 )}

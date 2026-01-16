@@ -218,7 +218,7 @@ const AdminBlogsForm = () => {
             <button
               type="button"
               onClick={() => navigate('/admin/blogs')}
-              className="flex items-center text-gray-500 hover:text-[#0B1530] transition-colors"
+              className="flex items-center text-gray-500 hover:text-primary transition-colors"
             >
               <FaArrowLeft className="mr-2" /> Back
             </button>
@@ -226,7 +226,7 @@ const AdminBlogsForm = () => {
                <button 
                 type="submit" 
                 disabled={loading}
-                className="bg-[#0B1530] text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
+                className="bg-primary text-white px-6 py-2 rounded-full text-sm font-bold shadow-lg hover:shadow-xl transition-all disabled:opacity-70"
                >
                  {loading ? 'Saving...' : 'Publish'}
                </button>
@@ -265,7 +265,7 @@ const AdminBlogsForm = () => {
               <input
                 {...register('title', { required: true })}
                 placeholder="Article Title..."
-                className="w-full text-4xl lg:text-5xl font-serif font-bold text-[#0B1530] placeholder-gray-300 border-none focus:ring-0 p-0 mb-8 bg-transparent"
+                className="w-full text-4xl lg:text-5xl font-serif font-bold text-primary placeholder-gray-300 border-none focus:ring-0 p-0 mb-8 bg-transparent"
                 autoComplete="off"
               />
 
@@ -278,7 +278,7 @@ const AdminBlogsForm = () => {
                     onClick={() => setHtmlMode(!htmlMode)}
                     className={`px-4 py-2 rounded-lg font-medium text-sm transition-all ${
                       htmlMode 
-                        ? 'bg-[#C9A227] text-white shadow-md' 
+                        ? 'bg-secondary text-white shadow-md' 
                         : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
                     }`}
                   >
@@ -292,7 +292,7 @@ const AdminBlogsForm = () => {
                     value={content}
                     onChange={(e) => setContent(e.target.value)}
                     placeholder="Paste your HTML content here..."
-                    className="w-full min-h-[500px] p-4 border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-[#C9A227] focus:ring-2 focus:ring-[#C9A227]/20"
+                    className="w-full min-h-[500px] p-4 border border-gray-200 rounded-lg font-mono text-sm focus:outline-none focus:border-secondary focus:ring-2 focus:ring-secondary/20"
                     style={{ fontFamily: 'Monaco, Consolas, monospace' }}
                   />
                 ) : (
@@ -524,7 +524,7 @@ const AdminBlogsForm = () => {
                  <button 
                   type="submit" 
                   disabled={loading}
-                  className="w-full bg-[#0B1530] text-white py-3 rounded-lg font-bold shadow-md hover:bg-[#1a2b5c] transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
+                  className="w-full bg-primary text-white py-3 rounded-lg font-bold shadow-md hover:bg-primary transition-colors flex items-center justify-center gap-2 disabled:opacity-70"
                  >
                    {loading ? <span className="animate-spin">⏳</span> : <FaMagic />}
                    {isEditMode ? 'Update Story' : 'Publish Story'}
@@ -540,7 +540,7 @@ const AdminBlogsForm = () => {
                       setContent(BLOG_TEMPLATE);
                       toast.success('Template loaded! Customize it with your content.');
                     }}
-                    className="w-full py-3 rounded-lg font-medium text-[#C9A227] border-2 border-[#C9A227] hover:bg-[#C9A227] hover:text-white transition-colors flex items-center justify-center gap-2"
+                    className="w-full py-3 rounded-lg font-medium text-secondary border-2 border-secondary hover:bg-secondary hover:text-white transition-colors flex items-center justify-center gap-2"
                    >
                      <FaFileAlt />
                      Use Template
@@ -562,11 +562,11 @@ const AdminBlogsForm = () => {
                 
                 <div className="space-y-5">
                   <div>
-                    <label className="block text-sm font-semibold text-[#0B1530] mb-2">Category</label>
+                    <label className="block text-sm font-semibold text-primary mb-2">Category</label>
                     <div className="relative">
                       <select 
                         {...register('category')} 
-                        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-[#C9A227]"
+                        className="w-full appearance-none bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg leading-tight focus:outline-none focus:bg-white focus:border-secondary"
                       >
                         <option>General</option>
                         <option>Tax Updates</option>
@@ -581,10 +581,10 @@ const AdminBlogsForm = () => {
                   </div>
 
                   <div>
-                     <label className="block text-sm font-semibold text-[#0B1530] mb-2">Author</label>
+                     <label className="block text-sm font-semibold text-primary mb-2">Author</label>
                      <input 
                        {...register('author')} 
-                       className="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg focus:outline-none focus:bg-white focus:border-[#C9A227]" 
+                       className="w-full bg-gray-50 border border-gray-200 text-gray-700 py-3 px-4 rounded-lg focus:outline-none focus:bg-white focus:border-secondary" 
                        placeholder="Author Name"
                        defaultValue="Admin"
                      />

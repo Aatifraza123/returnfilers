@@ -58,7 +58,7 @@ const settingsSchema = new mongoose.Schema({
   // Hero Section
   hero: {
     title: { type: String, default: 'Professional Tax & Financial Services' },
-    subtitle: { type: String, default: 'Expert Chartered Accountants for Your Business Growth' },
+    subtitle: { type: String, default: 'Expert Tax & Business Consultants for Your Business Growth' },
     ctaText: { type: String, default: 'Get Started' },
     ctaLink: { type: String, default: '/quote' },
     backgroundImage: { type: String, default: 'https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop' }
@@ -122,9 +122,9 @@ const settingsSchema = new mongoose.Schema({
   
   // SEO Settings
   seo: {
-    metaTitle: { type: String, default: 'ReturnFilers - Professional CA Services' },
-    metaDescription: { type: String, default: 'Expert Chartered Accountant services for tax filing, GST, auditing, and business registration.' },
-    metaKeywords: { type: String, default: 'CA, Chartered Accountant, Tax Filing, GST, Audit' },
+    metaTitle: { type: String, default: 'ReturnFilers - Professional Tax & Business Consulting Services' },
+    metaDescription: { type: String, default: 'Expert tax and business consulting services for tax filing, GST, auditing, and business registration.' },
+    metaKeywords: { type: String, default: 'Tax Consultant, Business Consultant, Tax Filing, GST, Audit' },
     faviconUrl: { type: String, default: '/favicon.svg' },
     ogImage: { type: String, default: '' },
     googleAnalyticsId: { type: String, default: '' },

@@ -24,6 +24,8 @@ const digitalServiceRoutes = require('./routes/digitalServiceRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
 const sitemapRoutes = require('./routes/sitemapRoutes');
+const pricingRoutes = require('./routes/pricing');
+const userRoutes = require('./routes/userRoutes');
 
 const app = express();
 
@@ -157,6 +159,18 @@ console.log('✓ Settings routes registered at /api/settings');
 
 app.use('/api/notifications', notificationRoutes);
 console.log('✓ Notification routes registered at /api/notifications');
+
+app.use('/api/pricing', pricingRoutes);
+console.log('✓ Pricing routes registered at /api/pricing');
+console.log('📊 Pricing routes object:', pricingRoutes);
+
+app.use('/api/users', userRoutes);
+console.log('✓ User routes registered at /api/users');
+
+// Test route to verify pricing endpoint works
+app.get('/api/pricing-test', (req, res) => {
+  res.json({ message: 'Pricing test route works!' });
+});
 
 // Sitemap route
 app.use('/sitemap.xml', sitemapRoutes);

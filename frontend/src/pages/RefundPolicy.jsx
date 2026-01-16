@@ -41,7 +41,7 @@ const RefundPolicy = () => {
           <a 
             key={index} 
             href={`mailto:${part}`} 
-            className="text-[#C9A227] hover:text-[#0B1530] underline transition-colors font-bold"
+            className="text-secondary hover:text-primary underline transition-colors font-bold"
           >
             {part}
           </a>
@@ -78,16 +78,16 @@ const RefundPolicy = () => {
           <motion.span 
             initial={{ opacity: 0 }} 
             animate={{ opacity: 1 }} 
-            className="text-[#0B1530] font-semibold tracking-wider uppercase text-xs mb-2 block"
+            className="text-primary font-semibold tracking-wider uppercase text-xs mb-2 block"
           >
             Billing & Support
           </motion.span>
           <motion.h1
             initial={{ opacity: 0, y: 20 }}
             animate={{ opacity: 1, y: 0 }}
-            className="text-3xl md:text-4xl font-serif font-bold mb-3 text-[#0B1530]"
+            className="text-3xl md:text-4xl font-serif font-bold mb-3 text-primary"
           >
-            Refund <span className="text-[#C9A227]">Policy</span>
+            Refund <span className="text-secondary">Policy</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -113,7 +113,7 @@ const RefundPolicy = () => {
         <div className="container mx-auto px-6 max-w-4xl">
           {loading ? (
             <div className="flex items-center justify-center py-12">
-              <div className="animate-spin w-12 h-12 border-4 border-[#C9A227] border-t-transparent rounded-full"></div>
+              <div className="animate-spin w-12 h-12 border-4 border-secondary border-t-transparent rounded-full"></div>
             </div>
           ) : (
             <motion.div

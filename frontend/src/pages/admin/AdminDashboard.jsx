@@ -30,7 +30,8 @@ const AdminDashboard = () => {
     consultations: 0,
     contacts: 0,
     bookings: 0,
-    quotes: 0
+    quotes: 0,
+    users: 0
   });
   const [loading, setLoading] = useState(true);
 
@@ -40,13 +41,14 @@ const AdminDashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      const [services, blogs, consultations, contacts, bookings, quotes] = await Promise.all([
+      const [services, blogs, consultations, contacts, bookings, quotes, users] = await Promise.all([
         api.get('/services'),
         api.get('/blogs'),
         api.get('/consultations'),
         api.get('/contacts'),
         api.get('/bookings'),
-        api.get('/quotes')
+        api.get('/quotes'),
+        api.get('/users/stats')
       ]);
 
       setStats({
@@ -55,7 +57,8 @@ const AdminDashboard = () => {
         consultations: consultations.data.consultations?.length || consultations.data.length || 0,
         contacts: contacts.data.contacts?.length || contacts.data.length || 0,
         bookings: bookings.data.bookings?.length || bookings.data.length || 0,
-        quotes: quotes.data.quotes?.length || quotes.data.length || 0
+        quotes: quotes.data.quotes?.length || quotes.data.length || 0,
+        users: users.data.stats?.totalUsers || 0
       });
     } catch (error) {
       console.error('Error fetching dashboard data:', error);
@@ -198,6 +201,7 @@ const AdminDashboard = () => {
   }
 
   const statsCards = [
+    { title: 'Users', value: stats.users, icon: <FaUsers />, color: 'blue', link: '/admin/users' },
     { title: 'Services', value: stats.services, icon: <FaServicestack />, color: 'green', link: '/admin/services' },
     { title: 'Blogs', value: stats.blogs, icon: <FaBlog />, color: 'purple', link: '/admin/blogs' },
     { title: 'Bookings', value: stats.bookings, icon: <FaCalendarCheck />, color: 'orange', link: '/admin/bookings' },
@@ -207,6 +211,7 @@ const AdminDashboard = () => {
   ];
 
   const quickActions = [
+    { title: 'Manage Users', link: '/admin/users', icon: <FaUsers />, desc: 'View and manage users' },
     { title: 'Manage Services', link: '/admin/services', icon: <FaServicestack />, desc: 'Add or edit services' },
     { title: 'Manage Blogs', link: '/admin/blogs', icon: <FaBlog />, desc: 'Create and publish blogs' },
     { title: 'View Bookings', link: '/admin/bookings', icon: <FaCalendarCheck />, desc: 'Manage service bookings' },

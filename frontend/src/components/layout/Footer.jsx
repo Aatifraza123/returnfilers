@@ -25,9 +25,14 @@ const Footer = () => {
   const quickLinks = [
     { to: '/about', label: 'About Us' },
     { to: '/services', label: 'Services' },
-    // { to: '/portfolio', label: 'Portfolio' },
     { to: '/contact', label: 'Contact' },
     ...(settings?.features?.enableBlog ? [{ to: '/blog', label: 'Blog' }] : [])
+  ];
+
+  const resourceLinks = [
+    { to: '/pricing', label: 'Pricing' },
+    { to: '/faq', label: 'FAQ' },
+    { to: '/calculator', label: 'Calculator' },
   ];
 
   const legalLinks = [
@@ -76,7 +81,7 @@ const Footer = () => {
       }}
     >
       <div className="container mx-auto px-6 py-6 md:py-8">
-        <div className={`grid ${settings?.features?.enableNewsletter ? 'md:grid-cols-4' : 'md:grid-cols-3'} gap-8 md:gap-10`}>
+        <div className={`grid ${settings?.features?.enableNewsletter ? 'md:grid-cols-5' : 'md:grid-cols-4'} gap-8 md:gap-10`}>
           {/* ReturnFilers Section */}
           <div className="space-y-4">
             <div className="flex items-center gap-3">
@@ -92,7 +97,7 @@ const Footer = () => {
                     }}
                   />
                   <div 
-                    className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
+                    className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-secondary to-[#C9A832] rounded-tr-xl rounded-bl-xl items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
                     style={{ display: 'none' }}
                   >
                     {settings?.logoText || 'RF'}
@@ -100,7 +105,7 @@ const Footer = () => {
                 </>
               ) : (
                 <div 
-                  className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-[#C9A227] to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
+                  className="w-12 h-12 md:w-14 md:h-14 bg-gradient-to-br from-secondary to-[#C9A832] rounded-tr-xl rounded-bl-xl flex items-center justify-center text-white font-serif text-base md:text-xl font-bold shadow-md"
                 >
                   {settings?.logoText || 'RF'}
                 </div>
@@ -171,6 +176,30 @@ const Footer = () => {
             </ul>
           </div>
 
+          {/* Resources */}
+          <div>
+            <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Resources</h4>
+            <ul className="space-y-3 md:space-y-4 text-sm md:text-base">
+              {resourceLinks.map(({ to, label }) => (
+                <li key={to}>
+                  <Link 
+                    to={to} 
+                    className="inline-block hover:translate-x-1 transition-all duration-300"
+                    style={{ color: footerLink }}
+                    onMouseEnter={(e) => {
+                      e.currentTarget.style.color = footerText;
+                    }}
+                    onMouseLeave={(e) => {
+                      e.currentTarget.style.color = footerLink;
+                    }}
+                  >
+                    {label}
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
           {/* Legal */}
           <div>
             <h4 className="font-serif font-bold mb-4 md:mb-6 text-white text-lg md:text-xl">Legal</h4>
@@ -206,12 +235,12 @@ const Footer = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   placeholder="Your email address"
-                  className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-[#C9A227] transition-all placeholder-gray-500 text-sm"
+                  className="w-full pl-4 pr-12 py-2.5 rounded-full bg-[#1A1A1A] text-white border border-[#333] focus:outline-none focus:border-secondary transition-all placeholder-gray-500 text-sm"
                   required
                 />
                 <button
                   type="submit"
-                  className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-[#C9A227] text-black rounded-full hover:bg-white transition-colors shadow-lg"
+                  className="absolute right-1 top-1 bottom-1 w-9 h-9 flex items-center justify-center bg-secondary text-black rounded-full hover:bg-white transition-colors shadow-lg"
                   aria-label="Subscribe"
                 >
                   <FaPaperPlane size={14} className="-ml-0.5" />

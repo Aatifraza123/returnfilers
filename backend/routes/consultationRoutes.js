@@ -14,8 +14,8 @@ const {
 // User route - get user's own consultations
 router.get('/my-consultations', protectUser, getUserConsultations);
 
-// Public route - anyone can submit (but will link to user if logged in)
-router.post('/', protectUser, createConsultation);
+// Public route - anyone can submit (no auth required)
+router.post('/', createConsultation);
 
 // Admin routes - protected
 router.get('/', protectAdmin, getConsultations);

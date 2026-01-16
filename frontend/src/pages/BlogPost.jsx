@@ -79,10 +79,10 @@ const BlogPost = () => {
   if (!blog) return null;
 
   return (
-    <div className="min-h-screen bg-white font-sans selection:bg-[#C9A227] selection:text-white">
+    <div className="min-h-screen bg-white font-sans selection:bg-secondary selection:text-white">
       {/* Reading Progress Bar */}
       <motion.div
-        className="fixed top-0 left-0 right-0 h-1 bg-[#C9A227] origin-left z-50"
+        className="fixed top-0 left-0 right-0 h-1 bg-secondary origin-left z-50"
         style={{ scaleX }}
       />
 
@@ -92,7 +92,12 @@ const BlogPost = () => {
           style={{ y }}
           className="absolute inset-0 z-0"
         >
-          <div className="absolute inset-0 bg-gradient-to-b from-[#0B1530]/80 via-[#0B1530]/60 to-[#0B1530] z-10" />
+          <div 
+            className="absolute inset-0 z-10"
+            style={{
+              background: 'linear-gradient(to bottom, rgba(11, 21, 48, 0.8), rgba(11, 21, 48, 0.6), rgba(11, 21, 48, 1))'
+            }}
+          />
           <img
             src={blog.image || 'https://images.unsplash.com/photo-1486312338219-ce68d2c6f44d?auto=format&fit=crop&q=80'}
             alt={blog.title}
@@ -103,7 +108,7 @@ const BlogPost = () => {
         <div className="absolute inset-0 z-20 container mx-auto px-4 flex flex-col justify-end pb-10 max-w-4xl">
           <Link
             to="/blog"
-            className="inline-flex items-center text-white/70 hover:text-[#C9A227] mb-4 transition-colors text-xs font-medium tracking-wide w-fit group" 
+            className="inline-flex items-center text-white/70 hover:text-secondary mb-4 transition-colors text-xs font-medium tracking-wide w-fit group" 
           >
             <FaArrowLeft className="mr-2 group-hover:-translate-x-1 transition-transform text-[10px]" />
             Back to Journal
@@ -115,7 +120,7 @@ const BlogPost = () => {
             transition={{ duration: 0.6 }}
           >
             {blog.category && (
-              <span className="inline-block px-2.5 py-0.5 mb-3 text-[10px] font-bold tracking-widest text-[#C9A227] uppercase border border-[#C9A227]/30 rounded-full bg-[#C9A227]/10 backdrop-blur-sm">
+              <span className="inline-block px-2.5 py-0.5 mb-3 text-[10px] font-bold tracking-widest text-secondary uppercase border border-secondary/30 rounded-full bg-secondary/10 backdrop-blur-sm">
                 {blog.category}
               </span>
             )}
@@ -126,17 +131,17 @@ const BlogPost = () => {
 
             <div className="flex flex-wrap items-center gap-5 text-xs text-gray-300 border-t border-white/10 pt-4">
               <div className="flex items-center gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#C9A227] flex items-center justify-center text-[#0B1530] font-bold text-[10px]">
+                <div className="w-6 h-6 rounded-full bg-secondary flex items-center justify-center text-primary font-bold text-[10px]">
                   {blog.author ? blog.author[0] : <FaUser />}
                 </div>
                 <span className="font-medium text-white tracking-wide">{blog.author || 'Anonymous'}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <FaCalendarAlt className="text-[#C9A227]" />
+                <FaCalendarAlt className="text-secondary" />
                 <span>{blog.createdAt ? format(new Date(blog.createdAt), 'MMMM dd, yyyy') : 'Date unavailable'}</span>
               </div>
               <div className="flex items-center gap-1.5">
-                <FaClock className="text-[#C9A227]" />
+                <FaClock className="text-secondary" />
                 <span>{blog.readTime || '5 min read'}</span>
               </div>
             </div>
@@ -162,7 +167,7 @@ const BlogPost = () => {
                   navigator.clipboard.writeText(window.location.href);
                   toast.success('Link copied!');
                 }}
-                className="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-[#C9A227] hover:text-white transition-all duration-300 shadow-sm border border-gray-100"
+                className="w-8 h-8 rounded-full bg-gray-50 text-gray-600 flex items-center justify-center hover:bg-secondary hover:text-white transition-all duration-300 shadow-sm border border-gray-100"
                >
                  <FaShareAlt size={12} />
                </button>
@@ -232,6 +237,7 @@ const BlogSkeleton = () => (
 );
 
 export default BlogPost;
+
 
 
 

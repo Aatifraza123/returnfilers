@@ -99,11 +99,11 @@ const UserProfile = () => {
   return (
     <div className="min-h-screen bg-gray-50">
       {/* Header */}
-      <div className="bg-[#0B1530] text-white py-6">
+      <div className="bg-primary text-white py-6">
         <div className="container mx-auto px-6">
           <Link
             to="/dashboard"
-            className="inline-flex items-center gap-2 text-gray-300 hover:text-[#C9A227] mb-4 transition-colors"
+            className="inline-flex items-center gap-2 text-gray-300 hover:text-secondary mb-4 transition-colors"
           >
             <FaArrowLeft /> Back to Dashboard
           </Link>
@@ -115,11 +115,11 @@ const UserProfile = () => {
       <div className="container mx-auto px-6 py-8 max-w-2xl">
         {/* Profile Form */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6 mb-6">
-          <h2 className="text-xl font-bold text-[#0B1530] mb-6">Personal Information</h2>
+          <h2 className="text-xl font-bold text-primary mb-6">Personal Information</h2>
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <FaUser className="inline mr-2 text-[#C9A227]" />
+                <FaUser className="inline mr-2 text-secondary" />
                 Full Name
               </label>
               <input
@@ -128,13 +128,13 @@ const UserProfile = () => {
                 value={formData.name}
                 onChange={handleChange}
                 required
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530]"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <FaEnvelope className="inline mr-2 text-[#C9A227]" />
+                <FaEnvelope className="inline mr-2 text-secondary" />
                 Email Address
               </label>
               <input
@@ -148,7 +148,7 @@ const UserProfile = () => {
 
             <div>
               <label className="block text-sm font-semibold text-gray-700 mb-2">
-                <FaPhone className="inline mr-2 text-[#C9A227]" />
+                <FaPhone className="inline mr-2 text-secondary" />
                 Phone Number
               </label>
               <input
@@ -157,14 +157,14 @@ const UserProfile = () => {
                 value={formData.phone}
                 onChange={handleChange}
                 placeholder="Enter your phone number"
-                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530]"
+                className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
               />
             </div>
 
             <button
               type="submit"
               disabled={loading}
-              className="w-full bg-[#0B1530] text-white py-3 rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+              className="w-full bg-primary text-white py-3 rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
             >
               {loading ? 'Saving...' : (
                 <>
@@ -178,11 +178,11 @@ const UserProfile = () => {
         {/* Password Section */}
         <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
           <div className="flex items-center justify-between mb-4">
-            <h2 className="text-xl font-bold text-[#0B1530]">Password & Security</h2>
+            <h2 className="text-xl font-bold text-primary">Password & Security</h2>
             {!showPasswordForm && (
               <button
                 onClick={() => setShowPasswordForm(true)}
-                className="text-[#C9A227] hover:text-[#0B1530] font-semibold text-sm"
+                className="text-secondary hover:text-primary font-semibold text-sm"
               >
                 Change Password
               </button>
@@ -201,7 +201,7 @@ const UserProfile = () => {
                   value={passwordData.currentPassword}
                   onChange={handlePasswordChange}
                   required
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
 
@@ -216,7 +216,7 @@ const UserProfile = () => {
                   onChange={handlePasswordChange}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
 
@@ -231,7 +231,7 @@ const UserProfile = () => {
                   onChange={handlePasswordChange}
                   required
                   minLength={6}
-                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530]/20 focus:border-[#0B1530]"
+                  className="w-full px-4 py-3 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-primary/20 focus:border-primary"
                 />
               </div>
 
@@ -239,7 +239,7 @@ const UserProfile = () => {
                 <button
                   type="submit"
                   disabled={loading}
-                  className="flex-1 bg-[#0B1530] text-white py-3 rounded-lg font-semibold hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
+                  className="flex-1 bg-primary text-white py-3 rounded-lg font-semibold hover:bg-secondary hover:text-primary transition-colors disabled:opacity-50 disabled:cursor-not-allowed flex items-center justify-center gap-2"
                 >
                   {loading ? 'Changing...' : (
                     <>

@@ -21,6 +21,9 @@ import ExpertiseDetail from './pages/ExpertiseDetail'
 import Blog from './pages/Blog'
 import BlogPost from './pages/BlogPost'
 import Contact from './pages/Contact'
+import Calculator from './pages/Calculator'
+import FAQ from './pages/FAQ'
+import Pricing from './pages/Pricing'
 import TermsConditions from './pages/TermsConditions'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
@@ -59,6 +62,7 @@ import AdminProfile from './pages/admin/AdminProfile'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminBookings from './pages/admin/AdminBookings'
 import AdminDigitalServices from './pages/admin/AdminDigitalServices'
+import AdminPricing from './pages/admin/AdminPricing'
 import Booking from './pages/Booking'
 import DigitalServices from './pages/DigitalServices'
 import DigitalServiceDetail from './pages/DigitalServiceDetail'
@@ -71,8 +75,25 @@ const ChatbotWrapper = () => {
   const location = useLocation();
   const isAdminRoute = location.pathname.startsWith('/admin');
   
-  // Don't show chatbot on admin pages
-  if (isAdminRoute) return null;
+  // Pages where chatbot should be shown
+  const chatbotPages = [
+    '/',              // Home
+    '/about',         // About
+    '/services',      // Services
+    '/contact',       // Contact
+    '/quote',         // Quote
+    '/calculator',    // Calculator
+    '/blog',          // Blog
+  ];
+  
+  // Check if current page should show chatbot
+  const shouldShowChatbot = chatbotPages.some(page => 
+    location.pathname === page || 
+    location.pathname.startsWith(page + '/')
+  );
+  
+  // Don't show chatbot on admin pages or pages not in the list
+  if (isAdminRoute || !shouldShowChatbot) return null;
   
   return <AIChatbot />;
 };
@@ -109,6 +130,9 @@ function App() {
           <Route path="blog/:id" element={<BlogPost />} />
           {/* <Route path="portfolio" element={<Portfolio />} /> */}
           <Route path="contact" element={<Contact />} />
+          <Route path="calculator" element={<Calculator />} />
+          <Route path="faq" element={<FAQ />} />
+          <Route path="pricing" element={<Pricing />} />
           <Route path="terms-conditions" element={<TermsConditions />} />
           <Route path="quote" element={<Quote />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
@@ -158,15 +182,16 @@ function App() {
           <Route path="profile" element={<AdminProfile />} />
           <Route path="bookings" element={<AdminBookings />} />
           <Route path="digital-services" element={<AdminDigitalServices />} />
+          <Route path="pricing" element={<AdminPricing />} />
         </Route>
 
         {/* 404 Page */}
         <Route path="*" element={
           <div className="min-h-screen flex items-center justify-center bg-gray-100">
             <div className="text-center">
-              <h1 className="text-6xl font-bold text-[#0B1530] mb-4">404</h1>
+              <h1 className="text-6xl font-bold text-primary mb-4">404</h1>
               <p className="text-xl text-gray-600 mb-8">Page Not Found</p>
-              <a href="/" className="px-6 py-3 bg-[#0B1530] text-white rounded-lg hover:bg-[#C9A227] transition-colors">
+              <a href="/" className="px-6 py-3 bg-primary text-white rounded-lg hover:bg-secondary transition-colors">
                 Go Home
               </a>
             </div>

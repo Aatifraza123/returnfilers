@@ -1,282 +1,167 @@
-import { useState, useEffect, Fragment, useContext } from 'react';
-import { Dialog, Transition } from '@headlessui/react';
+import { useState } from 'react';
+import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaComments } from 'react-icons/fa';
 import api from '../../api/axios';
-import toast from 'react-hot-toast';
-import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaComment } from 'react-icons/fa';
-import UserAuthContext from '../../context/UserAuthContext';
-import AuthModal from './AuthModal';
 
-const ConsultationModal = ({ isOpen, closeModal, preSelectedService }) => {
-  const { user, token } = useContext(UserAuthContext);
-  const [showAuthModal, setShowAuthModal] = useState(false);
-  const [loading, setLoading] = useState(false);
+const ConsultationModal = ({ isOpen, onClose, serviceName = '' }) => {
   const [formData, setFormData] = useState({
     name: '',
     email: '',
     phone: '',
-    service: '',
+    service: serviceName || '',
     message: ''
   });
-
-  // Pre-fill service when preSelectedService prop changes
-  useEffect(() => {
-    if (preSelectedService) {
-      setFormData(prev => ({ ...prev, service: preSelectedService }));
-    }
-  }, [preSelectedService]);
-  
-  // Pre-fill user data when user logs in
-  useEffect(() => {
-    if (user) {
-      setFormData(prev => ({
-        ...prev,
-        name: user.name || prev.name,
-        email: user.email || prev.email,
-        phone: user.phone || prev.phone
-      }));
-    }
-  }, [user]);
+  const [loading, setLoading] = useState(false);
+  const [success, setSuccess] = useState(false);
+  const [error, setError] = useState('');
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    
-    // Phone number validation - only allow digits and max 10
-    if (name === 'phone') {
-      const digitsOnly = value.replace(/\D/g, '').slice(0, 10);
-      setFormData({ ...formData, [name]: digitsOnly });
-      return;
-    }
-    
-    setFormData({ ...formData, [name]: value });
+    setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-    
-    // Check if user is logged in
-    if (!user) {
-      closeModal();
-      setShowAuthModal(true);
-      return;
-    }
-    
-    // Validate phone is exactly 10 digits
-    if (formData.phone.length !== 10) {
-      toast.error('Please enter a valid 10-digit phone number');
-      return;
-    }
-    
     setLoading(true);
+    setError('');
 
     try {
-      const response = await api.post('/consultations', formData, {
-        headers: { Authorization: `Bearer ${token}` }
-      });
-      
-      if (response.data.success) {
-        toast.success(response.data.message);
+      await api.post('/consultations', formData);
+      setSuccess(true);
+      setTimeout(() => {
+        onClose();
+        setSuccess(false);
         setFormData({ name: '', email: '', phone: '', service: '', message: '' });
-        closeModal();
-      }
-    } catch (error) {
-      const errorMsg = error.response?.data?.message || 'Failed to submit. Please try again.';
-      toast.error(errorMsg);
+      }, 2000);
+    } catch (err) {
+      setError(err.response?.data?.message || 'Failed to submit request');
     } finally {
       setLoading(false);
     }
   };
 
+  if (!isOpen) return null;
+
   return (
-    <>
-      {/* Auth Modal */}
-      <AuthModal 
-        isOpen={showAuthModal}
-        onClose={() => setShowAuthModal(false)}
-        onSuccess={(userData) => {
-          setFormData({
-            ...formData,
-            name: userData.name,
-            email: userData.email,
-            phone: userData.phone || formData.phone
-          });
-          setShowAuthModal(false);
-          // Reopen consultation modal after login
-          setTimeout(() => closeModal.call(null, true), 100);
-        }}
-        message="Please login to book a consultation"
-      />
-      
-    <Transition appear show={isOpen} as={Fragment}>
-      <Dialog as="div" className="relative z-[100]" onClose={closeModal}>
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-sm">
+      <div className="bg-white rounded-lg shadow-2xl max-w-md w-full relative">
+        <button
+          onClick={onClose}
+          className="absolute top-4 right-4 text-gray-400 hover:text-gray-600 z-10"
         >
-          <div className="fixed inset-0 bg-black/60 backdrop-blur-sm" />
-        </Transition.Child>
+          <FaTimes size={20} />
+        </button>
 
-        <div className="fixed inset-0 overflow-y-auto">
-          <div className="flex min-h-full items-center justify-center p-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="w-full max-w-md transform overflow-hidden rounded bg-white p-6 text-left align-middle shadow-xl transition-all border border-gray-100">
-                
-                {/* Header */}
-                <div className="flex justify-between items-center mb-4">
-                  <Dialog.Title as="h3" className="text-xl font-bold text-[#0B1530]">
-                    Book Consultation
-                  </Dialog.Title>
-                  <button 
-                    onClick={closeModal} 
-                    className="text-gray-400 hover:text-red-500 transition-colors"
-                  >
-                    <FaTimes size={18} />
-                  </button>
-                </div>
-
-                <p className="text-gray-600 text-sm mb-4">
-                  Fill the form below and our expert CAs will connect with you within 24 hours.
-                </p>
-
-                {/* Form */}
-                <form onSubmit={handleSubmit} className="space-y-3">
-                  
-                  {/* Name */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <FaUser size={14} />
-                    </div>
-                    <input
-                      type="text"
-                      name="name"
-                      value={formData.name}
-                      onChange={handleChange}
-                      placeholder="Full Name *"
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
-                    />
-                  </div>
-
-                  {/* Email */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <FaEnvelope size={14} />
-                    </div>
-                    <input
-                      type="email"
-                      name="email"
-                      value={formData.email}
-                      onChange={handleChange}
-                      placeholder="Email Address *"
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
-                    />
-                  </div>
-
-                  {/* Phone */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <FaPhone size={14} />
-                    </div>
-                    <input
-                      type="tel"
-                      name="phone"
-                      value={formData.phone}
-                      onChange={handleChange}
-                      placeholder="9876543210"
-                      maxLength={10}
-                      pattern="[6-9][0-9]{9}"
-                      title="Enter valid 10-digit mobile number"
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all text-sm"
-                    />
-                  </div>
-
-                  {/* Service */}
-                  <div className="relative">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none text-gray-400">
-                      <FaBriefcase size={14} />
-                    </div>
-                    <select
-                      name="service"
-                      value={formData.service}
-                      onChange={handleChange}
-                      required
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all appearance-none text-sm text-gray-700"
-                    >
-                      <option value="">Select Service *</option>
-                      {preSelectedService && !['Tax Consulting', 'Audit Services', 'Business Registration', 'Financial Advisory', 'Web Development - Basic Website', 'Web Development - Business Website', 'Web Development - E-commerce Website', 'Web Development - Custom Web Application', 'Other'].includes(preSelectedService) && (
-                        <option value={preSelectedService}>{preSelectedService}</option>
-                      )}
-                      <option value="Tax Consulting">Tax Consulting</option>
-                      <option value="Audit Services">Audit Services</option>
-                      <option value="Business Registration">Business Registration</option>
-                      <option value="Financial Advisory">Financial Advisory</option>
-                      <optgroup label="Web Development">
-                        <option value="Web Development - Basic Website">Basic Website</option>
-                        <option value="Web Development - Business Website">Business Website</option>
-                        <option value="Web Development - E-commerce Website">E-commerce Website</option>
-                        <option value="Web Development - Custom Web Application">Custom Web Application</option>
-                      </optgroup>
-                      <option value="Other">Other</option>
-                    </select>
-                  </div>
-
-                  {/* Message */}
-                  <div className="relative">
-                    <div className="absolute top-2.5 left-3 pointer-events-none text-gray-400">
-                      <FaComment size={14} />
-                    </div>
-                    <textarea
-                      name="message"
-                      value={formData.message}
-                      onChange={handleChange}
-                      rows="3"
-                      placeholder="Briefly describe your requirements..."
-                      className="w-full pl-10 pr-4 py-2.5 bg-gray-50 border border-gray-200 rounded focus:outline-none focus:border-[#0B1530] focus:ring-1 focus:ring-[#0B1530] transition-all resize-none text-sm"
-                    />
-                  </div>
-
-                  {/* Submit Button */}
-                  <button
-                    type="submit"
-                    disabled={loading}
-                    className="w-full bg-[#0B1530] text-white py-2.5 rounded font-semibold text-sm hover:bg-[#C9A227] hover:text-[#0B1530] transition-all shadow-lg disabled:opacity-70 disabled:cursor-not-allowed mt-3"
-                  >
-                    {loading ? 'Submitting...' : 'Confirm Booking'}
-                  </button>
-
-                </form>
-              </Dialog.Panel>
-            </Transition.Child>
+        {success ? (
+          <div className="text-center py-12 px-6">
+            <div className="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <svg className="w-8 h-8 text-green-500" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M5 13l4 4L19 7" />
+              </svg>
+            </div>
+            <h3 className="text-xl font-bold text-gray-900 mb-2">Booking Confirmed!</h3>
+            <p className="text-gray-600">We'll contact you within 24 hours.</p>
           </div>
-        </div>
-      </Dialog>
-    </Transition>
-    </>
+        ) : (
+          <>
+            <div className="px-6 py-4 border-b border-gray-200">
+              <h2 className="text-xl font-bold text-gray-900">Book Consultation</h2>
+              <p className="text-sm text-gray-600 mt-1">
+                Fill the form below and our expert consultants will connect with you within 24 hours.
+              </p>
+            </div>
+
+            <form onSubmit={handleSubmit} className="px-6 py-4 space-y-3">
+              {error && (
+                <div className="bg-red-50 border border-red-200 text-red-600 px-3 py-2 rounded text-sm">
+                  {error}
+                </div>
+              )}
+
+              <div>
+                <div className="relative">
+                  <FaUser className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                  <input
+                    type="text"
+                    name="name"
+                    value={formData.name}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                    placeholder="Full Name *"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="relative">
+                  <FaEnvelope className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                  <input
+                    type="email"
+                    name="email"
+                    value={formData.email}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                    placeholder="Email Address *"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="relative">
+                  <FaPhone className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={formData.phone}
+                    onChange={handleChange}
+                    required
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                    placeholder="9876543210"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="relative">
+                  <FaBriefcase className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                  <input
+                    type="text"
+                    name="service"
+                    value={formData.service}
+                    onChange={handleChange}
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none text-sm"
+                    placeholder="Select Service *"
+                  />
+                </div>
+              </div>
+
+              <div>
+                <div className="relative">
+                  <FaComments className="absolute left-3 top-2.5 text-gray-400" size={14} />
+                  <textarea
+                    name="message"
+                    value={formData.message}
+                    onChange={handleChange}
+                    rows={2}
+                    className="w-full pl-9 pr-4 py-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500 focus:border-transparent outline-none resize-none text-sm"
+                    placeholder="Briefly describe your requirements..."
+                  />
+                </div>
+              </div>
+
+              <button
+                type="submit"
+                disabled={loading}
+                className="w-full py-2.5 bg-black text-white font-semibold rounded hover:bg-gray-800 transition-all disabled:opacity-50 disabled:cursor-not-allowed text-sm"
+              >
+                {loading ? 'Submitting...' : 'Submit Request'}
+              </button>
+            </form>
+          </>
+        )}
+      </div>
+    </div>
   );
 };
 
 export default ConsultationModal;
-
-
-
-
-
-
-
-
-
-

@@ -9,7 +9,8 @@ import {
   FaEnvelope,
   FaCheckCircle,
   FaArrowRight,
-  FaCode
+  FaCode,
+  FaFileAlt
 } from 'react-icons/fa';
 
 const Expertise = () => {
@@ -32,7 +33,7 @@ const Expertise = () => {
         'Minimize tax liability legally',
         'Avoid penalties and notices',
         'Stay compliant with latest laws',
-        'Expert CA guidance'
+        'Expert tax consultant guidance'
       ]
     },
     {
@@ -130,13 +131,19 @@ const Expertise = () => {
   return (
     <main className="font-sans text-gray-800 bg-gray-50">
       {/* Hero Section */}
-      <section className="relative py-12 md:py-16 bg-gradient-to-br from-[#0B1530] via-[#1a2b5c] to-[#0B1530] text-white overflow-hidden pt-20 md:pt-28">
+      <section 
+        className="relative py-12 md:py-16 text-white overflow-hidden pt-20 md:pt-28"
+        style={{
+          background: `linear-gradient(to bottom right, var(--color-primary), var(--color-primary), var(--color-primary))`
+        }}
+      >
         <div className="absolute inset-0 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')] opacity-10"></div>
         <div className="container mx-auto px-4 sm:px-6 lg:px-8 text-center relative z-10 max-w-5xl">
           <motion.span
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
-            className="text-[#C9A227] font-semibold tracking-widest uppercase text-xs sm:text-sm mb-3 block"
+            className="font-semibold tracking-widest uppercase text-xs sm:text-sm mb-3 block"
+            style={{ color: 'var(--color-secondary)' }}
           >
             Our Expertise
           </motion.span>
@@ -145,7 +152,7 @@ const Expertise = () => {
             animate={{ opacity: 1, y: 0 }}
             className="text-3xl sm:text-4xl md:text-5xl font-serif font-bold mb-4 leading-tight"
           >
-            Comprehensive <span className="text-[#C9A227]">Solutions</span>
+            Comprehensive <span style={{ color: 'var(--color-secondary)' }}>Solutions</span>
           </motion.h1>
           <motion.p
             initial={{ opacity: 0, y: 20 }}
@@ -177,11 +184,20 @@ const Expertise = () => {
                 <div className="p-6 md:p-8">
                   {/* Header */}
                   <div className="flex items-start gap-4 mb-6">
-                    <div className="w-12 h-12 bg-[#0B1530] rounded-lg flex items-center justify-center text-[#C9A227] text-xl flex-shrink-0 group-hover:scale-110 transition-all duration-300">
+                    <div 
+                      className="w-12 h-12 rounded-lg flex items-center justify-center text-xl flex-shrink-0 group-hover:scale-110 transition-all duration-300"
+                      style={{
+                        backgroundColor: 'var(--color-primary)',
+                        color: 'var(--color-secondary)'
+                      }}
+                    >
                       {service.icon}
                     </div>
                     <div>
-                      <h2 className="text-xl md:text-2xl font-bold text-[#0B1530] mb-2">
+                      <h2 
+                        className="text-xl md:text-2xl font-bold mb-2"
+                        style={{ color: 'var(--color-primary)' }}
+                      >
                         {service.title}
                       </h2>
                       <p className="text-gray-600 text-sm leading-relaxed">
@@ -194,13 +210,19 @@ const Expertise = () => {
                   <div className="grid md:grid-cols-2 gap-6">
                     {/* Services Offered */}
                     <div className="bg-gray-50 rounded-lg p-5">
-                      <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">
+                      <h3 
+                        className="text-sm font-bold mb-4 uppercase tracking-wide"
+                        style={{ color: 'var(--color-primary)' }}
+                      >
                         Services We Offer
                       </h3>
                       <ul className="space-y-2.5">
                         {service.keyPoints.map((point, pIdx) => (
                           <li key={pIdx} className="flex items-start gap-2.5">
-                            <FaCheckCircle className="text-[#C9A227] text-xs mt-1 flex-shrink-0" />
+                            <FaCheckCircle 
+                              className="text-xs mt-1 flex-shrink-0"
+                              style={{ color: 'var(--color-secondary)' }}
+                            />
                             <span className="text-sm text-gray-700">{point}</span>
                           </li>
                         ))}
@@ -208,14 +230,23 @@ const Expertise = () => {
                     </div>
 
                     {/* Benefits */}
-                    <div className="bg-[#0B1530]/5 rounded-lg p-5">
-                      <h3 className="text-sm font-bold text-[#0B1530] mb-4 uppercase tracking-wide">
+                    <div 
+                      className="rounded-lg p-5"
+                      style={{ backgroundColor: 'var(--color-primary-10)' }}
+                    >
+                      <h3 
+                        className="text-sm font-bold mb-4 uppercase tracking-wide"
+                        style={{ color: 'var(--color-primary)' }}
+                      >
                         Key Benefits
                       </h3>
                       <ul className="space-y-2.5">
                         {service.benefits.map((benefit, bIdx) => (
                           <li key={bIdx} className="flex items-start gap-2.5">
-                            <div className="w-5 h-5 bg-[#C9A227] rounded-full flex items-center justify-center flex-shrink-0 mt-0.5">
+                            <div 
+                              className="w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 mt-0.5"
+                              style={{ backgroundColor: 'var(--color-secondary)' }}
+                            >
                               <FaCheckCircle className="text-white text-[8px]" />
                             </div>
                             <span className="text-sm text-gray-700 font-medium">{benefit}</span>
@@ -229,13 +260,25 @@ const Expertise = () => {
                   <div className="mt-6 pt-5 border-t border-gray-100 flex flex-wrap items-center justify-between gap-4">
                     <Link 
                       to={`/expertise/${service.slug}`}
-                      className="inline-flex items-center gap-2 text-sm font-semibold text-[#C9A227] hover:text-[#0B1530] transition-colors group"
+                      className="inline-flex items-center gap-2 text-sm font-semibold transition-colors group"
+                      style={{ color: 'var(--color-secondary)' }}
+                      onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                      onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
                     >
                       Learn More <FaArrowRight size={10} className="group-hover:translate-x-1 transition-transform" />
                     </Link>
                     <Link
                       to="/contact"
-                      className="inline-flex items-center gap-2 px-4 py-2 bg-[#0B1530] text-white text-sm font-semibold rounded-lg hover:bg-[#C9A227] hover:text-[#0B1530] transition-colors"
+                      className="inline-flex items-center gap-2 px-4 py-2 text-white text-sm font-semibold rounded-lg transition-colors"
+                      style={{ backgroundColor: 'var(--color-primary)' }}
+                      onMouseEnter={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--color-secondary)';
+                        e.currentTarget.style.color = 'var(--color-primary)';
+                      }}
+                      onMouseLeave={(e) => {
+                        e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                        e.currentTarget.style.color = 'white';
+                      }}
                     >
                       Get Started
                     </Link>
@@ -255,18 +298,39 @@ const Expertise = () => {
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
           >
-            <h2 className="text-2xl lg:text-3xl font-serif font-bold mb-3 text-[#0B1530]">
+            <h2 
+              className="text-2xl lg:text-3xl font-serif font-bold mb-3"
+              style={{ color: 'var(--color-primary)' }}
+            >
               Ready to Get Started?
             </h2>
             <p className="text-base text-gray-600 mb-6 max-w-2xl mx-auto">
               Our expert team is ready to help you navigate your financial journey. Contact us today for a free consultation.
             </p>
             <div className="flex flex-wrap justify-center gap-3">
+              <Link to="/quote">
+                <motion.button
+                  whileHover={{ scale: 1.05 }}
+                  whileTap={{ scale: 0.95 }}
+                  className="px-6 py-2.5 rounded-full font-semibold text-sm shadow-lg hover:bg-white hover:shadow-xl transition-all flex items-center gap-2"
+                  style={{
+                    backgroundColor: 'var(--color-secondary)',
+                    color: 'var(--color-primary)'
+                  }}
+                >
+                  <FaFileAlt size={14} />
+                  Get Custom Quote
+                </motion.button>
+              </Link>
               <Link to="/contact">
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2.5 bg-[#C9A227] text-[#0B1530] rounded-full font-semibold text-sm shadow-lg hover:bg-white hover:shadow-xl transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 rounded-full font-semibold text-sm shadow-lg hover:bg-white hover:shadow-xl transition-all flex items-center gap-2"
+                  style={{
+                    backgroundColor: 'var(--color-secondary)',
+                    color: 'var(--color-primary)'
+                  }}
                 >
                   <FaEnvelope size={14} />
                   Contact Us
@@ -276,7 +340,19 @@ const Expertise = () => {
                 <motion.button
                   whileHover={{ scale: 1.05 }}
                   whileTap={{ scale: 0.95 }}
-                  className="px-6 py-2.5 border-2 border-[#0B1530] text-[#0B1530] rounded-full font-semibold text-sm hover:bg-[#0B1530] hover:text-white transition-all flex items-center gap-2"
+                  className="px-6 py-2.5 border-2 rounded-full font-semibold text-sm transition-all flex items-center gap-2"
+                  style={{
+                    borderColor: 'var(--color-primary)',
+                    color: 'var(--color-primary)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.backgroundColor = 'var(--color-primary)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.backgroundColor = 'transparent';
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
                 >
                   <FaPhone size={14} />
                   +91 84471 27264
@@ -286,8 +362,61 @@ const Expertise = () => {
           </motion.div>
         </div>
       </section>
+
+      {/* Success Stories */}
+      <section className="py-12 md:py-16 bg-gray-50">
+        <div className="container mx-auto max-w-6xl px-4 sm:px-6 lg:px-8">
+          <div className="text-center mb-12">
+            <h2 className="text-3xl md:text-4xl font-serif font-bold text-gray-900 mb-4">
+              Success Stories
+            </h2>
+            <p className="text-gray-600 max-w-2xl mx-auto text-base">
+              Real results from businesses we've helped grow and succeed
+            </p>
+          </div>
+
+          <div className="grid md:grid-cols-3 gap-6">
+            {/* Story 1 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300">
+              <div 
+                className="text-4xl font-bold mb-2"
+                style={{ color: 'var(--color-secondary)' }}
+              >₹2.5L</div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Tax Savings</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Helped an e-commerce business save ₹2.5 lakhs in taxes through strategic planning and compliance optimization
+              </p>
+            </div>
+
+            {/* Story 2 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300">
+              <div 
+                className="text-4xl font-bold mb-2"
+                style={{ color: 'var(--color-secondary)' }}
+              >100+</div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Companies Registered</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Successfully registered over 100 companies with complete compliance and post-registration support
+              </p>
+            </div>
+
+            {/* Story 3 */}
+            <div className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300">
+              <div 
+                className="text-4xl font-bold mb-2"
+                style={{ color: 'var(--color-secondary)' }}
+              >99%</div>
+              <h3 className="text-lg font-bold text-gray-900 mb-2">Client Satisfaction</h3>
+              <p className="text-gray-600 text-sm leading-relaxed">
+                Maintained 99% client satisfaction rate with timely delivery and expert guidance across all services
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
     </main>
   );
 };
 
 export default Expertise;
+

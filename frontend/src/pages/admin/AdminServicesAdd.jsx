@@ -123,7 +123,7 @@ const AdminServicesForm = () => {
     <div className="py-8">
       <div className="container mx-auto px-4 max-w-2xl">
         <div className="flex justify-between items-center mb-8">
-          <h1 className="text-3xl font-serif font-bold text-[#0B1530]">
+          <h1 className="text-3xl font-serif font-bold text-primary">
             {getPageTitle()}
           </h1>
           {isViewMode && (
@@ -190,7 +190,7 @@ const AdminServicesForm = () => {
               disabled={isViewMode}
               placeholder="ITR Filing&#10;Tax Optimization&#10;GST Registration"
               {...register('features')}
-              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#0B1530] transition-colors ${
+              className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary transition-colors ${
                 isViewMode ? 'bg-gray-50 text-gray-600' : 'bg-white'
               }`}
             />
@@ -206,7 +206,7 @@ const AdminServicesForm = () => {
                 <button
                   type="button"
                   onClick={() => setFaqs([...faqs, { question: '', answer: '' }])}
-                  className="px-3 py-1 bg-[#0B1530] text-white text-xs rounded hover:bg-blue-900 transition-colors"
+                  className="px-3 py-1 bg-primary text-white text-xs rounded hover:bg-blue-900 transition-colors"
                 >
                   + Add FAQ
                 </button>
@@ -238,7 +238,7 @@ const AdminServicesForm = () => {
                       setFaqs(newFaqs)
                     }}
                     disabled={isViewMode}
-                    className={`w-full px-3 py-2 border rounded-lg mb-2 text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1530] ${
+                    className={`w-full px-3 py-2 border rounded-lg mb-2 text-sm focus:outline-none focus:ring-2 focus:ring-primary ${
                       isViewMode ? 'bg-gray-100 text-gray-600' : 'bg-white'
                     }`}
                   />
@@ -252,7 +252,7 @@ const AdminServicesForm = () => {
                     }}
                     disabled={isViewMode}
                     rows="3"
-                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-[#0B1530] resize-none ${
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-primary resize-none ${
                       isViewMode ? 'bg-gray-100 text-gray-600' : 'bg-white'
                     }`}
                   />
@@ -264,7 +264,7 @@ const AdminServicesForm = () => {
           {/* Buttons */}
           {!isViewMode && (
             <div className="flex gap-4 mt-6">
-              <Button type="submit" disabled={loading} className="flex-1 bg-[#0B1530] text-white hover:bg-blue-900">
+              <Button type="submit" disabled={loading} className="flex-1 bg-primary text-white hover:bg-blue-900">
                 {loading ? 'Processing...' : (isEditMode ? 'Update Service' : 'Create Service')}
               </Button>
               

@@ -123,7 +123,7 @@ const Header = () => {
               {settings?.logoText}
             </div>
           )}
-          <span className="text-base sm:text-lg md:text-xl font-serif font-bold tracking-tight text-[#0B1530]">
+          <span className="text-base sm:text-lg md:text-xl font-serif font-bold tracking-tight text-primary">
             {settings?.companyName}
           </span>
         </Link>
@@ -185,19 +185,19 @@ const Header = () => {
                     <div className="border-t border-gray-100 mt-2 pt-2">
                       <Link
                         to="/digital-services"
-                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
+                        className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-secondary/10 hover:text-secondary"
                       >
                         🌐 Digital Services
                       </Link>
                       <Link
                         to="/other-services"
-                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:bg-[#C9A227]/10 hover:text-[#C9A227]"
+                        className="block px-4 py-2 text-sm font-semibold text-primary hover:bg-secondary/10 hover:text-secondary"
                       >
                         📋 Other Services
                       </Link>
                       <Link
                         to="/services"
-                        className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                        className="block px-4 py-2 text-sm font-semibold text-primary hover:text-secondary"
                       >
                         View All →
                       </Link>
@@ -214,7 +214,7 @@ const Header = () => {
                           <Link
                             key={blog._id}
                             to={`/blog/${blog.slug || blog._id}`}
-                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-[#C9A227]/10 hover:text-[#C9A227] transition-colors"
+                            className="block px-4 py-2 text-sm text-gray-700 hover:bg-secondary/10 hover:text-secondary transition-colors"
                           >
                             <div className="font-medium">{blog.title}</div>
                             <div className="text-xs text-gray-500 mt-0.5">{new Date(blog.createdAt).toLocaleDateString()}</div>
@@ -223,7 +223,7 @@ const Header = () => {
                         <div className="border-t border-gray-100 mt-2 pt-2">
                           <Link
                             to="/blog"
-                            className="block px-4 py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                            className="block px-4 py-2 text-sm font-semibold text-primary hover:text-secondary"
                           >
                             View All Blogs →
                           </Link>
@@ -284,7 +284,7 @@ const Header = () => {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="lg:hidden text-2xl focus:outline-none transition-colors text-[#0B1530]"
+          className="lg:hidden text-2xl focus:outline-none transition-colors text-primary"
           onClick={() => setMobileMenu(!mobileMenu)}
         >
           {mobileMenu ? <FaTimes /> : <FaBars />}
@@ -315,7 +315,7 @@ const Header = () => {
                             if (isServicesDropdown) setMobileServicesOpen(!mobileServicesOpen);
                             if (isBlogsDropdown) setMobileBlogsOpen(!mobileBlogsOpen);
                           }}
-                          className="flex items-center justify-between w-full text-lg font-medium text-[#0B1530]"
+                          className="flex items-center justify-between w-full text-lg font-medium text-primary"
                         >
                           {link.label}
                           <FaChevronDown className={`text-xs text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
@@ -339,7 +339,7 @@ const Header = () => {
                                       setMobileMenu(false);
                                       setMobileServicesOpen(false);
                                     }}
-                                    className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
+                                    className="block py-2 text-sm text-gray-700 hover:text-secondary"
                                   >
                                     {service.title}
                                   </Link>
@@ -350,7 +350,7 @@ const Header = () => {
                                     setMobileMenu(false);
                                     setMobileServicesOpen(false);
                                   }}
-                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
                                 >
                                   🌐 Digital Services
                                 </Link>
@@ -360,7 +360,7 @@ const Header = () => {
                                     setMobileMenu(false);
                                     setMobileServicesOpen(false);
                                   }}
-                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
                                 >
                                   📋 Other Services
                                 </Link>
@@ -370,7 +370,7 @@ const Header = () => {
                                     setMobileMenu(false);
                                     setMobileServicesOpen(false);
                                   }}
-                                  className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
                                 >
                                   View All →
                                 </Link>
@@ -399,7 +399,7 @@ const Header = () => {
                                           setMobileMenu(false);
                                           setMobileBlogsOpen(false);
                                         }}
-                                        className="block py-2 text-sm text-gray-700 hover:text-[#C9A227]"
+                                        className="block py-2 text-sm text-gray-700 hover:text-secondary"
                                       >
                                         <div className="font-medium">{blog.title}</div>
                                         <div className="text-xs text-gray-500 mt-0.5">{new Date(blog.createdAt).toLocaleDateString()}</div>
@@ -411,7 +411,7 @@ const Header = () => {
                                         setMobileMenu(false);
                                         setMobileBlogsOpen(false);
                                       }}
-                                      className="block py-2 text-sm font-semibold text-[#0B1530] hover:text-[#C9A227]"
+                                      className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
                                     >
                                       View All Blogs →
                                     </Link>

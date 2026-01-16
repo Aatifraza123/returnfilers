@@ -2,9 +2,9 @@ import { useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 
 const SEO = ({ 
-  title = 'ReturnFilers - Expert Chartered Accountants & Tax Consultants',
-  description = 'Professional CA services including GST registration, ITR filing, tax planning, auditing, and business consulting.',
-  keywords = 'chartered accountant, CA services, GST registration, ITR filing, tax consultant',
+  title = 'ReturnFilers - Expert Tax & Business Consultants',
+  description = 'Professional tax and business consulting services including GST registration, ITR filing, tax planning, auditing, and business advisory.',
+  keywords = 'tax consultant, business consultant, GST registration, ITR filing, tax planning',
   image = 'https://www.returnfilers.in/logo-transparent.png',
   type = 'website'
 }) => {

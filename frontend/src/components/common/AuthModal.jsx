@@ -253,7 +253,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                           checked={formData.consent}
                           onChange={(e) => setFormData({ ...formData, consent: e.target.checked })}
                           required
-                          className="mt-0.5 w-3.5 h-3.5 text-[#0B1530] border-gray-300 rounded focus:ring-[#0B1530]"
+                          className="mt-0.5 w-3.5 h-3.5 text-primary border-gray-300 rounded focus:ring-primary"
                         />
                         <label htmlFor="consent" className="text-xs text-gray-600 leading-tight">
                           I agree to the{' '}
@@ -261,7 +261,7 @@ const AuthModal = ({ isOpen, onClose, onSuccess, message = 'Please login to cont
                             href="/terms-conditions" 
                             target="_blank" 
                             rel="noopener noreferrer"
-                            className="text-[#0B1530] underline hover:text-[#C9A227]"
+                            className="text-primary underline hover:text-secondary"
                           >
                             Terms & Conditions
                           </a>

@@ -148,13 +148,13 @@ const AdminTestimonials = () => {
       {/* Header */}
       <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold text-[#0B1530]">Testimonials</h1>
+          <h1 className="text-2xl md:text-3xl font-bold text-primary">Testimonials</h1>
           <p className="text-gray-500 text-sm mt-1">Manage customer reviews and testimonials</p>
         </div>
         {!showForm && (
           <button
             onClick={() => setShowForm(true)}
-            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-[#0B1530] to-[#1a2b5c] text-white rounded-xl font-semibold text-sm hover:shadow-lg transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 bg-gradient-to-r from-primary to-primary text-white rounded-xl font-semibold text-sm hover:shadow-lg transition-all"
           >
             <FaPlus size={12} />
             Add Testimonial
@@ -168,7 +168,7 @@ const AdminTestimonials = () => {
           onClick={() => setActiveTab('tax')}
           className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
             activeTab === 'tax'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              ? 'text-secondary border-b-2 border-secondary'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -181,7 +181,7 @@ const AdminTestimonials = () => {
           onClick={() => setActiveTab('webdev')}
           className={`px-6 py-3 font-semibold text-sm transition-colors relative ${
             activeTab === 'webdev'
-              ? 'text-[#C9A227] border-b-2 border-[#C9A227]'
+              ? 'text-secondary border-b-2 border-secondary'
               : 'text-gray-500 hover:text-gray-700'
           }`}
         >
@@ -194,9 +194,9 @@ const AdminTestimonials = () => {
 
       {/* Form */}
       {showForm && (
-        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-[#C9A227]">
+        <div className="bg-white p-6 rounded-2xl shadow-lg mb-6 border-t-4 border-secondary">
           <div className="flex justify-between items-center mb-6">
-            <h2 className="text-xl font-bold text-[#0B1530]">
+            <h2 className="text-xl font-bold text-primary">
               {editingTestimonial ? '✏️ Edit Testimonial' : '➕ Add Testimonial'}
             </h2>
             <button onClick={resetForm} className="text-gray-400 hover:text-gray-600 p-2">
@@ -214,7 +214,7 @@ const AdminTestimonials = () => {
                   onChange={(e) => setFormData({ ...formData, name: e.target.value })}
                   placeholder="Customer name"
                   required
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-secondary text-sm"
                 />
               </div>
               <div>
@@ -225,7 +225,7 @@ const AdminTestimonials = () => {
                   onChange={(e) => setFormData({ ...formData, title: e.target.value })}
                   placeholder="CEO, Company Name"
                   required
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-secondary text-sm"
                 />
               </div>
             </div>
@@ -235,7 +235,7 @@ const AdminTestimonials = () => {
               <select
                 value={formData.service}
                 onChange={(e) => setFormData({ ...formData, service: e.target.value })}
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm bg-white"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-secondary text-sm bg-white"
               >
                 <option value="">General</option>
                 <option value="Tax Consulting">Tax Consulting</option>
@@ -257,7 +257,7 @@ const AdminTestimonials = () => {
                 placeholder="What did the customer say..."
                 required
                 rows="3"
-                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm resize-none"
+                className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-secondary text-sm resize-none"
               />
             </div>
 
@@ -287,7 +287,7 @@ const AdminTestimonials = () => {
                   value={formData.image}
                   onChange={(e) => setFormData({ ...formData, image: e.target.value })}
                   placeholder="https://..."
-                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-[#C9A227] text-sm"
+                  className="w-full border border-gray-200 p-3 rounded-xl focus:outline-none focus:border-secondary text-sm"
                 />
               </div>
               <div>
@@ -330,7 +330,7 @@ const AdminTestimonials = () => {
       {/* Testimonials Grid */}
       {loading ? (
         <div className="bg-white rounded-2xl p-12 text-center">
-          <div className="animate-spin w-10 h-10 border-4 border-[#C9A227] border-t-transparent rounded-full mx-auto mb-4"></div>
+          <div className="animate-spin w-10 h-10 border-4 border-secondary border-t-transparent rounded-full mx-auto mb-4"></div>
           <p className="text-gray-500">Loading testimonials...</p>
         </div>
       ) : currentTestimonials.length > 0 ? (
@@ -355,7 +355,7 @@ const AdminTestimonials = () => {
                       }}
                     />
                   ) : (
-                    <div className="w-full h-full bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] flex items-center justify-center text-white font-bold text-lg">
+                    <div className="w-full h-full bg-gradient-to-br from-primary to-primary flex items-center justify-center text-white font-bold text-lg">
                       {testimonial.name?.charAt(0)}
                     </div>
                   )}
@@ -365,7 +365,7 @@ const AdminTestimonials = () => {
                 <div className="flex-1 min-w-0">
                   <div className="flex items-start justify-between gap-2">
                     <div>
-                      <h3 className="font-bold text-[#0B1530]">{testimonial.name}</h3>
+                      <h3 className="font-bold text-primary">{testimonial.name}</h3>
                       <p className="text-gray-500 text-sm">{testimonial.title}</p>
                     </div>
                     <div className="flex items-center gap-0.5">
@@ -374,7 +374,7 @@ const AdminTestimonials = () => {
                   </div>
 
                   <div className="mt-3 relative">
-                    <FaQuoteLeft className="absolute -left-1 -top-1 text-[#C9A227]/20" size={20} />
+                    <FaQuoteLeft className="absolute -left-1 -top-1 text-secondary/20" size={20} />
                     <p className="text-gray-600 text-sm leading-relaxed pl-5 line-clamp-3">
                       {testimonial.quote}
                     </p>

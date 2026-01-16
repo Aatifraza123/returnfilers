@@ -39,6 +39,7 @@ const AdminLayout = () => {
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts' },
     { path: '/admin/services', icon: <FaServicestack />, label: 'Services' },
     { path: '/admin/digital-services', icon: <FaFolderOpen />, label: 'Digital Services' },
+    { path: '/admin/pricing', icon: <FaFileInvoiceDollar />, label: 'Pricing' },
     { path: '/admin/blogs', icon: <FaBlog />, label: 'Blogs' },
     { path: '/admin/testimonials', icon: <FaQuoteRight />, label: 'Testimonials' },
     { path: '/admin/emails', icon: <FaInbox />, label: 'Emails' },

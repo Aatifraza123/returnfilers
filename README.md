@@ -1,6 +1,6 @@
-# CA Associates Website
+# ReturnFilers - Tax & Business Consulting Website
 
-A professional website for Chartered Accountants with admin panel, blog, portfolio, and payment integration.
+A professional website for tax and business consultants with admin panel, blog, portfolio, and payment integration.
 
 ## 🚀 Tech Stack
 

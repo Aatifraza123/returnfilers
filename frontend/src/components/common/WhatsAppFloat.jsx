@@ -7,7 +7,7 @@ const WhatsAppFloat = () => {
   const [showButton, setShowButton] = useState(false); // New state for scroll visibility
 
   const phoneNumber = "8447127264";
-  const message = "Hello! I would like to inquire about your CA services.";
+  const message = "Hello! I would like to inquire about your tax and business consulting services.";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
   // Automatically hide the tooltip after 10 seconds

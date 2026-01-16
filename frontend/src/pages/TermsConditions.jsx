@@ -11,10 +11,10 @@ const TermsConditions = () => {
           animate={{ opacity: 1, y: 0 }}
           className="text-center mb-12"
         >
-          <div className="inline-flex items-center justify-center w-16 h-16 bg-[#0B1530] rounded-full mb-4">
+          <div className="inline-flex items-center justify-center w-16 h-16 bg-primary rounded-full mb-4">
             <FaFileContract className="text-white text-2xl" />
           </div>
-          <h1 className="text-4xl font-bold text-[#0B1530] mb-4">Terms & Conditions</h1>
+          <h1 className="text-4xl font-bold text-primary mb-4">Terms & Conditions</h1>
           <p className="text-gray-600">Last updated: January 2026</p>
         </motion.div>
 
@@ -27,8 +27,8 @@ const TermsConditions = () => {
         >
           {/* Introduction */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4 flex items-center gap-2">
-              <FaShieldAlt className="text-[#C9A227]" />
+            <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <FaShieldAlt className="text-secondary" />
               Introduction
             </h2>
             <p className="text-gray-700 leading-relaxed">
@@ -38,7 +38,7 @@ const TermsConditions = () => {
 
           {/* Services */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Our Services</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Our Services</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               ReturnFilers provides professional tax filing, GST registration, business incorporation, and financial advisory services. We are committed to:
             </p>
@@ -53,8 +53,8 @@ const TermsConditions = () => {
 
           {/* User Responsibilities */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4 flex items-center gap-2">
-              <FaUserShield className="text-[#C9A227]" />
+            <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <FaUserShield className="text-secondary" />
               User Responsibilities
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -72,7 +72,7 @@ const TermsConditions = () => {
 
           {/* Payment Terms */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Payment Terms</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Payment Terms</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               All fees for our services are clearly communicated before engagement. Payment terms include:
             </p>
@@ -86,7 +86,7 @@ const TermsConditions = () => {
 
           {/* Confidentiality */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Confidentiality & Privacy</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Confidentiality & Privacy</h2>
             <p className="text-gray-700 leading-relaxed">
               We maintain strict confidentiality of all client information. Your personal and financial data is protected under our Privacy Policy and applicable data protection laws. We will never share your information with third parties without your explicit consent, except as required by law.
             </p>
@@ -94,8 +94,8 @@ const TermsConditions = () => {
 
           {/* Limitation of Liability */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4 flex items-center gap-2">
-              <FaExclamationTriangle className="text-[#C9A227]" />
+            <h2 className="text-2xl font-bold text-primary mb-4 flex items-center gap-2">
+              <FaExclamationTriangle className="text-secondary" />
               Limitation of Liability
             </h2>
             <p className="text-gray-700 leading-relaxed mb-4">
@@ -111,7 +111,7 @@ const TermsConditions = () => {
 
           {/* Intellectual Property */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Intellectual Property</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Intellectual Property</h2>
             <p className="text-gray-700 leading-relaxed">
               All content on our website, including text, graphics, logos, and software, is the property of ReturnFilers and protected by copyright laws. You may not reproduce, distribute, or use any content without our written permission.
             </p>
@@ -119,7 +119,7 @@ const TermsConditions = () => {
 
           {/* Termination */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Termination</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Termination</h2>
             <p className="text-gray-700 leading-relaxed">
               Either party may terminate services with written notice. Upon termination, all outstanding fees become immediately due. We reserve the right to terminate services for violation of these terms or non-payment.
             </p>
@@ -127,7 +127,7 @@ const TermsConditions = () => {
 
           {/* Changes to Terms */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Changes to Terms</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Changes to Terms</h2>
             <p className="text-gray-700 leading-relaxed">
               We reserve the right to modify these Terms and Conditions at any time. Changes will be effective immediately upon posting on our website. Continued use of our services after changes constitutes acceptance of the modified terms.
             </p>
@@ -135,7 +135,7 @@ const TermsConditions = () => {
 
           {/* Governing Law */}
           <section>
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Governing Law</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Governing Law</h2>
             <p className="text-gray-700 leading-relaxed">
               These Terms and Conditions are governed by the laws of India. Any disputes shall be subject to the exclusive jurisdiction of the courts in Ghaziabad, Uttar Pradesh.
             </p>
@@ -143,7 +143,7 @@ const TermsConditions = () => {
 
           {/* Contact */}
           <section className="bg-gray-50 p-6 rounded-lg">
-            <h2 className="text-2xl font-bold text-[#0B1530] mb-4">Contact Us</h2>
+            <h2 className="text-2xl font-bold text-primary mb-4">Contact Us</h2>
             <p className="text-gray-700 leading-relaxed mb-4">
               If you have any questions about these Terms and Conditions, please contact us:
             </p>

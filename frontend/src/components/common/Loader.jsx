@@ -34,16 +34,16 @@ const Loader = ({ size = 'md', text = '' }) => {
             alt="Loading" 
             className={`${sizeClasses[size]} object-contain`}
           />
-          <div className={`absolute inset-0 ${sizeClasses[size]} ${borderSize[size]} border-[#C9A227] border-t-transparent rounded-full animate-spin`}></div>
+          <div className={`absolute inset-0 ${sizeClasses[size]} ${borderSize[size]} border-secondary border-t-transparent rounded-full animate-spin`}></div>
         </div>
       ) : (
         <div className="relative">
-          <div className={`${sizeClasses[size]} bg-gradient-to-br from-[#0B1530] to-[#1a2b5c] rounded-lg flex items-center justify-center`}>
-            <span className="text-[#C9A227] font-bold text-2xl">
+          <div className={`${sizeClasses[size]} bg-gradient-to-br from-primary to-primary rounded-lg flex items-center justify-center`}>
+            <span className="text-secondary font-bold text-2xl">
               {settings?.logoText || 'RF'}
             </span>
           </div>
-          <div className={`absolute inset-0 ${sizeClasses[size]} ${borderSize[size]} border-[#C9A227] border-t-transparent rounded-full animate-spin`}></div>
+          <div className={`absolute inset-0 ${sizeClasses[size]} ${borderSize[size]} border-secondary border-t-transparent rounded-full animate-spin`}></div>
         </div>
       )}
       {text && <p className="text-gray-600 mt-4 text-sm">{text}</p>}

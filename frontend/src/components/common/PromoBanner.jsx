@@ -67,7 +67,7 @@ const PromoBanner = () => {
   console.log('✅ Banner WILL render now!');
 
   const bannerContent = (
-    <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-[#C9A227] to-[#d4af37] text-[#0B1530] py-2.5 px-4 z-[60]">
+    <div className="fixed top-0 left-0 right-0 bg-gradient-to-r from-secondary to-[#d4af37] text-primary py-2.5 px-4 z-[60]">
       <div className="container mx-auto flex items-center justify-between gap-4">
         <div className="flex-1 text-center">
           <p className="text-sm md:text-base font-semibold">
@@ -76,7 +76,7 @@ const PromoBanner = () => {
         </div>
         <button
           onClick={handleClose}
-          className="flex-shrink-0 w-6 h-6 rounded-full bg-[#0B1530]/20 hover:bg-[#0B1530]/30 flex items-center justify-center transition-colors"
+          className="flex-shrink-0 w-6 h-6 rounded-full bg-primary/20 hover:bg-primary/30 flex items-center justify-center transition-colors"
           aria-label="Close banner"
         >
           <FaTimes size={12} />
