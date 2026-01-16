@@ -38,6 +38,8 @@ connectDB();
 // CORS Configuration - Support both development and production
 const allowedOrigins = [
   // Production frontend URLs
+  'https://www.returnfilers.in',
+  'https://returnfilers.in',
   'https://ca-website-nine-mu.vercel.app',
   'https://ca-website-it5v.vercel.app',
   'https://ca-website-puce.vercel.app',
