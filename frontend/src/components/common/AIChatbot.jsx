@@ -107,7 +107,7 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={part}
-          className="inline-block px-2 py-0.5 bg-blue-50 text-blue-700 rounded font-semibold hover:bg-blue-100 transition-all duration-200 border border-blue-200"
+          className="inline-block px-2 py-0.5 bg-[#2596be] text-white rounded font-semibold hover:bg-[#145369] transition-all duration-200"
         >
           {displayName}
         </a>
@@ -524,9 +524,9 @@ const AIChatbot = () => {
           }}
           className="relative group"
         >
-          <div className="w-12 h-12 bg-[#0B1530] rounded-full shadow-lg flex items-center justify-center hover:bg-[#2d3e5f] transition-colors group-hover:scale-110 duration-200 active:scale-95">
+          <div className="w-12 h-12 bg-[#041014] rounded-full shadow-lg flex items-center justify-center hover:bg-[#145369] transition-colors group-hover:scale-110 duration-200 active:scale-95">
             <FaRobot size={20} className="text-white" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#0B1530] rounded-full animate-pulse"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#2596be] rounded-full animate-pulse"></span>
           </div>
         </button>
       </div>
@@ -542,7 +542,7 @@ const AIChatbot = () => {
         }}
       >
         {/* Header */}
-        <div className="bg-[#0B1530] text-white p-3 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[#041014] text-white p-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
             <div className="w-10 h-10 bg-white/20 rounded-full flex items-center justify-center">
               <FaRobot size={18} className="text-white" />
@@ -623,7 +623,7 @@ const AIChatbot = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-gray-100 text-gray-700 hover:bg-gray-200 rounded-lg text-[11px] font-medium transition-all duration-200 border border-gray-200 hover:border-gray-300"
+                  className="px-2.5 py-1 bg-[#2596be] text-white hover:bg-[#145369] rounded-lg text-[11px] font-medium transition-all duration-200"
                 >
                   {q}
                 </button>
