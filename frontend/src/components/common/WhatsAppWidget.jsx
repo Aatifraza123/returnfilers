@@ -97,7 +97,7 @@ const WhatsAppWidget = () => {
         }}
       >
         {isOpen && (
-          <div className="absolute bottom-full right-0 mb-3 bg-white rounded-lg shadow-2xl p-4 w-64 animate-fadeIn">
+          <div className="absolute bottom-full right-0 mb-3 bg-white rounded-lg shadow-2xl p-4 w-64 animate-pulse">
             <div className="flex items-center justify-between mb-3">
               <div className="flex items-center gap-2">
                 <div className="w-9 h-9 bg-[#25D366] rounded-full flex items-center justify-center">
@@ -142,22 +142,6 @@ const WhatsAppWidget = () => {
           <FaWhatsapp size={24} />
         </button>
       </div>
-
-      <style jsx>{`
-        @keyframes fadeIn {
-          from {
-            opacity: 0;
-            transform: translateY(10px);
-          }
-          to {
-            opacity: 1;
-            transform: translateY(0);
-          }
-        }
-        .animate-fadeIn {
-          animation: fadeIn 0.3s ease-out;
-        }
-      `}</style>
     </>
   );
 };
