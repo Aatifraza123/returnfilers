@@ -118,8 +118,8 @@ const Services = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Feature 1 */}
             <div 
-              className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -140,8 +140,8 @@ const Services = () => {
 
             {/* Feature 2 */}
             <div 
-              className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -162,8 +162,8 @@ const Services = () => {
 
             {/* Feature 3 */}
             <div 
-              className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -184,8 +184,8 @@ const Services = () => {
 
             {/* Feature 4 */}
             <div 
-              className="bg-gray-50 p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -373,8 +373,8 @@ const Services = () => {
           <div className="grid md:grid-cols-2 lg:grid-cols-4 gap-6">
             {/* Step 1 */}
             <div 
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -397,8 +397,8 @@ const Services = () => {
 
             {/* Step 2 */}
             <div 
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -421,8 +421,8 @@ const Services = () => {
 
             {/* Step 3 */}
             <div 
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -445,8 +445,8 @@ const Services = () => {
 
             {/* Step 4 */}
             <div 
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >

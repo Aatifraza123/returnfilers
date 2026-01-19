@@ -28,6 +28,28 @@ const Header = () => {
   
   // Use global settings context
   const { settings } = useSettings();
+
+  // Close mobile menu on escape key
+  useEffect(() => {
+    const handleKeyDown = (e) => {
+      if (e.key === 'Escape' && mobileMenu) {
+        setMobileMenu(false);
+      }
+    };
+    
+    if (mobileMenu) {
+      document.addEventListener('keydown', handleKeyDown);
+      // Prevent body scroll when menu is open
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'unset';
+    }
+    
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+      document.body.style.overflow = 'unset';
+    };
+  }, [mobileMenu]);
   
   // Debug log
   useEffect(() => {
@@ -79,13 +101,13 @@ const Header = () => {
   ];
 
   return (
-    <header className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 ${
+    <header className={`fixed top-0 left-0 w-full transition-all duration-300 ${
       scrolled 
         ? 'bg-white/95 backdrop-blur-lg shadow-md py-2.5' 
         : isHomePage 
           ? 'bg-white/90 backdrop-blur-sm py-3' 
           : 'bg-white/80 backdrop-blur-sm py-3'
-    }`}>
+    }`} style={{ zIndex: 999999 }}>
       {/* Remove gradient overlay for home page */}
       
       <nav className="container mx-auto px-4 sm:px-6 flex justify-between items-center relative z-10">
@@ -167,7 +189,7 @@ const Header = () => {
                 
                 {/* Services Dropdown */}
                 {isServicesDropdown && servicesOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
+                  <div className="absolute top-full left-0 mt-2 w-56 bg-white rounded-lg shadow-xl border border-gray-100 py-2" style={{ zIndex: 999999 }}>
                     {services.length > 0 && services.map((service) => (
                       <Link
                         key={service._id}
@@ -207,7 +229,7 @@ const Header = () => {
                 
                 {/* Blogs Dropdown */}
                 {isBlogsDropdown && blogsOpen && (
-                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2 z-50">
+                  <div className="absolute top-full left-0 mt-2 w-64 bg-white rounded-lg shadow-xl border border-gray-100 py-2" style={{ zIndex: 999999 }}>
                     {blogs.length > 0 ? (
                       <>
                         {blogs.map((blog) => (
@@ -284,182 +306,188 @@ const Header = () => {
 
         {/* Mobile Menu Toggle */}
         <button
-          className="lg:hidden text-2xl focus:outline-none transition-colors text-primary"
+          className="lg:hidden p-2 -mr-2 text-2xl focus:outline-none transition-colors text-primary hover:bg-gray-100 rounded-lg"
           onClick={() => setMobileMenu(!mobileMenu)}
+          aria-label="Toggle mobile menu"
         >
           {mobileMenu ? <FaTimes /> : <FaBars />}
         </button>
       </nav>
 
-      {/* Mobile Menu */}
+      {/* Mobile Menu - Traditional Top Slide Down */}
       <AnimatePresence>
         {mobileMenu && (
           <motion.div
-            initial={{ opacity: 0, height: 0 }}
-            animate={{ opacity: 1, height: 'auto' }}
-            exit={{ opacity: 0, height: 0 }}
-            className="lg:hidden bg-white/95 backdrop-blur-xl shadow-2xl overflow-hidden border-t border-gray-100"
+            initial={{ height: 0, opacity: 0 }}
+            animate={{ height: 'auto', opacity: 1 }}
+            exit={{ height: 0, opacity: 0 }}
+            transition={{ duration: 0.3, ease: 'easeInOut' }}
+            className="lg:hidden absolute top-full left-0 w-full bg-white shadow-xl border-t border-gray-200 overflow-hidden"
+            style={{ zIndex: 999999 }}
           >
-            <ul className="flex flex-col p-6 space-y-4">
-              {navLinks.map((link) => {
-                const isServicesDropdown = link.type === 'services';
-                const isBlogsDropdown = link.type === 'blogs';
-                const dropdownOpen = isServicesDropdown ? mobileServicesOpen : isBlogsDropdown ? mobileBlogsOpen : false;
-                
-                return (
-                  <li key={link.to}>
-                    {link.hasDropdown ? (
-                      <div>
-                        <button
-                          onClick={() => {
-                            if (isServicesDropdown) setMobileServicesOpen(!mobileServicesOpen);
-                            if (isBlogsDropdown) setMobileBlogsOpen(!mobileBlogsOpen);
-                          }}
-                          className="flex items-center justify-between w-full text-lg font-medium text-primary"
-                        >
-                          {link.label}
-                          <FaChevronDown className={`text-xs text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} />
-                        </button>
-                        
-                        {/* Mobile Services Dropdown */}
-                        {isServicesDropdown && (
+            <div className="px-6 py-4 max-h-[80vh] overflow-y-auto">
+              {/* Navigation Links */}
+              <nav className="space-y-1">
+                {navLinks.map((link, index) => {
+                  const isServicesDropdown = link.type === 'services';
+                  const isBlogsDropdown = link.type === 'blogs';
+                  const dropdownOpen = isServicesDropdown ? mobileServicesOpen : isBlogsDropdown ? mobileBlogsOpen : false;
+                  
+                  return (
+                    <div key={link.to}>
+                      {link.hasDropdown ? (
+                        <div>
+                          <button
+                            onClick={() => {
+                              if (isServicesDropdown) setMobileServicesOpen(!mobileServicesOpen);
+                              if (isBlogsDropdown) setMobileBlogsOpen(!mobileBlogsOpen);
+                            }}
+                            className="flex items-center justify-between w-full p-3 rounded-lg hover:bg-gray-50 transition-all group"
+                          >
+                            <span className="font-medium text-gray-800 group-hover:text-primary">
+                              {link.label}
+                            </span>
+                            <FaChevronDown 
+                              className={`text-gray-400 transition-transform ${dropdownOpen ? 'rotate-180' : ''}`} 
+                              size={14}
+                            />
+                          </button>
+                          
+                          {/* Dropdown Content */}
                           <AnimatePresence>
-                            {mobileServicesOpen && (
+                            {dropdownOpen && (
                               <motion.div
                                 initial={{ height: 0, opacity: 0 }}
                                 animate={{ height: 'auto', opacity: 1 }}
                                 exit={{ height: 0, opacity: 0 }}
-                                className="mt-2 ml-4 space-y-2 overflow-hidden"
+                                className="ml-4 mt-2 space-y-1 overflow-hidden"
                               >
-                                {services.length > 0 && services.map((service) => (
-                                  <Link
-                                    key={service._id}
-                                    to={`/services/${service.slug || service._id}`}
-                                    onClick={() => {
-                                      setMobileMenu(false);
-                                      setMobileServicesOpen(false);
-                                    }}
-                                    className="block py-2 text-sm text-gray-700 hover:text-secondary"
-                                  >
-                                    {service.title}
-                                  </Link>
-                                ))}
-                                <Link
-                                  to="/digital-services"
-                                  onClick={() => {
-                                    setMobileMenu(false);
-                                    setMobileServicesOpen(false);
-                                  }}
-                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
-                                >
-                                  🌐 Digital Services
-                                </Link>
-                                <Link
-                                  to="/other-services"
-                                  onClick={() => {
-                                    setMobileMenu(false);
-                                    setMobileServicesOpen(false);
-                                  }}
-                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
-                                >
-                                  📋 Other Services
-                                </Link>
-                                <Link
-                                  to="/services"
-                                  onClick={() => {
-                                    setMobileMenu(false);
-                                    setMobileServicesOpen(false);
-                                  }}
-                                  className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
-                                >
-                                  View All →
-                                </Link>
-                              </motion.div>
-                            )}
-                          </AnimatePresence>
-                        )}
-                        
-                        {/* Mobile Blogs Dropdown */}
-                        {isBlogsDropdown && (
-                          <AnimatePresence>
-                            {mobileBlogsOpen && (
-                              <motion.div
-                                initial={{ height: 0, opacity: 0 }}
-                                animate={{ height: 'auto', opacity: 1 }}
-                                exit={{ height: 0, opacity: 0 }}
-                                className="mt-2 ml-4 space-y-2 overflow-hidden"
-                              >
-                                {blogs.length > 0 ? (
+                                {isServicesDropdown && (
                                   <>
-                                    {blogs.map((blog) => (
+                                    {services.length > 0 && services.map((service) => (
                                       <Link
-                                        key={blog._id}
-                                        to={`/blog/${blog.slug || blog._id}`}
+                                        key={service._id}
+                                        to={`/services/${service.slug || service._id}`}
                                         onClick={() => {
                                           setMobileMenu(false);
-                                          setMobileBlogsOpen(false);
+                                          setMobileServicesOpen(false);
                                         }}
-                                        className="block py-2 text-sm text-gray-700 hover:text-secondary"
+                                        className="block p-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
                                       >
-                                        <div className="font-medium">{blog.title}</div>
-                                        <div className="text-xs text-gray-500 mt-0.5">{new Date(blog.createdAt).toLocaleDateString()}</div>
+                                        {service.title}
                                       </Link>
                                     ))}
-                                    <Link
-                                      to="/blog"
-                                      onClick={() => {
-                                        setMobileMenu(false);
-                                        setMobileBlogsOpen(false);
-                                      }}
-                                      className="block py-2 text-sm font-semibold text-primary hover:text-secondary"
-                                    >
-                                      View All Blogs →
-                                    </Link>
+                                    <div className="border-t border-gray-100 mt-2 pt-2 space-y-1">
+                                      <Link
+                                        to="/digital-services"
+                                        onClick={() => {
+                                          setMobileMenu(false);
+                                          setMobileServicesOpen(false);
+                                        }}
+                                        className="block p-2 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                                      >
+                                        🌐 Digital Services
+                                      </Link>
+                                      <Link
+                                        to="/other-services"
+                                        onClick={() => {
+                                          setMobileMenu(false);
+                                          setMobileServicesOpen(false);
+                                        }}
+                                        className="block p-2 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                                      >
+                                        📋 Other Services
+                                      </Link>
+                                      <Link
+                                        to="/services"
+                                        onClick={() => {
+                                          setMobileMenu(false);
+                                          setMobileServicesOpen(false);
+                                        }}
+                                        className="block p-2 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                                      >
+                                        View All →
+                                      </Link>
+                                    </div>
                                   </>
-                                ) : (
-                                  <div className="py-2 text-sm text-gray-500">No blogs available</div>
+                                )}
+                                
+                                {isBlogsDropdown && (
+                                  <>
+                                    {blogs.length > 0 ? (
+                                      <>
+                                        {blogs.map((blog) => (
+                                          <Link
+                                            key={blog._id}
+                                            to={`/blog/${blog.slug || blog._id}`}
+                                            onClick={() => {
+                                              setMobileMenu(false);
+                                              setMobileBlogsOpen(false);
+                                            }}
+                                            className="block p-2 rounded-lg text-sm text-gray-600 hover:bg-gray-50 hover:text-primary transition-colors"
+                                          >
+                                            <div className="font-medium">{blog.title}</div>
+                                            <div className="text-xs text-gray-400 mt-0.5">
+                                              {new Date(blog.createdAt).toLocaleDateString()}
+                                            </div>
+                                          </Link>
+                                        ))}
+                                        <Link
+                                          to="/blog"
+                                          onClick={() => {
+                                            setMobileMenu(false);
+                                            setMobileBlogsOpen(false);
+                                          }}
+                                          className="block p-2 rounded-lg text-sm font-medium text-primary hover:bg-primary/5 transition-colors"
+                                        >
+                                          View All Blogs →
+                                        </Link>
+                                      </>
+                                    ) : (
+                                      <div className="p-2 text-sm text-gray-400">No blogs available</div>
+                                    )}
+                                  </>
                                 )}
                               </motion.div>
                             )}
                           </AnimatePresence>
-                        )}
-                      </div>
-                    ) : (
-                      <NavLink
-                        to={link.to}
-                        onClick={() => setMobileMenu(false)}
-                        className={({ isActive }) =>
-                          `flex items-center justify-between text-lg font-medium ${
-                            isActive ? '' : 'text-gray-800'
-                          }`
-                        }
-                        style={({ isActive }) => ({
-                          color: isActive ? 'var(--color-secondary)' : undefined
-                        })}
-                      >
-                        {link.label}
-                      </NavLink>
-                    )}
-                  </li>
-                );
-              })}
-              <li className="pt-4 mt-2 border-t border-gray-100">
+                        </div>
+                      ) : (
+                        <NavLink
+                          to={link.to}
+                          onClick={() => setMobileMenu(false)}
+                          className={({ isActive }) =>
+                            `block p-3 rounded-lg transition-all ${
+                              isActive 
+                                ? 'bg-primary/10 text-primary font-medium' 
+                                : 'text-gray-800 hover:bg-gray-50 hover:text-primary'
+                            }`
+                          }
+                        >
+                          {link.label}
+                        </NavLink>
+                      )}
+                    </div>
+                  );
+                })}
+              </nav>
+
+              {/* CTA Buttons */}
+              <div className="mt-6 pt-4 border-t border-gray-100 space-y-3">
                 {user ? (
                   <Link
                     to={dashboardLink}
-                    className="block text-white px-5 py-2.5 rounded-md text-center text-base font-semibold hover:shadow-lg transition-all"
-                    style={{ 
-                      background: `linear-gradient(to right, var(--color-primary), var(--color-primary))` 
-                    }}
+                    className="block w-full text-center px-6 py-3 rounded-lg text-white font-medium hover:shadow-lg transition-all"
+                    style={{ background: 'var(--color-primary)' }}
                     onClick={() => setMobileMenu(false)}
                   >
                     Dashboard
                   </Link>
                 ) : (
-                  <div className="space-y-2">
+                  <>
                     <Link
                       to="/login"
-                      className="block bg-white px-5 py-2.5 rounded-md text-center text-base font-semibold hover:bg-gray-50 transition-all border-2"
+                      className="block w-full text-center px-6 py-3 rounded-lg font-medium border-2 hover:bg-gray-50 transition-all"
                       style={{ 
                         color: 'var(--color-primary)',
                         borderColor: 'var(--color-primary)'
@@ -470,27 +498,33 @@ const Header = () => {
                     </Link>
                     <Link
                       to="/quote"
-                      className="block px-5 py-2.5 rounded-md text-center text-base font-semibold hover:shadow-lg transition-all"
+                      className="block w-full text-center px-6 py-3 rounded-lg font-medium hover:shadow-lg transition-all"
                       style={{ 
-                        background: `var(--color-secondary)`,
+                        background: 'var(--color-secondary)',
                         color: 'var(--color-primary)'
-                      }}
-                      onMouseEnter={(e) => {
-                        e.currentTarget.style.background = 'var(--color-primary)';
-                        e.currentTarget.style.color = 'white';
-                      }}
-                      onMouseLeave={(e) => {
-                        e.currentTarget.style.background = 'var(--color-secondary)';
-                        e.currentTarget.style.color = 'var(--color-primary)';
                       }}
                       onClick={() => setMobileMenu(false)}
                     >
                       Get Quote
                     </Link>
-                  </div>
+                  </>
                 )}
-              </li>
-            </ul>
+              </div>
+
+              {/* Contact Info */}
+              <div className="mt-4 pt-4 border-t border-gray-100">
+                <div className="text-center">
+                  <p className="text-sm text-gray-500 mb-2">Need Help?</p>
+                  <a 
+                    href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`}
+                    className="text-sm font-medium hover:underline"
+                    style={{ color: 'var(--color-primary)' }}
+                  >
+                    {settings?.phone || '+91 84471 27264'}
+                  </a>
+                </div>
+              </div>
+            </div>
           </motion.div>
         )}
       </AnimatePresence>

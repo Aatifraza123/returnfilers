@@ -165,7 +165,6 @@ console.log('✓ Notification routes registered at /api/notifications');
 
 app.use('/api/pricing', pricingRoutes);
 console.log('✓ Pricing routes registered at /api/pricing');
-console.log('📊 Pricing routes object:', pricingRoutes);
 
 app.use('/api/users', userRoutes);
 console.log('✓ User routes registered at /api/users');

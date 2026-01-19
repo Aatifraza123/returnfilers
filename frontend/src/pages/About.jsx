@@ -1,6 +1,6 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import { motion } from 'framer-motion';
+import { motion, useInView } from 'framer-motion';
 import {
   FaAward,
   FaUsers,
@@ -18,6 +18,47 @@ import {
   FaMoneyBillWave,
   FaLock,
 } from 'react-icons/fa';
+
+// Counter Animation Component
+const CounterAnimation = ({ end, duration = 2000, suffix = "" }) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, threshold: 0.3 });
+
+  useEffect(() => {
+    if (isInView && !hasAnimated) {
+      setHasAnimated(true);
+      let startTime = null;
+      const startCount = 0;
+      
+      const animate = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentCount = Math.floor(easeOutQuart * (end - startCount) + startCount);
+        
+        setCount(currentCount);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setCount(end);
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    }
+  }, [isInView, end, duration, hasAnimated]);
+
+  return (
+    <div ref={ref} className="text-2xl md:text-3xl font-bold mb-1" style={{ color: 'var(--color-primary)' }}>
+      {count}{suffix}
+    </div>
+  );
+};
 import api from '../api/axios';
 
 const About = () => {
@@ -44,10 +85,34 @@ const About = () => {
   }, []);
 
   const stats = [
-    { icon: <FaUsers />, value: `${settings?.about?.clientsServed || 500}+`, label: 'Happy Clients' },
-    { icon: <FaAward />, value: `${settings?.about?.yearsOfExperience || 3}+`, label: 'Years Experience' },
-    { icon: <FaHandshake />, value: `${settings?.about?.projectsCompleted || 1000}+`, label: 'Tax Returns Filed' },
-    { icon: <FaChartLine />, value: `${settings?.about?.successRate || 99}%`, label: 'Client Satisfaction' },
+    { 
+      icon: <FaUsers />, 
+      end: settings?.about?.clientsServed || 500, 
+      suffix: '+', 
+      label: 'Happy Clients',
+      duration: 2500 
+    },
+    { 
+      icon: <FaAward />, 
+      end: settings?.about?.yearsOfExperience || 3, 
+      suffix: '+', 
+      label: 'Years Experience',
+      duration: 1500 
+    },
+    { 
+      icon: <FaHandshake />, 
+      end: settings?.about?.projectsCompleted || 1000, 
+      suffix: '+', 
+      label: 'Tax Returns Filed',
+      duration: 3000 
+    },
+    { 
+      icon: <FaChartLine />, 
+      end: settings?.about?.successRate || 99, 
+      suffix: '%', 
+      label: 'Client Satisfaction',
+      duration: 2200 
+    },
   ];
 
   // Use team from settings, no default fallback
@@ -132,10 +197,11 @@ const About = () => {
                   className="text-3xl mb-2 flex justify-center"
                   style={{ color: 'var(--color-secondary)' }}
                 >{stat.icon}</div>
-                <h3 
-                  className="text-2xl md:text-3xl font-bold mb-1"
-                  style={{ color: 'var(--color-primary)' }}
-                >{stat.value}</h3>
+                <CounterAnimation 
+                  end={stat.end} 
+                  suffix={stat.suffix}
+                  duration={stat.duration}
+                />
                 <p className="text-gray-500 text-xs md:text-sm uppercase tracking-wide font-medium">{stat.label}</p>
               </motion.div>
             ))}
@@ -273,7 +339,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -302,7 +368,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -331,7 +397,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -360,7 +426,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -389,7 +455,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -418,7 +484,7 @@ const About = () => {
               <div 
                 className="w-12 h-12 rounded-lg flex items-center justify-center text-xl mb-4"
                 style={{ 
-                  backgroundColor: 'var(--color-secondary-10)',
+                  backgroundColor: '#e9f5f9',
                   color: 'var(--color-secondary)'
                 }}
               >
@@ -463,8 +529,8 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -491,8 +557,8 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -519,8 +585,8 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -547,8 +613,8 @@ const About = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >

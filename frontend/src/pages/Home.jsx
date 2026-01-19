@@ -1,5 +1,5 @@
-import { useState, useEffect, useCallback } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { useState, useEffect, useCallback, useRef } from "react";
+import { motion, AnimatePresence, useInView } from "framer-motion";
 import { Link } from "react-router-dom";
 import ConsultationModal from "../components/common/ConsultationModal";
 import api from "../api/axios";
@@ -18,6 +18,47 @@ import {
   FaChevronLeft,
   FaChevronRight,
 } from "react-icons/fa";
+
+// Counter Animation Component
+const CounterAnimation = ({ end, duration = 2000, suffix = "" }) => {
+  const [count, setCount] = useState(0);
+  const [hasAnimated, setHasAnimated] = useState(false);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true, threshold: 0.3 });
+
+  useEffect(() => {
+    if (isInView && !hasAnimated) {
+      setHasAnimated(true);
+      let startTime = null;
+      const startCount = 0;
+      
+      const animate = (currentTime) => {
+        if (startTime === null) startTime = currentTime;
+        const progress = Math.min((currentTime - startTime) / duration, 1);
+        
+        // Easing function for smooth animation
+        const easeOutQuart = 1 - Math.pow(1 - progress, 4);
+        const currentCount = Math.floor(easeOutQuart * (end - startCount) + startCount);
+        
+        setCount(currentCount);
+        
+        if (progress < 1) {
+          requestAnimationFrame(animate);
+        } else {
+          setCount(end);
+        }
+      };
+      
+      requestAnimationFrame(animate);
+    }
+  }, [isInView, end, duration, hasAnimated]);
+
+  return (
+    <div ref={ref} className="text-4xl font-serif font-bold">
+      {count}{suffix}
+    </div>
+  );
+};
 
 const Home = () => {
   // State to control the modal
@@ -324,9 +365,11 @@ const Home = () => {
             style={{ color: 'var(--color-primary)' }}
           >
             <div className="text-center">
-              <div className="text-4xl font-serif font-bold">
-                {settings?.about?.yearsOfExperience || 3}+
-              </div>
+              <CounterAnimation 
+                end={settings?.about?.yearsOfExperience || 3} 
+                suffix="+"
+                duration={2000}
+              />
               <div className="text-sm font-bold uppercase tracking-wider opacity-80">
                 Years Experience
               </div>
@@ -336,9 +379,11 @@ const Home = () => {
               style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
             ></div>
             <div className="text-center">
-              <div className="text-4xl font-serif font-bold">
-                {settings?.about?.clientsServed || 100}+
-              </div>
+              <CounterAnimation 
+                end={settings?.about?.clientsServed || 100} 
+                suffix="+"
+                duration={2500}
+              />
               <div className="text-sm font-bold uppercase tracking-wider opacity-80">
                 Happy Clients
               </div>
@@ -348,7 +393,11 @@ const Home = () => {
               style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
             ></div>
             <div className="text-center">
-              <div className="text-4xl font-serif font-bold">100%</div>
+              <CounterAnimation 
+                end={100} 
+                suffix="%"
+                duration={1800}
+              />
               <div className="text-sm font-bold uppercase tracking-wider opacity-80">
                 Confidentiality
               </div>
@@ -397,7 +446,8 @@ const Home = () => {
                 key={idx}
                 variants={cardVariants}
                 whileHover={{ y: -5 }}
-                className="bg-white p-8 rounded-2xl border border-gray-100 hover:border-secondary/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                className="p-8 rounded-2xl border border-gray-100 hover:border-secondary/30 shadow-sm hover:shadow-xl transition-all duration-300 group"
+                style={{ backgroundColor: '#e9f5f9' }}
               >
                 <div
                   className="w-14 h-14 rounded-xl flex items-center justify-center text-2xl mb-6 transition-all duration-300"
@@ -705,8 +755,8 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.1 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -733,8 +783,8 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.2 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -761,8 +811,8 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -789,8 +839,8 @@ const Home = () => {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.4 }}
-              className="bg-white rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
-              style={{ borderColor: '#e5e7eb' }}
+              className="rounded-lg p-6 border border-gray-200 hover:shadow-md transition-all duration-300"
+              style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
               onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
               onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
             >
@@ -849,8 +899,8 @@ const Home = () => {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: idx * 0.1 }}
-                className="bg-white p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
-                style={{ borderColor: '#e5e7eb' }}
+                className="p-6 rounded-lg border border-gray-200 hover:shadow-md transition-all duration-300"
+                style={{ borderColor: '#e5e7eb', backgroundColor: '#e9f5f9' }}
                 onMouseEnter={(e) => e.currentTarget.style.borderColor = 'var(--color-secondary)'}
                 onMouseLeave={(e) => e.currentTarget.style.borderColor = '#e5e7eb'}
               >
@@ -907,7 +957,8 @@ const Home = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.3 }}
-                    className="bg-white p-6 md:p-8 rounded-2xl shadow-xl relative flex flex-col md:flex-row items-center gap-6"
+                    className="p-6 md:p-8 rounded-2xl shadow-xl relative flex flex-col md:flex-row items-center gap-6"
+                    style={{ backgroundColor: '#e9f5f9' }}
                   >
                     {/* Left: Author */}
                     <div className="flex flex-col items-center md:w-48 flex-shrink-0">
