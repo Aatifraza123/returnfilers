@@ -81,7 +81,7 @@ const MyConsultations = () => {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8">
+    <div className="min-h-screen bg-gray-50 py-8 pt-24">
       <div className="container mx-auto px-6">
         {/* Header */}
         <div className="mb-8">

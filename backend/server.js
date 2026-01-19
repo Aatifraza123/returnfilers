@@ -45,14 +45,8 @@ const allowedOrigins = [
   'https://ca-website-puce.vercel.app',
   // Environment variable frontend URL
   ...(process.env.FRONTEND_URL ? [process.env.FRONTEND_URL] : []),
-  // Local development
-  'http://localhost:5173',
-  'http://localhost:5174',
-  'http://localhost:5175',
-  'http://localhost:5176',
-  'http://localhost:5177',
-  'http://localhost:3000',
-  'http://localhost:8000'
+  // Local development - only 5173
+  'http://localhost:5173'
 ];
 
 // Function to check if origin is allowed
