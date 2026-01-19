@@ -51,7 +51,8 @@ const allowedOrigins = [
   'http://localhost:5175',
   'http://localhost:5176',
   'http://localhost:5177',
-  'http://localhost:3000'
+  'http://localhost:3000',
+  'http://localhost:8000'
 ];
 
 // Function to check if origin is allowed
