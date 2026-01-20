@@ -3,10 +3,12 @@ const Service = require('../models/serviceModel');
 const DigitalService = require('../models/DigitalService');
 const Testimonial = require('../models/testimonialModel');
 const Blog = require('../models/blogModel');
+const Pricing = require('../models/Pricing');
+const Settings = require('../models/settingsModel');
 
 // Cache (refresh every 5 minutes for website data, 30 min for news)
-let dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, news: null };
-let cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, news: 0 };
+let dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, pricing: null, settings: null, news: null };
+let cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, pricing: 0, settings: 0, news: 0 };
 const CACHE_DURATION = 5 * 60 * 1000;
 const NEWS_CACHE_DURATION = 30 * 60 * 1000; // 30 minutes for news
 
@@ -52,6 +54,28 @@ const getBlogs = async () => {
     cacheTime.blogs = now;
   } catch (e) { console.log('Blogs fetch error'); }
   return dataCache.blogs || [];
+};
+
+// Fetch pricing
+const getPricing = async () => {
+  const now = Date.now();
+  if (dataCache.pricing && (now - cacheTime.pricing) < CACHE_DURATION) return dataCache.pricing;
+  try {
+    dataCache.pricing = await Pricing.find({ active: true }).select('category categoryTitle name price description features billingCycle popular').sort({ order: 1 });
+    cacheTime.pricing = now;
+  } catch (e) { console.log('Pricing fetch error'); }
+  return dataCache.pricing || [];
+};
+
+// Fetch settings
+const getSettings = async () => {
+  const now = Date.now();
+  if (dataCache.settings && (now - cacheTime.settings) < CACHE_DURATION) return dataCache.settings;
+  try {
+    dataCache.settings = await Settings.findOne().select('companyName email phone whatsapp businessHours about hero footer');
+    cacheTime.settings = now;
+  } catch (e) { console.log('Settings fetch error'); }
+  return dataCache.settings || {};
 };
 
 // Fetch tax/finance news from GNews API (free)
@@ -135,6 +159,43 @@ const formatBlogs = (blogs) => {
   return blogs.map(b => `- ${b.title} [${b.category}]`).join('\n');
 };
 
+const formatPricing = (pricing) => {
+  if (!pricing?.length) return '(No pricing packages yet)';
+  const categories = {};
+  pricing.forEach(p => {
+    if (!categories[p.category]) categories[p.category] = [];
+    categories[p.category].push(p);
+  });
+  
+  let result = [];
+  Object.keys(categories).forEach(category => {
+    const categoryTitle = categories[category][0]?.categoryTitle || category.toUpperCase();
+    result.push(`\n${categoryTitle}:`);
+    categories[category].forEach(p => {
+      let line = `- ${p.name}: ${p.price}`;
+      if (p.billingCycle && p.billingCycle !== 'one-time') line += ` (${p.billingCycle})`;
+      if (p.popular) line += ' ⭐ POPULAR';
+      result.push(line);
+      if (p.description) result.push(`  ${p.description.substring(0, 100)}...`);
+    });
+  });
+  return result.join('\n');
+};
+
+const formatSettings = (settings) => {
+  if (!settings) return {};
+  return {
+    companyName: settings.companyName || 'ReturnFilers',
+    email: settings.email || 'info@returnfilers.in',
+    phone: settings.phone || '+91 84471 27264',
+    whatsapp: settings.whatsapp || '+91 84471 27264',
+    businessHours: settings.businessHours || {},
+    about: settings.about || {},
+    hero: settings.hero || {},
+    footer: settings.footer || {}
+  };
+};
+
 const formatNews = (news) => {
   if (!news?.length) return '(No recent news)';
   return news.map(n => `- ${n.title} [${n.source}] - ${n.date}`).join('\n');
@@ -149,9 +210,11 @@ const getCurrentDate = () => {
 
 // Build system prompt with all data
 const getSystemPrompt = async () => {
-  const [services, digitalServices, testimonials, blogs, news] = await Promise.all([
-    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, pricing, settings, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPricing(), getSettings(), getTaxNews()
   ]);
+  
+  const companySettings = formatSettings(settings);
   
   return `You are "ReturnFilers AI", the official AI assistant for ReturnFilers - a professional tax and business consulting firm in India.
 
@@ -175,12 +238,12 @@ ReturnFilers is a professional tax and business consulting firm that combines te
 **Our Vision:** Making tax compliance simple, accessible, and stress-free for everyone through technology and expert guidance.
 
 **Why Choose ReturnFilers:**
-- Expert tax and business consultants with 3+ years experience
+- Expert tax and business consultants with ${companySettings.about?.yearsOfExperience || 3}+ years experience
 - 100% compliance with tax laws and regulations
 - Technology-driven e-filing platform
 - Transparent pricing with no hidden charges
 - Dedicated support throughout the process
-- 100+ satisfied clients across India
+- ${companySettings.about?.clientsServed || 100}+ satisfied clients across India
 
 ## STRICT RULES:
 - You are ReturnFilers AI, NOT a general assistant
@@ -188,24 +251,27 @@ ReturnFilers is a professional tax and business consulting firm that combines te
 - NEVER mention "CA firm", "Chartered Accountant", or "CA services"
 - ALWAYS say "tax and business consulting firm" or "tax consulting firm"
 - NEVER mention AI limitations or training data
-- Experience: 3+ years (since 2022) - NEVER say more
-- Clients: 100+ - NEVER say more
+- Experience: ${companySettings.about?.yearsOfExperience || 3}+ years (since ${companySettings.about?.yearEstablished || 2022}) - NEVER say more
+- Clients: ${companySettings.about?.clientsServed || 100}+ - NEVER say more
 - Use EXACT prices from services list below
-- If unsure: "Please contact us at +91 84471 27264"
+- If unsure: "Please contact us at ${companySettings.phone || '+91 84471 27264'}"
 
 ## YOUR INTRODUCTION (USE THIS EXACTLY):
 "I'm ReturnFilers AI, your assistant for tax and business consulting services. I'm here to help you with tax filing, GST registration, business setup, and more. How can I assist you today?"
 
 ## COMPANY INFO:
-- Company: ReturnFilers (Professional Tax & Business Consulting Firm)
-- Phone/WhatsApp: +91 84471 27264
-- Email: info@returnfilers.in
+- Company: ${companySettings.companyName || 'ReturnFilers'} (Professional Tax & Business Consulting Firm)
+- Phone/WhatsApp: ${companySettings.phone || '+91 84471 27264'}
+- Email: ${companySettings.email || 'info@returnfilers.in'}
 - Website: https://returnfilers.in
-- Hours: Mon-Fri 9am-6pm, Sat 10am-2pm
-- Established: 2022
+- Hours: ${companySettings.businessHours?.weekdays || 'Mon-Fri 9am-6pm'}, ${companySettings.businessHours?.saturday || 'Sat 10am-2pm'}
+- Established: ${companySettings.about?.yearEstablished || 2022}
 
 ## OUR SERVICES (USE EXACT PRICES):
 ${formatServices(services)}
+
+## PRICING PACKAGES:
+${formatPricing(pricing)}
 
 ## DIGITAL SERVICES (WEB DEVELOPMENT):
 ${formatDigitalServices(digitalServices)}
@@ -428,12 +494,12 @@ const chatWithAIStream = async (req, res) => {
 const testAI = async (req, res) => {
   // Force refresh cache if ?refresh=true
   if (req.query.refresh === 'true') {
-    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, news: null };
-    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, news: 0 };
+    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, pricing: null, settings: null, news: null };
+    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, pricing: 0, settings: 0, news: 0 };
   }
   
-  const [services, digitalServices, testimonials, blogs, news] = await Promise.all([
-    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getTaxNews()
+  const [services, digitalServices, testimonials, blogs, pricing, settings, news] = await Promise.all([
+    getServices(), getDigitalServices(), getTestimonials(), getBlogs(), getPricing(), getSettings(), getTaxNews()
   ]);
   res.json({ 
     success: true, 
@@ -442,14 +508,44 @@ const testAI = async (req, res) => {
       digitalServices: digitalServices.length,
       testimonials: testimonials.length,
       blogs: blogs.length,
+      pricing: pricing.length,
+      settings: settings ? 'loaded' : 'not found',
       news: news.length
     },
     details: {
       services: services.map(s => ({ title: s.title, price: s.price })),
-      digitalServices: digitalServices.map(d => ({ title: d.title, packages: d.packages?.length }))
+      digitalServices: digitalServices.map(d => ({ title: d.title, packages: d.packages?.length })),
+      pricing: pricing.map(p => ({ name: p.name, price: p.price, category: p.category })),
+      settings: settings ? {
+        companyName: settings.companyName,
+        phone: settings.phone,
+        email: settings.email,
+        yearsOfExperience: settings.about?.yearsOfExperience,
+        clientsServed: settings.about?.clientsServed
+      } : null
     },
     cacheInfo: 'Data refreshes every 5 minutes automatically'
   });
 };
 
-module.exports = { chatWithAI, chatWithAIStream, testAI };
+// Cache invalidation endpoint for admin use
+const invalidateCache = async (req, res) => {
+  try {
+    // Clear all cache
+    dataCache = { services: null, digitalServices: null, testimonials: null, blogs: null, pricing: null, settings: null, news: null };
+    cacheTime = { services: 0, digitalServices: 0, testimonials: 0, blogs: 0, pricing: 0, settings: 0, news: 0 };
+    
+    console.log('🔄 AI Chatbot cache invalidated by admin');
+    
+    res.json({ 
+      success: true, 
+      message: 'AI Chatbot cache cleared successfully. New data will be loaded on next chat request.',
+      timestamp: new Date().toISOString()
+    });
+  } catch (error) {
+    console.error('Cache invalidation error:', error);
+    res.status(500).json({ success: false, message: 'Failed to clear cache' });
+  }
+};
+
+module.exports = { chatWithAI, chatWithAIStream, testAI, invalidateCache };
