@@ -64,7 +64,14 @@ const userSchema = new mongoose.Schema({
   verificationTokenExpire: Date,
   // OTP for email verification
   emailOTP: String,
-  emailOTPExpire: Date
+  emailOTPExpire: Date,
+  // Mobile OTP verification
+  mobileOTP: String,
+  mobileOTPExpire: Date,
+  isMobileVerified: {
+    type: Boolean,
+    default: false
+  }
 }, {
   timestamps: true
 });

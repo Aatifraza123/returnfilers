@@ -43,7 +43,7 @@ if (!rootElement) {
               <QueryClientProvider client={queryClient}>
                 <App />
                 <Toaster 
-                  position="top-center"
+                  position="bottom-right"
                   toastOptions={{
                     // Default options
                     duration: 3000,
