@@ -1,0 +1,38 @@
+# VPS Deployment Commands for Enhanced AI Chatbot
+
+# 1. Connect to VPS
+ssh root@srv1268535
+
+# 2. Navigate to project directory
+cd ~/returnfilers/backend
+
+# 3. Pull latest changes from GitHub
+git pull origin main
+
+# 4. Restart backend service with PM2
+pm2 restart backend
+
+# 5. Check if backend is running properly
+pm2 status
+
+# 6. View backend logs (optional)
+pm2 logs backend --lines 20
+
+# 7. Test the enhanced chatbot (optional)
+curl -X GET "http://localhost:5000/api/chat/test"
+
+# 8. Test cache invalidation endpoint (optional)
+curl -X POST "http://localhost:5000/api/chat/invalidate-cache"
+
+# Expected Output:
+# - Backend should restart successfully
+# - PM2 status should show "online"
+# - Test endpoint should return data with pricing and settings
+# - Cache invalidation should return success message
+
+# Note: The enhanced AI chatbot now includes:
+# ✅ Pricing packages from admin panel
+# ✅ Company settings (contact info, business hours)
+# ✅ Dynamic experience years and client count
+# ✅ Auto-update every 5 minutes
+# ✅ Manual cache refresh capability

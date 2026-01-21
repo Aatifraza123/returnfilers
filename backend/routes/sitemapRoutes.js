@@ -5,42 +5,45 @@ const Blog = require('../models/blogModel');
 const DigitalService = require('../models/DigitalService');
 
 // @desc    Generate XML Sitemap
-// @route   GET /api/sitemap
+// @route   GET /sitemap.xml
 // @access  Public
 router.get('/', async (req, res) => {
   try {
     const baseUrl = 'https://www.returnfilers.in';
-    const currentDate = new Date().toISOString();
+    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
 
-    // Fetch all active services, blogs, and digital services
+    // Fetch all active services, published blogs, and active digital services
     const [services, blogs, digitalServices] = await Promise.all([
-      Service.find({ active: true }).select('_id slug updatedAt'),
-      Blog.find().select('_id slug updatedAt'),
-      DigitalService.find({ active: true }).select('_id slug updatedAt')
+      Service.find({ active: true }).select('_id title slug updatedAt createdAt'),
+      Blog.find({ isPublished: true }).select('_id title slug updatedAt createdAt'),
+      DigitalService.find({ active: true }).select('_id title slug updatedAt createdAt')
     ]);
 
-    // Static pages
+    // Static pages with proper priorities and change frequencies
     const staticPages = [
       { url: '', changefreq: 'daily', priority: '1.0' },
-      { url: '/about', changefreq: 'monthly', priority: '0.8' },
+      { url: '/about', changefreq: 'monthly', priority: '0.9' },
       { url: '/services', changefreq: 'weekly', priority: '0.9' },
       { url: '/digital-services', changefreq: 'weekly', priority: '0.9' },
       { url: '/expertise', changefreq: 'monthly', priority: '0.8' },
-      { url: '/blog', changefreq: 'daily', priority: '0.9' },
+      { url: '/blog', changefreq: 'daily', priority: '0.8' },
       { url: '/contact', changefreq: 'monthly', priority: '0.7' },
-      { url: '/quote', changefreq: 'monthly', priority: '0.7' },
-      { url: '/booking', changefreq: 'monthly', priority: '0.7' }
+      { url: '/quote', changefreq: 'monthly', priority: '0.8' },
+      { url: '/booking', changefreq: 'monthly', priority: '0.8' },
+      { url: '/auth', changefreq: 'yearly', priority: '0.3' }
     ];
 
     // Expertise pages
     const expertisePages = [
       'tax-consulting',
-      'auditing',
+      'auditing', 
       'financial-advisory',
-      'business-consulting'
+      'business-consulting',
+      'gst-services',
+      'company-registration'
     ];
 
-    // Build XML
+    // Build XML with proper formatting
     let xml = '<?xml version="1.0" encoding="UTF-8"?>\n';
     xml += '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n';
 
@@ -60,15 +63,17 @@ router.get('/', async (req, res) => {
       xml += `    <loc>${baseUrl}/expertise/${slug}</loc>\n`;
       xml += `    <lastmod>${currentDate}</lastmod>\n`;
       xml += `    <changefreq>monthly</changefreq>\n`;
-      xml += `    <priority>0.8</priority>\n`;
+      xml += `    <priority>0.7</priority>\n`;
       xml += '  </url>\n';
     });
 
-    // Add service pages
+    // Add service pages (use slug if available, otherwise ID)
     services.forEach(service => {
+      const serviceSlug = service.slug || service._id;
+      const lastMod = service.updatedAt ? service.updatedAt.toISOString().split('T')[0] : currentDate;
       xml += '  <url>\n';
-      xml += `    <loc>${baseUrl}/services/${service._id}</loc>\n`;
-      xml += `    <lastmod>${service.updatedAt || currentDate}</lastmod>\n`;
+      xml += `    <loc>${baseUrl}/services/${serviceSlug}</loc>\n`;
+      xml += `    <lastmod>${lastMod}</lastmod>\n`;
       xml += `    <changefreq>weekly</changefreq>\n`;
       xml += `    <priority>0.8</priority>\n`;
       xml += '  </url>\n';
@@ -76,33 +81,39 @@ router.get('/', async (req, res) => {
 
     // Add digital service pages
     digitalServices.forEach(service => {
+      const serviceSlug = service.slug || service._id;
+      const lastMod = service.updatedAt ? service.updatedAt.toISOString().split('T')[0] : currentDate;
       xml += '  <url>\n';
-      xml += `    <loc>${baseUrl}/digital-services/${service.slug}</loc>\n`;
-      xml += `    <lastmod>${service.updatedAt || currentDate}</lastmod>\n`;
+      xml += `    <loc>${baseUrl}/digital-services/${serviceSlug}</loc>\n`;
+      xml += `    <lastmod>${lastMod}</lastmod>\n`;
       xml += `    <changefreq>weekly</changefreq>\n`;
-      xml += `    <priority>0.8</priority>\n`;
+      xml += `    <priority>0.7</priority>\n`;
       xml += '  </url>\n';
     });
 
     // Add blog pages
     blogs.forEach(blog => {
       const blogSlug = blog.slug || blog._id;
+      const lastMod = blog.updatedAt ? blog.updatedAt.toISOString().split('T')[0] : currentDate;
       xml += '  <url>\n';
       xml += `    <loc>${baseUrl}/blog/${blogSlug}</loc>\n`;
-      xml += `    <lastmod>${blog.updatedAt || currentDate}</lastmod>\n`;
+      xml += `    <lastmod>${lastMod}</lastmod>\n`;
       xml += `    <changefreq>monthly</changefreq>\n`;
-      xml += `    <priority>0.7</priority>\n`;
+      xml += `    <priority>0.6</priority>\n`;
       xml += '  </url>\n';
     });
 
     xml += '</urlset>';
 
     // Set proper headers for XML
-    res.header('Content-Type', 'application/xml');
+    res.header('Content-Type', 'application/xml; charset=utf-8');
+    res.header('Cache-Control', 'public, max-age=3600'); // Cache for 1 hour
     res.send(xml);
+    
+    console.log(`✅ Sitemap generated with ${staticPages.length + expertisePages.length + services.length + digitalServices.length + blogs.length} URLs`);
   } catch (error) {
-    console.error('Sitemap generation error:', error);
-    res.status(500).send('Error generating sitemap');
+    console.error('❌ Sitemap generation error:', error);
+    res.status(500).send('<?xml version="1.0" encoding="UTF-8"?><error>Sitemap generation failed</error>');
   }
 });
 
