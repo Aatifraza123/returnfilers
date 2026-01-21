@@ -10,7 +10,13 @@ const DigitalService = require('../models/DigitalService');
 router.get('/', async (req, res) => {
   try {
     const baseUrl = 'https://www.returnfilers.in';
-    const currentDate = new Date().toISOString().split('T')[0]; // YYYY-MM-DD format
+    // Use UTC date to avoid timezone issues
+    const now = new Date();
+    const currentDate = now.getFullYear() + '-' + 
+                       String(now.getMonth() + 1).padStart(2, '0') + '-' + 
+                       String(now.getDate()).padStart(2, '0');
+    
+    console.log(`🗓️ Generating sitemap for date: ${currentDate}`);
 
     // Fetch all active services, published blogs, and active digital services
     const [services, blogs, digitalServices] = await Promise.all([
@@ -70,7 +76,13 @@ router.get('/', async (req, res) => {
     // Add service pages (use slug if available, otherwise ID)
     services.forEach(service => {
       const serviceSlug = service.slug || service._id;
-      const lastMod = service.updatedAt ? service.updatedAt.toISOString().split('T')[0] : currentDate;
+      let lastMod = currentDate;
+      if (service.updatedAt) {
+        const updateDate = new Date(service.updatedAt);
+        lastMod = updateDate.getFullYear() + '-' + 
+                 String(updateDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                 String(updateDate.getDate()).padStart(2, '0');
+      }
       xml += '  <url>\n';
       xml += `    <loc>${baseUrl}/services/${serviceSlug}</loc>\n`;
       xml += `    <lastmod>${lastMod}</lastmod>\n`;
@@ -82,7 +94,13 @@ router.get('/', async (req, res) => {
     // Add digital service pages
     digitalServices.forEach(service => {
       const serviceSlug = service.slug || service._id;
-      const lastMod = service.updatedAt ? service.updatedAt.toISOString().split('T')[0] : currentDate;
+      let lastMod = currentDate;
+      if (service.updatedAt) {
+        const updateDate = new Date(service.updatedAt);
+        lastMod = updateDate.getFullYear() + '-' + 
+                 String(updateDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                 String(updateDate.getDate()).padStart(2, '0');
+      }
       xml += '  <url>\n';
       xml += `    <loc>${baseUrl}/digital-services/${serviceSlug}</loc>\n`;
       xml += `    <lastmod>${lastMod}</lastmod>\n`;
@@ -94,7 +112,13 @@ router.get('/', async (req, res) => {
     // Add blog pages
     blogs.forEach(blog => {
       const blogSlug = blog.slug || blog._id;
-      const lastMod = blog.updatedAt ? blog.updatedAt.toISOString().split('T')[0] : currentDate;
+      let lastMod = currentDate;
+      if (blog.updatedAt) {
+        const updateDate = new Date(blog.updatedAt);
+        lastMod = updateDate.getFullYear() + '-' + 
+                 String(updateDate.getMonth() + 1).padStart(2, '0') + '-' + 
+                 String(updateDate.getDate()).padStart(2, '0');
+      }
       xml += '  <url>\n';
       xml += `    <loc>${baseUrl}/blog/${blogSlug}</loc>\n`;
       xml += `    <lastmod>${lastMod}</lastmod>\n`;
