@@ -1,4 +1,15 @@
 const Service = require('../models/serviceModel');
+const axios = require('axios');
+
+// Helper function to invalidate AI chatbot cache
+const invalidateAIChatbotCache = async () => {
+  try {
+    await axios.post('http://localhost:5000/api/chat/invalidate-cache');
+    console.log('🤖 AI Chatbot cache invalidated after service update');
+  } catch (error) {
+    console.log('⚠️ Failed to invalidate AI chatbot cache:', error.message);
+  }
+};
 
 // @desc    Get all active services
 // @route   GET /api/services
@@ -56,6 +67,9 @@ const createService = async (req, res) => {
       image // ✅ Save Image
     });
 
+    // Invalidate AI chatbot cache
+    await invalidateAIChatbotCache();
+
     res.status(201).json(service);
   } catch (error) {
     res.status(500).json({ message: error.message });
@@ -85,6 +99,10 @@ const updateService = async (req, res) => {
       
       const updatedService = await service.save();
       console.log('Service updated:', updatedService._id, 'Image:', updatedService.image, 'FAQs:', updatedService.faqs?.length);
+      
+      // Invalidate AI chatbot cache
+      await invalidateAIChatbotCache();
+      
       res.json(updatedService);
     } else {
       res.status(404).json({ message: 'Service not found' });
@@ -103,6 +121,10 @@ const deleteService = async (req, res) => {
 
     if (service) {
       await service.deleteOne();
+      
+      // Invalidate AI chatbot cache
+      await invalidateAIChatbotCache();
+      
       res.json({ message: 'Service removed' });
     } else {
       res.status(404).json({ message: 'Service not found' });

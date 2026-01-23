@@ -1,38 +1,47 @@
-# VPS Deployment Commands for Enhanced AI Chatbot
+# VPS Deployment Commands for Enhanced AI Chatbot + Fixed Sitemap
 
 # 1. Connect to VPS
 ssh root@srv1268535
 
-# 2. Navigate to project directory
+# 2. Update Backend (Enhanced AI Chatbot)
 cd ~/returnfilers/backend
-
-# 3. Pull latest changes from GitHub
 git pull origin main
-
-# 4. Restart backend service with PM2
 pm2 restart backend
-
-# 5. Check if backend is running properly
 pm2 status
 
-# 6. View backend logs (optional)
-pm2 logs backend --lines 20
+# 3. Update Frontend (Fixed Sitemap)
+cd ~/returnfilers/frontend
+git pull origin main
+npm run build
+# Copy build files to web server (if using nginx/apache)
+# Or restart frontend service if using PM2
 
-# 7. Test the enhanced chatbot (optional)
+# 4. Test Enhanced AI Chatbot
 curl -X GET "http://localhost:5000/api/chat/test"
 
-# 8. Test cache invalidation endpoint (optional)
+# 5. Test Improved Sitemap
+curl -X GET "http://localhost:5000/sitemap.xml"
+
+# 6. Test Cache Invalidation (optional)
 curl -X POST "http://localhost:5000/api/chat/invalidate-cache"
 
-# Expected Output:
-# - Backend should restart successfully
-# - PM2 status should show "online"
-# - Test endpoint should return data with pricing and settings
-# - Cache invalidation should return success message
+# 7. Check PM2 Status
+pm2 logs backend --lines 20
 
-# Note: The enhanced AI chatbot now includes:
-# ✅ Pricing packages from admin panel
-# ✅ Company settings (contact info, business hours)
-# ✅ Dynamic experience years and client count
-# ✅ Auto-update every 5 minutes
-# ✅ Manual cache refresh capability
+# Expected Results:
+# ✅ Backend: Enhanced AI chatbot with pricing & settings integration
+# ✅ Frontend: Fixed sitemap files (sitemap.xml, sitemap_index.xml)
+# ✅ Robots.txt: Updated to point to main domain sitemaps
+# ✅ Google Search Console: Should now discover pages properly
+
+# New Sitemap URLs:
+# - https://www.returnfilers.in/sitemap.xml (main sitemap index)
+# - https://www.returnfilers.in/sitemap_index.xml (sitemap index)
+# - https://api.returnfilers.in/sitemap.xml (backend generated sitemap)
+
+# AI Chatbot Enhancements:
+# ✅ Auto-updates with admin pricing changes
+# ✅ Dynamic company settings (contact info, business hours)
+# ✅ Real-time experience years and client count
+# ✅ Cache invalidation for instant updates
+# ✅ Comprehensive admin content integration

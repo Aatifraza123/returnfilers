@@ -1,4 +1,15 @@
 const DigitalService = require('../models/DigitalService');
+const axios = require('axios');
+
+// Helper function to invalidate AI chatbot cache
+const invalidateAIChatbotCache = async () => {
+  try {
+    await axios.post('http://localhost:5000/api/chat/invalidate-cache');
+    console.log('🤖 AI Chatbot cache invalidated after digital service update');
+  } catch (error) {
+    console.log('⚠️ Failed to invalidate AI chatbot cache:', error.message);
+  }
+};
 
 // Get all digital services
 exports.getDigitalServices = async (req, res) => {
@@ -40,6 +51,9 @@ exports.createDigitalService = async (req, res) => {
       active
     });
     
+    // Invalidate AI chatbot cache
+    await invalidateAIChatbotCache();
+    
     res.status(201).json({ success: true, service });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -59,6 +73,9 @@ exports.updateDigitalService = async (req, res) => {
       return res.status(404).json({ success: false, message: 'Service not found' });
     }
     
+    // Invalidate AI chatbot cache
+    await invalidateAIChatbotCache();
+    
     res.json({ success: true, service });
   } catch (error) {
     res.status(500).json({ success: false, message: error.message });
@@ -73,6 +90,9 @@ exports.deleteDigitalService = async (req, res) => {
     if (!service) {
       return res.status(404).json({ success: false, message: 'Service not found' });
     }
+    
+    // Invalidate AI chatbot cache
+    await invalidateAIChatbotCache();
     
     res.json({ success: true, message: 'Service deleted successfully' });
   } catch (error) {
