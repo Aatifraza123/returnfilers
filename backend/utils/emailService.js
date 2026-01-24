@@ -34,19 +34,21 @@ const createTransporter = () => {
   };
 
   if (isZoho) {
-    // Zoho specific configuration - optimized for deliverability
+    // Try alternative Zoho configuration - smtp.zoho.in instead of smtppro
+    const alternativeHost = 'smtp.zoho.in';
     config = {
-      ...config,
+      host: alternativeHost,
       port: 465,
       secure: true,
-      requireTLS: true,
-      tls: {
-        rejectUnauthorized: true,
-        minVersion: 'TLSv1.2'
+      auth: {
+        user: emailUser,
+        pass: emailPass
       },
-      // Add authentication method
-      authMethod: 'PLAIN'
+      tls: {
+        rejectUnauthorized: false
+      }
     };
+    console.log('🔧 Using alternative Zoho config:', alternativeHost);
   } else if (isGmail) {
     // Gmail specific configuration
     config = {

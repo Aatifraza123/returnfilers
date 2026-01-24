@@ -418,7 +418,16 @@ const changePassword = async (req, res) => {
 // @access  Public
 const forgotPassword = async (req, res) => {
   try {
+    console.log('🔄 Forgot password request received:', req.body);
+    
     const { email } = req.body;
+
+    if (!email) {
+      return res.status(400).json({
+        success: false,
+        message: 'Email is required'
+      });
+    }
 
     const user = await User.findOne({ email });
     if (!user) {
@@ -428,18 +437,23 @@ const forgotPassword = async (req, res) => {
       });
     }
 
+    console.log('👤 User found:', user.email);
+
     // Generate reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
     user.resetPasswordExpire = Date.now() + 15 * 60 * 1000; // 15 minutes
 
     await user.save();
+    console.log('💾 Reset token saved for user');
 
     // Create reset URL
     const resetUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/reset-password/${resetToken}`;
+    console.log('🔗 Reset URL generated:', resetUrl);
     
     // Send email with reset link - Fully Responsive
     try {
+      console.log('📧 Attempting to send reset email...');
       await sendEmail({
         to: email,
         subject: 'Reset Your Password - ReturnFilers',
@@ -493,12 +507,13 @@ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration
 </html>`
       });
 
+      console.log('✅ Reset email sent successfully');
       res.json({
         success: true,
         message: 'Password reset link sent to your email'
       });
     } catch (emailError) {
-      console.error('Email sending failed:', emailError);
+      console.error('❌ Email sending failed:', emailError);
       // Reset the token fields if email fails
       user.resetPasswordToken = undefined;
       user.resetPasswordExpire = undefined;
@@ -506,14 +521,16 @@ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration
       
       res.status(500).json({
         success: false,
-        message: 'Failed to send reset email. Please try again.'
+        message: 'Failed to send reset email. Please try again.',
+        error: emailError.message
       });
     }
   } catch (error) {
-    console.error('Forgot password error:', error);
+    console.error('❌ Forgot password error:', error);
     res.status(500).json({
       success: false,
-      message: 'Server error'
+      message: 'Server error',
+      error: error.message
     });
   }
 };

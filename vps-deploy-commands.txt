@@ -1,47 +1,45 @@
-# VPS Deployment Commands for Enhanced AI Chatbot + Fixed Sitemap
+# VPS Deployment Commands - Fix Digital Services Pricing & Auto AI Sync
 
 # 1. Connect to VPS
 ssh root@srv1268535
 
-# 2. Update Backend (Enhanced AI Chatbot)
+# 2. Update Backend Code
 cd ~/returnfilers/backend
 git pull origin main
+
+# 3. Run Database Update Script (Fix Pricing)
+node update-digital-services.js
+
+# 4. Restart Backend
 pm2 restart backend
-pm2 status
 
-# 3. Update Frontend (Fixed Sitemap)
-cd ~/returnfilers/frontend
-git pull origin main
-npm run build
-# Copy build files to web server (if using nginx/apache)
-# Or restart frontend service if using PM2
+# 5. Test Updated Pricing
+curl -X GET "http://localhost:5000/api/digital-services"
 
-# 4. Test Enhanced AI Chatbot
-curl -X GET "http://localhost:5000/api/chat/test"
-
-# 5. Test Improved Sitemap
-curl -X GET "http://localhost:5000/sitemap.xml"
-
-# 6. Test Cache Invalidation (optional)
-curl -X POST "http://localhost:5000/api/chat/invalidate-cache"
+# 6. Test AI Chatbot with New Pricing
+curl -X POST "http://localhost:5000/api/chat" \
+  -H "Content-Type: application/json" \
+  -d '{"message": "What are your web development prices?"}'
 
 # 7. Check PM2 Status
-pm2 logs backend --lines 20
+pm2 status
+pm2 logs backend --lines 10
 
 # Expected Results:
-# ✅ Backend: Enhanced AI chatbot with pricing & settings integration
-# ✅ Frontend: Fixed sitemap files (sitemap.xml, sitemap_index.xml)
-# ✅ Robots.txt: Updated to point to main domain sitemaps
-# ✅ Google Search Console: Should now discover pages properly
+# ✅ Database updated with correct pricing:
+#    - Basic Website: ₹9,999 (7-10 working days)
+#    - Business Website: ₹24,999 (10-15 working days)
+#    - E-commerce Website: ₹29,999 (15-20 working days)
+# ✅ AI Chatbot shows website pricing (not old ₹19k, ₹39k, ₹69k)
+# ✅ Auto-sync enabled: Admin changes → AI Chatbot (instant)
 
-# New Sitemap URLs:
-# - https://www.returnfilers.in/sitemap.xml (main sitemap index)
-# - https://www.returnfilers.in/sitemap_index.xml (sitemap index)
-# - https://api.returnfilers.in/sitemap.xml (backend generated sitemap)
+# New Features Added:
+# 🤖 Automatic AI chatbot cache invalidation on admin updates
+# 📊 Database pricing sync with website
+# ⚡ Instant reflection of admin changes in chatbot
+# 🔄 Auto-sync system for all admin content updates
 
-# AI Chatbot Enhancements:
-# ✅ Auto-updates with admin pricing changes
-# ✅ Dynamic company settings (contact info, business hours)
-# ✅ Real-time experience years and client count
-# ✅ Cache invalidation for instant updates
-# ✅ Comprehensive admin content integration
+# Test Auto-Sync:
+# 1. Update any service/digital service in admin panel
+# 2. AI chatbot will automatically show updated info within seconds
+# 3. No manual cache clearing needed anymore!
