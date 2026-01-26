@@ -39,6 +39,11 @@ const serviceSchema = mongoose.Schema({
     type: String, 
     default: '' // Stores URL string
   },
+  // ✅ Cloudinary Public ID for image management
+  imagePublicId: {
+    type: String,
+    default: ''
+  },
   icon: {
     type: String,
     default: ''

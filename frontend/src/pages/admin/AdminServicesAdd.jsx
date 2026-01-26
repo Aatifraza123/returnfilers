@@ -16,6 +16,8 @@ const AdminServicesForm = () => {
 
   const [loading, setLoading] = useState(false)
   const [faqs, setFaqs] = useState([{ question: '', answer: '' }])
+  const [imagePreview, setImagePreview] = useState('')
+  const [imageUploadType, setImageUploadType] = useState('url') // 'url' or 'upload'
   const { register, handleSubmit, reset, setValue, formState: { errors } } = useForm()
 
   // Auth Config
@@ -64,12 +66,19 @@ const AdminServicesForm = () => {
             setFaqs(service.faqs)
           }
 
+          // Set image preview if exists
+          if (service.image) {
+            setImagePreview(service.image)
+            setValue('image', service.image)
+          }
+
           reset({
             title: service.title || '',
             description: service.description || '',
             price: service.price || '', // NaN हटाने के लिए empty string
             category: service.category || '',
-            features: formattedFeatures
+            features: formattedFeatures,
+            image: service.image || ''
           })
 
         } catch (error) {
@@ -93,7 +102,8 @@ const AdminServicesForm = () => {
       const formattedData = {
         ...data,
         features: data.features.split('\n').map(f => f.trim()).filter(f => f !== ''),
-        faqs: faqs.filter(faq => faq.question.trim() && faq.answer.trim())
+        faqs: faqs.filter(faq => faq.question.trim() && faq.answer.trim()),
+        image: imagePreview || data.image || '' // Use preview or URL
       }
 
       if (isEditMode) {
@@ -111,6 +121,45 @@ const AdminServicesForm = () => {
     } finally {
       setLoading(false)
     }
+  }
+
+  // Handle image file upload
+  const handleImageUpload = (e) => {
+    const file = e.target.files[0]
+    if (!file) return
+
+    // Check file size (max 5MB)
+    if (file.size > 5 * 1024 * 1024) {
+      toast.error('Image size should be less than 5MB')
+      return
+    }
+
+    // Check file type
+    if (!file.type.startsWith('image/')) {
+      toast.error('Please upload an image file')
+      return
+    }
+
+    // Convert to base64
+    const reader = new FileReader()
+    reader.onloadend = () => {
+      setImagePreview(reader.result)
+      setValue('image', reader.result)
+    }
+    reader.readAsDataURL(file)
+  }
+
+  // Handle image URL input
+  const handleImageUrl = (e) => {
+    const url = e.target.value
+    setImagePreview(url)
+    setValue('image', url)
+  }
+
+  // Remove image
+  const removeImage = () => {
+    setImagePreview('')
+    setValue('image', '')
   }
 
   const getPageTitle = () => {
@@ -195,6 +244,113 @@ const AdminServicesForm = () => {
               }`}
             />
           </div>
+
+          {/* Image Upload Section */}
+          {!isViewMode && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-neutral-700 mb-3">
+                Service Image
+              </label>
+              
+              {/* Toggle between URL and Upload */}
+              <div className="flex gap-2 mb-3">
+                <button
+                  type="button"
+                  onClick={() => setImageUploadType('url')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    imageUploadType === 'url'
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Image URL
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setImageUploadType('upload')}
+                  className={`px-4 py-2 rounded-lg text-sm font-medium transition-colors ${
+                    imageUploadType === 'upload'
+                      ? 'bg-primary text-white'
+                      : 'bg-gray-100 text-gray-700 hover:bg-gray-200'
+                  }`}
+                >
+                  Upload Image
+                </button>
+              </div>
+
+              {/* URL Input */}
+              {imageUploadType === 'url' && (
+                <input
+                  type="url"
+                  placeholder="https://example.com/image.jpg"
+                  onChange={handleImageUrl}
+                  defaultValue={imagePreview}
+                  className="w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-primary"
+                />
+              )}
+
+              {/* File Upload */}
+              {imageUploadType === 'upload' && (
+                <div className="border-2 border-dashed border-gray-300 rounded-lg p-6 text-center hover:border-primary transition-colors">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleImageUpload}
+                    className="hidden"
+                    id="image-upload"
+                  />
+                  <label
+                    htmlFor="image-upload"
+                    className="cursor-pointer flex flex-col items-center"
+                  >
+                    <svg className="w-12 h-12 text-gray-400 mb-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
+                    </svg>
+                    <span className="text-sm text-gray-600">
+                      Click to upload or drag and drop
+                    </span>
+                    <span className="text-xs text-gray-500 mt-1">
+                      PNG, JPG, GIF up to 5MB
+                    </span>
+                  </label>
+                </div>
+              )}
+
+              {/* Image Preview */}
+              {imagePreview && (
+                <div className="mt-4 relative">
+                  <img
+                    src={imagePreview}
+                    alt="Preview"
+                    className="w-full h-48 object-cover rounded-lg border"
+                  />
+                  <button
+                    type="button"
+                    onClick={removeImage}
+                    className="absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full hover:bg-red-600 transition-colors"
+                  >
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+            </div>
+          )}
+
+          {/* View Mode Image Display */}
+          {isViewMode && imagePreview && (
+            <div className="mb-6">
+              <label className="block text-sm font-medium text-neutral-700 mb-3">
+                Service Image
+              </label>
+              <img
+                src={imagePreview}
+                alt="Service"
+                className="w-full h-48 object-cover rounded-lg border"
+              />
+            </div>
+          )}
 
           {/* FAQs Section */}
           <div className="mb-6">
