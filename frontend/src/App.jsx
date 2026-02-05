@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { AuthProvider } from './context/AuthContext'
 import { UserAuthProvider } from './context/UserAuthContext'
 import { SettingsProvider } from './context/SettingsContext'
@@ -9,6 +10,7 @@ import ThemeProvider from './components/common/ThemeProvider'
 import GoogleAnalytics from './components/common/GoogleAnalytics'
 import GoogleTagManager from './components/common/GoogleTagManager'
 import FacebookPixel from './components/common/FacebookPixel'
+import CookieConsentBanner from './components/common/CookieConsent'
 import AdminLayout from './components/layout/AdminLayout' 
 
 // Public Pages
@@ -28,6 +30,7 @@ import TermsConditions from './pages/TermsConditions'
 import Quote from './pages/Quote'
 import PrivacyPolicy from './pages/PrivacyPolicy'
 import RefundPolicy from './pages/RefundPolicy'
+import CookiePolicy from './pages/CookiePolicy'
 import Auth from './pages/Auth'
 import ForgotPassword from './pages/ForgotPassword'
 import ResetPassword from './pages/ResetPassword'
@@ -101,17 +104,21 @@ const ChatbotWrapper = () => {
 function App() {
   console.log('App component rendering... v2.0');
   
+  const recaptchaSiteKey = import.meta.env.VITE_RECAPTCHA_SITE_KEY;
+  
   // Simple test to see if React is working
   try {
     return (
-      <AuthProvider>
-        <UserAuthProvider>
-          <SettingsProvider>
-            <ThemeProvider>
-              <GoogleAnalytics />
-              <GoogleTagManager />
-              <FacebookPixel />
-              <ChatbotWrapper />
+      <GoogleReCaptchaProvider reCaptchaKey={recaptchaSiteKey}>
+        <AuthProvider>
+          <UserAuthProvider>
+            <SettingsProvider>
+              <ThemeProvider>
+                <GoogleAnalytics />
+                <GoogleTagManager />
+                <FacebookPixel />
+                <ChatbotWrapper />
+                <CookieConsentBanner />
 
               <Routes>
           {/* Public Routes */}
@@ -137,6 +144,7 @@ function App() {
           <Route path="quote" element={<Quote />} />
           <Route path="privacy-policy" element={<PrivacyPolicy />} />
           <Route path="refund-policy" element={<RefundPolicy />} />
+          <Route path="cookie-policy" element={<CookiePolicy />} />
           <Route path="booking" element={<Booking />} />
           <Route path="digital-services" element={<DigitalServices />} />
           <Route path="digital-services/:slug" element={<DigitalServiceDetail />} />
@@ -202,6 +210,7 @@ function App() {
         </SettingsProvider>
       </UserAuthProvider>
       </AuthProvider>
+      </GoogleReCaptchaProvider>
     );
   } catch (error) {
     console.error('Error in App component:', error);

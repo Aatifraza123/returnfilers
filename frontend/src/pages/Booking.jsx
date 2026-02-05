@@ -4,6 +4,7 @@ import { motion } from 'framer-motion';
 import { FaCloudUploadAlt, FaFileAlt, FaTimes, FaCheckCircle, FaSpinner, FaShieldAlt, FaLock, FaCalendarCheck } from 'react-icons/fa';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
+import { useRecaptcha } from '../hooks/useRecaptcha';
 import UserAuthContext from '../context/UserAuthContext';
 import AuthModal from '../components/common/AuthModal';
 
@@ -22,6 +23,7 @@ const Booking = () => {
   const preSelectedService = searchParams.get('service') || '';
   const { user, token } = useContext(UserAuthContext);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const getRecaptchaToken = useRecaptcha('booking_form');
   
   const [services, setServices] = useState([]);
   const [loadingServices, setLoadingServices] = useState(true);
@@ -205,8 +207,17 @@ const Booking = () => {
     setLoading(true);
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      if (!recaptchaToken) {
+        toast.error('Security verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
       // Prepare booking data
-      const bookingData = { ...formData };
+      const bookingData = { ...formData, recaptchaToken };
       
       // If documents uploaded, convert to base64
       if (files.length > 0) {

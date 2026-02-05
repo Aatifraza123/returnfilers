@@ -196,19 +196,9 @@ const Home = () => {
         {/* Background Image */}
         <div className="absolute inset-0 z-0">
           <img
-            src={
-              settings?.hero?.backgroundImage ||
-              "https://images.unsplash.com/photo-1497366216548-37526070297c?q=80&w=2301&auto=format&fit=crop"
-            }
+            src="https://res.cloudinary.com/derzj7d4u/image/upload/v1770318586/yff9wcvmf7otz1vj3pum.png"
             alt="Office Background"
             className="w-full h-full object-cover"
-          />
-          {/* Gradient Overlay */}
-          <div 
-            className="absolute inset-0 bg-gradient-to-r"
-            style={{
-              background: `linear-gradient(to right, var(--color-primary), rgba(var(--color-primary-rgb, 11, 21, 48), 0.85), rgba(var(--color-primary-rgb, 11, 21, 48), 0.4))`
-            }}
           />
         </div>
 
@@ -252,31 +242,30 @@ const Home = () => {
                 transition={{ delay: 0.5 }}
                 className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-10"
               >
-                {/* UPDATED: Button triggers Modal with Dynamic Colors */}
+                {/* Primary CTA Button - Gold/Yellow */}
                 <button
                   onClick={openModal}
-                  className="px-6 py-3 md:px-8 md:py-3.5 rounded-full font-semibold text-sm md:text-base shadow-lg transition-all hover:-translate-y-0.5 hover:shadow-xl"
-                  style={{
-                    background: "var(--color-secondary)",
-                    color: "var(--color-primary)",
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.background = "var(--color-primary)";
-                    e.currentTarget.style.color = "white";
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.background = "var(--color-secondary)";
-                    e.currentTarget.style.color = "var(--color-primary)";
-                  }}
+                  className="group relative px-6 py-3 md:px-8 md:py-4 rounded-2xl font-semibold text-sm md:text-base shadow-lg transition-all duration-300 hover:shadow-2xl hover:scale-105 overflow-hidden border-2 border-amber-400 bg-gradient-to-r from-amber-400 to-yellow-400 text-gray-900 hover:from-amber-500 hover:to-yellow-500"
                 >
-                  Book Consultation
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Book Consultation
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
                 </button>
 
+                {/* Secondary CTA Button - Transparent with White Border */}
                 <Link
                   to="/quote"
-                  className="px-6 py-3 md:px-8 md:py-3.5 border border-white/20 bg-white/5 text-white rounded-full font-medium text-sm md:text-base hover:bg-white/10 transition-all backdrop-blur-sm"
+                  className="group px-6 py-3 md:px-8 md:py-4 border-2 border-white/60 bg-white/10 text-white rounded-2xl font-semibold text-sm md:text-base hover:bg-white/20 hover:border-white transition-all duration-300 backdrop-blur-md shadow-lg hover:shadow-xl hover:scale-105"
                 >
-                  Get Custom Quote
+                  <span className="flex items-center justify-center gap-2">
+                    Get Custom Quote
+                    <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M9 5l7 7-7 7" />
+                    </svg>
+                  </span>
                 </Link>
               </motion.div>
 
@@ -356,12 +345,12 @@ const Home = () => {
 
       {/* ==================== STATS STRIP ==================== */}
       <section 
-        className="py-8"
+        className="py-6 md:py-8"
         style={{ backgroundColor: 'var(--color-secondary)' }}
       >
-        <div className="container mx-auto max-w-6xl px-6">
+        <div className="container mx-auto max-w-6xl px-4 md:px-6">
           <div 
-            className="flex flex-wrap justify-around items-center gap-8"
+            className="flex flex-wrap justify-around items-center gap-4 md:gap-8"
             style={{ color: 'var(--color-primary)' }}
           >
             <div className="text-center">
@@ -370,12 +359,12 @@ const Home = () => {
                 suffix="+"
                 duration={2000}
               />
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+              <div className="text-xs md:text-sm font-bold uppercase tracking-wider opacity-80">
                 Years Experience
               </div>
             </div>
             <div 
-              className="h-10 w-px hidden md:block"
+              className="h-8 md:h-10 w-px hidden sm:block"
               style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
             ></div>
             <div className="text-center">
@@ -384,12 +373,12 @@ const Home = () => {
                 suffix="+"
                 duration={2500}
               />
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+              <div className="text-xs md:text-sm font-bold uppercase tracking-wider opacity-80">
                 Happy Clients
               </div>
             </div>
             <div 
-              className="h-10 w-px hidden md:block"
+              className="h-8 md:h-10 w-px hidden sm:block"
               style={{ backgroundColor: 'var(--color-primary)', opacity: 0.2 }}
             ></div>
             <div className="text-center">
@@ -398,7 +387,7 @@ const Home = () => {
                 suffix="%"
                 duration={1800}
               />
-              <div className="text-sm font-bold uppercase tracking-wider opacity-80">
+              <div className="text-xs md:text-sm font-bold uppercase tracking-wider opacity-80">
                 Confidentiality
               </div>
             </div>
@@ -1146,45 +1135,59 @@ const Home = () => {
       </section>
 
       {/* ==================== CTA SECTION ==================== */}
-      <section 
-        className="py-12 md:py-16 px-6 text-center"
-        style={{ backgroundColor: 'var(--color-primary)' }}
-      >
-        <div className="container mx-auto max-w-3xl">
-          <h2 className="text-2xl lg:text-3xl font-serif font-bold mb-4 text-white">
-            Ready to Optimize Your Finances?
-          </h2>
-          <p className="text-base lg:text-lg mb-8 text-gray-400 font-light">
-            Schedule a free 30-minute consultation with our expert tax and business
-            consultants.
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            {/* UPDATED: Button triggers Modal with Dynamic Colors */}
-            <button
-              onClick={openModal}
-              className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105"
-              style={{
-                background: "var(--color-secondary)",
-                color: "var(--color-primary)",
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = "var(--color-primary)";
-                e.currentTarget.style.color = "white";
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = "var(--color-secondary)";
-                e.currentTarget.style.color = "var(--color-primary)";
-              }}
-            >
-              Book Consultation
-            </button>
+      <section className="py-12 md:py-16 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <div 
+            className="relative overflow-hidden rounded-3xl shadow-2xl"
+            style={{
+              backgroundImage: 'url(https://res.cloudinary.com/derzj7d4u/image/upload/v1770317763/gnnotiewypvhfx7xqyi9.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {/* Dark Overlay for text readability */}
+            <div 
+              className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60"
+            />
             
-            <Link
-              to="/quote"
-              className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105 border-2 border-white/20 text-white hover:bg-white/10"
-            >
-              Get Custom Quote
-            </Link>
+            {/* Content */}
+            <div className="relative z-10 py-16 md:py-20 px-6 md:px-12 text-center">
+              <h2 className="text-2xl lg:text-4xl font-serif font-bold mb-4 text-white">
+                Ready to Optimize Your Finances?
+              </h2>
+              <p className="text-base lg:text-lg mb-8 text-gray-200 font-light max-w-2xl mx-auto">
+                Schedule a free 30-minute consultation with our expert tax and business
+                consultants.
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                {/* UPDATED: Button triggers Modal with Dynamic Colors */}
+                <button
+                  onClick={openModal}
+                  className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105"
+                  style={{
+                    background: "var(--color-secondary)",
+                    color: "var(--color-primary)",
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = "var(--color-primary)";
+                    e.currentTarget.style.color = "white";
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = "var(--color-secondary)";
+                    e.currentTarget.style.color = "var(--color-primary)";
+                  }}
+                >
+                  Book Consultation
+                </button>
+                
+                <Link
+                  to="/quote"
+                  className="inline-block rounded-full px-10 py-4 font-bold text-base transition-all duration-300 hover:shadow-xl hover:scale-105 border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm"
+                >
+                  Get Custom Quote
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

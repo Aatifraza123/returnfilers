@@ -8,9 +8,10 @@ const {
   changeAdminPassword
 } = require('../controllers/adminAuthController');
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
+const { verifyRecaptcha } = require('../middleware/recaptchaMiddleware');
 
-// Public routes
-router.post('/login', loginAdmin);
+// Public routes (with reCAPTCHA for login)
+router.post('/login', verifyRecaptcha(0.7), loginAdmin);
 router.post('/google', googleLoginAdmin);
 
 // Protected routes

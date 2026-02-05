@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { FaTimes, FaUser, FaEnvelope, FaPhone, FaBriefcase, FaComments } from 'react-icons/fa';
 import api from '../../api/axios';
+import { useRecaptcha } from '../../hooks/useRecaptcha';
 
 const ConsultationModal = ({ isOpen, onClose, serviceName = '' }) => {
   const [formData, setFormData] = useState({
@@ -13,6 +14,7 @@ const ConsultationModal = ({ isOpen, onClose, serviceName = '' }) => {
   const [loading, setLoading] = useState(false);
   const [success, setSuccess] = useState(false);
   const [error, setError] = useState('');
+  const getRecaptchaToken = useRecaptcha('consultation_form');
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
@@ -24,7 +26,19 @@ const ConsultationModal = ({ isOpen, onClose, serviceName = '' }) => {
     setError('');
 
     try {
-      await api.post('/consultations', formData);
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      if (!recaptchaToken) {
+        setError('Security verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      await api.post('/consultations', {
+        ...formData,
+        recaptchaToken
+      });
       setSuccess(true);
       setTimeout(() => {
         onClose();

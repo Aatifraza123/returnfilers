@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const { protectUser } = require('../middleware/userAuth');
+const { verifyRecaptcha } = require('../middleware/recaptchaMiddleware');
 
 // Import controller functions
 let createQuote, getQuotes, updateQuote, deleteQuote, getUserQuotes;
@@ -27,7 +28,7 @@ router.get('/my-quotes', protectUser, getUserQuotes);
 
 // @route   /api/quotes
 router.route('/')
-  .post(createQuote)  // Public: Anyone can submit quote request
+  .post(verifyRecaptcha(0.5), createQuote)  // Public: Anyone can submit quote request (with reCAPTCHA)
   .get(protectAdmin, getQuotes);        // Private: Only Admin can view
 
 // @route   /api/quotes/:id

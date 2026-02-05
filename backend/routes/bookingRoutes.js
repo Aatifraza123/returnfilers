@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const { protectUser } = require('../middleware/userAuth');
+const { verifyRecaptcha } = require('../middleware/recaptchaMiddleware');
 const {
   createBooking,
   getBookings,
@@ -12,8 +13,8 @@ const {
   getUserBookings
 } = require('../controllers/bookingController');
 
-// User routes - protected
-router.post('/', protectUser, createBooking);
+// User routes - protected (with reCAPTCHA)
+router.post('/', protectUser, verifyRecaptcha(0.5), createBooking);
 router.get('/my-bookings', protectUser, getUserBookings);
 
 // Admin routes

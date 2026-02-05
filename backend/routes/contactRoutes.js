@@ -1,6 +1,7 @@
 const express = require('express');
 const router = express.Router();
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
+const { verifyRecaptcha } = require('../middleware/recaptchaMiddleware');
 const {
   createContact,
   getContacts,
@@ -11,8 +12,8 @@ const {
 } = require('../controllers/contactController');
 const { sendEmail } = require('../utils/emailService');
 
-// Public route - anyone can submit
-router.post('/', createContact);
+// Public route - anyone can submit (with reCAPTCHA)
+router.post('/', verifyRecaptcha(0.5), createContact);
 
 // Test email endpoint
 router.get('/test-email', async (req, res) => {

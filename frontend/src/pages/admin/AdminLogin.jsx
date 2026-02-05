@@ -5,6 +5,7 @@ import AuthContext from '../../context/AuthContext';
 import { login as apiLogin } from '../../api/authApi'; 
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
+import { useRecaptcha } from '../../hooks/useRecaptcha';
 import { FaEye, FaEyeSlash, FaArrowLeft } from 'react-icons/fa';
 import { useSettings } from '../../context/SettingsContext';
 
@@ -16,6 +17,7 @@ const AdminLogin = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
   const { settings } = useSettings();
+  const getRecaptchaToken = useRecaptcha('admin_login');
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -27,7 +29,16 @@ const AdminLogin = () => {
 
     setLoading(true);
     try {
-      const data = await apiLogin({ email, password });
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      if (!recaptchaToken) {
+        toast.error('Security verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
+      const data = await apiLogin({ email, password, recaptchaToken });
       
       if (data && data.token) {
         login(data, data.token);

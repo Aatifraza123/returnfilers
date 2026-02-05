@@ -3,6 +3,7 @@ import { motion } from 'framer-motion';
 import { useForm } from 'react-hook-form';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
+import { useRecaptcha } from '../hooks/useRecaptcha';
 import Input from '../components/common/Input';
 import Button from '../components/common/Button';
 import { 
@@ -22,6 +23,7 @@ const Contact = () => {
   const [settings, setSettings] = useState(null);
   const [settingsLoading, setSettingsLoading] = useState(true);
   const { register, handleSubmit, formState: { errors }, reset } = useForm();
+  const getRecaptchaToken = useRecaptcha('contact_form');
   
   const fetchSettings = async () => {
     setSettingsLoading(true);
@@ -57,11 +59,21 @@ const Contact = () => {
   const onSubmit = async (data) => {
     setLoading(true);
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      if (!recaptchaToken) {
+        toast.error('Security verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
       const response = await api.post('/contacts', {
         name: data.name,
         email: data.email,
         phone: data.phone,
-        message: data.message
+        message: data.message,
+        recaptchaToken
       });
       
       if (response.data.success) {

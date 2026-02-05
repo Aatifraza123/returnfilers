@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 const { protectUser } = require('../middleware/userAuth');
+const { verifyRecaptcha } = require('../middleware/recaptchaMiddleware');
 const {
   createConsultation,
   getConsultations,
@@ -14,8 +15,8 @@ const {
 // User route - get user's own consultations
 router.get('/my-consultations', protectUser, getUserConsultations);
 
-// Public route - anyone can submit (no auth required)
-router.post('/', createConsultation);
+// Public route - anyone can submit (with reCAPTCHA)
+router.post('/', verifyRecaptcha(0.5), createConsultation);
 
 // Admin routes - protected
 router.get('/', protectAdmin, getConsultations);

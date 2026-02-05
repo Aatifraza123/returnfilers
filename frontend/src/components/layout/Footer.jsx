@@ -38,6 +38,7 @@ const Footer = () => {
   const legalLinks = [
     { to: '/privacy-policy', label: 'Privacy Policy' },
     { to: '/terms-conditions', label: 'Terms & Conditions' },
+    { to: '/cookie-policy', label: 'Cookie Policy' },
     { to: '/refund-policy', label: 'Refund Policy' }
   ];
 

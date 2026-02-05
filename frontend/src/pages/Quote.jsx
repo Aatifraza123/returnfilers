@@ -2,10 +2,12 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import api from '../api/axios';
 import toast from 'react-hot-toast';
+import { useRecaptcha } from '../hooks/useRecaptcha';
 
 const Quote = () => {
   const navigate = useNavigate();
   const [loading, setLoading] = useState(false);
+  const getRecaptchaToken = useRecaptcha('quote_form');
   const [formData, setFormData] = useState({
     name: '',
     email: '',
@@ -41,8 +43,20 @@ const Quote = () => {
     setLoading(true);
 
     try {
+      // Get reCAPTCHA token
+      const recaptchaToken = await getRecaptchaToken();
+      
+      if (!recaptchaToken) {
+        toast.error('Security verification failed. Please try again.');
+        setLoading(false);
+        return;
+      }
+
       // No auth required - send without token
-      const response = await api.post('/quotes', formData);
+      const response = await api.post('/quotes', {
+        ...formData,
+        recaptchaToken
+      });
       toast.success('Quote request submitted successfully! We will contact you soon.');
       setFormData({
         name: '',
