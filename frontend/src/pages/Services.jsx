@@ -537,32 +537,46 @@ const Services = () => {
       </section>
 
       {/* CTA */}
-      <section className="py-12" style={{ backgroundColor: 'var(--color-primary)' }}>
-        <div className="container mx-auto px-6 max-w-3xl text-center">
-          <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
-            Need a Custom Solution?
-          </h2>
-          <p className="text-gray-400 text-sm md:text-base mb-8">
-            Get a personalized quote for your specific requirements
-          </p>
-          <Link
-            to="/booking?service=Custom%20Service"
-            className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg"
+      <section className="py-12 md:py-16 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <div 
+            className="relative overflow-hidden rounded-3xl shadow-2xl"
             style={{
-              background: 'var(--color-secondary)',
-              color: 'var(--color-primary)'
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.background = 'var(--color-primary)';
-              e.currentTarget.style.color = 'white';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.background = 'var(--color-secondary)';
-              e.currentTarget.style.color = 'var(--color-primary)';
+              backgroundImage: 'url(https://res.cloudinary.com/derzj7d4u/image/upload/v1770317763/gnnotiewypvhfx7xqyi9.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
             }}
           >
-            Get Custom Quote <FaArrowRight size={12} />
-          </Link>
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60"></div>
+            
+            <div className="container mx-auto px-6 max-w-3xl relative z-10 py-16 md:py-20 text-center">
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
+                Need a Custom Solution?
+              </h2>
+              <p className="text-gray-200 text-sm md:text-base mb-8">
+                Get a personalized quote for your specific requirements
+              </p>
+              <Link
+                to="/quote"
+                className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                style={{
+                  background: 'var(--color-secondary)',
+                  color: 'var(--color-primary)'
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.background = 'var(--color-primary)';
+                  e.currentTarget.style.color = 'white';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.background = 'var(--color-secondary)';
+                  e.currentTarget.style.color = 'var(--color-primary)';
+                }}
+              >
+                Get Custom Quote <FaArrowRight size={12} />
+              </Link>
+            </div>
+          </div>
         </div>
       </section>
     </main>

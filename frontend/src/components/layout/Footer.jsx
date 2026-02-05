@@ -67,10 +67,10 @@ const Footer = () => {
   const socialLinks = getSocialLinks();
 
   // Get footer colors from settings
-  const footerBg = settings?.brandColors?.footerBg || '#000000';
+  const footerBg = settings?.brandColors?.footerBg || '#0B1530';
   const footerText = settings?.brandColors?.footerText || '#ffffff';
-  const footerLink = settings?.brandColors?.footerLink || '#C9A227';
-  const footerCompanyName = settings?.brandColors?.footerCompanyName || '#C9A227';
+  const footerLink = settings?.brandColors?.footerLink || '#D4AF37';
+  const footerCompanyName = settings?.brandColors?.footerCompanyName || '#D4AF37';
 
   return (
     <footer 

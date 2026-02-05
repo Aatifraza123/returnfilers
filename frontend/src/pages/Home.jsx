@@ -557,29 +557,64 @@ const Home = () => {
       </section>
 
       {/* ==================== ABOUT SECTION ==================== */}
-      <section className="py-16 md:py-20 bg-white">
+      <section className="py-16 md:py-20 bg-gradient-to-br from-gray-50 to-white">
         <div className="container mx-auto max-w-7xl px-6">
-          <div className="grid lg:grid-cols-2 gap-12 items-center">
-            {/* Left: Image */}
+          <div className="grid lg:grid-cols-2 gap-16 items-center">
+            {/* Left: Image with Modern Design */}
             <motion.div
               initial={{ opacity: 0, x: -30 }}
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
-              className="relative"
+              className="relative order-2 lg:order-1"
             >
-              <div className="relative rounded-2xl overflow-hidden shadow-2xl">
-                <img
-                  src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
-                  alt="About ReturnFilers"
-                  className="w-full h-[400px] object-cover"
-                />
+              {/* Main Image Container */}
+              <div className="relative">
+                {/* Decorative Background Shape */}
                 <div 
-                  className="absolute inset-0 bg-gradient-to-t to-transparent"
-                  style={{ 
-                    background: `linear-gradient(to top, rgba(var(--color-primary-rgb, 11, 21, 48), 0.4), transparent)`
-                  }}
+                  className="absolute -inset-4 rounded-[3rem] opacity-20 blur-2xl"
+                  style={{ backgroundColor: 'var(--color-secondary)' }}
                 ></div>
+                
+                {/* Image */}
+                <div className="relative rounded-[2.5rem] overflow-hidden shadow-2xl border-4 border-white">
+                  <img
+                    src="https://images.unsplash.com/photo-1600880292203-757bb62b4baf?auto=format&fit=crop&q=80&w=800"
+                    alt="About ReturnFilers"
+                    className="w-full h-[500px] object-cover"
+                  />
+                  <div 
+                    className="absolute inset-0"
+                    style={{ 
+                      background: `linear-gradient(135deg, rgba(var(--color-primary-rgb, 11, 21, 48), 0.3), transparent 60%)`
+                    }}
+                  ></div>
+                </div>
+
+                {/* Floating Stats Card */}
+                <motion.div
+                  initial={{ opacity: 0, y: 20 }}
+                  whileInView={{ opacity: 1, y: 0 }}
+                  viewport={{ once: true }}
+                  transition={{ delay: 0.4 }}
+                  className="absolute -bottom-6 -right-6 bg-white rounded-2xl shadow-2xl p-6 border-2"
+                  style={{ borderColor: 'var(--color-secondary)' }}
+                >
+                  <div className="flex items-center gap-4">
+                    <div 
+                      className="w-14 h-14 rounded-xl flex items-center justify-center"
+                      style={{ backgroundColor: 'var(--color-secondary)' }}
+                    >
+                      <FaAward className="text-2xl" style={{ color: 'var(--color-primary)' }} />
+                    </div>
+                    <div>
+                      <div className="text-3xl font-bold" style={{ color: 'var(--color-primary)' }}>
+                        {settings?.about?.yearsOfExperience || 3}+
+                      </div>
+                      <div className="text-sm text-gray-600 font-medium">Years Excellence</div>
+                    </div>
+                  </div>
+                </motion.div>
               </div>
             </motion.div>
 
@@ -589,68 +624,64 @@ const Home = () => {
               whileInView={{ opacity: 1, x: 0 }}
               viewport={{ once: true }}
               transition={{ duration: 0.6 }}
+              className="order-1 lg:order-2"
             >
+              {/* Badge */}
               <span 
-                className="font-bold tracking-widest uppercase text-sm mb-4 block"
-                style={{ color: 'var(--color-secondary)' }}
+                className="inline-flex items-center gap-2 px-4 py-2 rounded-full text-sm font-bold uppercase tracking-wider mb-6"
+                style={{ 
+                  backgroundColor: 'var(--color-secondary-10)',
+                  color: 'var(--color-secondary)'
+                }}
               >
+                <FaBriefcase className="text-xs" />
                 About Us
               </span>
+
+              {/* Heading */}
               <h2 
-                className="text-3xl lg:text-4xl font-serif font-bold mb-6"
+                className="text-4xl lg:text-5xl font-serif font-bold mb-6 leading-tight"
                 style={{ color: 'var(--color-primary)' }}
               >
-                Business Growth in Financial Success
+                Business Growth in{" "}
+                <span style={{ color: 'var(--color-secondary)' }}>Financial Success</span>
               </h2>
-              <p className="text-gray-600 text-base leading-relaxed mb-6">
-                We are a trusted partner for businesses seeking
-                seamless compliance and return filing solutions. Our team of
-                experienced professionals ensures that your organization stays
-                fully aligned with statutory requirements while you focus on
-                growth. With a commitment to accuracy, transparency, and timely
-                delivery, we simplify complex regulatory processes into clear,
-                actionable steps. From corporate compliances to tax return
-                filings, we bring together expertise and technology to provide
-                reliable, end-to-end support. <br/> <br/>Our goal is to empower businesses
-                with peace of mind, knowing that their compliance obligations
-                are handled with precision and care.{" "}
-                {settings?.about?.yearEstablished || 2022}, we have been helping
-                businesses and individuals navigate the complex world of
-                taxation, compliance, and financial planning.
-              </p>
-              
 
-              {/* Key Points */}
-              <div className="grid sm:grid-cols-2 gap-4 mb-8">
-                <div className="flex items-start gap-3">
+              {/* Description */}
+              <p className="text-gray-600 text-lg leading-relaxed mb-8">
+                We are a trusted partner for businesses seeking seamless compliance and return filing solutions. Our team of experienced professionals ensures that your organization stays fully aligned with statutory requirements while you focus on growth.
+              </p>
+
+              {/* Key Features Grid */}
+              <div className="grid sm:grid-cols-2 gap-5 mb-8">
+                <div className="flex items-start gap-4 p-4 rounded-xl bg-white shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
                   <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: 'var(--color-secondary-10)' }}
                   >
-                    <FaUsers style={{ color: 'var(--color-secondary)' }} />
+                    <FaUsers className="text-xl" style={{ color: 'var(--color-secondary)' }} />
                   </div>
                   <div>
                     <h4 
-                      className="font-bold"
+                      className="font-bold text-lg mb-1"
                       style={{ color: 'var(--color-primary)' }}
                     >
                       {settings?.about?.clientsServed || 100}+ Clients
                     </h4>
-                    <p className="text-sm text-gray-500">
-                      Trusted by businesses
-                    </p>
+                    <p className="text-sm text-gray-500">Trusted by businesses</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+
+                <div className="flex items-start gap-4 p-4 rounded-xl bg-white shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
                   <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: 'var(--color-secondary-10)' }}
                   >
-                    <FaLock style={{ color: 'var(--color-secondary)' }} />
+                    <FaLock className="text-xl" style={{ color: 'var(--color-secondary)' }} />
                   </div>
                   <div>
                     <h4 
-                      className="font-bold"
+                      className="font-bold text-lg mb-1"
                       style={{ color: 'var(--color-primary)' }}
                     >
                       100% Confidential
@@ -658,57 +689,54 @@ const Home = () => {
                     <p className="text-sm text-gray-500">Your data is secure</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+
+                <div className="flex items-start gap-4 p-4 rounded-xl bg-white shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
                   <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: 'var(--color-secondary-10)' }}
                   >
-                    <FaCheckCircle style={{ color: 'var(--color-secondary)' }} />
+                    <FaCheckCircle className="text-xl" style={{ color: 'var(--color-secondary)' }} />
                   </div>
                   <div>
                     <h4 
-                      className="font-bold"
+                      className="font-bold text-lg mb-1"
                       style={{ color: 'var(--color-primary)' }}
                     >
                       Timely Delivery
                     </h4>
-                    <p className="text-sm text-gray-500">
-                      Never miss deadlines
-                    </p>
+                    <p className="text-sm text-gray-500">Never miss deadlines</p>
                   </div>
                 </div>
-                <div className="flex items-start gap-3">
+
+                <div className="flex items-start gap-4 p-4 rounded-xl bg-white shadow-md border border-gray-100 hover:shadow-lg transition-shadow">
                   <div 
-                    className="w-10 h-10 rounded-lg flex items-center justify-center flex-shrink-0"
+                    className="w-12 h-12 rounded-xl flex items-center justify-center flex-shrink-0"
                     style={{ backgroundColor: 'var(--color-secondary-10)' }}
                   >
-                    <FaChartLine style={{ color: 'var(--color-secondary)' }} />
+                    <FaChartLine className="text-xl" style={{ color: 'var(--color-secondary)' }} />
                   </div>
                   <div>
                     <h4 
-                      className="font-bold"
+                      className="font-bold text-lg mb-1"
                       style={{ color: 'var(--color-primary)' }}
                     >
-                      {settings?.about?.yearsOfExperience || 3}+ Years
-                      Experience
+                      Expert Team
                     </h4>
-                    <p className="text-sm text-gray-500">
-                      Since {settings?.about?.yearEstablished || 2022}
-                    </p>
+                    <p className="text-sm text-gray-500">Since {settings?.about?.yearEstablished || 2022}</p>
                   </div>
                 </div>
               </div>
 
+              {/* CTA Button */}
               <Link
                 to="/about"
-                className="inline-flex items-center gap-2 font-semibold transition-all group"
-                style={{ color: 'var(--color-primary)' }}
-                onMouseEnter={(e) => e.currentTarget.style.color = 'var(--color-secondary)'}
-                onMouseLeave={(e) => e.currentTarget.style.color = 'var(--color-primary)'}
+                className="inline-flex items-center gap-3 px-8 py-4 rounded-xl font-bold text-white transition-all shadow-lg hover:shadow-xl hover:scale-105 group"
+                style={{ backgroundColor: 'var(--color-primary)' }}
+                onMouseEnter={(e) => e.currentTarget.style.backgroundColor = 'var(--color-secondary)'}
+                onMouseLeave={(e) => e.currentTarget.style.backgroundColor = 'var(--color-primary)'}
               >
-                Learn More About Us{" "}
+                Learn More About Us
                 <FaArrowRight
-                  size={12}
                   className="group-hover:translate-x-1 transition-transform"
                 />
               </Link>
@@ -904,9 +932,11 @@ const Home = () => {
         </div>
       </section>
 
-      {/* ==================== TESTIMONIALS ==================== */}
+      {/* ==================== TESTIMONIALS SECTION ==================== */}
       {settings?.features?.enableTestimonials && testimonials.length > 0 && (
-        <section className="py-16 md:py-20 bg-gradient-to-b from-gray-50 to-white overflow-hidden">
+        <section 
+          className="py-16 md:py-20 overflow-hidden bg-white"
+        >
           <div className="container mx-auto max-w-7xl px-6">
             {/* Section Header */}
             <motion.div
@@ -930,7 +960,7 @@ const Home = () => {
               >
                 Trusted by Clients
               </h2>
-              <p className="text-gray-500 max-w-xl mx-auto">
+              <p className="text-gray-600 max-w-xl mx-auto">
                 See what our clients say about their experience working with us
               </p>
             </motion.div>
@@ -946,8 +976,8 @@ const Home = () => {
                     animate={{ opacity: 1, x: 0 }}
                     exit={{ opacity: 0, x: -50 }}
                     transition={{ duration: 0.3 }}
-                    className="p-6 md:p-8 rounded-2xl shadow-xl relative flex flex-col md:flex-row items-center gap-6"
-                    style={{ backgroundColor: '#e9f5f9' }}
+                    className="p-6 md:p-8 rounded-3xl shadow-2xl relative flex flex-col md:flex-row items-center gap-6 border-2 border-white/20"
+                    style={{ backgroundColor: 'rgba(255, 255, 255, 0.95)' }}
                   >
                     {/* Left: Author */}
                     <div className="flex flex-col items-center md:w-48 flex-shrink-0">

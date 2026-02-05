@@ -736,43 +736,54 @@ const About = () => {
       </section>
 
       {/* ==================== CTA SECTION ==================== */}
-      <section 
-        className="py-12 md:py-16 text-center"
-        style={{ backgroundColor: 'var(--color-primary)' }}
-      >
-        <div className="container mx-auto px-6 max-w-3xl">
-          <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
-            Ready to Work With Us?
-          </h2>
-          <p className="text-gray-400 text-sm md:text-base mb-8">
-            Get a personalized quote for your business needs or schedule a consultation
-          </p>
-          <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
-            <Link
-              to="/quote"
-              className="inline-flex items-center gap-2 px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 shadow-md hover:shadow-lg"
-              style={{
-                background: 'var(--color-secondary)',
-                color: 'var(--color-primary)'
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.background = 'var(--color-primary)';
-                e.currentTarget.style.color = 'white';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.background = 'var(--color-secondary)';
-                e.currentTarget.style.color = 'var(--color-primary)';
-              }}
-            >
-              Get Custom Quote <FaArrowRight size={12} />
-            </Link>
+      <section className="py-12 md:py-16 px-6">
+        <div className="container mx-auto max-w-7xl">
+          <div 
+            className="relative overflow-hidden rounded-3xl shadow-2xl"
+            style={{
+              backgroundImage: 'url(https://res.cloudinary.com/derzj7d4u/image/upload/v1770317763/gnnotiewypvhfx7xqyi9.jpg)',
+              backgroundSize: 'cover',
+              backgroundPosition: 'center',
+            }}
+          >
+            {/* Dark Overlay */}
+            <div className="absolute inset-0 bg-gradient-to-r from-black/80 to-black/60"></div>
             
-            <Link
-              to="/contact"
-              className="inline-block px-6 py-2.5 rounded-lg font-semibold text-sm transition-all duration-300 border-2 border-white/20 text-white hover:bg-white/10"
-            >
-              Contact Us
-            </Link>
+            <div className="container mx-auto px-6 max-w-3xl relative z-10 py-16 md:py-20 text-center">
+              <h2 className="text-2xl md:text-3xl font-serif font-bold text-white mb-4">
+                Ready to Work With Us?
+              </h2>
+              <p className="text-gray-200 text-sm md:text-base mb-8">
+                Get a personalized quote for your business needs or schedule a consultation
+              </p>
+              <div className="flex flex-col sm:flex-row gap-4 justify-center items-center">
+                <Link
+                  to="/quote"
+                  className="inline-flex items-center gap-2 px-8 py-3 rounded-full font-semibold text-base transition-all duration-300 shadow-lg hover:shadow-xl hover:scale-105"
+                  style={{
+                    background: 'var(--color-secondary)',
+                    color: 'var(--color-primary)'
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.background = 'var(--color-primary)';
+                    e.currentTarget.style.color = 'white';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.background = 'var(--color-secondary)';
+                    e.currentTarget.style.color = 'var(--color-primary)';
+                  }}
+                >
+                  Get Custom Quote <FaArrowRight size={12} />
+                </Link>
+                
+                <Link
+                  to="/contact"
+                  className="inline-block px-8 py-3 rounded-full font-semibold text-base transition-all duration-300 border-2 border-white/30 text-white hover:bg-white/10 backdrop-blur-sm hover:scale-105"
+                >
+                  Contact Us
+                </Link>
+              </div>
+            </div>
           </div>
         </div>
       </section>

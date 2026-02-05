@@ -22,7 +22,7 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^\+\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-4">
-              <span className="w-1 h-1 rounded-full bg-[#0B1530] mt-1.5 flex-shrink-0"></span>
+              <span className="w-1 h-1 rounded-full bg-[#041313] mt-1.5 flex-shrink-0"></span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -33,7 +33,7 @@ const MessageContent = ({ content, isUser }) => {
           const text = trimmedLine.replace(/^[-•*]\s*/, '');
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
-              <span className="w-1.5 h-1.5 rounded-full bg-[#0B1530] mt-1.5 flex-shrink-0"></span>
+              <span className="w-1.5 h-1.5 rounded-full bg-[#041313] mt-1.5 flex-shrink-0"></span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -45,7 +45,7 @@ const MessageContent = ({ content, isUser }) => {
           const num = trimmedLine.match(/^\d+/)[0];
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
-              <span className="w-4 h-4 rounded bg-[#0B1530] text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
+              <span className="w-4 h-4 rounded bg-[#041313] text-white text-[9px] font-bold flex items-center justify-center flex-shrink-0 mt-0.5">{num}</span>
               <span className="text-[12px]">{formatText(text)}</span>
             </div>
           );
@@ -83,7 +83,7 @@ const formatText = (text) => {
       return <strong key={idx} className="font-semibold text-[#0B1530]">{part.slice(2, -2)}</strong>;
     }
     if (part.startsWith('₹')) {
-      return <span key={idx} className="font-semibold text-[#134b5f] px-1 rounded" style={{ backgroundColor: '#bee0ec' }}>{part}</span>;
+      return <span key={idx} className="font-semibold text-[#041313] px-1 rounded" style={{ backgroundColor: '#d3e3f2' }}>{part}</span>;
     }
     if (part.startsWith('|')) {
       return <span key={idx} className="text-gray-500 text-[11px]">{part}</span>;
@@ -107,7 +107,7 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={part}
-          className="inline-block px-2 py-0.5 bg-[#134b5f] text-white rounded font-semibold hover:bg-[#1a5f75] hover:text-white transition-all duration-200"
+          className="inline-block px-2 py-0.5 bg-[#041313] text-white rounded font-semibold hover:bg-[#052626] hover:text-white transition-all duration-200"
         >
           {displayName}
         </a>
@@ -127,8 +127,8 @@ const formatText = (text) => {
           href={cleanUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="inline-block px-2 py-0.5 text-[#134b5f] rounded font-medium transition-colors"
-          style={{ backgroundColor: '#bee0ec' }}
+          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors"
+          style={{ backgroundColor: '#d3e3f2' }}
         >
           {displayName}
         </a>
@@ -140,8 +140,8 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={`mailto:${part}`} 
-          className="inline-block px-2 py-0.5 text-[#134b5f] rounded font-medium transition-colors"
-          style={{ backgroundColor: '#bee0ec' }}
+          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors"
+          style={{ backgroundColor: '#d3e3f2' }}
         >
           ✉️ {part}
         </a>
@@ -526,9 +526,9 @@ const AIChatbot = () => {
           }}
           className="relative group"
         >
-          <div className="w-12 h-12 bg-[#134b5f] rounded-full shadow-lg flex items-center justify-center hover:bg-[#1a5f75] transition-colors group-hover:scale-110 duration-200 active:scale-95">
+          <div className="w-12 h-12 bg-[#041313] rounded-full shadow-lg flex items-center justify-center hover:bg-[#052626] transition-colors group-hover:scale-110 duration-200 active:scale-95">
             <FaRobot size={20} className="text-white group-hover:text-white" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#134b5f] rounded-full animate-pulse"></span>
+            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#041313] rounded-full animate-pulse"></span>
           </div>
         </button>
       </div>
@@ -544,10 +544,10 @@ const AIChatbot = () => {
         }}
       >
         {/* Header */}
-        <div className="bg-[#134b5f] text-white p-3 flex items-center justify-between flex-shrink-0">
+        <div className="bg-[#041313] text-white p-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="rounded-full flex items-center justify-center" style={{ width: '40px', height: '40px', backgroundColor: '#bee0ec' }}>
-              <FaRobot size={18} className="text-[#134b5f]" />
+            <div className="rounded-full flex items-center justify-center" style={{ width: '40px', height: '40px', backgroundColor: '#d3e3f2' }}>
+              <FaRobot size={18} className="text-[#041313]" />
             </div>
             <div>
               <h3 className="font-bold text-sm">{settings?.companyName || 'ReturnFilers'} AI</h3>
@@ -575,20 +575,20 @@ const AIChatbot = () => {
         </div>
 
         {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ backgroundColor: '#bee0ec' }}>
+        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ backgroundColor: '#d3e3f2' }}>
           {messages.filter(msg => msg.content).map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
               <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
                 <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
                   msg.role === 'user' 
-                    ? 'bg-[#0B1530] text-white' 
-                    : 'bg-[#0B1530] text-white'
+                    ? 'bg-[#041313] text-white' 
+                    : 'bg-[#041313] text-white'
                 }`}>
                   {msg.role === 'user' ? <FaUser size={10} /> : <FaRobot size={11} />}
                 </div>
                 <div className={`px-3 py-2.5 text-[13px] leading-relaxed ${
                   msg.role === 'user'
-                    ? 'bg-[#0B1530] text-white rounded-2xl rounded-br-sm'
+                    ? 'bg-[#041313] text-white rounded-2xl rounded-br-sm'
                     : 'bg-white text-gray-700 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100'
                 }`}>
                   <MessageContent content={msg.content} isUser={msg.role === 'user'} />
@@ -600,14 +600,14 @@ const AIChatbot = () => {
           {loading && messages[messages.length - 1]?.content === '' && (
             <div className="flex justify-start">
               <div className="flex items-end gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#0B1530] text-white flex items-center justify-center">
+                <div className="w-6 h-6 rounded-full bg-[#041313] text-white flex items-center justify-center">
                   <FaRobot size={11} />
                 </div>
                 <div className="bg-white px-3 py-2.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
                   <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-2 h-2 bg-[#0B1530] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
+                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                   </div>
                 </div>
               </div>
@@ -625,7 +625,7 @@ const AIChatbot = () => {
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-[#134b5f] text-white hover:bg-[#1a5f75] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
+                  className="px-2.5 py-1 bg-[#041313] text-white hover:bg-[#052626] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
                 >
                   {q}
                 </button>
@@ -644,13 +644,13 @@ const AIChatbot = () => {
               onChange={(e) => setInput(e.target.value)}
               placeholder="Type your question..."
               disabled={loading}
-              className="flex-1 px-3 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#134b5f] disabled:opacity-50 placeholder-gray-400"
-              style={{ backgroundColor: '#bee0ec' }}
+              className="flex-1 px-3 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#041313] disabled:opacity-50 placeholder-gray-400"
+              style={{ backgroundColor: '#d3e3f2' }}
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#134b5f] text-white rounded-xl flex items-center justify-center hover:bg-[#1a5f75] hover:text-white hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#134b5f] disabled:hover:scale-100"
+              className="w-9 h-9 bg-[#041313] text-white rounded-xl flex items-center justify-center hover:bg-[#052626] hover:text-white hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#041313] disabled:hover:scale-100"
             >
               <FaPaperPlane size={13} />
             </button>
