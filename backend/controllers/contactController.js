@@ -189,6 +189,17 @@ const createContact = async (req, res) => {
         
         await createContactNotification(contact);
         console.log('✅ Contact notification created');
+
+        // Capture lead for scoring and follow-up
+        const { captureLeadFromForm } = require('../utils/leadScoringService');
+        await captureLeadFromForm({
+          name: contact.name,
+          email: contact.email,
+          phone: contact.phone,
+          source: 'contact_form',
+          message: contact.message
+        });
+        console.log('✅ Lead captured from contact form');
       } catch (err) {
         console.error('❌ Email sending failed (non-blocking):', err.message);
         console.error('Error stack:', err.stack);
@@ -348,6 +359,17 @@ const sendContactEmails = async (contact) => {
   
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
+  const { processContactQuery } = require('../utils/aiAutoResponder');
+
+  // Process query with AI
+  console.log('🤖 Processing query with AI auto-responder...');
+  const aiResult = await processContactQuery({
+    name: contact.name,
+    email: contact.email,
+    message: contact.message
+  });
+  
+  console.log(`📊 Query Category: ${aiResult.category}, Priority: ${aiResult.priority}`);
 
   // Use old working templates
   const adminHtml = getAdminNotificationTemplate({
@@ -356,36 +378,69 @@ const sendContactEmails = async (contact) => {
       name: contact.name,
       email: contact.email,
       phone: contact.phone,
-      message: contact.message
+      message: contact.message,
+      aiCategory: aiResult.category,
+      aiPriority: aiResult.priority
     }
   });
 
-  const customerHtml = getCustomerConfirmationTemplate({
-    type: 'contact',
-    data: {
-      name: contact.name,
-      message: contact.message
-    }
-  });
+  // Use AI-generated response for customer email
+  const customerHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #0B1530; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .footer { background: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #666; }
+        .ai-badge { background: #D4AF37; color: #0B1530; padding: 5px 10px; border-radius: 5px; font-size: 11px; font-weight: bold; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h2>ReturnFilers</h2>
+          <p>Professional CA Services</p>
+        </div>
+        <div class="content">
+          <p><span class="ai-badge">🤖 AI-Powered Response</span></p>
+          <div style="white-space: pre-line; margin-top: 20px;">
+${aiResult.response}
+          </div>
+        </div>
+        <div class="footer">
+          <p>This is an automated response. A team member will follow up if needed.</p>
+          <p>© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
 
   try {
     // Send admin notification to info@returnfilers.in only
     console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
-      subject: `New Contact Message from ${contact.name}`,
+      subject: `[${aiResult.priority.toUpperCase()}] ${aiResult.category} - New Contact from ${contact.name}`,
       html: adminHtml
     });
     console.log('✅ Admin email sent to info@returnfilers.in');
 
-    // Customer confirmation
-    console.log('Sending customer confirmation email...');
-    await sendEmail({
-      to: contact.email,
-      subject: 'Thank you for contacting ReturnFilers',
-      html: customerHtml
-    });
-    console.log('✅ Customer email sent');
+    // Send AI-generated customer response
+    if (aiResult.shouldAutoSend) {
+      console.log('Sending AI-generated customer response...');
+      await sendEmail({
+        to: contact.email,
+        subject: 'Thank you for contacting ReturnFilers - We\'re here to help!',
+        html: customerHtml
+      });
+      console.log('✅ AI-powered customer email sent');
+    } else {
+      console.log('⚠️ Auto-send disabled for this query category');
+    }
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

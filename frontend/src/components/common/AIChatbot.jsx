@@ -92,12 +92,17 @@ const formatText = (text) => {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
     }
     // Internal route links (e.g., /booking, /services, /contact)
-    if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog') {
+    if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog' || part === '/track-appointment') {
       const routeNames = {
         '/booking': '📅 Book Now',
         '/services': 'Our Services',
         '/digital-services': '🌐 Web Development',
         '/contact': 'Contact Us',
+        '/quote': 'Get Quote',
+        '/about': 'About Us',
+        '/blog': 'Blog',
+        '/track-appointment': '🔍 Track Appointment'
+      };
         '/quote': 'Get Quote',
         '/about': 'About Us',
         '/blog': 'Blog'
@@ -476,11 +481,10 @@ const AIChatbot = () => {
   };
 
   const quickQuestions = [
-    'GST Registration',
-    'ITR Filing Cost',
-    'Web Development',
-    'Company Registration',
-    'All Services'
+    'Our Services',
+    'Pricing Info',
+    'Book Appointment',
+    'Contact Us'
   ];
 
   // Don't render if chatbot is disabled (check after all hooks)
@@ -546,13 +550,13 @@ const AIChatbot = () => {
         {/* Header */}
         <div className="bg-[#041313] text-white p-3 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="rounded-full flex items-center justify-center" style={{ width: '40px', height: '40px', backgroundColor: '#d3e3f2' }}>
-              <FaRobot size={18} className="text-[#041313]" />
+            <div className="rounded-full flex items-center justify-center" style={{ width: '36px', height: '36px', backgroundColor: '#d3e3f2' }}>
+              <FaRobot size={16} className="text-[#041313]" />
             </div>
             <div>
-              <h3 className="font-bold text-sm">{settings?.companyName || 'ReturnFilers'} AI</h3>
-              <div className="flex items-center gap-1.5 text-xs text-gray-400">
-                <span className="w-1.5 h-1.5 bg-green-400 rounded-full"></span>
+              <h3 className="font-bold text-sm">TaxBot</h3>
+              <div className="flex items-center gap-1.5 text-xs text-gray-300">
+                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
                 Online
               </div>
             </div>
@@ -618,14 +622,14 @@ const AIChatbot = () => {
 
         {/* Quick Questions */}
         {messages.length <= 2 && !loading && (
-          <div className="px-3 py-2.5 bg-white border-t border-gray-100 flex-shrink-0">
-            <p className="text-[10px] text-gray-400 mb-1.5 font-medium">Quick Questions</p>
-            <div className="flex flex-wrap gap-1.5">
+          <div className="px-3 py-3 bg-gradient-to-r from-gray-50 to-white border-t border-gray-100 flex-shrink-0">
+            <p className="text-[11px] text-gray-500 mb-2 font-semibold">Quick Actions</p>
+            <div className="grid grid-cols-2 gap-2">
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-2.5 py-1 bg-[#041313] text-white hover:bg-[#052626] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200"
+                  className="px-3 py-2 bg-white border border-gray-200 hover:border-[#041313] hover:bg-[#041313] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200 shadow-sm"
                 >
                   {q}
                 </button>

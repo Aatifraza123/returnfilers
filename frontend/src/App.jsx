@@ -64,9 +64,12 @@ import AdminSettings from './pages/admin/AdminSettings'
 import AdminProfile from './pages/admin/AdminProfile'
 import AdminTestimonials from './pages/admin/AdminTestimonials'
 import AdminBookings from './pages/admin/AdminBookings'
+import AdminLeads from './pages/admin/AdminLeads'
 import AdminDigitalServices from './pages/admin/AdminDigitalServices'
 import AdminPricing from './pages/admin/AdminPricing'
 import Booking from './pages/Booking'
+import AppointmentBooking from './pages/AppointmentBooking'
+import TrackAppointment from './pages/TrackAppointment'
 import DigitalServices from './pages/DigitalServices'
 import DigitalServiceDetail from './pages/DigitalServiceDetail'
 import PackageDetail from './pages/PackageDetail'
@@ -146,6 +149,8 @@ function App() {
           <Route path="refund-policy" element={<RefundPolicy />} />
           <Route path="cookie-policy" element={<CookiePolicy />} />
           <Route path="booking" element={<Booking />} />
+          <Route path="appointment" element={<AppointmentBooking />} />
+          <Route path="track-appointment" element={<TrackAppointment />} />
           <Route path="digital-services" element={<DigitalServices />} />
           <Route path="digital-services/:slug" element={<DigitalServiceDetail />} />
           <Route path="other-services" element={<OtherServices />} />
@@ -189,6 +194,7 @@ function App() {
           <Route path="settings" element={<AdminSettings />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="leads" element={<AdminLeads />} />
           <Route path="digital-services" element={<AdminDigitalServices />} />
           <Route path="pricing" element={<AdminPricing />} />
         </Route>

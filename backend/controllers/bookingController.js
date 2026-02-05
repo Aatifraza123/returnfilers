@@ -48,13 +48,29 @@ const createBooking = async (req, res) => {
     });
 
     // Send email notification and create notifications
-    setImmediate(() => {
-      sendBookingEmail(booking).catch(err => console.error('Email failed:', err));
-      // Create notifications - pass booking with populated user field
-      const bookingData = booking.toObject();
-      bookingData.user = userId; // Ensure user ID is set
-      createBookingNotification(bookingData)
-        .catch(err => console.error('Notification failed:', err));
+    setImmediate(async () => {
+      try {
+        await sendBookingEmail(booking);
+        
+        // Create notifications - pass booking with populated user field
+        const bookingData = booking.toObject();
+        bookingData.user = userId; // Ensure user ID is set
+        await createBookingNotification(bookingData);
+        
+        // Capture lead for scoring and follow-up
+        const { captureLeadFromForm } = require('../utils/leadScoringService');
+        await captureLeadFromForm({
+          name: booking.name,
+          email: booking.email,
+          phone: booking.phone,
+          source: 'booking',
+          service: booking.service,
+          message: booking.message
+        });
+        console.log('✅ Lead captured from booking');
+      } catch (err) {
+        console.error('Email/notification/lead capture failed:', err);
+      }
     });
 
   } catch (error) {

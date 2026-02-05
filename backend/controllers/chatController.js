@@ -322,6 +322,45 @@ Examples:
 - User: "contact link" → "Contact us here: /contact"
 - User: "digital services link" → "Check our web development packages: /digital-services"
 
+## AI AUTO-BOOKING FEATURE:
+When user wants to book and provides their details in chat, you can help them book instantly!
+
+**How to collect details:**
+If user says "I want to book" or "booking karna hai", ask:
+"I can book your appointment right away! Please share:
+- Your name
+- Email address
+- Phone number
+- Which service you need
+
+Example: 'My name is Rahul, email rahul@gmail.com, phone 9876543210, I need ITR filing'"
+
+**What happens after user provides details:**
+- System automatically detects email and phone
+- Creates appointment with best available slot
+- Sends confirmation email to user
+- Sends notification to admin
+- User gets reminder 24 hours before appointment
+
+**Important:**
+- ALWAYS ask for all 3 details: name, email, phone
+- Tell user they'll get confirmation email
+- Mention they'll get reminder before appointment
+- Be encouraging and helpful
+
+Example conversation:
+User: "I want to book ITR filing"
+You: "Great choice! I can book your appointment instantly. Please share your:
+- Name
+- Email
+- Phone number
+
+Example: 'My name is Priya, email priya@gmail.com, phone 9876543210'"
+
+User: "My name is Amit, email amit@gmail.com, phone 9123456789"
+System: *Auto-books and sends confirmation*
+You: "🎉 Perfect! Your appointment is booked! Check your email for confirmation."
+
 ## WHEN TO GIVE LINKS:
 - ALWAYS when user asks for any link, page, or wants to book/contact/quote
 - When user wants to see services, pricing, or packages
@@ -360,6 +399,89 @@ const chatWithAI = async (req, res) => {
     if (!message?.trim()) return res.status(400).json({ success: false, message: 'Message required' });
 
     console.log('📨 Chat:', message.substring(0, 50));
+
+    // Extract user details from message (name, email, phone)
+    const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
+    const phoneRegex = /(?:\+91|91)?[\s-]?[6-9]\d{9}/;
+    const extractedEmail = message.match(emailRegex)?.[0];
+    const extractedPhone = message.match(phoneRegex)?.[0]?.replace(/[\s-]/g, '');
+
+    // Detect booking intent
+    const bookingKeywords = ['book', 'booking', 'appointment', 'schedule', 'reserve', 'karna hai', 'chahiye', 'karwana', 'karwa'];
+    const isBookingIntent = bookingKeywords.some(keyword => message.toLowerCase().includes(keyword));
+    
+    // If user provides details with booking intent, auto-book
+    if (isBookingIntent && extractedEmail && extractedPhone) {
+      try {
+        // Extract name (first word before email or phone)
+        const nameMatch = message.match(/(?:my name is|i am|naam|mera naam)\s+([a-zA-Z\s]+)/i);
+        const extractedName = nameMatch ? nameMatch[1].trim() : 'Chatbot User';
+        
+        // Extract service from message
+        const services = await getServices();
+        let serviceMatch = 'General Inquiry';
+        for (const service of services) {
+          if (message.toLowerCase().includes(service.title.toLowerCase())) {
+            serviceMatch = service.title;
+            break;
+          }
+        }
+
+        // Auto-book appointment using AI booking service
+        const { autoBookAppointment } = require('../utils/aiBookingService');
+        const bookingResult = await autoBookAppointment({
+          name: extractedName,
+          email: extractedEmail,
+          phone: extractedPhone,
+          service: serviceMatch,
+          message: `Booked via AI Chatbot: ${message.substring(0, 200)}`
+        });
+
+        if (bookingResult.success) {
+          console.log('✅ AI Chatbot auto-booked appointment:', bookingResult.appointment.id);
+          
+          // Capture lead with high score
+          const { captureLeadFromForm } = require('../utils/leadScoringService');
+          await captureLeadFromForm({
+            name: extractedName,
+            email: extractedEmail,
+            phone: extractedPhone,
+            source: 'chatbot',
+            service: serviceMatch,
+            message: message
+          });
+          
+          // Return success message with booking details
+          return res.json({
+            success: true,
+            response: `🎉 Great! Your appointment has been booked successfully!\n\n📅 **Booking Details:**\n- Service: ${serviceMatch}\n- Date: ${new Date(bookingResult.appointment.date).toLocaleDateString('en-IN')}\n- Time: ${bookingResult.appointment.time}\n\n✅ Confirmation email sent to ${extractedEmail}\n\nWe'll send you a reminder 24 hours before your appointment. Looking forward to serving you! 😊`,
+            provider: 'AI Auto-Booking',
+            autoBooked: true
+          });
+        }
+      } catch (err) {
+        console.error('Auto-booking failed:', err.message);
+        // Continue with normal chat if auto-booking fails
+      }
+    }
+    
+    // Capture lead for booking intent (even without complete details)
+    if (isBookingIntent) {
+      try {
+        const { captureLeadFromForm } = require('../utils/leadScoringService');
+        await captureLeadFromForm({
+          name: 'Chatbot User',
+          email: extractedEmail || 'chatbot@temp.com',
+          phone: extractedPhone || '',
+          source: 'chatbot',
+          message: message,
+          service: 'Booking Inquiry'
+        });
+        console.log('✅ Lead captured from chatbot booking intent');
+      } catch (err) {
+        console.error('Lead capture failed:', err.message);
+      }
+    }
 
     let response = null, provider = null;
 

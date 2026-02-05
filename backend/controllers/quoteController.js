@@ -54,15 +54,31 @@ const createQuote = async (req, res) => {
     res.status(201).json(quote);
 
     // Send emails in background (non-blocking)
-    setImmediate(() => {
-      sendQuoteEmails(quote)
-        .then(() => console.log('Quote emails sent successfully'))
-        .catch(err => console.error('Quote email sending failed:', err.message));
-      // Create notifications - pass quote with populated user field
-      const quoteData = quote.toObject();
-      quoteData.user = userId; // Ensure user ID is set
-      createQuoteNotification(quoteData)
-        .catch(err => console.error('Quote notification failed:', err));
+    setImmediate(async () => {
+      try {
+        await sendQuoteEmails(quote);
+        console.log('Quote emails sent successfully');
+        
+        // Create notifications - pass quote with populated user field
+        const quoteData = quote.toObject();
+        quoteData.user = userId; // Ensure user ID is set
+        await createQuoteNotification(quoteData);
+        
+        // Capture lead for scoring and follow-up
+        const { captureLeadFromForm } = require('../utils/leadScoringService');
+        await captureLeadFromForm({
+          name: quote.name,
+          email: quote.email,
+          phone: quote.phone,
+          source: 'quote_request',
+          service: quote.service,
+          budget: quote.budget,
+          message: quote.message
+        });
+        console.log('✅ Lead captured from quote request');
+      } catch (err) {
+        console.error('Quote email/notification/lead capture failed:', err.message);
+      }
     });
   } catch (error) {
     console.error('Quote creation error:', error);
