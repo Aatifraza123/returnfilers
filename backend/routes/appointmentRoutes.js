@@ -18,8 +18,8 @@ const {
 router.get('/available-slots', getAvailableSlotsController);
 router.get('/by-email/:email', getAppointmentsByEmail);
 router.post('/suggest-slots', suggestSlots);
-router.post('/', verifyRecaptcha(0.5), createAppointment);
-router.post('/auto-book', verifyRecaptcha(0.5), autoBook);
+router.post('/', createAppointment); // Removed reCAPTCHA for now
+router.post('/auto-book', autoBook); // Removed reCAPTCHA for now
 router.delete('/:id/cancel', cancelAppointment);
 
 // Admin routes
