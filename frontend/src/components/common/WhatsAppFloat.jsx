@@ -22,15 +22,23 @@ const WhatsAppFloat = () => {
   useEffect(() => {
     const handleScroll = () => {
       const footer = document.getElementById('footer');
+      const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+      const scrollPosition = window.scrollY;
+      
+      // Hide on home page hero section (first viewport)
+      if (isHomePage && scrollPosition < window.innerHeight) {
+        setShowButton(false);
+        return;
+      }
+      
       if (!footer) {
         // If footer not found, show button after 100px scroll
-        setShowButton(window.scrollY > 100);
+        setShowButton(scrollPosition > 100);
         return;
       }
 
       const footerTop = footer.offsetTop;
-      const windowBottom = window.scrollY + window.innerHeight;
-      const scrollPosition = window.scrollY;
+      const windowBottom = scrollPosition + window.innerHeight;
 
       // Show button after scrolling down 100px
       // Hide button when footer is visible (when window bottom reaches footer top)
@@ -99,7 +107,6 @@ const WhatsAppFloat = () => {
           target="_blank"
           rel="noopener noreferrer"
           whileHover={{ scale: 1.1 }}
-          whileTap={{ scale: 0.9 }}
           className="relative z-10 flex items-center justify-center w-14 h-14 md:w-16 md:h-16 bg-[#25D366] rounded-full shadow-lg hover:shadow-green-500/40 transition-all duration-300"
           onMouseEnter={() => setShowTooltip(true)}
         >

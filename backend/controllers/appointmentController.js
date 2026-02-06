@@ -264,7 +264,7 @@ const updateAppointment = async (req, res) => {
 
 /**
  * @desc    Cancel appointment
- * @route   DELETE /api/appointments/:id
+ * @route   DELETE /api/appointments/:id/cancel
  * @access  Public/Private
  */
 const cancelAppointment = async (req, res) => {
@@ -296,6 +296,35 @@ const cancelAppointment = async (req, res) => {
     res.status(500).json({
       success: false,
       message: 'Failed to cancel appointment'
+    });
+  }
+};
+
+/**
+ * @desc    Delete appointment permanently (Admin only)
+ * @route   DELETE /api/appointments/:id
+ * @access  Private/Admin
+ */
+const deleteAppointment = async (req, res) => {
+  try {
+    const appointment = await Appointment.findByIdAndDelete(req.params.id);
+    
+    if (!appointment) {
+      return res.status(404).json({
+        success: false,
+        message: 'Appointment not found'
+      });
+    }
+    
+    res.json({
+      success: true,
+      message: 'Appointment deleted permanently'
+    });
+  } catch (error) {
+    console.error('Delete appointment error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Failed to delete appointment'
     });
   }
 };
@@ -436,5 +465,6 @@ module.exports = {
   getAppointments,
   getAppointmentsByEmail,
   updateAppointment,
-  cancelAppointment
+  cancelAppointment,
+  deleteAppointment
 };

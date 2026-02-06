@@ -34,6 +34,7 @@ const AdminLayout = () => {
     { path: '/admin/dashboard', icon: <FaChartPie />, label: 'Dashboard' },
     { path: '/admin/customers', icon: <FaUser />, label: 'Customers' },
     { path: '/admin/bookings', icon: <FaCalendarCheck />, label: 'Bookings' },
+    { path: '/admin/appointments', icon: <FaCalendarCheck />, label: 'Appointments' },
     { path: '/admin/consultations', icon: <FaComments />, label: 'Consultations' },
     { path: '/admin/quotes', icon: <FaFileInvoiceDollar />, label: 'Quotes' },
     { path: '/admin/contacts', icon: <FaAddressBook />, label: 'Contacts' },

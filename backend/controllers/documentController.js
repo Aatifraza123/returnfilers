@@ -10,7 +10,6 @@ const createDocument = async (req, res) => {
     const { name, email, phone, service, message, documents } = req.body;
 
     console.log('NEW DOCUMENT SUBMISSION');
-    console.log('Data:', { name, email, phone, service, documentsCount: documents?.length });
 
     // Validation
     if (!name || !email || !phone || !service) {
@@ -270,22 +269,18 @@ const sendDocumentEmails = async (doc) => {
 
   try {
     // Send admin notification
-    console.log('Sending admin notification email...');
     await sendEmail({
       to: adminEmailAddress,
       subject: `New Document Submission - ${doc.service} - ${doc.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin notification email sent');
 
     // Send customer confirmation
-    console.log('Sending customer confirmation email...');
     await sendEmail({
       to: doc.email,
       subject: 'Document Submission Confirmed - ReturnFilers',
       html: customerHtml
     });
-    console.log('✅ Customer confirmation email sent');
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

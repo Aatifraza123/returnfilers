@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import api from '../../api/axios';
 import toast from 'react-hot-toast';
 import { format } from 'date-fns';
@@ -16,6 +17,7 @@ import ReactQuill from 'react-quill';
 import 'react-quill/dist/quill.snow.css';
 
 const AdminEmails = () => {
+  const navigate = useNavigate();
   const [emails, setEmails] = useState([]);
   const [loading, setLoading] = useState(true);
   const [isInitialLoad, setIsInitialLoad] = useState(true);
@@ -128,13 +130,7 @@ const AdminEmails = () => {
       const bookings = bookingsRes.data.bookings || [];
       const newsletters = newsletterRes.data.subscribers || [];
       
-      console.log('Fetched data:', {
-        consultations: consultations.length,
-        contacts: contacts.length,
-        quotes: quotes.length,
-        bookings: bookings.length,
-        newsletters: newsletters.length
-      });
+      console.log('Fetched recipient groups');
       
       // Combine all and mark type with proper field mapping
       const allEmailsRaw = [
@@ -191,10 +187,6 @@ const AdminEmails = () => {
         return dateB - dateA;
       });
       
-      console.log('Total emails before deduplication:', allEmailsRaw.length);
-      console.log('Total emails after deduplication:', allEmails.length);
-      console.log('Duplicates removed:', allEmailsRaw.length - allEmails.length);
-      
       // Store both: deduplicated for "all" view, raw for filtered views
       setEmails(allEmails);
       setAllEmailsRaw(allEmailsRaw); // Store raw data for filters
@@ -241,8 +233,6 @@ const AdminEmails = () => {
         return;
       }
       
-      console.log('Deleting:', { endpoint, id, emailType });
-      
       await api.delete(endpoint, config);
       toast.success('Email deleted successfully');
       fetchEmails();
@@ -278,8 +268,6 @@ const AdminEmails = () => {
         toast.error('Status update not available for this type');
         return;
       }
-      
-      console.log('Updating status:', { endpoint, id, emailType, newStatus });
       
       await api.patch(endpoint, { status: newStatus }, config);
       toast.success('Status updated successfully');
@@ -327,15 +315,6 @@ const AdminEmails = () => {
         email: e.email,
         name: e.name
       }));
-
-      // Debug: Log what we're sending
-      console.log('📧 Sending bulk email:');
-      console.log('Subject:', bulkEmailData.subject);
-      console.log('Message type:', typeof bulkEmailData.message);
-      console.log('Message length:', bulkEmailData.message.length);
-      console.log('Message preview (first 300 chars):', bulkEmailData.message.substring(0, 300));
-      console.log('Has < character:', bulkEmailData.message.includes('<'));
-      console.log('Has &lt; encoded:', bulkEmailData.message.includes('&lt;'));
 
       // Clean the message: Remove ReactQuill's wrapper <p> tags if content is already HTML
       let cleanMessage = bulkEmailData.message;
@@ -424,7 +403,7 @@ const AdminEmails = () => {
             Total: <span className="font-bold text-primary">{filteredEmails.length}</span>
           </div>
           <button
-            onClick={() => setShowBulkEmailModal(true)}
+            onClick={() => navigate('/admin/bulk-email')}
             className="flex items-center gap-2 px-4 py-2 bg-secondary text-white rounded-lg hover:bg-[#C5A028] transition-colors text-sm font-medium"
           >
             <FaPaperPlane className="text-sm" />

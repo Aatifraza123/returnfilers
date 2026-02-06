@@ -7,15 +7,14 @@ const { notifyBookingStatusUpdate } = require('../utils/adminNotificationHelper'
 
 // @desc    Create booking
 // @route   POST /api/bookings
-// @access  Private (User must be logged in)
+// @access  Public (Optional authentication)
 const createBooking = async (req, res) => {
   try {
     const { name, email, phone, service, message, documents } = req.body;
-    const userId = req.user.id; // Get user ID from auth middleware
+    const userId = req.user?.id; // Optional - Get user ID if logged in
 
     console.log('NEW BOOKING');
-    console.log('User ID:', userId);
-    console.log('Data:', { name, email, phone, service, hasDocuments: documents?.length > 0 });
+    console.log('User ID:', userId || 'Guest user');
 
     if (!name || !email || !phone || !service) {
       return res.status(400).json({
@@ -25,7 +24,7 @@ const createBooking = async (req, res) => {
     }
 
     const booking = await Booking.create({
-      user: userId,
+      user: userId || undefined, // Optional user ID
       name: name.trim(),
       email: email.trim().toLowerCase(),
       phone: phone.replace(/\D/g, ''),
@@ -34,12 +33,16 @@ const createBooking = async (req, res) => {
       documents: documents || []
     });
 
-    // Add booking to user's bookings array
-    await User.findByIdAndUpdate(userId, {
-      $push: { bookings: booking._id }
-    });
+    // Add booking to user's bookings array (only if logged in)
+    if (userId) {
+      await User.findByIdAndUpdate(userId, {
+        $push: { bookings: booking._id }
+      });
+    } else {
+      console.log('Guest booking created');
+    }
 
-    console.log('Booking saved and linked to user:', booking._id);
+    console.log('Booking saved:', booking._id);
 
     res.status(201).json({
       success: true,
@@ -53,9 +56,11 @@ const createBooking = async (req, res) => {
         await sendBookingEmail(booking);
         
         // Create notifications - pass booking with populated user field
-        const bookingData = booking.toObject();
-        bookingData.user = userId; // Ensure user ID is set
-        await createBookingNotification(bookingData);
+        if (userId) {
+          const bookingData = booking.toObject();
+          bookingData.user = userId; // Ensure user ID is set
+          await createBookingNotification(bookingData);
+        }
         
         // Capture lead for scoring and follow-up
         const { captureLeadFromForm } = require('../utils/leadScoringService');
@@ -211,7 +216,6 @@ const replyToBooking = async (req, res) => {
 
 // Helper function to send booking emails using professional templates
 const sendBookingEmail = async (booking) => {
-  console.log('sendBookingEmail called for:', booking._id);
   
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
 
@@ -240,22 +244,18 @@ const sendBookingEmail = async (booking) => {
 
   try {
     // Send admin notification to info@returnfilers.in only
-    console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
       subject: `New Booking: ${booking.service} - ${booking.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin email sent to info@returnfilers.in');
 
     // Send customer confirmation
-    console.log('Sending customer confirmation email...');
     await sendEmail({
       to: booking.email,
       subject: `Booking Confirmed - ${booking.service}`,
       html: customerHtml
     });
-    console.log('✅ Customer email sent');
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

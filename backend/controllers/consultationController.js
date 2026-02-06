@@ -13,7 +13,6 @@ const createConsultation = async (req, res) => {
 
     console.log('NEW CONSULTATION REQUEST');
     console.log('User ID:', userId || 'Not logged in');
-    console.log('Data:', { name, email, phone, service });
 
     // Validation
     if (!name || !email || !phone || !service) {
@@ -42,7 +41,6 @@ const createConsultation = async (req, res) => {
       await User.findByIdAndUpdate(userId, {
         $push: { consultations: consultation._id }
       });
-      console.log('Consultation linked to user:', userId);
     }
 
     console.log('Consultation saved:', consultation._id);
@@ -60,10 +58,8 @@ const createConsultation = async (req, res) => {
 
     // Send emails in next event loop tick (completely non-blocking)
     setImmediate(() => {
-      console.log('Starting email sending process for consultation:', consultation._id);
       sendConsultationEmails(consultation)
         .then(() => {
-          console.log('Consultation emails sent successfully');
         })
         .catch(err => {
           console.error('Email sending failed (non-blocking):', err);
@@ -219,7 +215,6 @@ const deleteConsultation = async (req, res) => {
 
 // Helper function to send emails using professional templates
 const sendConsultationEmails = async (consultation) => {
-  console.log('sendConsultationEmails called for:', consultation._id);
   
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
@@ -247,22 +242,18 @@ const sendConsultationEmails = async (consultation) => {
 
   try {
     // Send admin notification to info@returnfilers.in only
-    console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
       subject: `New Consultation: ${consultation.service} - ${consultation.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin email sent to info@returnfilers.in');
 
     // Customer confirmation
-    console.log('Sending customer confirmation email...');
     await sendEmail({
       to: consultation.email,
       subject: `Consultation Request Received - ${consultation.service}`,
       html: customerHtml
     });
-    console.log('✅ Customer email sent');
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

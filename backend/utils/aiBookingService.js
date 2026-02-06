@@ -1,5 +1,6 @@
 const Appointment = require('../models/Appointment');
 const axios = require('axios');
+const { sendEmail } = require('./emailService');
 
 /**
  * AI-Powered Booking Service
@@ -210,6 +211,16 @@ const autoBookAppointment = async (customerData) => {
     
     console.log('✅ Auto-booked appointment:', appointment._id);
     
+    // Send confirmation emails in background
+    setImmediate(async () => {
+      try {
+        await sendAppointmentEmails(appointment);
+        console.log('✅ Appointment confirmation emails sent');
+      } catch (err) {
+        console.error('❌ Failed to send appointment emails:', err);
+      }
+    });
+    
     return {
       success: true,
       appointment: {
@@ -285,6 +296,129 @@ const extractDateTime = (message) => {
   }
   
   return { date, time };
+};
+
+/**
+ * Send appointment confirmation emails
+ */
+const sendAppointmentEmails = async (appointment) => {
+  const appointmentDate = new Date(appointment.appointmentDate).toLocaleDateString('en-IN', {
+    weekday: 'long',
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric'
+  });
+  
+  // Customer confirmation email
+  const customerHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #0B1530; color: white; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .appointment-details { background: white; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0; }
+        .button { display: inline-block; padding: 12px 30px; background: #D4AF37; color: #0B1530; text-decoration: none; border-radius: 5px; font-weight: bold; }
+        .footer { background: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #666; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h2>✅ Appointment Confirmed!</h2>
+        </div>
+        <div class="content">
+          <p>Dear ${appointment.name},</p>
+          <p>Your appointment has been successfully booked with ReturnFilers.</p>
+          
+          <div class="appointment-details">
+            <h3 style="margin-top: 0; color: #0B1530;">Appointment Details</h3>
+            <p><strong>Service:</strong> ${appointment.service}</p>
+            <p><strong>Date:</strong> ${appointmentDate}</p>
+            <p><strong>Time:</strong> ${appointment.appointmentTime}</p>
+            <p><strong>Type:</strong> ${appointment.meetingType === 'online' ? 'Online Meeting' : appointment.meetingType === 'phone' ? 'Phone Call' : 'In-Person'}</p>
+          </div>
+          
+          <p>We'll send you a reminder 24 hours before your appointment.</p>
+          <p>If you need to reschedule or cancel, please contact us at +91 84471 27264</p>
+        </div>
+        <div class="footer">
+          <p>© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+          <p>📞 +91 84471 27264 | 📧 info@returnfilers.in</p>
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  // Admin notification email
+  const adminHtml = `
+    <!DOCTYPE html>
+    <html>
+    <head>
+      <style>
+        body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+        .header { background: #D4AF37; color: #0B1530; padding: 20px; text-align: center; }
+        .content { background: #f9f9f9; padding: 30px; }
+        .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+      </style>
+    </head>
+    <body>
+      <div class="container">
+        <div class="header">
+          <h2>🔔 New Appointment Booked (AI Chatbot)</h2>
+        </div>
+        <div class="content">
+          <div class="details">
+            <h3>Customer Details</h3>
+            <p><strong>Name:</strong> ${appointment.name}</p>
+            <p><strong>Email:</strong> ${appointment.email}</p>
+            <p><strong>Phone:</strong> ${appointment.phone}</p>
+          </div>
+          
+          <div class="details">
+            <h3>Appointment Details</h3>
+            <p><strong>Service:</strong> ${appointment.service}</p>
+            <p><strong>Date:</strong> ${appointmentDate}</p>
+            <p><strong>Time:</strong> ${appointment.appointmentTime}</p>
+            <p><strong>Type:</strong> ${appointment.meetingType}</p>
+            <p><strong>Booked By:</strong> AI Chatbot</p>
+          </div>
+          
+          ${appointment.message ? `
+          <div class="details">
+            <h3>Message</h3>
+            <p>${appointment.message}</p>
+          </div>
+          ` : ''}
+        </div>
+      </div>
+    </body>
+    </html>
+  `;
+  
+  try {
+    // Send to customer
+    await sendEmail({
+      to: appointment.email,
+      subject: '✅ Appointment Confirmed - ReturnFilers',
+      html: customerHtml
+    });
+    
+    // Send to admin
+    await sendEmail({
+      to: 'info@returnfilers.in',
+      subject: `🔔 New Appointment: ${appointment.name} - ${appointmentDate} ${appointment.appointmentTime}`,
+      html: adminHtml
+    });
+    
+  } catch (error) {
+    console.error('❌ Failed to send appointment emails:', error.message);
+    throw error;
+  }
 };
 
 module.exports = {

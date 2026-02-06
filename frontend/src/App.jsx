@@ -59,6 +59,7 @@ import AdminBlogs from './pages/admin/AdminBlogs'
 import AdminReviews from './pages/admin/AdminReviews'
 import AdminUsers from './pages/admin/AdminUsers'
 import AdminEmails from './pages/admin/AdminEmails'
+import AdminBulkEmail from './pages/admin/AdminBulkEmail'
 import AdminQuotes from './pages/admin/AdminQuotes'
 import AdminSettings from './pages/admin/AdminSettings'
 import AdminProfile from './pages/admin/AdminProfile'
@@ -67,6 +68,7 @@ import AdminBookings from './pages/admin/AdminBookings'
 import AdminLeads from './pages/admin/AdminLeads'
 import AdminDigitalServices from './pages/admin/AdminDigitalServices'
 import AdminPricing from './pages/admin/AdminPricing'
+import AdminAppointments from './pages/admin/AdminAppointments'
 import Booking from './pages/Booking'
 import AppointmentBooking from './pages/AppointmentBooking'
 import TrackAppointment from './pages/TrackAppointment'
@@ -189,11 +191,13 @@ function App() {
           <Route path="testimonials" element={<AdminTestimonials />} />
           <Route path="users" element={<AdminUsers />} />
           <Route path="emails" element={<AdminEmails />} />
+          <Route path="bulk-email" element={<AdminBulkEmail />} />
           <Route path="contacts" element={<AdminContacts />} />
           <Route path="quotes" element={<AdminQuotes />} />
           <Route path="settings" element={<AdminSettings />} />
           <Route path="profile" element={<AdminProfile />} />
           <Route path="bookings" element={<AdminBookings />} />
+          <Route path="appointments" element={<AdminAppointments />} />
           <Route path="leads" element={<AdminLeads />} />
           <Route path="digital-services" element={<AdminDigitalServices />} />
           <Route path="pricing" element={<AdminPricing />} />

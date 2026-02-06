@@ -45,7 +45,6 @@ const createQuote = async (req, res) => {
       await User.findByIdAndUpdate(userId, {
         $push: { quotes: quote._id }
       });
-      console.log('Quote linked to user:', userId);
     }
 
     console.log('Quote created successfully:', quote._id);
@@ -57,7 +56,6 @@ const createQuote = async (req, res) => {
     setImmediate(async () => {
       try {
         await sendQuoteEmails(quote);
-        console.log('Quote emails sent successfully');
         
         // Create notifications - pass quote with populated user field
         const quoteData = quote.toObject();
@@ -88,7 +86,6 @@ const createQuote = async (req, res) => {
 
 // Helper function to send quote emails using professional templates
 const sendQuoteEmails = async (quote) => {
-  console.log('sendQuoteEmails called for:', quote._id);
   
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
@@ -116,22 +113,18 @@ const sendQuoteEmails = async (quote) => {
 
   try {
     // Send admin notification to info@returnfilers.in only
-    console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
       subject: `New Quote Request: ${quote.service} - ${quote.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin email sent to info@returnfilers.in');
 
     // Customer confirmation
-    console.log('Sending customer confirmation email...');
     await sendEmail({
       to: quote.email,
       subject: `Quote Request Received - ${quote.service}`,
       html: customerHtml
     });
-    console.log('✅ Customer email sent');
 
   } catch (error) {
     console.error('❌ Email sending failed:', error.message);

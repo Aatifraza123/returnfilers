@@ -19,7 +19,7 @@ router.post('/', verifyRecaptcha(0.5), createContact);
 router.get('/test-email', async (req, res) => {
   try {
     const testEmail = req.query.email || process.env.EMAIL_USER;
-    console.log('🧪 Testing email to:', testEmail);
+    console.log('🧪 Testing email service');
     
     const result = await sendEmail({
       to: testEmail,

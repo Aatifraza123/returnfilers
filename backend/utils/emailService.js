@@ -79,26 +79,18 @@ const createTransporter = () => {
  * Send email via SMTP (Zoho) - Simple format to avoid spam
  */
 const sendEmail = async ({ to, subject, html, text, from }) => {
-  console.log('=================================================');
-  console.log('📧 EMAIL SERVICE CALLED - ZOHO SMTP MODE');
-  console.log('📧 To:', to);
-  console.log('📧 Subject:', subject);
-  console.log('=================================================');
-  
   const transporter = createTransporter();
   if (!transporter) {
     throw new Error('SMTP transporter not configured');
   }
   
   try {
-    console.log('🔄 Sending via Zoho SMTP...');
-    
     const mailOptions = {
       from: from || `ReturnFilers <${process.env.EMAIL_USER || 'info@returnfilers.in'}>`,
       to: to,
       subject: subject,
       html: html,
-      text: text || html.replace(/<[^>]*>/g, ''), // Auto-generate text from HTML
+      text: text || html.replace(/<[^>]*>/g, ''),
       headers: {
         'X-Mailer': 'Nodemailer',
         'Reply-To': process.env.EMAIL_USER || 'info@returnfilers.in'
@@ -106,14 +98,9 @@ const sendEmail = async ({ to, subject, html, text, from }) => {
     };
     
     const info = await transporter.sendMail(mailOptions);
-    
-    console.log('✅✅✅ EMAIL SENT VIA ZOHO SMTP:', info.messageId);
-    console.log('=================================================');
     return { success: true, provider: 'smtp', id: info.messageId };
   } catch (error) {
-    console.log('❌❌❌ SMTP FAILED:', error.message);
-    console.log('❌ Error details:', error);
-    console.log('=================================================');
+    console.error('❌ Email sending failed');
     throw error;
   }
 };
@@ -149,7 +136,7 @@ const sendBulkEmails = async (emails) => {
       await new Promise(resolve => setTimeout(resolve, 500));
     } catch (error) {
       results.push({ to: email.to, success: false, error: error.message });
-      console.log('❌ Bulk email failed for:', email.to, error.message);
+      console.log('❌ Bulk email failed:', error.message);
     }
   }
   

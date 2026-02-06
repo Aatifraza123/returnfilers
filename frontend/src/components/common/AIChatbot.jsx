@@ -34,7 +34,7 @@ const MessageContent = ({ content, isUser }) => {
           return (
             <div key={idx} className="flex items-start gap-1.5 pl-0.5">
               <span className="w-1.5 h-1.5 rounded-full bg-[#041313] mt-1.5 flex-shrink-0"></span>
-              <span className="text-[12px]">{formatText(text)}</span>
+              <span className="text-[13px]">{formatText(text)}</span>
             </div>
           );
         }
@@ -54,14 +54,14 @@ const MessageContent = ({ content, isUser }) => {
         // Headers (ending with :)
         if (trimmedLine.endsWith(':') && trimmedLine.length < 50 && !trimmedLine.includes('http') && !trimmedLine.includes('₹')) {
           return (
-            <div key={idx} className="font-semibold text-[#0B1530] mt-2 mb-1 text-[12px]">
+            <div key={idx} className="font-semibold text-[#0B1530] mt-2 mb-1 text-[13px]">
               {formatText(trimmedLine)}
             </div>
           );
         }
         
         return (
-          <div key={idx} className="text-[12px]">
+          <div key={idx} className="text-[13px]">
             {formatText(trimmedLine)}
           </div>
         );
@@ -102,10 +102,6 @@ const formatText = (text) => {
         '/about': 'About Us',
         '/blog': 'Blog',
         '/track-appointment': '🔍 Track Appointment'
-      };
-        '/quote': 'Get Quote',
-        '/about': 'About Us',
-        '/blog': 'Blog'
       };
       const displayName = routeNames[part] || part;
       return (
@@ -189,7 +185,7 @@ const AIChatbot = () => {
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
-      content: 'Hello! 👋 Welcome to ReturnFilers.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?' 
+      content: '**Hello! 👋 Welcome to ReturnFilers**\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\n**How can I assist you today?**' 
     }
   ]);
   const [input, setInput] = useState('');
@@ -209,7 +205,7 @@ const AIChatbot = () => {
           setMessages([
             { 
               role: 'assistant', 
-              content: `Hello! 👋 Welcome to ${data.data.companyName || 'ReturnFilers'}.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?` 
+              content: `**Hello! 👋 Welcome to ${data.data.companyName || 'ReturnFilers'}**\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\n**How can I assist you today?**` 
             }
           ]);
         }
@@ -243,7 +239,15 @@ const AIChatbot = () => {
   useEffect(() => {
     const handleScroll = () => {
       // Always show chatbot on all screen sizes (desktop and mobile)
-      setIsVisible(true);
+      // But hide on home page hero section (first 100vh)
+      const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+      const scrollPosition = window.scrollY;
+      
+      if (isHomePage && scrollPosition < window.innerHeight) {
+        setIsVisible(false);
+      } else {
+        setIsVisible(true);
+      }
     };
 
     window.addEventListener('scroll', handleScroll);
@@ -328,7 +332,7 @@ const AIChatbot = () => {
     setMessages([
       { 
         role: 'assistant', 
-        content: `Hello! 👋 Welcome to ${settings?.companyName || 'ReturnFilers'}.\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\nHow can I assist you today?` 
+        content: `**Hello! 👋 Welcome to ${settings?.companyName || 'ReturnFilers'}**\n\nI can help you with:\n- Tax Filing & ITR\n- GST Registration & Returns\n- Company Registration\n- Accounting Services\n\n**How can I assist you today?**` 
       }
     ]);
   };
@@ -494,7 +498,7 @@ const AIChatbot = () => {
 
   return (
     <>
-      {/* Floating Chat Button with Tooltip */}
+      {/* Floating Chat Button */}
       <div
         className={`fixed z-50 transition-all duration-300 ${
           isOpen ? 'scale-0 opacity-0' : isVisible ? 'scale-100 opacity-100' : 'scale-0 opacity-0'
@@ -505,23 +509,6 @@ const AIChatbot = () => {
           cursor: isDragging ? 'grabbing' : 'grab'
         }}
       >
-        {/* Tooltip Message */}
-        <div className="absolute bottom-full right-0 mb-3 animate-bounce-slow">
-          <div className="bg-white px-3 py-2 rounded-xl shadow-lg border border-gray-100 whitespace-nowrap relative">
-            <button
-              onClick={() => setIsVisible(false)}
-              className="absolute -top-2 -right-2 w-5 h-5 bg-red-500 hover:bg-red-600 text-white rounded-full flex items-center justify-center text-xs transition-colors shadow-md"
-              aria-label="Close tooltip"
-            >
-              <FaTimes size={10} />
-            </button>
-            <p className="text-xs font-medium text-[#0B1530]">👋 Need help?</p>
-            <p className="text-[10px] text-gray-500">Chat with AI</p>
-            {/* Arrow */}
-            <div className="absolute -bottom-2 right-6 w-4 h-4 bg-white border-r border-b border-gray-100 transform rotate-45"></div>
-          </div>
-        </div>
-        
         <button
           onMouseDown={handleMouseDown}
           onTouchStart={handleTouchStart}
@@ -530,33 +517,32 @@ const AIChatbot = () => {
           }}
           className="relative group"
         >
-          <div className="w-12 h-12 bg-[#041313] rounded-full shadow-lg flex items-center justify-center hover:bg-[#052626] transition-colors group-hover:scale-110 duration-200 active:scale-95">
-            <FaRobot size={20} className="text-white group-hover:text-white" />
-            <span className="absolute -top-1 -right-1 w-3 h-3 bg-[#041313] rounded-full animate-pulse"></span>
+          <div className="w-14 h-14 bg-gradient-to-br from-purple-600 to-purple-700 rounded-full shadow-xl flex items-center justify-center hover:shadow-2xl transition-all duration-300 group-hover:scale-110 active:scale-95">
+            <FaRobot size={24} className="text-white" />
           </div>
         </button>
       </div>
 
-      {/* Chat Window */}
+      {/* Chat Window - Hostinger Style */}
       <div 
-        className={`fixed z-50 w-[calc(100vw-2rem)] sm:w-[340px] md:w-[360px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden border border-gray-200 transition-all duration-300 ${
-          isOpen && isVisible ? 'opacity-100 scale-100 h-[70vh] sm:h-[450px] md:h-[480px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
+        className={`fixed z-50 w-[calc(100vw-2rem)] sm:w-[400px] bg-white rounded-2xl shadow-2xl flex flex-col overflow-hidden transition-all duration-300 ${
+          isOpen && isVisible ? 'opacity-100 scale-100 h-[80vh] sm:h-[600px]' : 'opacity-0 scale-95 h-0 pointer-events-none'
         }`}
         style={{ 
           bottom: `${position.bottom}px`, 
           right: `${position.right}px`
         }}
       >
-        {/* Header */}
-        <div className="bg-[#041313] text-white p-3 flex items-center justify-between flex-shrink-0">
+        {/* Header - Hostinger Style */}
+        <div className="bg-white border-b border-gray-200 p-4 flex items-center justify-between flex-shrink-0">
           <div className="flex items-center gap-3">
-            <div className="rounded-full flex items-center justify-center" style={{ width: '36px', height: '36px', backgroundColor: '#d3e3f2' }}>
-              <FaRobot size={16} className="text-[#041313]" />
+            <div className="w-10 h-10 rounded-full bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center">
+              <FaRobot size={20} className="text-white" />
             </div>
             <div>
-              <h3 className="font-bold text-sm">TaxBot</h3>
-              <div className="flex items-center gap-1.5 text-xs text-gray-300">
-                <span className="w-1.5 h-1.5 bg-green-400 rounded-full animate-pulse"></span>
+              <h3 className="font-semibold text-gray-900 text-base">ReturnFilers AI</h3>
+              <div className="flex items-center gap-1.5 text-xs text-gray-500">
+                <span className="w-2 h-2 bg-green-500 rounded-full"></span>
                 Online
               </div>
             </div>
@@ -564,105 +550,101 @@ const AIChatbot = () => {
           <div className="flex items-center gap-1">
             <button 
               onClick={clearChat}
-              className="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors text-white hover:text-white"
+              className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors text-gray-600"
               title="New chat"
             >
-              <FaRedo size={12} />
+              <FaRedo size={14} />
             </button>
             <button 
               onClick={() => setIsOpen(false)}
-              className="w-8 h-8 rounded-lg hover:bg-white/20 flex items-center justify-center transition-colors text-white hover:text-white"
+              className="w-9 h-9 rounded-lg hover:bg-gray-100 flex items-center justify-center transition-colors text-gray-600"
             >
-              <FaTimes size={14} />
+              <FaTimes size={16} />
             </button>
           </div>
         </div>
 
-        {/* Messages */}
-        <div className="flex-1 overflow-y-auto px-3 py-4 space-y-3" style={{ backgroundColor: '#d3e3f2' }}>
+        {/* Messages - Hostinger Style */}
+        <div className="flex-1 overflow-y-auto px-4 py-6 space-y-4 bg-gray-50 scrollbar-hide" style={{ scrollbarWidth: 'none', msOverflowStyle: 'none' }}>
           {messages.filter(msg => msg.content).map((msg, idx) => (
             <div key={idx} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-              <div className={`flex items-end gap-2 max-w-[85%] ${msg.role === 'user' ? 'flex-row-reverse' : ''}`}>
-                <div className={`w-6 h-6 rounded-full flex items-center justify-center flex-shrink-0 ${
-                  msg.role === 'user' 
-                    ? 'bg-[#041313] text-white' 
-                    : 'bg-[#041313] text-white'
-                }`}>
-                  {msg.role === 'user' ? <FaUser size={10} /> : <FaRobot size={11} />}
+              {msg.role === 'assistant' && (
+                <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center flex-shrink-0 mr-2">
+                  <FaRobot size={14} className="text-white" />
                 </div>
-                <div className={`px-3 py-2.5 text-[13px] leading-relaxed ${
-                  msg.role === 'user'
-                    ? 'bg-[#041313] text-white rounded-2xl rounded-br-sm'
-                    : 'bg-white text-gray-700 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100'
-                }`}>
-                  <MessageContent content={msg.content} isUser={msg.role === 'user'} />
-                </div>
+              )}
+              <div className={`max-w-[80%] px-4 py-3 text-sm leading-relaxed ${
+                msg.role === 'user'
+                  ? 'text-gray-800 rounded-2xl rounded-tr-md'
+                  : 'text-gray-800 rounded-2xl rounded-tl-md shadow-sm'
+              }`} style={msg.role === 'user' ? { backgroundColor: '#f9e9fc' } : { backgroundColor: '#e9effc' }}>
+                <MessageContent content={msg.content} isUser={msg.role === 'user'} />
               </div>
+              {msg.role === 'user' && (
+                <div className="w-8 h-8 rounded-full bg-gray-300 flex items-center justify-center flex-shrink-0 ml-2">
+                  <FaUser size={12} className="text-gray-600" />
+                </div>
+              )}
             </div>
           ))}
           
           {loading && messages[messages.length - 1]?.content === '' && (
             <div className="flex justify-start">
-              <div className="flex items-end gap-2">
-                <div className="w-6 h-6 rounded-full bg-[#041313] text-white flex items-center justify-center">
-                  <FaRobot size={11} />
-                </div>
-                <div className="bg-white px-3 py-2.5 rounded-2xl rounded-bl-sm shadow-sm border border-gray-100">
-                  <div className="flex gap-1">
-                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
-                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
-                    <span className="w-2 h-2 bg-[#041313] rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
-                  </div>
+              <div className="w-8 h-8 rounded-full bg-gradient-to-br from-purple-600 to-purple-700 flex items-center justify-center flex-shrink-0 mr-2">
+                <FaRobot size={14} className="text-white" />
+              </div>
+              <div className="px-4 py-3 rounded-2xl rounded-tl-md shadow-sm" style={{ backgroundColor: '#e9effc' }}>
+                <div className="flex gap-1">
+                  <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '0ms' }}></span>
+                  <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '150ms' }}></span>
+                  <span className="w-2 h-2 bg-purple-600 rounded-full animate-bounce" style={{ animationDelay: '300ms' }}></span>
                 </div>
               </div>
             </div>
           )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Quick Questions */}
-        {messages.length <= 2 && !loading && (
-          <div className="px-3 py-3 bg-gradient-to-r from-gray-50 to-white border-t border-gray-100 flex-shrink-0">
-            <p className="text-[11px] text-gray-500 mb-2 font-semibold">Quick Actions</p>
-            <div className="grid grid-cols-2 gap-2">
+          
+          {/* Quick Questions */}
+          {messages.length <= 2 && !loading && (
+            <div className="space-y-2">
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
                   onClick={() => handleQuickQuestion(q)}
-                  className="px-3 py-2 bg-white border border-gray-200 hover:border-[#041313] hover:bg-[#041313] hover:text-white rounded-lg text-[11px] font-medium transition-all duration-200 shadow-sm"
+                  className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 hover:border-purple-300 rounded-xl text-sm text-left text-gray-700 font-medium transition-all duration-200 shadow-sm"
                 >
                   {q}
                 </button>
               ))}
             </div>
-          </div>
-        )}
+          )}
+          
+          <div ref={messagesEndRef} />
+        </div>
 
-        {/* Input */}
-        <div className="p-2.5 bg-white border-t border-gray-200 flex-shrink-0">
+        {/* Input - Hostinger Style */}
+        <div className="p-4 bg-white border-t border-gray-200 flex-shrink-0">
           <form onSubmit={sendMessage} className="flex gap-2">
             <input
               ref={inputRef}
               type="text"
               value={input}
               onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your question..."
+              placeholder="Type your message..."
               disabled={loading}
-              className="flex-1 px-3 py-2 rounded-xl text-sm focus:outline-none focus:ring-2 focus:ring-[#041313] disabled:opacity-50 placeholder-gray-400"
-              style={{ backgroundColor: '#d3e3f2' }}
+              className="flex-1 px-4 py-3 rounded-xl text-sm bg-gray-50 border border-gray-200 focus:outline-none focus:ring-2 focus:ring-purple-500 focus:border-transparent disabled:opacity-50 placeholder-gray-400 transition-all"
             />
             <button
               type="submit"
               disabled={!input.trim() || loading}
-              className="w-9 h-9 bg-[#041313] text-white rounded-xl flex items-center justify-center hover:bg-[#052626] hover:text-white hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:bg-[#041313] disabled:hover:scale-100"
+              className="w-11 h-11 bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-xl flex items-center justify-center hover:shadow-lg hover:scale-105 transition-all duration-200 disabled:opacity-50 disabled:cursor-not-allowed disabled:hover:scale-100"
             >
-              <FaPaperPlane size={13} />
+              <FaPaperPlane size={14} />
             </button>
           </form>
           
-          <div className="mt-1.5 text-center">
-            <a href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`} className="text-[10px] text-gray-400 hover:text-[#0B1530] flex items-center justify-center gap-1 transition-colors">
-              <FaPhoneAlt size={8} /> {settings?.phone || '+91 84471 27264'}
+          <div className="mt-3 text-center">
+            <a href={`tel:${settings?.phone?.replace(/\s/g, '') || '+918447127264'}`} className="text-xs text-gray-500 hover:text-purple-600 flex items-center justify-center gap-1.5 transition-colors">
+              <FaPhoneAlt size={10} /> {settings?.phone || '+91 84471 27264'}
             </a>
           </div>
         </div>

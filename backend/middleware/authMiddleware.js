@@ -37,7 +37,6 @@ const protect = async (req, res, next) => {
 };
 
 const admin = (req, res, next) => {
-  console.log('Admin check - User:', req.user?.email, 'isAdmin:', req.user?.isAdmin);
   // Check if user is admin (either from Admin model or User model with isAdmin flag)
   if (req.user && (req.user.isAdmin === true || req.user.role === 'admin')) {
     next();

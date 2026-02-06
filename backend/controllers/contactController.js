@@ -11,8 +11,6 @@ const he = require('he'); // HTML entity decoder
 const sendBulkEmail = async (req, res) => {
   try {
     const { recipients, subject, message } = req.body;
-
-    console.log('BULK EMAIL REQUEST');
     console.log('Recipients count:', recipients?.length);
     console.log('Subject:', subject);
     console.log('Message type:', typeof message);
@@ -54,7 +52,6 @@ const sendBulkEmail = async (req, res) => {
     setImmediate(() => {
       sendBulkEmailsInBackground(recipients, subject, message)
         .then(() => {
-          console.log(`Bulk email sent to ${recipients.length} recipients`);
         })
         .catch(err => {
           console.error('Background bulk email error:', err);
@@ -71,7 +68,6 @@ const sendBulkEmail = async (req, res) => {
 
 // Helper function to send bulk emails in background using simple template
 const sendBulkEmailsInBackground = async (recipients, subject, message) => {
-  console.log('Starting background bulk email sending...');
   console.log('📧 Original recipients count:', recipients.length);
   
   // Remove duplicates based on email address
@@ -84,7 +80,6 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
       seenEmails.add(email);
       uniqueRecipients.push(recipient);
     } else {
-      console.log('⚠️ Skipping duplicate email:', email);
     }
   }
   
@@ -123,7 +118,7 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
       });
       
       sentCount++;
-      console.log(`✅ Sent to ${recipient.email} (${sentCount}/${uniqueRecipients.length})`);
+      console.log(`✅ Email sent (${sentCount}/${uniqueRecipients.length})`);
       
       // Small delay between emails
       await new Promise(resolve => setTimeout(resolve, 500));
@@ -133,8 +128,6 @@ const sendBulkEmailsInBackground = async (recipients, subject, message) => {
       console.error(`❌ Failed for ${recipient.email}:`, error.message);
     }
   }
-
-  console.log(`Bulk email completed: ${sentCount} sent, ${failedCount} failed, ${recipients.length - uniqueRecipients.length} duplicates skipped`);
 };
 
 // @desc    Submit contact message
@@ -145,7 +138,6 @@ const createContact = async (req, res) => {
     const { name, email, phone, message } = req.body;
 
     console.log('NEW CONTACT MESSAGE');
-    console.log('Data:', { name, email, phone });
 
     // Validation
     if (!name || !email || !phone || !message) {
@@ -178,14 +170,10 @@ const createContact = async (req, res) => {
       }
     });
 
-    console.log('✅ Response sent, now starting email process...');
-
     // Send emails in next event loop tick (completely non-blocking)
     setImmediate(async () => {
       try {
-        console.log('🔄 Inside setImmediate - Starting email sending process for contact:', contact._id);
         await sendContactEmails(contact);
-        console.log('✅ Contact emails sent successfully');
         
         await createContactNotification(contact);
         console.log('✅ Contact notification created');
@@ -355,7 +343,6 @@ const deleteContact = async (req, res) => {
 
 // Helper function to send emails using simple templates
 const sendContactEmails = async (contact) => {
-  console.log('sendContactEmails called for:', contact._id);
   
   const { sendEmail } = require('../utils/emailService');
   const { getAdminNotificationTemplate, getCustomerConfirmationTemplate } = require('../utils/emailTemplates');
@@ -421,13 +408,11 @@ ${aiResult.response}
 
   try {
     // Send admin notification to info@returnfilers.in only
-    console.log('Sending admin notification email to info@returnfilers.in...');
     await sendEmail({
       to: 'info@returnfilers.in',
       subject: `[${aiResult.priority.toUpperCase()}] ${aiResult.category} - New Contact from ${contact.name}`,
       html: adminHtml
     });
-    console.log('✅ Admin email sent to info@returnfilers.in');
 
     // Send AI-generated customer response
     if (aiResult.shouldAutoSend) {
@@ -437,7 +422,6 @@ ${aiResult.response}
         subject: 'Thank you for contacting ReturnFilers - We\'re here to help!',
         html: customerHtml
       });
-      console.log('✅ AI-powered customer email sent');
     } else {
       console.log('⚠️ Auto-send disabled for this query category');
     }

@@ -8,7 +8,7 @@ exports.notifyBookingStatusUpdate = async (booking, status, adminNote = '') => {
       return;
     }
 
-    console.log(`📢 Creating booking status update notification for user: ${booking.user}`);
+    console.log(`📢 Creating booking status update notification`);
 
     const statusMessages = {
       pending: 'Your booking is being reviewed',
@@ -50,7 +50,7 @@ exports.notifyQuoteResponse = async (quote, response) => {
       return;
     }
 
-    console.log(`📢 Creating quote response notification for user: ${quote.user}`);
+    console.log(`📢 Creating quote response notification`);
 
     const notification = await Notification.create({
       type: 'quote',

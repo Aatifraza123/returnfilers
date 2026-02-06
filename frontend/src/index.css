@@ -67,6 +67,16 @@ h1, h2, h3, h4, h5, h6 {
   scrollbar-color: #D4AF37 transparent;
 }
 
+/* Hide scrollbar completely for specific elements */
+.scrollbar-hide::-webkit-scrollbar {
+  display: none;
+}
+
+.scrollbar-hide {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
 /* Smooth Scrolling */
 html {
   scroll-behavior: smooth;

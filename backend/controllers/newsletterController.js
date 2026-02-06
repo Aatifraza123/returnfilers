@@ -7,8 +7,7 @@ const subscribe = async (req, res) => {
   try {
     const { email } = req.body;
 
-    console.log('📧 NEWSLETTER SUBSCRIPTION');
-    console.log('Email:', email);
+    console.log('📧 Newsletter subscription request received');
 
     // Validation
     if (!email) {
@@ -115,8 +114,7 @@ const unsubscribe = async (req, res) => {
   try {
     const email = decodeURIComponent(req.params.email);
     
-    console.log('📧 UNSUBSCRIBE REQUEST');
-    console.log('Email:', email);
+    console.log('📧 Unsubscribe request received');
 
     const subscriber = await Newsletter.findOne({ email: email.toLowerCase() });
     
@@ -151,7 +149,7 @@ const unsubscribe = async (req, res) => {
     subscriber.status = 'unsubscribed';
     await subscriber.save();
 
-    console.log('✅ User unsubscribed:', email);
+    console.log('✅ User unsubscribed successfully');
 
     res.send(`
       <!DOCTYPE html>

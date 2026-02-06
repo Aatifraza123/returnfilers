@@ -10,7 +10,8 @@ const {
   getAppointments,
   getAppointmentsByEmail,
   updateAppointment,
-  cancelAppointment
+  cancelAppointment,
+  deleteAppointment
 } = require('../controllers/appointmentController');
 
 // Public routes
@@ -24,6 +25,7 @@ router.delete('/:id/cancel', cancelAppointment);
 // Admin routes
 router.get('/', protectAdmin, getAppointments);
 router.patch('/:id', protectAdmin, updateAppointment);
+router.delete('/:id', protectAdmin, deleteAppointment);
 
 // Test route to manually trigger reminders (Admin only)
 router.post('/trigger-reminders', protectAdmin, async (req, res) => {

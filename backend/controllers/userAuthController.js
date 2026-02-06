@@ -48,7 +48,6 @@ const registerUser = async (req, res) => {
 
         // Send OTP email
         try {
-          console.log('📧 Resending OTP to existing unverified user:', email);
           await sendEmail({
             to: email,
             subject: 'Email Verification - OTP',
@@ -144,7 +143,6 @@ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration
 
     // Send OTP email
     try {
-      console.log('📧 Sending OTP email to:', email);
       await sendEmail({
         to: email,
         subject: 'Email Verification - OTP',
@@ -199,7 +197,6 @@ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration
 </body>
 </html>`
       });
-      console.log('✅ OTP email sent successfully');
 
       res.status(201).json({
         success: true,
@@ -437,8 +434,6 @@ const forgotPassword = async (req, res) => {
       });
     }
 
-    console.log('👤 User found:', user.email);
-
     // Generate reset token
     const resetToken = crypto.randomBytes(32).toString('hex');
     user.resetPasswordToken = crypto.createHash('sha256').update(resetToken).digest('hex');
@@ -453,7 +448,6 @@ const forgotPassword = async (req, res) => {
     
     // Send email with reset link - Fully Responsive
     try {
-      console.log('📧 Attempting to send reset email...');
       await sendEmail({
         to: email,
         subject: 'Reset Your Password - ReturnFilers',
@@ -506,8 +500,6 @@ img { border: 0; height: auto; line-height: 100%; outline: none; text-decoration
 </body>
 </html>`
       });
-
-      console.log('✅ Reset email sent successfully');
       res.json({
         success: true,
         message: 'Password reset link sent to your email'

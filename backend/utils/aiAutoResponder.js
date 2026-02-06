@@ -242,7 +242,6 @@ const processContactQuery = async (contactData) => {
     
     // Categorize the query
     const category = categorizeQuery(message);
-    console.log(`📧 Processing ${category} query from ${name}`);
     
     // Generate AI response
     const aiResponse = await generateAIResponse(name, email, message, category);
