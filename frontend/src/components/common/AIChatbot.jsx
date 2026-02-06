@@ -1,5 +1,6 @@
 import { useState, useRef, useEffect } from 'react';
 import { FaRobot, FaTimes, FaPaperPlane, FaUser, FaPhoneAlt, FaRedo } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
 import api from '../../api/axios';
 
 // Format AI response with proper styling
@@ -89,7 +90,7 @@ const formatText = (text) => {
       return <span key={idx} className="text-gray-500 text-[11px]">{part}</span>;
     }
     if (part.startsWith('+91')) {
-      return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline">{part}</a>;
+      return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline cursor-pointer hover:text-[#052626]">{part}</a>;
     }
     // Internal route links (e.g., /booking, /services, /contact)
     if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog' || part === '/track-appointment') {
@@ -105,13 +106,16 @@ const formatText = (text) => {
       };
       const displayName = routeNames[part] || part;
       return (
-        <a 
+        <Link 
           key={idx} 
-          href={part}
-          className="inline-block px-2 py-0.5 bg-[#041313] text-white rounded font-semibold hover:bg-[#052626] hover:text-white transition-all duration-200"
+          to={part}
+          className="inline-block px-2 py-0.5 bg-[#041313] text-white rounded font-semibold hover:bg-[#052626] hover:text-white transition-all duration-200 cursor-pointer"
+          onClick={(e) => {
+            e.stopPropagation();
+          }}
         >
           {displayName}
-        </a>
+        </Link>
       );
     }
     // URL - clickable with button style
@@ -128,8 +132,9 @@ const formatText = (text) => {
           href={cleanUrl} 
           target="_blank" 
           rel="noopener noreferrer" 
-          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors"
+          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors cursor-pointer hover:opacity-80"
           style={{ backgroundColor: '#d3e3f2' }}
+          onClick={(e) => e.stopPropagation()}
         >
           {displayName}
         </a>
@@ -141,9 +146,14 @@ const formatText = (text) => {
         <a 
           key={idx} 
           href={`mailto:${part}`} 
-          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors"
+          className="inline-block px-2 py-0.5 text-[#041313] rounded font-medium transition-colors cursor-pointer hover:opacity-80"
           style={{ backgroundColor: '#d3e3f2' }}
+          onClick={(e) => e.stopPropagation()}
         >
+          ✉️ {part}
+        </a>
+      );
+    }
           ✉️ {part}
         </a>
       );

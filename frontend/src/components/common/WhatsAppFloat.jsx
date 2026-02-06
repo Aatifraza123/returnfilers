@@ -23,25 +23,26 @@ const WhatsAppFloat = () => {
     const handleScroll = () => {
       const footer = document.getElementById('footer');
       const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
       
-      // Hide on any page's hero section (first viewport)
-      if (scrollPosition < window.innerHeight) {
+      // Hide on any page's hero section (first viewport + 100px buffer)
+      if (scrollPosition < viewportHeight - 100) {
         setShowButton(false);
         return;
       }
       
       if (!footer) {
         // If footer not found, show button after hero section
-        setShowButton(scrollPosition >= window.innerHeight);
+        setShowButton(scrollPosition >= viewportHeight - 100);
         return;
       }
 
       const footerTop = footer.offsetTop;
-      const windowBottom = scrollPosition + window.innerHeight;
+      const windowBottom = scrollPosition + viewportHeight;
 
       // Show button after hero section
       // Hide button when footer is visible (when window bottom reaches footer top)
-      if (scrollPosition >= window.innerHeight && windowBottom < footerTop - 50) {
+      if (scrollPosition >= viewportHeight - 100 && windowBottom < footerTop - 50) {
         setShowButton(true);
       } else {
         setShowButton(false);
@@ -49,9 +50,14 @@ const WhatsAppFloat = () => {
     };
 
     window.addEventListener('scroll', handleScroll);
-    // Check on mount
+    window.addEventListener('resize', handleScroll);
+    // Check on mount with a small delay to ensure proper calculation
+    setTimeout(handleScroll, 100);
     handleScroll();
-    return () => window.removeEventListener('scroll', handleScroll);
+    return () => {
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
   }, []);
 
   return (
