@@ -238,12 +238,10 @@ const AIChatbot = () => {
 
   useEffect(() => {
     const handleScroll = () => {
-      // Always show chatbot on all screen sizes (desktop and mobile)
-      // But hide on home page hero section (first 100vh)
-      const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
+      // Hide on any page's hero section (first viewport)
       const scrollPosition = window.scrollY;
       
-      if (isHomePage && scrollPosition < window.innerHeight) {
+      if (scrollPosition < window.innerHeight) {
         setIsVisible(false);
       } else {
         setIsVisible(true);

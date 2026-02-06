@@ -18,31 +18,30 @@ const WhatsAppFloat = () => {
     return () => clearTimeout(timer);
   }, []);
 
-  // Show button after scrolling down 100px, but hide when footer is visible
+  // Show button after scrolling down past hero section, but hide when footer is visible
   useEffect(() => {
     const handleScroll = () => {
       const footer = document.getElementById('footer');
-      const isHomePage = window.location.pathname === '/' || window.location.pathname === '/home';
       const scrollPosition = window.scrollY;
       
-      // Hide on home page hero section (first viewport)
-      if (isHomePage && scrollPosition < window.innerHeight) {
+      // Hide on any page's hero section (first viewport)
+      if (scrollPosition < window.innerHeight) {
         setShowButton(false);
         return;
       }
       
       if (!footer) {
-        // If footer not found, show button after 100px scroll
-        setShowButton(scrollPosition > 100);
+        // If footer not found, show button after hero section
+        setShowButton(scrollPosition >= window.innerHeight);
         return;
       }
 
       const footerTop = footer.offsetTop;
       const windowBottom = scrollPosition + window.innerHeight;
 
-      // Show button after scrolling down 100px
+      // Show button after hero section
       // Hide button when footer is visible (when window bottom reaches footer top)
-      if (scrollPosition > 100 && windowBottom < footerTop - 50) {
+      if (scrollPosition >= window.innerHeight && windowBottom < footerTop - 50) {
         setShowButton(true);
       } else {
         setShowButton(false);
