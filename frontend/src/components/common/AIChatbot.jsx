@@ -250,8 +250,9 @@ const AIChatbot = () => {
     const handleScroll = () => {
       // Hide on any page's hero section (first viewport)
       const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
       
-      if (scrollPosition < window.innerHeight) {
+      if (scrollPosition < viewportHeight) {
         setIsVisible(false);
       } else {
         setIsVisible(true);
@@ -260,6 +261,8 @@ const AIChatbot = () => {
 
     window.addEventListener('scroll', handleScroll);
     window.addEventListener('resize', handleScroll);
+    // Check on mount with delay
+    setTimeout(handleScroll, 100);
     handleScroll();
     return () => {
       window.removeEventListener('scroll', handleScroll);

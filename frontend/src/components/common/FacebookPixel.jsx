@@ -10,6 +10,7 @@ const FacebookPixel = () => {
   // Initialize Facebook Pixel
   useEffect(() => {
     if (!pixelId) {
+      console.log('❌ Facebook Pixel ID not configured');
       return;
     }
 

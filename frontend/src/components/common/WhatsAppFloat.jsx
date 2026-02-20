@@ -25,15 +25,15 @@ const WhatsAppFloat = () => {
       const scrollPosition = window.scrollY;
       const viewportHeight = window.innerHeight;
       
-      // Hide on any page's hero section (first viewport + 100px buffer)
-      if (scrollPosition < viewportHeight - 100) {
+      // Hide on any page's hero section (first viewport)
+      if (scrollPosition < viewportHeight) {
         setShowButton(false);
         return;
       }
       
       if (!footer) {
         // If footer not found, show button after hero section
-        setShowButton(scrollPosition >= viewportHeight - 100);
+        setShowButton(scrollPosition >= viewportHeight);
         return;
       }
 
@@ -42,7 +42,7 @@ const WhatsAppFloat = () => {
 
       // Show button after hero section
       // Hide button when footer is visible (when window bottom reaches footer top)
-      if (scrollPosition >= viewportHeight - 100 && windowBottom < footerTop - 50) {
+      if (scrollPosition >= viewportHeight && windowBottom < footerTop - 50) {
         setShowButton(true);
       } else {
         setShowButton(false);

@@ -16,7 +16,7 @@ const GoogleLoginButton = ({ onSuccess }) => {
         { credential: credentialResponse.credential }
       );
 
-      if (response.data.success) {
+      if (response.data.success && response.data.user) {
         // Store token and user data
         localStorage.setItem('userToken', response.data.token);
         localStorage.setItem('user', JSON.stringify(response.data.user));
@@ -24,13 +24,15 @@ const GoogleLoginButton = ({ onSuccess }) => {
         // Update context
         login(response.data.user, response.data.token);
         
-        toast.success(`Welcome back, ${response.data.user.name}!`);
+        toast.success(`Welcome back, ${response.data.user.name || 'User'}!`);
         
         if (onSuccess) {
-          onSuccess();
+          onSuccess(response.data.user);
         } else {
           navigate('/dashboard');
         }
+      } else {
+        throw new Error('Invalid response from server');
       }
     } catch (error) {
       console.error('Google login error:', error);
