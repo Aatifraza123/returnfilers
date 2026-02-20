@@ -154,10 +154,6 @@ const formatText = (text) => {
         </a>
       );
     }
-          ✉️ {part}
-        </a>
-      );
-    }
     // Check if part contains URL that wasn't split (e.g., "at:https://...")
     if (part.includes('https://') || part.includes('http://')) {
       const urlMatch = part.match(/(https?:\/\/[^\s<>"{}|\\^`\[\]]+)/i);
