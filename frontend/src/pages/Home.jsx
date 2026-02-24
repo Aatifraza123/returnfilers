@@ -66,6 +66,7 @@ const Home = () => {
   const [testimonials, setTestimonials] = useState([]);
   const [currentTestimonial, setCurrentTestimonial] = useState(0);
   const [settings, setSettings] = useState(null);
+  const [settingsLoading, setSettingsLoading] = useState(true);
 
   const openModal = () => setIsModalOpen(true);
   const closeModal = () => setIsModalOpen(false);
@@ -93,6 +94,7 @@ const Home = () => {
   useEffect(() => {
     const fetchData = async () => {
       try {
+        setSettingsLoading(true);
         // Fetch settings first
         const { data: settingsData } = await api.get("/settings");
         if (settingsData.success) {
@@ -111,6 +113,8 @@ const Home = () => {
         }
       } catch (error) {
         console.log("Error fetching data");
+      } finally {
+        setSettingsLoading(false);
       }
     };
     fetchData();
@@ -222,8 +226,11 @@ const Home = () => {
                 transition={{ delay: 0.3, duration: 0.8 }}
                 className="text-5xl lg:text-6xl font-serif font-bold text-white leading-tight mb-6"
               >
-                {settings?.hero?.title ||
-                  "Financial Clarity for Modern Business"}
+                {settingsLoading ? (
+                  <span className="inline-block h-16 w-3/4 bg-white/20 rounded-lg animate-pulse"></span>
+                ) : (
+                  settings?.hero?.title || "Financial Clarity for Modern Business"
+                )}
               </motion.h1>
 
               <motion.p
@@ -232,8 +239,15 @@ const Home = () => {
                 transition={{ delay: 0.4, duration: 0.8 }}
                 className="text-lg lg:text-xl text-gray-300 mb-8 max-w-lg mx-auto lg:mx-0 leading-relaxed font-light"
               >
-                {settings?.hero?.subtitle ||
-                  "We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business."}
+                {settingsLoading ? (
+                  <>
+                    <span className="inline-block h-6 w-full bg-white/20 rounded mb-2 animate-pulse"></span>
+                    <span className="inline-block h-6 w-5/6 bg-white/20 rounded animate-pulse"></span>
+                  </>
+                ) : (
+                  settings?.hero?.subtitle ||
+                  "We simplify complex tax and audit challenges, allowing you to focus on what you do best—growing your business."
+                )}
               </motion.p>
 
               <motion.div
