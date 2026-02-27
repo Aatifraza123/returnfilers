@@ -230,15 +230,30 @@ const Services = () => {
       </section>
 
       {/* Services Grid */}
-      <section className="py-8 md:py-12 bg-gray-50">
-        <div className="container mx-auto px-6 max-w-7xl">
+      <section className="py-8 md:py-12 relative overflow-hidden">
+        {/* Decorative Background - Enhanced */}
+        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-purple-50 to-amber-50"></div>
+        
+        {/* Multiple Decorative Circles */}
+        <div className="absolute top-0 right-0 w-96 h-96 bg-gradient-to-br from-blue-200 to-blue-100 rounded-full filter blur-3xl opacity-30 animate-pulse"></div>
+        <div className="absolute bottom-0 left-0 w-96 h-96 bg-gradient-to-tr from-purple-200 to-purple-100 rounded-full filter blur-3xl opacity-30 animate-pulse" style={{ animationDelay: '1s' }}></div>
+        <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-[500px] h-[500px] bg-gradient-to-br from-amber-100 to-yellow-100 rounded-full filter blur-3xl opacity-20"></div>
+        
+        {/* Geometric Patterns */}
+        <div className="absolute top-10 left-10 w-20 h-20 border-2 border-blue-200 rounded-lg rotate-12 opacity-30"></div>
+        <div className="absolute bottom-20 right-20 w-16 h-16 border-2 border-purple-200 rounded-full opacity-30"></div>
+        <div className="absolute top-1/3 right-1/4 w-12 h-12 bg-amber-100 rounded-lg rotate-45 opacity-20"></div>
+        <div className="absolute bottom-1/3 left-1/4 w-24 h-24 border-4 border-blue-100 rounded-full opacity-20"></div>
+        
+        <div className="container mx-auto px-6 max-w-7xl relative z-10">
           
           {filteredServices.length > 0 ? (
             <div className="grid md:grid-cols-2 xl:grid-cols-3 gap-6">
               {filteredServices.map((service, index) => (
                 <div
                   key={service._id || index}
-                  className="group bg-white rounded-xl overflow-hidden border border-gray-100 hover:border-secondary/30 shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col"
+                  className="group bg-white rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 flex flex-col border-2"
+                  style={{ borderColor: 'var(--color-secondary)' }}
                 >
                   {/* Image */}
                   <Link to={`/services/${service._id}`} className="block relative h-48 overflow-hidden">
