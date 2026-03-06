@@ -192,7 +192,7 @@ const Home = () => {
   };
 
   return (
-    <main className="font-sans text-gray-800">
+    <main className="font-sans text-gray-800 overflow-x-hidden">
       <ConsultationModal isOpen={isModalOpen} onClose={closeModal} />
       
       {/* ==================== HERO SECTION ==================== */}
@@ -206,7 +206,7 @@ const Home = () => {
           />
         </div>
 
-        <div className="container mx-auto px-6 relative z-10">
+        <div className="container mx-auto px-4 md:px-6 relative z-10 max-w-7xl">
           <div className="grid lg:grid-cols-2 gap-12 items-center">
             {/* Left Content */}
             <div className="text-center lg:text-left">
@@ -329,7 +329,7 @@ const Home = () => {
                 initial={{ y: 20, opacity: 0 }}
                 animate={{ y: 0, opacity: 1 }}
                 transition={{ delay: 0.8 }}
-                className="absolute bottom-8 -left-6 bg-white p-5 rounded-xl shadow-xl flex items-center gap-4 max-w-xs"
+                className="absolute bottom-8 left-0 lg:left-4 bg-white p-4 lg:p-5 rounded-xl shadow-xl flex items-center gap-3 lg:gap-4 max-w-xs"
               >
                 <div 
                   className="w-12 h-12 rounded-full flex items-center justify-center text-xl"

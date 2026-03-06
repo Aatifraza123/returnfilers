@@ -188,6 +188,15 @@ const AIChatbot = () => {
   const [position, setPosition] = useState({ bottom: 24, right: 24 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
+  const [showLeadForm, setShowLeadForm] = useState(false);
+  const [leadData, setLeadData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: '',
+    message: ''
+  });
+  const [submittingLead, setSubmittingLead] = useState(false);
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
@@ -220,6 +229,44 @@ const AIChatbot = () => {
       }
     };
     fetchSettings();
+  }, []);
+
+  // Auto-open chatbot after 3 seconds on first visit OR on scroll
+  useEffect(() => {
+    const hasSeenChatbot = sessionStorage.getItem('chatbotSeen');
+    let scrollTimer = null;
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      
+      // Open when user scrolls past 50% of viewport
+      if (scrollPosition > viewportHeight * 0.5) {
+        if (!sessionStorage.getItem('chatbotSeen')) {
+          setIsOpen(true);
+          sessionStorage.setItem('chatbotSeen', 'true');
+        }
+        window.removeEventListener('scroll', handleScroll);
+      }
+    };
+    
+    // Auto-open after 3 seconds if not already seen
+    if (!hasSeenChatbot) {
+      scrollTimer = setTimeout(() => {
+        if (!sessionStorage.getItem('chatbotSeen')) {
+          setIsOpen(true);
+          sessionStorage.setItem('chatbotSeen', 'true');
+        }
+      }, 3000);
+      
+      // Also listen for scroll
+      window.addEventListener('scroll', handleScroll, { passive: true });
+    }
+    
+    return () => {
+      if (scrollTimer) clearTimeout(scrollTimer);
+      window.removeEventListener('scroll', handleScroll);
+    };
   }, []);
 
   const scrollToBottom = () => {
@@ -491,11 +538,47 @@ const AIChatbot = () => {
     setTimeout(() => sendMessage(), 100);
   };
 
+  const handleLeadSubmit = async (e) => {
+    e.preventDefault();
+    setSubmittingLead(true);
+
+    try {
+      const response = await api.post('/leads', {
+        ...leadData,
+        source: 'AI Chatbot',
+        status: 'new'
+      });
+
+      if (response.data.success) {
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `✅ **Thank you, ${leadData.name}!**\n\nYour details have been submitted successfully. Our team will contact you within 24 hours.\n\n📧 Confirmation email sent to ${leadData.email}\n📞 We'll call you on ${leadData.phone}\n\n**Need immediate help?**\nCall us: ${settings?.phone || '+91 84471 27264'}`
+        }]);
+        
+        setShowLeadForm(false);
+        setLeadData({ name: '', email: '', phone: '', service: '', message: '' });
+      }
+    } catch (error) {
+      console.error('Lead submission error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Sorry, there was an error submitting your details. Please try again or call us directly at ${settings?.phone || '+91 84471 27264'}`
+      }]);
+    } finally {
+      setSubmittingLead(false);
+    }
+  };
+
+  const handleLeadInputChange = (e) => {
+    const { name, value } = e.target;
+    setLeadData(prev => ({ ...prev, [name]: value }));
+  };
+
   const quickQuestions = [
     'Our Services',
     'Pricing Info',
     'Book Appointment',
-    'Contact Us'
+    'Share My Details' // New option to trigger lead form
   ];
 
   // Don't render if chatbot is disabled (check after all hooks)
@@ -611,17 +694,99 @@ const AIChatbot = () => {
           )}
           
           {/* Quick Questions */}
-          {messages.length <= 2 && !loading && (
+          {messages.length <= 2 && !loading && !showLeadForm && (
             <div className="space-y-2">
               {quickQuestions.map((q, idx) => (
                 <button
                   key={idx}
-                  onClick={() => handleQuickQuestion(q)}
+                  onClick={() => {
+                    if (q === 'Share My Details') {
+                      setShowLeadForm(true);
+                    } else {
+                      handleQuickQuestion(q);
+                    }
+                  }}
                   className="w-full px-4 py-3 bg-white hover:bg-gray-50 border border-gray-200 hover:border-purple-300 rounded-xl text-sm text-left text-gray-700 font-medium transition-all duration-200 shadow-sm"
                 >
                   {q}
                 </button>
               ))}
+            </div>
+          )}
+
+          {/* Lead Capture Form */}
+          {showLeadForm && (
+            <div className="bg-white rounded-xl p-4 border-2 border-purple-300 shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-bold text-gray-900">Share Your Details</h4>
+                <button
+                  onClick={() => setShowLeadForm(false)}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <FaTimes size={14} />
+                </button>
+              </div>
+              <form onSubmit={handleLeadSubmit} className="space-y-3">
+                <input
+                  type="text"
+                  name="name"
+                  value={leadData.name}
+                  onChange={handleLeadInputChange}
+                  placeholder="Your Name *"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <input
+                  type="email"
+                  name="email"
+                  value={leadData.email}
+                  onChange={handleLeadInputChange}
+                  placeholder="Email Address *"
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <input
+                  type="tel"
+                  name="phone"
+                  value={leadData.phone}
+                  onChange={handleLeadInputChange}
+                  placeholder="Mobile Number *"
+                  required
+                  maxLength={10}
+                  pattern="[0-9]{10}"
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
+                />
+                <select
+                  name="service"
+                  value={leadData.service}
+                  onChange={handleLeadInputChange}
+                  required
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 bg-white"
+                >
+                  <option value="">Select Service *</option>
+                  <option value="Tax Filing">Tax Filing</option>
+                  <option value="GST Registration">GST Registration</option>
+                  <option value="Company Registration">Company Registration</option>
+                  <option value="Accounting">Accounting</option>
+                  <option value="Audit">Audit</option>
+                  <option value="Other">Other</option>
+                </select>
+                <textarea
+                  name="message"
+                  value={leadData.message}
+                  onChange={handleLeadInputChange}
+                  placeholder="Your Message (Optional)"
+                  rows={2}
+                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 resize-none"
+                />
+                <button
+                  type="submit"
+                  disabled={submittingLead}
+                  className="w-full py-2.5 bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-lg font-semibold text-sm hover:shadow-lg transition-all disabled:opacity-50"
+                >
+                  {submittingLead ? 'Submitting...' : 'Submit Details'}
+                </button>
+              </form>
             </div>
           )}
           

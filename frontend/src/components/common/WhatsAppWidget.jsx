@@ -3,6 +3,7 @@ import { FaWhatsapp, FaTimes } from 'react-icons/fa';
 
 const WhatsAppWidget = () => {
   const [isOpen, setIsOpen] = useState(false);
+  const [showWidget, setShowWidget] = useState(false); // Hide initially
   const [position, setPosition] = useState({ bottom: 128, right: 24 });
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
@@ -10,6 +11,34 @@ const WhatsAppWidget = () => {
   
   const phoneNumber = '918447127264';
   const defaultMessage = 'Hi, I need help with tax and business services';
+
+  // Hide widget in hero section
+  useEffect(() => {
+    setShowWidget(false); // Start hidden
+    
+    const handleScroll = () => {
+      const scrollPosition = window.scrollY;
+      const viewportHeight = window.innerHeight;
+      const threshold = viewportHeight - 100;
+      
+      // Hide in hero section
+      if (scrollPosition < threshold) {
+        setShowWidget(false);
+      } else {
+        setShowWidget(true);
+      }
+    };
+
+    const timer = setTimeout(handleScroll, 300);
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
+    return () => {
+      clearTimeout(timer);
+      window.removeEventListener('scroll', handleScroll);
+      window.removeEventListener('resize', handleScroll);
+    };
+  }, []);
 
   const handleWhatsAppClick = () => {
     const url = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(defaultMessage)}`;
@@ -87,6 +116,7 @@ const WhatsAppWidget = () => {
 
   return (
     <>
+      {showWidget && (
       <div 
         ref={buttonRef}
         className="fixed z-50"
@@ -142,6 +172,7 @@ const WhatsAppWidget = () => {
           <FaWhatsapp size={24} />
         </button>
       </div>
+      )}
     </>
   );
 };

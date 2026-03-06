@@ -69,7 +69,7 @@ const getLeadById = async (req, res) => {
  */
 const createLead = async (req, res) => {
   try {
-    const { name, email, phone, source, interestedServices, budget, notes } = req.body;
+    const { name, email, phone, source, interestedServices, budget, notes, service, message } = req.body;
     
     // Check if lead exists
     const existingLead = await Lead.findOne({ email: email.toLowerCase().trim() });
@@ -85,13 +85,121 @@ const createLead = async (req, res) => {
       email: email.toLowerCase().trim(),
       phone: phone?.replace(/\D/g, '') || '',
       source: source || 'manual',
-      interestedServices: interestedServices || [],
+      interestedServices: service ? [service] : (interestedServices || []),
       budget: budget || 'not-specified',
-      notes: notes || ''
+      notes: message || notes || ''
     });
     
     lead.calculateScore();
     await lead.save();
+    
+    // Send confirmation email to user
+    setImmediate(async () => {
+      try {
+        const { sendEmail } = require('../utils/emailService');
+        
+        // User confirmation email
+        const userHtml = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: #0B1530; color: white; padding: 20px; text-align: center; }
+              .content { background: #f9f9f9; padding: 30px; }
+              .button { display: inline-block; padding: 12px 30px; background: #D4AF37; color: #0B1530; text-decoration: none; border-radius: 5px; font-weight: bold; }
+              .footer { background: #f1f1f1; padding: 15px; text-align: center; font-size: 12px; color: #666; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h2>✅ Thank You for Contacting Us!</h2>
+              </div>
+              <div class="content">
+                <p>Dear ${name},</p>
+                <p>Thank you for reaching out to ReturnFilers. We have received your inquiry and our team will get back to you within 24 hours.</p>
+                
+                <div style="background: white; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0;">
+                  <h3 style="margin-top: 0; color: #0B1530;">Your Details</h3>
+                  <p><strong>Name:</strong> ${name}</p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Phone:</strong> ${phone}</p>
+                  ${service ? `<p><strong>Service:</strong> ${service}</p>` : ''}
+                  ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
+                </div>
+                
+                <p>In the meantime, feel free to explore our services or call us directly at <strong>+91 84471 27264</strong></p>
+                
+                <p style="text-align: center; margin-top: 30px;">
+                  <a href="${process.env.FRONTEND_URL || 'https://www.returnfilers.in'}/services" class="button">View Our Services</a>
+                </p>
+              </div>
+              <div class="footer">
+                <p>© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
+                <p>📞 +91 84471 27264 | 📧 info@returnfilers.in</p>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+        
+        // Admin notification email
+        const adminHtml = `
+          <!DOCTYPE html>
+          <html>
+          <head>
+            <style>
+              body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; }
+              .container { max-width: 600px; margin: 0 auto; padding: 20px; }
+              .header { background: #D4AF37; color: #0B1530; padding: 20px; text-align: center; }
+              .content { background: #f9f9f9; padding: 30px; }
+              .details { background: white; padding: 15px; margin: 10px 0; border-radius: 5px; }
+            </style>
+          </head>
+          <body>
+            <div class="container">
+              <div class="header">
+                <h2>🔔 New Lead from ${source || 'Website'}</h2>
+              </div>
+              <div class="content">
+                <div class="details">
+                  <h3>Lead Details</h3>
+                  <p><strong>Name:</strong> ${name}</p>
+                  <p><strong>Email:</strong> ${email}</p>
+                  <p><strong>Phone:</strong> ${phone}</p>
+                  <p><strong>Source:</strong> ${source || 'Manual'}</p>
+                  ${service ? `<p><strong>Service:</strong> ${service}</p>` : ''}
+                  ${message ? `<p><strong>Message:</strong> ${message}</p>` : ''}
+                  <p><strong>Score:</strong> ${lead.score}/100</p>
+                  <p><strong>Priority:</strong> ${lead.priority}</p>
+                </div>
+              </div>
+            </div>
+          </body>
+          </html>
+        `;
+        
+        // Send to user
+        await sendEmail({
+          to: email,
+          subject: '✅ Thank You for Contacting ReturnFilers',
+          html: userHtml
+        });
+        
+        // Send to admin
+        await sendEmail({
+          to: process.env.ADMIN_EMAIL || 'info@returnfilers.in',
+          subject: `🔔 New Lead: ${name} - ${source || 'Website'}`,
+          html: adminHtml
+        });
+        
+        console.log('✅ Lead confirmation emails sent');
+      } catch (err) {
+        console.error('❌ Failed to send lead emails:', err);
+      }
+    });
     
     res.status(201).json({
       success: true,

@@ -1,4 +1,5 @@
 import { Routes, Route, Navigate, useLocation } from 'react-router-dom'
+import { useEffect } from 'react'
 import { GoogleReCaptchaProvider } from 'react-google-recaptcha-v3'
 import { AuthProvider } from './context/AuthContext'
 import { UserAuthProvider } from './context/UserAuthContext'
@@ -106,6 +107,17 @@ const ChatbotWrapper = () => {
   return <AIChatbot />;
 };
 
+// Scroll to top on route change
+const ScrollToTop = () => {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+};
+
 function App() {
   console.log('App component rendering... v2.0');
   
@@ -119,6 +131,7 @@ function App() {
           <UserAuthProvider>
             <SettingsProvider>
               <ThemeProvider>
+                <ScrollToTop />
                 <GoogleAnalytics />
                 <GoogleTagManager />
                 <FacebookPixel />

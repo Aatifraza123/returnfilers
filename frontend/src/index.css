@@ -83,8 +83,14 @@ html {
 }
 
 /* Prevent horizontal scroll */
-body {
+html, body {
   overflow-x: hidden;
+  max-width: 100vw;
+}
+
+#root {
+  overflow-x: hidden;
+  max-width: 100vw;
 }
 
 /* Blog Content Styles - For Rich Text Editor Content */

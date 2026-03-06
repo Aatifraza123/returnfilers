@@ -3,58 +3,78 @@ import { FaWhatsapp, FaTimes } from 'react-icons/fa';
 import { useState, useEffect } from 'react';
 
 const WhatsAppFloat = () => {
-  const [showTooltip, setShowTooltip] = useState(true);
-  const [showButton, setShowButton] = useState(false); // New state for scroll visibility
+  const [showTooltip, setShowTooltip] = useState(false); // Start hidden
+  const [showButton, setShowButton] = useState(false); // Start hidden
 
   const phoneNumber = "8447127264";
   const message = "Hello! I would like to inquire about your tax and business consulting services.";
   const whatsappUrl = `https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`;
 
-  // Automatically hide the tooltip after 10 seconds
+  // Show tooltip only after button is visible and after delay
   useEffect(() => {
-    const timer = setTimeout(() => {
-      setShowTooltip(false);
-    }, 10000);
-    return () => clearTimeout(timer);
-  }, []);
+    if (showButton) {
+      const timer = setTimeout(() => {
+        setShowTooltip(true);
+      }, 2000);
+      
+      // Auto-hide after 10 seconds
+      const hideTimer = setTimeout(() => {
+        setShowTooltip(false);
+      }, 12000);
+      
+      return () => {
+        clearTimeout(timer);
+        clearTimeout(hideTimer);
+      };
+    }
+  }, [showButton]);
 
   // Show button after scrolling down past hero section, but hide when footer is visible
   useEffect(() => {
+    // Force initial hidden state
+    setShowButton(false);
+    
     const handleScroll = () => {
-      const footer = document.getElementById('footer');
       const scrollPosition = window.scrollY;
       const viewportHeight = window.innerHeight;
+      const threshold = viewportHeight - 100;
       
-      // Hide on any page's hero section (first viewport)
-      if (scrollPosition < viewportHeight) {
+      console.log('WhatsApp Float:', { scrollPosition, viewportHeight, threshold, shouldShow: scrollPosition >= threshold });
+      
+      // Simple check: hide if scroll is less than viewport height - 100
+      if (scrollPosition < threshold) {
         setShowButton(false);
         return;
       }
       
+      // Show button after scrolling past hero
+      const footer = document.getElementById('footer');
       if (!footer) {
-        // If footer not found, show button after hero section
-        setShowButton(scrollPosition >= viewportHeight);
+        setShowButton(true);
         return;
       }
 
       const footerTop = footer.offsetTop;
       const windowBottom = scrollPosition + viewportHeight;
 
-      // Show button after hero section
-      // Hide button when footer is visible (when window bottom reaches footer top)
-      if (scrollPosition >= viewportHeight && windowBottom < footerTop - 50) {
-        setShowButton(true);
-      } else {
+      // Hide when footer is visible
+      if (windowBottom >= footerTop - 50) {
         setShowButton(false);
+      } else {
+        setShowButton(true);
       }
     };
 
-    window.addEventListener('scroll', handleScroll);
-    window.addEventListener('resize', handleScroll);
-    // Check on mount with a small delay to ensure proper calculation
-    setTimeout(handleScroll, 100);
-    handleScroll();
+    // Wait for DOM to be ready
+    const initialTimer = setTimeout(() => {
+      handleScroll();
+    }, 500);
+
+    window.addEventListener('scroll', handleScroll, { passive: true });
+    window.addEventListener('resize', handleScroll, { passive: true });
+    
     return () => {
+      clearTimeout(initialTimer);
       window.removeEventListener('scroll', handleScroll);
       window.removeEventListener('resize', handleScroll);
     };
@@ -62,9 +82,14 @@ const WhatsAppFloat = () => {
 
   return (
     <div
-      className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 transition-opacity duration-500 ${
-        showButton ? 'opacity-100' : 'opacity-0 pointer-events-none'
+      className={`fixed bottom-6 right-6 z-50 flex flex-col items-end gap-4 transition-all duration-500 ${
+        showButton ? 'opacity-100 visible' : 'opacity-0 invisible pointer-events-none'
       }`}
+      style={{ 
+        visibility: showButton ? 'visible' : 'hidden',
+        display: showButton ? 'flex' : 'none',
+        transform: showButton ? 'scale(1)' : 'scale(0)'
+      }}
     >
       {/* Tooltip Message */}
       <AnimatePresence>
