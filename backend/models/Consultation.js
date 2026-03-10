@@ -44,6 +44,11 @@ const consultationSchema = new mongoose.Schema({
     type: String,
     enum: ['pending', 'contacted', 'closed', 'completed', 'cancelled'],
     default: 'pending'
+  },
+  source: {
+    type: String,
+    enum: ['website', 'contact_form', 'AI Chatbot', 'phone', 'email', 'manual'],
+    default: 'website'
   }
 }, {
   timestamps: true,

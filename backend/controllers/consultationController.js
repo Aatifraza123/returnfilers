@@ -8,11 +8,12 @@ const { createConsultationNotification } = require('../utils/notificationHelper'
 // @access  Private (User must be logged in)
 const createConsultation = async (req, res) => {
   try {
-    const { name, email, phone, service, message } = req.body;
+    const { name, email, phone, service, message, source } = req.body;
     const userId = req.user?.id; // Get user ID from auth middleware (optional)
 
     console.log('NEW CONSULTATION REQUEST');
     console.log('User ID:', userId || 'Not logged in');
+    console.log('Source:', source || 'website');
 
     // Validation
     if (!name || !email || !phone || !service) {
@@ -32,7 +33,8 @@ const createConsultation = async (req, res) => {
       email: email.trim().toLowerCase(),
       phone: cleanPhone,
       service: service.trim(),
-      message: message ? message.trim() : ''
+      message: message ? message.trim() : '',
+      source: source || 'website'
     });
 
     // Add consultation to user's consultations array if user is logged in

@@ -71,27 +71,41 @@ const createLead = async (req, res) => {
   try {
     const { name, email, phone, source, interestedServices, budget, notes, service, message } = req.body;
     
-    // Check if lead exists
-    const existingLead = await Lead.findOne({ email: email.toLowerCase().trim() });
-    if (existingLead) {
-      return res.status(400).json({
-        success: false,
-        message: 'Lead with this email already exists'
+    // Check if lead exists - if exists, update instead of creating new
+    let lead = await Lead.findOne({ email: email.toLowerCase().trim() });
+    
+    if (lead) {
+      // Update existing lead with new information
+      lead.name = name.trim();
+      lead.phone = phone?.replace(/\D/g, '') || lead.phone;
+      lead.source = source || lead.source;
+      lead.interestedServices = service ? [service] : (interestedServices || lead.interestedServices);
+      lead.budget = budget || lead.budget;
+      lead.notes = (lead.notes || '') + '\n\n' + (message || notes || '');
+      lead.status = 'new'; // Reset status to new
+      lead.lastContactDate = new Date();
+      
+      lead.calculateScore();
+      await lead.save();
+      
+      console.log('✅ Lead updated:', lead.email);
+    } else {
+      // Create new lead
+      lead = await Lead.create({
+        name: name.trim(),
+        email: email.toLowerCase().trim(),
+        phone: phone?.replace(/\D/g, '') || '',
+        source: source || 'manual',
+        interestedServices: service ? [service] : (interestedServices || []),
+        budget: budget || 'not-specified',
+        notes: message || notes || ''
       });
+      
+      lead.calculateScore();
+      await lead.save();
+      
+      console.log('✅ New lead created:', lead.email);
     }
-    
-    const lead = await Lead.create({
-      name: name.trim(),
-      email: email.toLowerCase().trim(),
-      phone: phone?.replace(/\D/g, '') || '',
-      source: source || 'manual',
-      interestedServices: service ? [service] : (interestedServices || []),
-      budget: budget || 'not-specified',
-      notes: message || notes || ''
-    });
-    
-    lead.calculateScore();
-    await lead.save();
     
     // Send confirmation email to user
     setImmediate(async () => {

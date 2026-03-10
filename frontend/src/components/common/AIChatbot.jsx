@@ -93,7 +93,7 @@ const formatText = (text) => {
       return <a key={idx} href={`tel:${part.replace(/\s/g, '')}`} className="font-semibold text-[#0B1530] underline cursor-pointer hover:text-[#052626]">{part}</a>;
     }
     // Internal route links (e.g., /booking, /services, /contact)
-    if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog' || part === '/track-appointment') {
+    if (part === '/booking' || part === '/services' || part === '/digital-services' || part === '/contact' || part === '/quote' || part === '/about' || part === '/blog') {
       const routeNames = {
         '/booking': '📅 Book Now',
         '/services': 'Our Services',
@@ -101,8 +101,7 @@ const formatText = (text) => {
         '/contact': 'Contact Us',
         '/quote': 'Get Quote',
         '/about': 'About Us',
-        '/blog': 'Blog',
-        '/track-appointment': '🔍 Track Appointment'
+        '/blog': 'Blog'
       };
       const displayName = routeNames[part] || part;
       return (
@@ -189,6 +188,25 @@ const AIChatbot = () => {
   const [isDragging, setIsDragging] = useState(false);
   const [dragStart, setDragStart] = useState({ x: 0, y: 0 });
   const [showLeadForm, setShowLeadForm] = useState(false);
+  const [showBookingForm, setShowBookingForm] = useState(false);
+  const [bookingStep, setBookingStep] = useState(1); // 1: Service, 2: Details, 3: Schedule, 4: Confirmation
+  const [selectedService, setSelectedService] = useState('');
+  const [bookingData, setBookingData] = useState({
+    name: '',
+    email: '',
+    phone: '',
+    service: '',
+    preferredDate: '',
+    preferredTime: '',
+    urgency: 'normal',
+    message: ''
+  });
+  const [submittingBooking, setSubmittingBooking] = useState(false);
+  const [bookingEmailVerified, setBookingEmailVerified] = useState(false);
+  const [bookingOtpSent, setBookingOtpSent] = useState(false);
+  const [bookingOtp, setBookingOtp] = useState('');
+  const [sendingBookingOtp, setSendingBookingOtp] = useState(false);
+  const [verifyingBookingOtp, setVerifyingBookingOtp] = useState(false);
   const [leadData, setLeadData] = useState({
     name: '',
     email: '',
@@ -558,16 +576,16 @@ const AIChatbot = () => {
     setSubmittingLead(true);
 
     try {
-      const response = await api.post('/leads', {
+      const response = await api.post('/consultations', {
         ...leadData,
         source: 'AI Chatbot',
-        status: 'new'
+        status: 'pending'
       });
 
       if (response.data.success) {
         setMessages(prev => [...prev, {
           role: 'assistant',
-          content: `✅ **Thank you, ${leadData.name}!**\n\nYour details have been submitted successfully. Our team will contact you within 24 hours.\n\n📧 Confirmation email sent to ${leadData.email}\n📞 We'll call you on ${leadData.phone}\n\n**Need immediate help?**\nCall us: ${settings?.phone || '+91 84471 27264'}`
+          content: `✅ **Thank you, ${leadData.name}!**\n\nYour consultation request has been submitted successfully. Our team will contact you within 24 hours.\n\n📧 Confirmation email sent to ${leadData.email}\n📞 We'll call you on ${leadData.phone}\n\n**Need immediate help?**\nCall us: ${settings?.phone || '+91 84471 27264'}`
         }]);
         
         setShowLeadForm(false);
@@ -577,10 +595,10 @@ const AIChatbot = () => {
         setOtp('');
       }
     } catch (error) {
-      console.error('Lead submission error:', error);
+      console.error('Consultation submission error:', error);
       setMessages(prev => [...prev, {
         role: 'assistant',
-        content: `❌ Sorry, there was an error submitting your details. Please try again or call us directly at ${settings?.phone || '+91 84471 27264'}`
+        content: `❌ Sorry, there was an error submitting your consultation request. Please try again or call us directly at ${settings?.phone || '+91 84471 27264'}`
       }]);
     } finally {
       setSubmittingLead(false);
@@ -654,6 +672,167 @@ const AIChatbot = () => {
     }
   };
 
+  // Service Booking Functions
+  const handleServiceBooking = () => {
+    setShowBookingForm(true);
+    setBookingStep(1);
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: `🎯 **Great! Let's book your service.**\n\nI'll help you book the perfect service for your needs. Please select a service below to get started.`
+    }]);
+  };
+
+  const handleServiceSelect = (service) => {
+    setSelectedService(service);
+    setBookingData(prev => ({ ...prev, service }));
+    setBookingStep(2);
+    
+    const serviceInfo = {
+      'Tax Filing': { price: '₹2,999 - ₹9,999', time: '3-5 days', description: 'Complete ITR filing with expert review' },
+      'GST Registration': { price: '₹2,499', time: '7-10 days', description: 'New GST registration with compliance setup' },
+      'Company Registration': { price: '₹8,999', time: '15-20 days', description: 'Private Limited Company incorporation' },
+      'Accounting': { price: '₹4,999/month', time: 'Ongoing', description: 'Monthly bookkeeping and financial reports' },
+      'Audit': { price: '₹15,999+', time: '10-15 days', description: 'Statutory audit and compliance' },
+      'Other': { price: 'Custom Quote', time: 'Varies', description: 'Tell us your specific requirements' }
+    };
+
+    const info = serviceInfo[service] || serviceInfo['Other'];
+    
+    setMessages(prev => [...prev, {
+      role: 'assistant',
+      content: `✅ **${service} Selected**\n\n💰 **Price:** ${info.price}\n⏱️ **Timeline:** ${info.time}\n📋 **Includes:** ${info.description}\n\nNow let's collect your details to proceed with the booking.`
+    }]);
+  };
+
+  const handleBookingSubmit = async (e) => {
+    e.preventDefault();
+    
+    // Check if email is verified
+    if (!bookingEmailVerified) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please verify your email address first before confirming the booking.'
+      }]);
+      return;
+    }
+    
+    setSubmittingBooking(true);
+
+    try {
+      // Create booking
+      const response = await api.post('/bookings', {
+        ...bookingData,
+        source: 'AI Chatbot',
+        status: 'pending',
+        bookingType: 'service'
+      });
+
+      if (response.data.success) {
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `🎉 **Booking Confirmed!**\n\n**Booking ID:** #${response.data.data._id.slice(-6).toUpperCase()}\n\n✅ **Service:** ${bookingData.service}\n📅 **Preferred Date:** ${bookingData.preferredDate}\n⏰ **Preferred Time:** ${bookingData.preferredTime}\n\n📧 **Confirmation email sent to ${bookingData.email}**\n📞 **Our team will call you within 2 hours to confirm details**\n\n**Need immediate help?**\nCall us: ${settings?.phone || '+91 84471 27264'}`
+        }]);
+        
+        setShowBookingForm(false);
+        setBookingStep(1);
+        setBookingData({
+          name: '',
+          email: '',
+          phone: '',
+          service: '',
+          preferredDate: '',
+          preferredTime: '',
+          urgency: 'normal',
+          message: ''
+        });
+        setSelectedService('');
+        setBookingEmailVerified(false);
+        setBookingOtpSent(false);
+        setBookingOtp('');
+      }
+    } catch (error) {
+      console.error('Booking submission error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Sorry, there was an error processing your booking. Please try again or call us directly at ${settings?.phone || '+91 84471 27264'}`
+      }]);
+    } finally {
+      setSubmittingBooking(false);
+    }
+  };
+
+  const handleSendBookingOTP = async () => {
+    if (!bookingData.email) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please enter your email address first.'
+      }]);
+      return;
+    }
+
+    setSendingBookingOtp(true);
+    try {
+      const response = await api.post('/otp/send-email-otp', {
+        email: bookingData.email
+      });
+
+      if (response.data.success) {
+        setBookingOtpSent(true);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `📧 **OTP sent to ${bookingData.email}**\n\nPlease check your email and enter the 6-digit OTP below to verify your email address for booking confirmation.\n\n${response.data.devOTP ? `**Dev OTP: ${response.data.devOTP}**` : ''}`
+        }]);
+      }
+    } catch (error) {
+      console.error('Booking OTP send error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Failed to send OTP. ${error.response?.data?.message || 'Please try again.'}`
+      }]);
+    } finally {
+      setSendingBookingOtp(false);
+    }
+  };
+
+  const handleVerifyBookingOTP = async () => {
+    if (!bookingOtp || bookingOtp.length !== 6) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please enter a valid 6-digit OTP.'
+      }]);
+      return;
+    }
+
+    setVerifyingBookingOtp(true);
+    try {
+      const response = await api.post('/otp/verify-email-otp', {
+        email: bookingData.email,
+        otp: bookingOtp
+      });
+
+      if (response.data.success) {
+        setBookingEmailVerified(true);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `✅ **Email verified successfully!**\n\nYou can now confirm your booking.`
+        }]);
+      }
+    } catch (error) {
+      console.error('Booking OTP verify error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ ${error.response?.data?.message || 'Invalid OTP. Please try again.'}`
+      }]);
+    } finally {
+      setVerifyingBookingOtp(false);
+    }
+  };
+
+  const handleBookingInputChange = (e) => {
+    const { name, value } = e.target;
+    setBookingData(prev => ({ ...prev, [name]: value }));
+  };
+
   const handleLeadInputChange = (e) => {
     const { name, value } = e.target;
     setLeadData(prev => ({ ...prev, [name]: value }));
@@ -662,8 +841,8 @@ const AIChatbot = () => {
   const quickQuestions = [
     'Our Services',
     'Pricing Info',
-    'Book Appointment',
-    'Share My Details' // New option to trigger lead form
+    'Book Service Now', // New option for direct booking
+    'Share My Details'
   ];
 
   // Don't render if chatbot is disabled (check after all hooks)
@@ -787,6 +966,8 @@ const AIChatbot = () => {
                   onClick={() => {
                     if (q === 'Share My Details') {
                       setShowLeadForm(true);
+                    } else if (q === 'Book Service Now') {
+                      handleServiceBooking();
                     } else {
                       handleQuickQuestion(q);
                     }
@@ -936,6 +1117,197 @@ const AIChatbot = () => {
                   {submittingLead ? 'Submitting...' : emailVerified ? 'Submit Details' : 'Verify Email First'}
                 </button>
               </form>
+            </div>
+          )}
+
+          {/* Service Booking Form */}
+          {showBookingForm && (
+            <div className="bg-white rounded-xl p-4 border-2 border-blue-300 shadow-lg">
+              <div className="flex items-center justify-between mb-3">
+                <h4 className="font-bold text-gray-900">Book Service</h4>
+                <button
+                  onClick={() => {
+                    setShowBookingForm(false);
+                    setBookingStep(1);
+                    setSelectedService('');
+                    setBookingEmailVerified(false);
+                    setBookingOtpSent(false);
+                    setBookingOtp('');
+                  }}
+                  className="text-gray-400 hover:text-gray-600"
+                >
+                  <FaTimes size={14} />
+                </button>
+              </div>
+
+              {/* Step 1: Service Selection */}
+              {bookingStep === 1 && (
+                <div className="space-y-3">
+                  <p className="text-sm text-gray-600 mb-3">Select the service you want to book:</p>
+                  {['Tax Filing', 'GST Registration', 'Company Registration', 'Accounting', 'Audit', 'Other'].map((service) => (
+                    <button
+                      key={service}
+                      onClick={() => handleServiceSelect(service)}
+                      className="w-full p-3 text-left border border-gray-300 rounded-lg hover:border-blue-500 hover:bg-blue-50 transition-all"
+                    >
+                      <div className="font-medium text-gray-900">{service}</div>
+                      <div className="text-xs text-gray-500 mt-1">
+                        {service === 'Tax Filing' && 'ITR filing with expert review'}
+                        {service === 'GST Registration' && 'New GST registration setup'}
+                        {service === 'Company Registration' && 'Private Limited Company'}
+                        {service === 'Accounting' && 'Monthly bookkeeping services'}
+                        {service === 'Audit' && 'Statutory audit and compliance'}
+                        {service === 'Other' && 'Custom service requirements'}
+                      </div>
+                    </button>
+                  ))}
+                </div>
+              )}
+
+              {/* Step 2: Booking Details */}
+              {bookingStep === 2 && (
+                <form onSubmit={handleBookingSubmit} className="space-y-3">
+                  <div className="bg-blue-50 p-3 rounded-lg mb-4">
+                    <div className="font-medium text-blue-900">Selected: {selectedService}</div>
+                  </div>
+                  
+                  <input
+                    type="text"
+                    name="name"
+                    value={bookingData.name}
+                    onChange={handleBookingInputChange}
+                    placeholder="Your Name *"
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <div className="relative">
+                    <input
+                      type="email"
+                      name="email"
+                      value={bookingData.email}
+                      onChange={handleBookingInputChange}
+                      placeholder="Email Address *"
+                      required
+                      className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 ${
+                        bookingEmailVerified ? 'border-green-500 bg-green-50' : 'border-gray-300'
+                      }`}
+                      disabled={bookingEmailVerified}
+                    />
+                    {bookingEmailVerified && (
+                      <div className="absolute right-2 top-2 text-green-500">
+                        ✓
+                      </div>
+                    )}
+                  </div>
+
+                  {/* Email Verification Section for Booking */}
+                  {bookingData.email && !bookingEmailVerified && (
+                    <div className="space-y-2">
+                      {!bookingOtpSent ? (
+                        <button
+                          type="button"
+                          onClick={handleSendBookingOTP}
+                          disabled={sendingBookingOtp}
+                          className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                        >
+                          {sendingBookingOtp ? 'Sending OTP...' : 'Send Verification OTP'}
+                        </button>
+                      ) : (
+                        <div className="space-y-2">
+                          <input
+                            type="text"
+                            value={bookingOtp}
+                            onChange={(e) => setBookingOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                            placeholder="Enter 6-digit OTP"
+                            maxLength={6}
+                            className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 text-center tracking-widest"
+                          />
+                          <div className="flex gap-2">
+                            <button
+                              type="button"
+                              onClick={handleVerifyBookingOTP}
+                              disabled={verifyingBookingOtp || bookingOtp.length !== 6}
+                              className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+                            >
+                              {verifyingBookingOtp ? 'Verifying...' : 'Verify OTP'}
+                            </button>
+                            <button
+                              type="button"
+                              onClick={handleSendBookingOTP}
+                              disabled={sendingBookingOtp}
+                              className="px-3 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
+                            >
+                              <FaRedo size={12} />
+                            </button>
+                          </div>
+                        </div>
+                      )}
+                    </div>
+                  )}
+                  <input
+                    type="tel"
+                    name="phone"
+                    value={bookingData.phone}
+                    onChange={handleBookingInputChange}
+                    placeholder="Mobile Number *"
+                    required
+                    maxLength={10}
+                    pattern="[0-9]{10}"
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <input
+                    type="date"
+                    name="preferredDate"
+                    value={bookingData.preferredDate}
+                    onChange={handleBookingInputChange}
+                    min={new Date().toISOString().split('T')[0]}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500"
+                  />
+                  <select
+                    name="preferredTime"
+                    value={bookingData.preferredTime}
+                    onChange={handleBookingInputChange}
+                    required
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  >
+                    <option value="">Select Preferred Time *</option>
+                    <option value="10:00 AM - 12:00 PM">10:00 AM - 12:00 PM</option>
+                    <option value="12:00 PM - 2:00 PM">12:00 PM - 2:00 PM</option>
+                    <option value="2:00 PM - 4:00 PM">2:00 PM - 4:00 PM</option>
+                    <option value="4:00 PM - 6:00 PM">4:00 PM - 6:00 PM</option>
+                  </select>
+                  <select
+                    name="urgency"
+                    value={bookingData.urgency}
+                    onChange={handleBookingInputChange}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 bg-white"
+                  >
+                    <option value="normal">Normal Priority</option>
+                    <option value="urgent">Urgent (Within 24 hours)</option>
+                    <option value="asap">ASAP (Same day)</option>
+                  </select>
+                  <textarea
+                    name="message"
+                    value={bookingData.message}
+                    onChange={handleBookingInputChange}
+                    placeholder="Additional Requirements (Optional)"
+                    rows={2}
+                    className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 resize-none"
+                  />
+                  <button
+                    type="submit"
+                    disabled={submittingBooking || !bookingEmailVerified}
+                    className={`w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                      bookingEmailVerified 
+                        ? 'bg-gradient-to-br from-blue-600 to-blue-700 text-white hover:shadow-lg' 
+                        : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    } disabled:opacity-50`}
+                  >
+                    {submittingBooking ? 'Booking...' : bookingEmailVerified ? 'Confirm Booking' : 'Verify Email First'}
+                  </button>
+                </form>
+              )}
             </div>
           )}
           

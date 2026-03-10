@@ -5,78 +5,7 @@
 
 const getEmailTemplate = (type, data) => {
   const templates = {
-    // 1. Appointment Reminder (24 hours before)
-    appointmentReminder: () => {
-      const appointmentDate = new Date(data.appointmentDate).toLocaleDateString('en-IN', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-      
-      return {
-        subject: `⏰ Reminder: Appointment Tomorrow at ${data.appointmentTime}`,
-        html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #0B1530; color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
-    .content { background: #ffffff; padding: 30px 20px; border: 1px solid #e0e0e0; }
-    .box { background: #f9f9f9; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0; }
-    .button { display: inline-block; padding: 12px 30px; background: #D4AF37; color: #0B1530; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 10px 5px; }
-    .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 10px 10px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1 style="margin: 0; font-size: 28px;">⏰ Appointment Reminder</h1>
-      <p style="margin: 10px 0 0 0;">Your appointment is tomorrow!</p>
-    </div>
-    
-    <div class="content">
-      <p>Dear ${data.name},</p>
-      
-      <p>This is a friendly reminder about your upcoming appointment with <strong>ReturnFilers</strong>.</p>
-      
-      <div class="box">
-        <h3 style="margin-top: 0; color: #0B1530;">📅 Appointment Details</h3>
-        <p><strong>Service:</strong> ${data.service}</p>
-        <p><strong>Date:</strong> ${appointmentDate}</p>
-        <p><strong>Time:</strong> ${data.appointmentTime}</p>
-        <p><strong>Type:</strong> ${data.meetingType === 'online' ? '💻 Online' : data.meetingType === 'phone' ? '📞 Phone' : '🏢 In-Person'}</p>
-        ${data.meetingLink ? `<p><strong>Meeting Link:</strong><br/><a href="${data.meetingLink}" style="color: #D4AF37;">${data.meetingLink}</a></p>` : ''}
-      </div>
-      
-      <p><strong>📋 What to Prepare:</strong></p>
-      <ul>
-        <li>Relevant documents</li>
-        <li>List of questions</li>
-        <li>Previous records (if any)</li>
-      </ul>
-      
-      <p style="text-align: center;">
-        ${data.meetingLink ? `<a href="${data.meetingLink}" class="button">Join Meeting</a>` : ''}
-        <a href="tel:+918447127264" class="button" style="background: #0B1530; color: white;">Call Us</a>
-      </p>
-      
-      <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-        <strong>Need to reschedule?</strong><br/>
-        Contact us: +91 84471 27264 | info@returnfilers.in
-      </p>
-    </div>
-    
-    <div class="footer">
-      <p>© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
-      <p>Professional Tax & Business Consulting</p>
-    </div>
-  </div>
-</body>
-</html>`
-      };
-    },
-
-    // 2. Lead Follow-up Email (Priority-based)
+    // 1. Lead Follow-up Email (Priority-based)
     leadFollowup: () => {
       const priorityEmojis = { urgent: '🔴', high: '🟠', medium: '🟡', low: '🟢' };
       const emoji = priorityEmojis[data.priority] || '📧';
@@ -146,7 +75,7 @@ const getEmailTemplate = (type, data) => {
       };
     },
 
-    // 3. Contact Form Auto-Response
+    // 2. Contact Form Auto-Response
     contactAutoResponse: () => {
       return {
         subject: `✅ We received your message - ReturnFilers`,
@@ -205,72 +134,6 @@ const getEmailTemplate = (type, data) => {
 </body>
 </html>`
       };
-    },
-
-    // 4. Appointment Confirmation
-    appointmentConfirmation: () => {
-      const appointmentDate = new Date(data.appointmentDate).toLocaleDateString('en-IN', {
-        weekday: 'long', year: 'numeric', month: 'long', day: 'numeric'
-      });
-      
-      return {
-        subject: `✅ Appointment Confirmed - ${appointmentDate}`,
-        html: `
-<!DOCTYPE html>
-<html>
-<head>
-  <style>
-    body { font-family: Arial, sans-serif; line-height: 1.6; color: #333; margin: 0; padding: 0; }
-    .container { max-width: 600px; margin: 0 auto; padding: 20px; }
-    .header { background: #0B1530; color: white; padding: 30px 20px; text-align: center; border-radius: 10px 10px 0 0; }
-    .content { background: #ffffff; padding: 30px 20px; border: 1px solid #e0e0e0; }
-    .box { background: #f9f9f9; padding: 20px; border-left: 4px solid #D4AF37; margin: 20px 0; }
-    .button { display: inline-block; padding: 12px 30px; background: #D4AF37; color: #0B1530; text-decoration: none; border-radius: 5px; font-weight: bold; margin: 10px 5px; }
-    .footer { background: #f5f5f5; padding: 20px; text-align: center; font-size: 12px; color: #666; border-radius: 0 0 10px 10px; }
-  </style>
-</head>
-<body>
-  <div class="container">
-    <div class="header">
-      <h1 style="margin: 0; font-size: 28px;">✅ Appointment Confirmed</h1>
-      <p style="margin: 10px 0 0 0;">We look forward to meeting you!</p>
-    </div>
-    
-    <div class="content">
-      <p>Dear ${data.name},</p>
-      
-      <p>Your appointment with <strong>ReturnFilers</strong> has been successfully confirmed.</p>
-      
-      <div class="box">
-        <h3 style="margin-top: 0; color: #0B1530;">📅 Appointment Details</h3>
-        <p><strong>Service:</strong> ${data.service}</p>
-        <p><strong>Date:</strong> ${appointmentDate}</p>
-        <p><strong>Time:</strong> ${data.appointmentTime}</p>
-        <p><strong>Type:</strong> ${data.meetingType === 'online' ? '💻 Online' : data.meetingType === 'phone' ? '📞 Phone' : '🏢 In-Person'}</p>
-        ${data.meetingLink ? `<p><strong>Meeting Link:</strong><br/><a href="${data.meetingLink}" style="color: #D4AF37;">${data.meetingLink}</a></p>` : ''}
-      </div>
-      
-      <p>We'll send you a reminder 24 hours before your appointment.</p>
-      
-      <p style="text-align: center;">
-        <a href="https://returnfilers.in/dashboard/consultations" class="button">View My Appointments</a>
-      </p>
-      
-      <p style="margin-top: 30px; padding-top: 20px; border-top: 1px solid #ddd;">
-        <strong>Need to reschedule?</strong><br/>
-        Contact us: +91 84471 27264 | info@returnfilers.in
-      </p>
-    </div>
-    
-    <div class="footer">
-      <p>© ${new Date().getFullYear()} ReturnFilers. All rights reserved.</p>
-      <p>Professional Tax & Business Consulting</p>
-    </div>
-  </div>
-</body>
-</html>`
-      };
-    }
   };
 
   return templates[type] ? templates[type]() : null;

@@ -14,7 +14,16 @@ const {
 } = require('../controllers/bookingController');
 
 // Public route with optional auth (works for both logged-in and guest users)
-router.post('/', optionalAuth, verifyRecaptcha(0.5), createBooking);
+// Skip reCAPTCHA for AI Chatbot bookings
+router.post('/', optionalAuth, (req, res, next) => {
+  // Skip reCAPTCHA verification for AI Chatbot source
+  if (req.body.source === 'AI Chatbot') {
+    console.log('🤖 Skipping reCAPTCHA for AI Chatbot booking');
+    return next();
+  }
+  // Apply reCAPTCHA for other sources
+  return verifyRecaptcha(0.5)(req, res, next);
+}, createBooking);
 
 // User routes - protected
 router.get('/my-bookings', protectUser, getUserBookings);

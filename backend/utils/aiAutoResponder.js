@@ -9,7 +9,7 @@ const axios = require('axios');
 const QUERY_CATEGORIES = {
   PRICING: ['price', 'cost', 'fee', 'charge', 'rate', 'pricing', 'affordable'],
   SERVICES: ['service', 'offer', 'provide', 'do you', 'can you', 'help with'],
-  APPOINTMENT: ['appointment', 'meeting', 'consultation', 'schedule', 'book', 'available'],
+  BOOKING: ['meeting', 'consultation', 'schedule', 'book', 'available'],
   TAX_FILING: ['tax', 'itr', 'return', 'filing', 'gst', 'income tax'],
   DOCUMENTS: ['document', 'paper', 'upload', 'submit', 'required', 'need'],
   URGENT: ['urgent', 'asap', 'immediately', 'emergency', 'quick'],
@@ -150,11 +150,11 @@ I'd be happy to discuss your specific requirements. Please book a consultation o
 Best regards,
 ReturnFilers Team`,
 
-    APPOINTMENT: `Dear ${name},
+    BOOKING: `Dear ${name},
 
 Thank you for your interest in scheduling a consultation!
 
-You can book an appointment through:
+You can book our services through:
 1. Our website: ${process.env.FRONTEND_URL}/booking
 2. Call us directly: +91 84471 27264
 3. WhatsApp: +91 84471 27264

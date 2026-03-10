@@ -332,19 +332,6 @@ Examples:
    - DO NOT auto-book these
    - Always direct to: /booking
 
-2. **APPOINTMENT BOOKING** (Date/Time based) - Can AUTO-BOOK
-   - For consultations, meetings, discussions
-   - User provides: name, email, phone, preferred date/time
-   - You CAN auto-book these appointments
-   - Confirm with user before booking
-
-**When to AUTO-BOOK Appointment:**
-If user says: "I want to schedule a meeting", "book an appointment", "consultation chahiye"
-AND provides: name, email, phone
-
-Response: "Great! I can book an appointment for you. Let me find the next available slot..."
-Then book using available time slots.
-
 **When to give /booking link:**
 If user says: "I want GST registration", "company registration karna hai", "ITR file karna hai"
 Response: "To book this service, please visit: /booking
@@ -353,7 +340,7 @@ You can upload required documents there."
 ## WHEN TO GIVE LINKS:
 - ALWAYS when user asks for any link, page, or wants to book/contact/quote
 - When user wants to see services, pricing, or packages
-- When user wants to upload documents or book appointment
+- When user wants to upload documents or book services
 - Keep responses natural but ALWAYS include the actual link path
 
 ## RESPONSE STYLE:
@@ -390,9 +377,9 @@ const chatWithAI = async (req, res) => {
 
     console.log('📨 Chat:', message.substring(0, 50));
 
-    // Detect appointment booking intent (not service booking)
-    const appointmentKeywords = ['appointment', 'schedule', 'meeting', 'consultation', 'discuss', 'milna', 'baat karna'];
-    const isAppointmentIntent = appointmentKeywords.some(keyword => message.toLowerCase().includes(keyword));
+    // Detect booking intent
+    const bookingKeywords = ['book', 'booking', 'service', 'registration', 'filing', 'consultation'];
+    const isBookingIntent = bookingKeywords.some(keyword => message.toLowerCase().includes(keyword));
     
     // Extract user details if provided
     const emailRegex = /[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}/;
@@ -400,33 +387,8 @@ const chatWithAI = async (req, res) => {
     const extractedEmail = message.match(emailRegex)?.[0];
     const extractedPhone = message.match(phoneRegex)?.[0];
     
-    // Auto-book appointment if user provides details
-    if (isAppointmentIntent && extractedEmail && extractedPhone) {
-      try {
-        // Extract name (simple approach - first capitalized word)
-        const nameMatch = message.match(/(?:name|naam)\s+(?:is|hai)?\s*([A-Z][a-z]+(?:\s+[A-Z][a-z]+)*)/i);
-        const extractedName = nameMatch ? nameMatch[1] : 'Chatbot User';
-        
-        // Auto-book appointment
-        const { autoBookAppointment } = require('../utils/aiBookingService');
-        const bookingResult = await autoBookAppointment({
-          name: extractedName,
-          email: extractedEmail,
-          phone: extractedPhone.replace(/\D/g, ''),
-          service: 'General Consultation',
-          message: message
-        });
-        
-        if (bookingResult.success) {
-          console.log('✅ AI Chatbot auto-booked appointment:', bookingResult.appointment.id);
-        }
-      } catch (err) {
-        console.error('Auto-booking failed:', err.message);
-      }
-    }
-    
     // Capture lead for any booking intent
-    if (isAppointmentIntent || message.toLowerCase().includes('book')) {
+    if (isBookingIntent || message.toLowerCase().includes('book')) {
       try {
         const { captureLeadFromForm } = require('../utils/leadScoringService');
         await captureLeadFromForm({

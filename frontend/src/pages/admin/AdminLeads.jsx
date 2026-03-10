@@ -187,7 +187,6 @@ const AdminLeads = () => {
             <option value="contact_form">Contact Form</option>
             <option value="quote_request">Quote Request</option>
             <option value="booking">Booking</option>
-            <option value="appointment">Appointment</option>
             <option value="chatbot">Chatbot</option>
           </select>
         </div>

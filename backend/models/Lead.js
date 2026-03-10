@@ -3,7 +3,7 @@ const mongoose = require('mongoose');
 const leadActivitySchema = new mongoose.Schema({
   type: {
     type: String,
-    enum: ['page_visit', 'form_submit', 'email_open', 'email_click', 'appointment_book', 'quote_request'],
+    enum: ['page_visit', 'form_submit', 'email_open', 'email_click', 'booking', 'quote_request'],
     required: true
   },
   description: String,
@@ -36,7 +36,7 @@ const leadSchema = new mongoose.Schema({
   },
   source: {
     type: String,
-    enum: ['contact_form', 'quote_request', 'booking', 'appointment', 'newsletter', 'chatbot', 'manual'],
+    enum: ['contact_form', 'quote_request', 'booking', 'newsletter', 'chatbot', 'AI Chatbot', 'manual'],
     default: 'contact_form'
   },
   status: {
@@ -102,11 +102,11 @@ leadSchema.methods.calculateScore = function() {
   
   // Base score from source
   const sourceScores = {
-    'appointment': 30,
+    'booking': 30,
     'quote_request': 25,
-    'booking': 25,
     'contact_form': 15,
     'chatbot': 10,
+    'AI Chatbot': 10,
     'newsletter': 5,
     'manual': 0
   };
@@ -114,7 +114,7 @@ leadSchema.methods.calculateScore = function() {
   
   // Activity-based scoring
   const activityScores = {
-    'appointment_book': 20,
+    'booking': 20,
     'quote_request': 15,
     'form_submit': 10,
     'email_click': 5,

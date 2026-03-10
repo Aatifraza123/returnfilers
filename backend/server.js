@@ -22,7 +22,6 @@ const testimonialRoutes = require('./routes/testimonialRoutes');
 const chatRoutes = require('./routes/chatRoutes');
 const documentRoutes = require('./routes/documentRoutes');
 const bookingRoutes = require('./routes/bookingRoutes');
-const appointmentRoutes = require('./routes/appointmentRoutes');
 const digitalServiceRoutes = require('./routes/digitalServiceRoutes');
 const settingsRoutes = require('./routes/settingsRoutes');
 const notificationRoutes = require('./routes/notificationRoutes');
@@ -156,9 +155,6 @@ console.log('✓ Document routes registered at /api/documents');
 app.use('/api/bookings', bookingRoutes);
 console.log('✓ Booking routes registered at /api/bookings');
 
-app.use('/api/appointments', appointmentRoutes);
-console.log('✓ Appointment routes registered at /api/appointments');
-
 app.use('/api/digital-services', digitalServiceRoutes);
 console.log('✓ Digital Service routes registered at /api/digital-services');
 
@@ -202,10 +198,6 @@ app.use((err, req, res, next) => {
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on http://localhost:${PORT}`);
-  
-  // Start automated appointment reminder service
-  const { startReminderService } = require('./utils/appointmentReminderService');
-  startReminderService();
   
   // Start automated lead follow-up service
   const { startFollowUpService } = require('./utils/leadScoringService');
