@@ -7,6 +7,8 @@ const connectDB = require('./config/db');
 // Import Routes
 const authRoutes = require('./routes/authRoutes');
 const userAuthRoutes = require('./routes/userAuthRoutes');
+const phoneAuthRoutes = require('./routes/phoneAuthRoutes');
+const otpRoutes = require('./routes/otpRoutes');
 const adminAuthRoutes = require('./routes/adminAuthRoutes');
 const adminRoutes = require('./routes/adminRoutes');
 const publicRoutes = require('./routes/publicRoutes');
@@ -111,7 +113,11 @@ app.use((req, res, next) => {
 // ==========================================
 app.use('/api/auth', authRoutes);
 app.use('/api/user/auth', userAuthRoutes);
+app.use('/api/user/auth/phone', phoneAuthRoutes);
+app.use('/api/otp', otpRoutes);
 console.log('✓ User auth routes registered at /api/user/auth');
+console.log('✓ Phone auth routes registered at /api/user/auth/phone');
+console.log('✓ OTP routes registered at /api/otp');
 app.use('/api/admin/auth', adminAuthRoutes);
 console.log('✓ Admin auth routes registered at /api/admin/auth');
 app.use('/api/admin', adminRoutes);

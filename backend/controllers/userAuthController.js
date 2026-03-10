@@ -860,10 +860,68 @@ const resendOTP = async (req, res) => {
   }
 };
 
+// @desc    Phone authentication login/register
+// @route   POST /api/user/auth/phone-login
+// @access  Public
+const phoneLogin = async (req, res) => {
+  try {
+    const { phone, uid } = req.body;
+
+    if (!phone || !uid) {
+      return res.status(400).json({
+        success: false,
+        message: 'Phone number and Firebase UID are required'
+      });
+    }
+
+    // Check if user exists with this phone
+    let user = await User.findOne({ phone: `+91${phone}` });
+
+    if (user) {
+      // User exists, update Firebase UID if not set
+      if (!user.firebaseUid) {
+        user.firebaseUid = uid;
+        await user.save();
+      }
+    } else {
+      // Create new user with phone
+      user = await User.create({
+        name: `User ${phone.slice(-4)}`, // Default name
+        phone: `+91${phone}`,
+        firebaseUid: uid,
+        isVerified: true, // Phone verified via Firebase
+        password: crypto.randomBytes(32).toString('hex') // Random password
+      });
+    }
+
+    res.json({
+      success: true,
+      message: 'Phone login successful',
+      user: {
+        id: user._id,
+        name: user.name,
+        email: user.email,
+        phone: user.phone,
+        role: user.role,
+        isVerified: user.isVerified,
+        avatar: user.avatar
+      },
+      token: generateToken(user._id)
+    });
+  } catch (error) {
+    console.error('Phone login error:', error);
+    res.status(500).json({
+      success: false,
+      message: 'Phone authentication failed'
+    });
+  }
+};
+
 module.exports = {
   registerUser,
   loginUser,
   googleLogin,
+  phoneLogin,
   verifyOTP,
   resendOTP,
   getMe,

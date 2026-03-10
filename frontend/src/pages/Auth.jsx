@@ -158,6 +158,8 @@ const Login = () => {
                 </p>
               </div>
 
+              {/* Auth Method Tabs - Removed, only email now */}
+              
               <form onSubmit={handleSubmit} className="space-y-4">
                 {!isLogin && (
                   <>

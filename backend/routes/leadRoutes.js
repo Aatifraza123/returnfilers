@@ -12,16 +12,17 @@ const {
 } = require('../controllers/leadController');
 const { protectAdmin } = require('../middleware/adminAuthMiddleware');
 
-// All routes require admin authentication
+// Public route for lead creation (no auth required)
+router.post('/', createLead);
+
+// All other routes require admin authentication
 router.use(protectAdmin);
 
 // Stats route (must be before /:id)
 router.get('/stats', getLeadStats);
 
-// CRUD routes
-router.route('/')
-  .get(getLeads)
-  .post(createLead);
+// CRUD routes (admin only)
+router.get('/', getLeads);
 
 router.route('/:id')
   .get(getLeadById)

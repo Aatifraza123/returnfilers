@@ -4,6 +4,7 @@ const {
   registerUser,
   loginUser,
   googleLogin,
+  phoneLogin,
   verifyOTP,
   resendOTP,
   getMe,
@@ -18,6 +19,7 @@ const { protectUser } = require('../middleware/userAuth');
 router.post('/register', registerUser);
 router.post('/login', loginUser);
 router.post('/google', googleLogin);
+router.post('/phone-login', phoneLogin);
 router.post('/verify-otp', verifyOTP);
 router.post('/resend-otp', resendOTP);
 router.post('/forgot-password', forgotPassword);

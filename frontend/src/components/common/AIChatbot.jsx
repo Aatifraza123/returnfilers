@@ -197,6 +197,11 @@ const AIChatbot = () => {
     message: ''
   });
   const [submittingLead, setSubmittingLead] = useState(false);
+  const [emailVerified, setEmailVerified] = useState(false);
+  const [otpSent, setOtpSent] = useState(false);
+  const [otp, setOtp] = useState('');
+  const [sendingOtp, setSendingOtp] = useState(false);
+  const [verifyingOtp, setVerifyingOtp] = useState(false);
   const [messages, setMessages] = useState([
     { 
       role: 'assistant', 
@@ -540,6 +545,16 @@ const AIChatbot = () => {
 
   const handleLeadSubmit = async (e) => {
     e.preventDefault();
+    
+    // Check if email is verified
+    if (!emailVerified) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please verify your email address first before submitting the form.'
+      }]);
+      return;
+    }
+    
     setSubmittingLead(true);
 
     try {
@@ -557,6 +572,9 @@ const AIChatbot = () => {
         
         setShowLeadForm(false);
         setLeadData({ name: '', email: '', phone: '', service: '', message: '' });
+        setEmailVerified(false);
+        setOtpSent(false);
+        setOtp('');
       }
     } catch (error) {
       console.error('Lead submission error:', error);
@@ -566,6 +584,73 @@ const AIChatbot = () => {
       }]);
     } finally {
       setSubmittingLead(false);
+    }
+  };
+
+  const handleSendOTP = async () => {
+    if (!leadData.email) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please enter your email address first.'
+      }]);
+      return;
+    }
+
+    setSendingOtp(true);
+    try {
+      const response = await api.post('/otp/send-email-otp', {
+        email: leadData.email
+      });
+
+      if (response.data.success) {
+        setOtpSent(true);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `📧 **OTP sent to ${leadData.email}**\n\nPlease check your email and enter the 6-digit OTP below to verify your email address.\n\n${response.data.devOTP ? `**Dev OTP: ${response.data.devOTP}**` : ''}`
+        }]);
+      }
+    } catch (error) {
+      console.error('OTP send error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ Failed to send OTP. ${error.response?.data?.message || 'Please try again.'}`
+      }]);
+    } finally {
+      setSendingOtp(false);
+    }
+  };
+
+  const handleVerifyOTP = async () => {
+    if (!otp || otp.length !== 6) {
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: '❌ Please enter a valid 6-digit OTP.'
+      }]);
+      return;
+    }
+
+    setVerifyingOtp(true);
+    try {
+      const response = await api.post('/otp/verify-email-otp', {
+        email: leadData.email,
+        otp: otp
+      });
+
+      if (response.data.success) {
+        setEmailVerified(true);
+        setMessages(prev => [...prev, {
+          role: 'assistant',
+          content: `✅ **Email verified successfully!**\n\nYou can now submit your details.`
+        }]);
+      }
+    } catch (error) {
+      console.error('OTP verify error:', error);
+      setMessages(prev => [...prev, {
+        role: 'assistant',
+        content: `❌ ${error.response?.data?.message || 'Invalid OTP. Please try again.'}`
+      }]);
+    } finally {
+      setVerifyingOtp(false);
     }
   };
 
@@ -720,7 +805,12 @@ const AIChatbot = () => {
               <div className="flex items-center justify-between mb-3">
                 <h4 className="font-bold text-gray-900">Share Your Details</h4>
                 <button
-                  onClick={() => setShowLeadForm(false)}
+                  onClick={() => {
+                    setShowLeadForm(false);
+                    setEmailVerified(false);
+                    setOtpSent(false);
+                    setOtp('');
+                  }}
                   className="text-gray-400 hover:text-gray-600"
                 >
                   <FaTimes size={14} />
@@ -736,15 +826,70 @@ const AIChatbot = () => {
                   required
                   className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
                 />
-                <input
-                  type="email"
-                  name="email"
-                  value={leadData.email}
-                  onChange={handleLeadInputChange}
-                  placeholder="Email Address *"
-                  required
-                  className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500"
-                />
+                <div className="relative">
+                  <input
+                    type="email"
+                    name="email"
+                    value={leadData.email}
+                    onChange={handleLeadInputChange}
+                    placeholder="Email Address *"
+                    required
+                    className={`w-full px-3 py-2 border rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 ${
+                      emailVerified ? 'border-green-500 bg-green-50' : 'border-gray-300'
+                    }`}
+                    disabled={emailVerified}
+                  />
+                  {emailVerified && (
+                    <div className="absolute right-2 top-2 text-green-500">
+                      ✓
+                    </div>
+                  )}
+                </div>
+
+                {/* Email Verification Section */}
+                {leadData.email && !emailVerified && (
+                  <div className="space-y-2">
+                    {!otpSent ? (
+                      <button
+                        type="button"
+                        onClick={handleSendOTP}
+                        disabled={sendingOtp}
+                        className="w-full py-2 bg-blue-600 text-white rounded-lg text-sm font-medium hover:bg-blue-700 disabled:opacity-50"
+                      >
+                        {sendingOtp ? 'Sending OTP...' : 'Send Verification OTP'}
+                      </button>
+                    ) : (
+                      <div className="space-y-2">
+                        <input
+                          type="text"
+                          value={otp}
+                          onChange={(e) => setOtp(e.target.value.replace(/\D/g, '').slice(0, 6))}
+                          placeholder="Enter 6-digit OTP"
+                          maxLength={6}
+                          className="w-full px-3 py-2 border border-gray-300 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-purple-500 text-center tracking-widest"
+                        />
+                        <div className="flex gap-2">
+                          <button
+                            type="button"
+                            onClick={handleVerifyOTP}
+                            disabled={verifyingOtp || otp.length !== 6}
+                            className="flex-1 py-2 bg-green-600 text-white rounded-lg text-sm font-medium hover:bg-green-700 disabled:opacity-50"
+                          >
+                            {verifyingOtp ? 'Verifying...' : 'Verify OTP'}
+                          </button>
+                          <button
+                            type="button"
+                            onClick={handleSendOTP}
+                            disabled={sendingOtp}
+                            className="px-3 py-2 bg-gray-600 text-white rounded-lg text-sm font-medium hover:bg-gray-700 disabled:opacity-50"
+                          >
+                            <FaRedo size={12} />
+                          </button>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                )}
                 <input
                   type="tel"
                   name="phone"
@@ -781,10 +926,14 @@ const AIChatbot = () => {
                 />
                 <button
                   type="submit"
-                  disabled={submittingLead}
-                  className="w-full py-2.5 bg-gradient-to-br from-purple-600 to-purple-700 text-white rounded-lg font-semibold text-sm hover:shadow-lg transition-all disabled:opacity-50"
+                  disabled={submittingLead || !emailVerified}
+                  className={`w-full py-2.5 rounded-lg font-semibold text-sm transition-all ${
+                    emailVerified 
+                      ? 'bg-gradient-to-br from-purple-600 to-purple-700 text-white hover:shadow-lg' 
+                      : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                  } disabled:opacity-50`}
                 >
-                  {submittingLead ? 'Submitting...' : 'Submit Details'}
+                  {submittingLead ? 'Submitting...' : emailVerified ? 'Submit Details' : 'Verify Email First'}
                 </button>
               </form>
             </div>
