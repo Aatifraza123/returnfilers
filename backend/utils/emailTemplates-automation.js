@@ -134,6 +134,7 @@ const getEmailTemplate = (type, data) => {
 </body>
 </html>`
       };
+    }
   };
 
   return templates[type] ? templates[type]() : null;
