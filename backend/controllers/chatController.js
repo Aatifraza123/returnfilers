@@ -91,7 +91,7 @@ const getTaxNews = async () => {
         lang: 'en',
         country: 'in',
         max: 5,
-        apikey: process.env.GNEWS_API_KEY || '0e5e5c5c5c5c5c5c5c5c5c5c5c5c5c5c' // fallback dummy
+        apikey: process.env.GNEWS_API_KEY
       },
       timeout: 5000
     });
@@ -543,7 +543,10 @@ const chatWithAIStream = async (req, res) => {
         response.data.on('end', () => { if (!res.writableEnded) { res.write('data: [DONE]\n\n'); res.end(); } });
         response.data.on('error', () => { if (!res.writableEnded) res.end(); });
         return;
-      } catch (e) { console.log('Stream failed'); }
+      } catch (e) { 
+        console.log('Stream failed:', e.message); 
+        console.error('Stream error details:', e);
+      }
     }
 
     res.write(`data: ${JSON.stringify({ error: 'AI unavailable' })}\n\n`);
