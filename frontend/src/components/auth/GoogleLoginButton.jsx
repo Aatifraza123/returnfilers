@@ -12,7 +12,7 @@ const GoogleLoginButton = ({ onSuccess }) => {
   const handleGoogleSuccess = async (credentialResponse) => {
     try {
       const response = await axios.post(
-        `${import.meta.env.VITE_API_URL}/api/user/auth/google`,
+        `${import.meta.env.VITE_API_URL}/user/auth/google`,
         { credential: credentialResponse.credential }
       );
 
